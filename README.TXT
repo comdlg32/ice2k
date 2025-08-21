@@ -26,5 +26,7 @@ Credits to nestoris for SE98 icon theme
 Credits to b00merang for linxp icon theme
 Credits to the FOX toolkit contributors for contributing to the FOX project,
 some code of it is being used here.
+Credits to https://github.com/travy-patty for logo and branding
+And credits to Microsoft for their icons/assets/design :P
 
 If I forgot to credit someone, let me know.
