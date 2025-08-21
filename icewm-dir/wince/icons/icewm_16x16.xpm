@@ -1,0 +1,28 @@
+/* XPM */
+static char *icewm_16x16[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c black",
+". c red",
+"X c green",
+"o c yellow",
+"O c blue",
+"+ c None",
+/* pixels */
+"++++++++++++++++",
+"+++++++++    +++",
+"+++++++        +",
+" +++++   .  X   ",
+" + +    ..  XX  ",
+"++      ..  XX  ",
+".+++++  .    X  ",
+".+.+..          ",
+"++....   O  o   ",
+"O+++++  OO  oo  ",
+"O+O+OO  OO  oo  ",
+"++OOOO  O    o  ",
+" +++++          ",
+" + +     ++++   ",
+"++     ++++++++ ",
+"++++++++++++++++"
+};

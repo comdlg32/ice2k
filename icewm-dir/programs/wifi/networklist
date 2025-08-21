@@ -1,0 +1,26 @@
+#!/bin/sh
+#network 1
+echo "network-wireless-100"
+echo "V"
+echo "work wifi"
+echo "WPA2-8021x"
+#network 2
+echo "network-wireless-75"
+echo "*"
+echo "home wifi"
+echo "WPA2-PSK"
+#network 3
+echo "network-wireless-50"
+echo " "
+echo "neighbor wifi"
+echo "WPA2-PSK"
+#network 4
+echo "network-wireless-25"
+echo " "
+echo "public wifi"
+echo "Open"
+#network 5
+echo "network-wireless-0"
+echo "*"
+echo "school wifi"
+echo "WPA2-8021x"

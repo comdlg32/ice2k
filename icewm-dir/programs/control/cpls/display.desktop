@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Display
+GenericName=Display
+Icon=preferences-desktop-display
+Exec=arandr
+NotShowIn=GNOME;KDE;XFCE;MATE;
+StartupNotify=true
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;

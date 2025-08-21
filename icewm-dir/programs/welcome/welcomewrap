@@ -1,0 +1,9 @@
+#!/bin/sh
+i2kcfg="$HOME/.icewm/cfg"
+progpath="$( dirname -- "$( readlink -f -- "$0"; )"; )"
+
+read runwelc < "$i2kcfg/ice2k/runwelcome"
+
+if [ "$runwelc" -eq 1 ]; then
+	exec "$progpath/welcome"
+fi

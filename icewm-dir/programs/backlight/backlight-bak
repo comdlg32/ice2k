@@ -1,0 +1,9 @@
+#!/bin/sh
+maxbrightness="$(cat /sys/class/backlight/intel_backlight/max_brightness)"
+brightness="$(cat /sys/class/backlight/intel_backlight/brightness)"
+#step="$(echo $maxbrightness / 15 | bc)"
+step="25"
+yad --vertical --scale --print-partial --hide-value --inc-buttons \
+--value=$brightness --min-value=1 --max-value=$maxbrightness \
+--no-buttons --mouse --height=250 --undecorated --on-top --skip-taskbar --close-on-unfocus --step=$step \
+| sudo tee /sys/class/backlight/intel_backlight/brightness

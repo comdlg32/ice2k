@@ -1,0 +1,27 @@
+#!/usr/bin/expect -f
+#trap {} SIGPIPE
+# Get arguments
+set arguments [lrange $argv 0 end]
+
+# Execute whoami command to get the username
+set username [exec whoami]
+
+# Execute hostname command to get the hostname
+set hostname [exec hostname]
+
+# Prompt for the password
+#stty -echo
+#send_user "Enter password: "
+#expect_user -re "(.*)\n"
+set password [gets stdin]
+#stty echo
+#send_user "\n"
+
+# Spawn the command and expect the reply
+log_user 0
+spawn doas $arguments
+
+expect "doas ($username@$hostname) password: "
+log_user 1
+send "$password\r"
+interact

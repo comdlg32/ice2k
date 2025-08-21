@@ -1,0 +1,32 @@
+#!/bin/sh
+netlistcon="$(iwctl known-networks list | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+netlist="$(echo "$netlistcon")"
+netnumber="$(echo "$netlist" | wc -l)"
+#echo "$netlistcon"
+#echo
+#echo "$netlist" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' | sed 's/..... *$//' | sed 's/[[:blank:]]*$//'
+
+hidden() {
+	if [ "$hidden" = "yes" ]; then
+		echo "network-wireless-0"
+	else
+		echo "network-wireless-100"
+	fi
+}
+
+for i in $(seq -s " " 1 $netnumber); do
+	export hidden="$(echo "$netlist" | sed -n "${i}p" | sed 's/................ *$//' | sed 's/[[:blank:]]*$//'  | cut -c 44- | sed 's/[[:blank:]]*$//')"
+	hidden
+
+	echo "$netlist" | sed -n "${i}p" | sed 's/........................................ *$//' | sed 's/[[:blank:]]*$//'
+#	echo "$hidden"
+	# echo "$netlistcon" | cut -c 1 | sed -n "${i}p"
+	echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 35-
+#	echo "$netlist" | sed -n "${i}p" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' |  awk 'NF>1{print $NF}'
+
+
+done
+
+#echo "$netlist" | awk 'NF>1{print $NF}'
+
+#echo "$netlist"

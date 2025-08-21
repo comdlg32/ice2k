@@ -1,0 +1,5 @@
+#!/bin/sh
+export LC_ALL=C
+ifdown $* 2>&1 | grep -q -v "not configured" || ifconfig $* down
+#echo $?
+#|| ifconfig $* down

@@ -1,0 +1,6 @@
+#!/bin/sh
+if ps -o pid,fname -u "$USER" | grep -q "wpa_gui"; then
+	ps -o pid,fname -u "$USER" | grep "wpa_gui" | awk '{print $1}' | xargs kill -15
+fi
+
+wpa_gui -i "$1" -q -m 3

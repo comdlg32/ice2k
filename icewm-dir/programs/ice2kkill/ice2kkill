@@ -1,0 +1,18 @@
+#!/bin/sh
+yad --borders=10 --width=400 --no-buttons --center --on-top --no-escape \
+--title "terminate yo goofy ahh program" --window-icon=xfce4-logo \
+--text="<b>terminate yo goofy ass application</b>
+
+this goofy ahh utility will terminate an individual program that may have
+frozen or is behaving goofy as fuck without having to completely restart
+your goofy ahh system. do not use this utility to close not goofy ahh
+functioning shit or parts of the ice2k desktop.
+
+simply move the newly shaped cursor over the program you wish to terminate
+and click yo goofy ass mouse button, and the program will be instantly
+terminated.
+
+CANCEL: to cancel this process, simply click anywhere on this goofy ahh window." &
+killdialogpid="$!"
+xkill
+kill "$killdialogpid" 2> /dev/null

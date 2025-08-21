@@ -1,0 +1,4 @@
+#!/bin/sh
+~/.icewm/programs/msgbox/msgbox 2 "dialog-question" \
+"User-Friendly User Interface" \
+"Choose Abort to Win,\nRetry to Lose,\nor Ignore to Cancel."

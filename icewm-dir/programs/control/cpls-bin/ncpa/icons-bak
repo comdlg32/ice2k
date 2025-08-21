@@ -1,0 +1,29 @@
+#!/bin/sh
+#echo "Make New Connection"
+#echo "Make New Connection"
+#echo stock_new-window
+#echo true
+##echo "xterm -e sudo nano /etc/network/interfaces"
+#echo "sh -c 'sudo nano /etc/network/interfaces'"
+cd /sys/class/net
+for i in *
+do
+	if [ "$i" = "lo" ]; then
+		echo -n
+	else
+		echo "$i"
+		echo "$i"
+		upstatus=`cat /sys/class/net/$i/operstate`
+		if [ "$upstatus" = "up" ]; then
+			echo network-transmit-receive
+		else
+			if [ "$upstatus" = "down" ]; then
+				echo network-offline
+			else
+				echo network-error
+			fi
+		fi
+		echo "sh -c '{ nohup '$HOME/.icewm/programs/control/cpls-bin/ncpa/properties' $i >/dev/null & } &'"
+		echo false
+	fi
+done

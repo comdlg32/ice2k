@@ -1,0 +1,59 @@
+XTerm*selectToClipboard: true
+XTerm*renderFont: true
+XTerm*faceName: Bm437 IBM VGA 8x16
+XTerm*faceSize: 12
+XTerm*iconHint: REPLACEHOMEFOLDER/.icewm/icons/terminal
+XTerm*VT100*background: black
+XTerm*VT100*foreground: silver
+XTerm*cursorBlink: true
+XTerm*cursorUnderLine: true
+XTerm.vt100.metaSendsEscape: true
+XTerm.vt100.backarrowKey: false
+XTerm.ttyModes: erase ^?
+XTerm*borderColor: #5d5d5d
+XTerm*colorInnerBorder: true
+XTerm*internalBorder: 1
+XTerm.*.decTerminalID: vt340
+XTerm*allowBoldFonts: false
+XTerm.*.numColorRegisters: 1024
+
+UXTerm*selectToClipboard: true
+UXTerm*renderFont: true
+UXTerm*faceName: Bm437 IBM VGA 8x16
+UXTerm*faceSize: 12
+UXTerm*iconHint: REPLACEHOMEFOLDER/.icewm/icons/terminal
+UXTerm*VT100*background: black
+UXTerm*VT100*foreground: silver
+UXTerm*cursorBlink: true
+UXTerm*cursorUnderLine: true
+UXTerm.vt100.metaSendsEscape: true
+UXTerm.vt100.backarrowKey: false
+UXTerm.ttyModes: erase ^?
+UXTerm*borderColor: #5d5d5d
+UXTerm*colorInnerBorder: true
+UXTerm*internalBorder: 1
+UXTerm.*.decTerminalID: vt340
+UXTerm*allowBoldFonts: false
+UXTerm.*.numColorRegisters: 1024
+
+!Xpdf*shadowThickness: 2
+Xpdf*Text*background: white
+Xpdf*pageNum*background: white
+Xpdf*XmList*background: white
+Xpdf*XmTextField*background: white
+
+
+! xft
+Xft.antialias: true
+Xft.dpi: 96
+Xft.hinting: true
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+Xft.rgba: rgb
+
+
+*.renderTable: variable
+*.renderTable.variable.fontName: Tahoma
+*.renderTable.variable.fontSize: 8
+*.renderTable.variable.fontType: FONT_IS_XFT
+

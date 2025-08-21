@@ -1,0 +1,121 @@
+#!/bin/sh
+if [ -f "$HOME/.icewm/cfg/animdesk/enabled" ]; then
+	if [ "$(cat "$HOME/.icewm/cfg/animdesk/enabled")" -eq "1" ]; then
+		true
+	else
+		exit 1
+	fi
+else
+	exit 1
+fi
+
+# Way to kill process in the current display
+# Based on https://unix.stackexchange.com/a/181371
+ActiveProcessPID()
+{
+	local process="$1"
+
+	local processPIDs="$(pidof -s "$process")"
+
+	local displayNumber="$(echo $DISPLAY \
+	| awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+	ps e -p "$processPIDs" \
+	        | awk -v n="$displayNumber" \
+	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+# Spams kill till the process doesn't exist
+KillPID()
+{
+	while true; do
+		kill "$(ActiveProcessPID "$1" 2>/dev/null)" 2>/dev/null || break
+	done
+}
+
+iniparse()
+{
+	sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.icewm/preferences
+}
+
+getcolor()
+{
+	iniparse DesktopBackgroundColor | sed -e 's/^"//'  -e 's/"$//'
+}
+
+getwallpaper()
+{
+	iniparse DesktopBackgroundImage | sed -e 's/^"//'  -e 's/"$//'
+}
+
+getposition()
+{
+	if [ "$(iniparse DesktopBackgroundCenter)" -eq 1 ]; then
+		if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+			#echo -n 'fit'
+			echo -n '--panscan=0'
+		else
+			#echo -n 'center'
+			echo -n '--video-unscaled'
+		fi
+	else
+		if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+			#echo -n 'fill'
+			echo -n '--panscan=1'
+		else
+			#echo -n 'tile'
+			echo -n '--video-unscaled'
+		fi
+	fi
+}
+
+anim()
+{
+	mpv --alpha=blend \
+	--no-input-default-bindings --no-hidpi-window-scale \
+	--no-stop-screensaver \
+	--no-ytdl --x11-name=animbg -x11-netwm=no \
+	--loop \
+	--no-audio \
+	--no-config --no-osd-bar --osd-level=0 --background="$(getcolor)" \
+	$(getposition) -wid=0 "$(getwallpaper)" > /dev/null 2>/dev/null
+	xrefresh
+}
+
+wallpaper="$(getwallpaper)"
+extension="${wallpaper##*.}"
+
+case "$extension" in
+	mp4|mkv|3gp|avi|swf|flv)
+		anim
+		exit 0
+		;;
+	gif)
+		if [ "$(identify "$wallpaper" | wc -l)" -gt 1 ]; then
+			anim
+		else
+			exit 0
+		fi
+		;;
+	png|apng)
+		if [ -n "$(xxd -p -c 8 "$wallpaper" | grep -ob '6163544c' | cut -d ':' -f 1)" ]; then
+			anim
+		else
+			exit 0
+		fi
+		;;
+	hta|htt|htm|html)
+		"$(dirname "$0")/adesktop"
+		exit 0
+		;;
+	i2k)
+		if cat "$file" 2>/dev/null | grep -q '[^[:print:][:blank:]]'; then
+			cat "$file" | grep -q "trail" && "$(dirname "$0")/trail"
+		fi
+		exit 0
+		;;
+	*)
+		exit 0
+		;;
+esac
+

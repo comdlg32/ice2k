@@ -1,0 +1,14 @@
+/* XPM */
+static char *frameIBL[] = {
+/* columns rows colors chars-per-pixel */
+"4 4 4 1 ",
+"  c shadowcolor",
+". c lightshadowcolor",
+"X c basecolor",
+"o c lightcolor",
+/* pixels */
+"XoXX",
+"XoXX",
+"X...",
+"    "
+};

@@ -1,0 +1,10 @@
+/* XPM */
+static char * frameATR_xpm[] = {
+"3 3 4 1",
+" 	c #000000",
+".	c #848284",
+"+	c #FFFFFF",
+"@	c #DEDFDE",
+"   ",
+".+ ",
+"@+ "};

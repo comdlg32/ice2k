@@ -1,0 +1,12 @@
+/* XPM */
+static char *frameAT[] = {
+/* columns rows colors chars-per-pixel */
+"1 4 2 1 ",
+"  c #d4d0c8",
+". c #ffffff",
+/* pixels */
+" ",
+".",
+" ",
+" "
+};

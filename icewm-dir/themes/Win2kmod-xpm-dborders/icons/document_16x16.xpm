@@ -1,0 +1,29 @@
+/* XPM */
+static char *document_16x16[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1 ",
+"  c black",
+". c red",
+"X c #0000BF",
+"o c #808080",
+"O c #C0C0C0",
+"+ c white",
+"@ c None",
+/* pixels */
+"@@@@ @ @ @ @ @@@",
+"@@@ +o+o+o+o+o@@",
+"@@o+ + + + + + @",
+"@@o++++++++++O @",
+"@@o++++++++++O @",
+"@@o+XXXXXXXX+O @",
+"@@o++++++++++O @",
+"@@o+XXXXXXXX+O @",
+"@@o++++++++++O @",
+"@@o+XXXXX+O.+O @",
+"@@o++++++O..+O @",
+"@@o+XXX+O.+.+O @",
+"@@o++++O....+O @",
+"@@o++++.+++.+O @",
+"@@oOOOOOOOOOOO @",
+"@@@           @@"
+};

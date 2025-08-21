@@ -1,0 +1,8 @@
+/* XPM */
+static char * dframeAT_xpm[] = {
+"1 3 2 1",
+" 	c basecolor",
+".	c lightcolor",
+" ",
+".",
+" "};

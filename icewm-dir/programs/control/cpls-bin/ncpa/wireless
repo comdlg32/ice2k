@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ -d "/sys/class/net/$1/wireless" ]; then
+	echo '--field="":LBL "" '
+#	echo '--field="Wireless Configuration":FBTN "xterm -e "~/aliases/wifi/wifi.sh"" '
+else
+	echo '--field=" ":LBL "" '
+#	echo '--field=" ":LBL "" '
+fi

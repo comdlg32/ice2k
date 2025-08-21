@@ -1,0 +1,9 @@
+#!/bin/sh
+cd "$HOME/.icewm/programs/control/cpls-bin/system-new"
+PLUG="$(~/.icewm/programs/common/random)"
+cpuname="$(LC_ALL=C lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p')"
+ram="$(grep MemTotal /proc/meminfo | awk '{print $2 / 1024}')"
+yad --plug=$PLUG --tabnum=1 --text="\nSystem: \n      $(uname -o) \n      $(uname -r) \n\nRegistered to:\n      $(whoami)\n      $(cat /etc/hostname)\n\nComputer:\n      $cpuname\n      $ram MiB RAM" --text-align=left \
+--image="computer.png" &
+./devmgr | yad --plug=$PLUG --tabnum=2 --list --column Icon:IMG --column Device:TEXT --no-headers --no-click --no-rules-hint --borders=0 &
+yad --notebook --title="System Properties" --key=$PLUG --tab="General" --tab="Device Manager" --height=420 --window-icon="preferences-system" --button="OK:0" --button="Cancel:1" --skip-taskbar --on-top --center

@@ -1,0 +1,40 @@
+#!/bin/sh
+geticon()
+{
+	if [ "$type" = "VGA compatible controller" ]; then
+		echo "display"
+	elif [ "$type" = "Ethernet controller" ]; then
+		echo "network-wired"
+	elif [ "$type" = "Network controller" ]; then
+		echo "network-wired"
+	elif [ "$type" = "Audio device" ]; then
+		echo "audio-speakers"
+	elif [ "$type" = "Memory controller" ]; then
+		echo "gnome-dev-memory"
+	elif [ "$type" = "IDE interface" ]; then
+		echo "drive-harddisk"
+	elif [ "$type" = "SATA controller" ]; then
+		echo "drive-harddisk"
+	else
+		echo "gnome-dev-memory"
+	fi
+}
+
+echo "folder"
+echo "PCI Devices:"
+
+lspci | cut -c 9- | sed 's/: /\n/' | while { read type; read device; } ; do
+	echo "$(geticon "$type")"
+	echo "   -  $device" | rev | cut -c 10- | rev
+done
+
+echo "blank.gif"
+echo
+
+echo "folder"
+echo "USB Devices:"
+
+lsusb | cut -c 34- | while read device ; do
+	echo "drive-removable-media-usb"
+	echo "   -  $device"
+done

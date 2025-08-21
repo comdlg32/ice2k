@@ -1,0 +1,13 @@
+# This is the Win2k/ME theme IceWM's menu definition file.
+# Merge with your own menu file or
+# Place in $HOME/.icewm
+
+prog "Command Prompt" terminal x-terminal-emulator
+prog "Web Browser" webbrowser x-www-browser
+separator
+# If you would like a Documents style submenu
+# Copy "documents.sh" to your home dir and set execute permission
+menuprog "Documents" documents ./documents.sh
+menuprog Monitors monitors icewm-menu-xrandr
+
+# See /usr/share/icewm/menu for more examples on how to configure

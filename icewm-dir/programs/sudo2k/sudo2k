@@ -1,0 +1,3 @@
+#!/bin/sh
+#exec ~/.icewm/programs/sudo2k/nonpinentry-sudo2k "$*"
+exec ~/.icewm/programs/sudo2k/pinentry-sudo2k "$@"

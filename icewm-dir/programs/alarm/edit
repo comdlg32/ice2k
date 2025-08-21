@@ -1,0 +1,16 @@
+#!/bin/sh
+getscriptdir()
+{
+	cd "$(dirname "${0}")"
+	echo "$PWD"
+}
+
+scriptdir="$(getscriptdir)"
+
+export PATH="$scriptdir:$PATH"
+
+yad --borders=10 --width=250 --height=300 --center \
+--button=OK:0 --window-icon="date" --title="Alarm" \
+--image="date" --image-on-top --text="<big>Alarm</big>" \
+--form --field='Name:' \
+--date-format="%X" --field='Time:':DT --field='Text:' --field='Sound:':FL

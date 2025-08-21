@@ -1,0 +1,147 @@
+# My favourite OS theme ever is Windows 2000.
+# This was later used by Microsoft for Windows ME as well. AFAIK, the only difference is WinME
+# didn't support shadows or fading. It used the Win98 "scroll" effect by default.
+# Finally, it was used as the base for "Windows Classic" theme in Windows XP.
+# There were some minor diffences, the Start Menu button size/icon come to mind.
+# Windows Vista/7 had a inaccurate implementation that was a "Software Rendered" port
+# however, it didn't use the native engine like XP did so was slower.
+
+
+ThemeDescription="Windows 2000 / ME"
+ThemeAuthor="PixelOCDGuy, modified by tf and enfaun"
+Look="flat"
+TaskbuttonIconOffset=6
+
+#DesktopBackgroundColor="#3a/6e/a5"
+TaskBarClockLeds=0
+TrayDrawBevel=1
+
+TitleButtonsLeft="s"
+TitleButtonsRight="xmi"
+TitleButtonsSupported="xmis"
+TitleBarHeight=19
+Gradients="titleAB.xpm titleAT.xpm titleIB.xpm titleIT.xpm separator.xpm buttonI.xpm buttonA.xpm switchbg.xpm dialogbg.xpm"
+TitleBarJoinRight=1
+
+BorderSizeX=4
+BorderSizeY=4
+CornerSizeX=4
+CornerSizeY=4
+DlgBorderSizeX=3
+DlgBorderSizeY=3
+
+ColorNormalButton="basecolor"
+ColorNormalButtonText="textcolor"
+ColorActiveButton="basecolor"
+ColorActiveButtonText="textcolor"
+
+ColorNormalTitleBarText="inactivetitlebartext"
+ColorActiveTitleBarText="activetitlebartext"
+ColorActiveBorder="basecolor"
+ColorInactiveBorder="basecolor"
+ColorNormalBorder="basecolor"
+
+ColorDialog="basecolor"
+ColorListBox="backcolor"
+ColorListBoxText="textcolor"
+ColorListBoxSelection="selbackcolor"
+ColorListBoxSelectionText="seltextcolor"
+ColorScrollBar="basecolor"
+ColorScrollBarSlider="basecolor"
+ColorScrollBarButton="basecolor"
+ColorScrollBarButtonArrow="textcolor"
+ColorLabel="basecolor"
+ColorLabelText="textcolor"
+
+ColorNormalMenu="basecolor"
+ColorActiveMenuItem="shadowcolor"
+ColorNormalMenuItemText="textcolor"
+ColorActiveMenuItemText="seltextcolor"
+ColorDisabledMenuItemText="lightshadowcolor"
+
+ColorDefaultTaskBar="basecolor"
+ColorNormalTaskBarApp="basecolor"
+ColorNormalTaskBarAppText="textcolor"
+ColorActiveTaskBarApp="basecolor"
+ColorActiveTaskBarAppText="textcolor"
+ColorMinimizedTaskBarApp="basecolor"
+ColorMinimizedTaskBarAppText="textcolor"
+
+ColorInput="backcolor"
+ColorInputText="textcolor"
+ColorClock="basecolor"
+ColorClockText="textcolor"
+
+ColorToolTip="#ffffe1"
+ColorToolTipText="textcolor"
+ColorMoveSizeStatus="basecolor"
+ColorMoveSizeStatusText="textcolor"
+ColorQuickSwitch="basecolor"
+ColorQuickSwitchText="textcolor"
+ColorQuickSwitchActive="selbackcolor"
+
+#PreferFreetypeFonts=1
+
+# Font Specification
+TitleFontNameXft	   =	"Tahoma:size=8:bold"
+MenuFontNameXft	           =    "tahoma:size=8"
+MinimizedWindowFontNameXft =    "tahoma:size=8"
+ActiveButtonFontNameXft    =    "tahoma:size=8"
+NormalButtonFontNameXft    =    "tahoma:size=8"
+QuickSwitchFontNameXft     =    "tahoma:size=8:bold"
+ListBoxFontNameXft         =    "tahoma:size=8"
+StatusFontNameXft          =    "tahoma:size=8"
+ToolTipFontNameXft         =    "tahoma:size=8"
+ActiveTaskBarFontNameXft   =    "tahoma:size=8:bold"
+NormalTaskBarFontNameXft   =    "tahoma:size=8"
+ClockFontNameXft           =    "tahoma:size=8"
+ApmFontNameXft             =    "tahoma:size=8"
+LabelFontNameXft	   =    "tahoma:size=8"
+NormalWorkspaceFontNameXft =    "tahoma:size=8"
+ActiveWorkspaceFontNameXft =    "tahoma:size=8:bold"
+
+TitleFontName		=	"-*-tahoma-bold-r-*-*-11-*-*-*-*-*-*-*"
+MenuFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+MinimizedWindowFontName	=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ActiveButtonFontName	=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+NormalButtonFontName	=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+QuickSwitchFontName	=	"-*-tahoma-bold-r-*-*-11-*-*-*-*-*-*-*"
+ListBoxFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+StatusFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ToolTipFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ActiveTaskBarFontName	=	"-*-tahoma-bold-r-*-*-11-*-*-*-*-*-*-*"
+NormalTaskBarFontName	=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ClockFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ApmFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+LabelFontName		=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+NormalWorkspaceFontName	=	"-*-tahoma-medium-r-*-*-11-*-*-*-*-*-*-*"
+ActiveWorkspaceFontName	=	"-*-tahoma-bold-r-*-*-11-*-*-*-*-*-*-*"
+
+#TitleFontName		=	"-cronyx-helvetica-bold-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#MenuFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#MinimizedWindowFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ActiveButtonFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#NormalButtonFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#QuickSwitchFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ListBoxFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#StatusFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ToolTipFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ActiveTaskBarFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#NormalTaskBarFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ClockFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ApmFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#LabelFontName		=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#NormalWorkspaceFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+#ActiveWorkspaceFontName	=	"-cronyx-helvetica-medium-r-normal-*-11-80-100-100-p-46-iso10646-1"
+
+
+
+
+MenuButtonIconVertOffset=-1
+
+#[taskbar]
+#TaskBarHeight=1
+#TaskBarEdgeTop=5
+#TaskBarEdgeBottom=5
+TitleBarVertOffset=1 
+TitleBarHorzOffset=0

@@ -1,0 +1,10 @@
+#!/bin/sh
+getscriptdir()
+{
+	cd "$(dirname "${0}")"
+	echo "$PWD"
+}
+
+export PATH="$(getscriptdir):$PATH"
+
+yad --image stock_volume --notification --text="Volume Control" --command=volume

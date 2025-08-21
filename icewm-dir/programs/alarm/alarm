@@ -1,0 +1,18 @@
+#!/bin/sh
+getscriptdir()
+{
+	cd "$(dirname "${0}")"
+	echo "$PWD"
+}
+
+scriptdir="$(getscriptdir)"
+
+export PATH="$scriptdir:$PATH"
+
+yad --width=250 --height=300 --center \
+--window-icon="date" --title="Alarms" \
+--button=Add:50 --buttons-layout=center \
+--list --no-headers --expand-column=3 \
+--dclick-action=edit \
+--hide-column=1 --column=ID:TEXT \
+--column=Icon:IMG --column=Name:text --column=Time:TEXT

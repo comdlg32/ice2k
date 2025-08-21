@@ -1,0 +1,2 @@
+#!/bin/sh
+pkexec xterm -e "nano /etc/network/interfaces"

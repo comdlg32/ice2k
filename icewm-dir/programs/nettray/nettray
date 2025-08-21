@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/.icewm/programs/nettray
+./icondetect $1 | yad --notification --listen \
+--image="network-offline" \
+--text="$1" --no-middle --class=nettray --name=nettray --title=nettray --action=menu

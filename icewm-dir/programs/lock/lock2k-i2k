@@ -1,0 +1,28 @@
+#!/bin/sh
+xdotool keyup Super_L
+xdotool keyup L
+if ! [ -f ~/.icewm/programs/lock/locktemp.png ]; then
+	lockpngexist=0
+elif ! grep -q $(xdpyinfo  | grep -oP 'dimensions:\s+\K\S+') ~/.icewm/programs/lock/i3res; then
+	lockpngexist=0
+else
+	lockpngexist=1
+fi
+
+if [ "$lockpngexist" -eq 0 ]; then
+	echo "Resolution has changed! Generating new file" >&2
+	echo $(xdpyinfo  | grep -oP 'dimensions:\s+\K\S+') > ~/.icewm/programs/lock/i3res
+	~/.icewm/programs/lock/convert
+fi
+
+
+xautolock -disable
+i3lock -n -u -e -p default -i ~/.icewm/programs/lock/locktemp.png
+
+if [ "$?" -eq "0" ]; then
+	xautolock -enable
+	true
+else
+	exec "$0"
+fi
+

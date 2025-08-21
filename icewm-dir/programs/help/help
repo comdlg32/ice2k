@@ -1,0 +1,19 @@
+#!/bin/sh
+printf "\33[?25l"
+stty -echo
+printf "\33[1m"
+echo To start a program
+printf "\33[0m"
+echo "1. Click the start button, and move your mouse to Programs."
+echo "2. Move your mouse to a category (like Network)."
+echo "3. Click the program you want to open."
+echo
+printf "\33[1m"
+echo "Tips"
+printf "\33[0m"
+echo "    After you start a program, a button appears in
+    the taskbar. To switch from a program to
+    another, simply click the program where
+    you want to switch to."
+cat > /dev/null
+

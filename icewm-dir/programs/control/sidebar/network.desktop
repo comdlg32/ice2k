@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Network
+Icon=network
+Exec=../cpls-bin/ncpa/ncpa
+Comment=Configure network devices.
+StartupNotify=true
+Terminal=false

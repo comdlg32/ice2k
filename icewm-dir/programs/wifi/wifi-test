@@ -1,0 +1,15 @@
+#!/bin/sh
+cd ~/.icewm/programs/wifi
+iwctl station wlan0 scan
+network="$(./networklist-REAL $@ | yad --list \
+--column=Quality:IMG --column=Connected:TEXT --column=Network:TEXT --column=Security:TEXT \
+--expand-column=3 --no-headers --listen --no-rules-hint \
+--center \
+--title="$*" --window-icon=network-wireless-100 \
+--button="Connect":0 --button="Disconnect":1 --button=""!reload:2 \
+--width=250 --height=300 \
+--skip-taskbar --borders=0 \
+--separator=" ")"
+network2="$(echo $network | sed 's/[[:blank:]]*$//' | sed '$s/\w*$//' | sed 's/[[:blank:]]*$//')"
+#echo "$network"
+echo "$network2"

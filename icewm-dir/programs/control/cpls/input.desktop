@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Input
+Icon=input-keyboard
+Exec=lxinput
+Comment=Configure keyboard, mouse, and other input devices
+StartupNotify=true
+Terminal=false
+Categories=GTK;Settings;HardwareSettings;X-LXDE-Settings;
+NotShowIn=GNOME;KDE;XFCE;MATE;

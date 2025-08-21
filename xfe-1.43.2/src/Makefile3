@@ -1,0 +1,53 @@
+.PHONY: clean uninstall install
+
+CC = gcc
+CXX = g++
+
+CFLAGS = -Wall -c
+CXXFLAGS = -Wall -c
+
+PREFIX = /usr/local
+
+
+# for non developers, do not touch this
+VERSION = 0.0.1
+CFLAGS += -D UHEXE_VERSION="\"$(VERSION)\"" -c --std=c99
+CXXFLAGS += `fox-config --cflags` -D UHEXE_VERSION="\"$(VERSION)\"" -c --std=c++98 -I.. -DLOCALEDIR="\"$(PREFIX)/share/locale\""
+LDFLAGS += `fox-config --libs`
+
+#ICONS = res/ico/*/*.gif res/ico/*.gif
+EXECUTABLE = xfe
+
+#COBJECTS = $(CSOURCES:.c=.o)
+
+#CXXSOURCES = foxutils.cpp main.cpp UhexeWindow.cpp AboutBox.cpp Hex.cpp basecontrols.cpp
+CXXSOURCES = ArchInputDialog.cpp Bookmarks.cpp BrowseInputDialog.cpp CommandWindow.cpp DialogBox.cpp DirHistBox.cpp DirList.cpp DirPanel.cpp ExecuteBox.cpp File.cpp FileDialog.cpp FileDict.cpp FileList.cpp FilePanel.cpp FontDialog.cpp HistInputDialog.cpp IconList.cpp InputDialog.cpp Keybindings.cpp KeybindingsDialog.cpp MessageBox.cpp OverwriteBox.cpp PathLinker.cpp Preferences.cpp Properties.cpp SearchPanel.cpp SearchWindow.cpp StringList.cpp TextLabel.cpp TextWindow.cpp WriteWindow.cpp XFileExplorer.cpp XFileImage.cpp XFilePackage.cpp XFileWrite.cpp clearlooks.cpp foxhacks.cpp icons.cpp main.cpp startupnotification.cpp xfeutils.cpp
+CXXOBJECTS = $(CXXSOURCES:.cpp=.o)
+
+OBJECTS = $(CXXOBJECTS) $(COBJECTS)
+
+all: $(EXECUTABLE)
+
+#$(OBJECTS): res/foxres.h
+
+# generate icon resources
+#res/foxres.h: $(ICONS)
+#	reswrap -s -p resico_ -z -d -o res/foxres.h $(ICONS)
+
+# link executable
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+
+clean:
+	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
+
+install: all
+	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
+
+uninstall:
+	rm -f $(PREFIX)/bin/$(EXECUTABLE)
+
+#AboutBox.o: foxutils.h AboutBox.h common.h
+#UhexeWindow.o: foxutils.h UhexeWindow.h AboutBox.h common.h
+#foxutils.o: foxutils.h common.h res/foxres.h
+#main.o: foxutils.h UhexeWindow.h common.h

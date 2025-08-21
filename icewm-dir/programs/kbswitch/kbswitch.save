@@ -1,0 +1,146 @@
+#!/bin/sh
+
+getscriptdir()
+{
+        cd "$(dirname "${0}")"
+        echo "$PWD"
+}
+
+
+scriptdir="$(getscriptdir)"
+export PATH="$scriptdir:$PATH"
+export fifodir="/tmp/kbswitch"
+export fifo="$fifodir/fifo"
+kblayouts="$(cat ~/.icewm/cfg/kbswitch/layouts)"
+
+#IFS="," read -ra layouts <<< "$kblayouts"
+
+pt_to_px() {
+        local pt="$(echo "$1+.5" | bc -l)"
+        local dpi=96
+        local px="$(echo "scale=0; $pt * $dpi / 72" | bc -l)"
+        echo -n "$px"
+}
+
+genicon()
+{
+	if test "$GTK2_RC_FILES"; then
+		font="$(cat "$(for arg in "$GTK2_RC_FILES"; do
+			part="${arg%%[:;]*}"
+
+			if [ -z "$part" ]; then
+				echo "$arg"
+	                else
+				echo "$part"
+			fi
+		done)" | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.gtkrc-2.0 | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+	elif test -f ~/.gtkrc-2.0; then
+		font="$(cat ~/.gtkrc-2.0 | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+	else
+		font="Tahoma 8"
+	fi
+
+	if ! test "$font"; then
+		font="Tahoma 8"
+	fi
+
+	typeface="$(echo -n "$font" | sed 's/[[:space:]]*\([0-9]\+\)$//')"
+
+	fontsize="$(pt_to_px "$(echo -n "$font" | grep -Eo '[0-9]+$' || echo -n "8")" )"
+
+	label="$(echo "$1" | tr [:lower:] [:upper:])"
+        mkdir -p "/tmp/kbswitch"
+        convert -background "#0a2368" -fill white -size 16x16 -gravity center -font "$typeface" -pointsize "$fontsize" label:$label "/tmp/kbswitch/$1.png"
+}
+
+addlayout()
+{
+	genicon "$1"
+	label="$(getname "$1")"
+	if ! test "$menu"; then
+		export menu="$label!setlayout $1!$1.png"
+	else
+		export menu=""$menu"|$label!setlayout $1!$1.png"
+	fi
+}
+
+#for var in "$kblayouts"
+#do
+#	genicon "$var"
+#done
+
+# Set the Internal Field Separator (IFS) to space to split the values
+IFS=","
+for layout in $kblayouts; do
+	addlayout "$layout"
+done
+IFS=
+
+#echo "$menu"
+
+cd "$fifodir"
+echo "$$" > "$fifodir/pid"
+rm "$fifo"
+mkfifo "$fifo"
+
+if test "$GTK2_RC_FILES"; then
+	font="$(cat "$(for arg in "$GTK2_RC_FILES"; do
+		part="${arg%%[:;]*}"
+
+		if [ -z "$part" ]; then
+			echo "$arg"
+		else
+			echo "$part"
+		fi
+	done)" | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.gtkrc-2.0 | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+elif test -f ~/.gtkrc-2.0; then
+	font="$(cat ~/.gtkrc-2.0 | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+else
+	font="Tahoma 8"
+fi
+
+if ! test "$font"; then
+	font="Tahoma 8"
+fi
+
+trapterm()
+{
+	IFS=","
+
+	cd "$fifodir"
+
+	for layout in $kblayouts; do
+		rm "$layout.png"
+	done
+
+	IFS=
+
+	export catpid=$(pgrep -f "cat "$fifo"")
+	kill "$catpid"
+
+	rm "$fifo"
+	exit
+}
+
+cd "$fifodir"
+defaultkb="$(echo "$kblayouts" | awk -F',' '{print $1}' | awk '{print $1}')"
+setxkbmap -layout $defaultkb
+defaulticon="$defaultkb.png"
+
+trap 'trapterm' TERM INT TSTP QUIT
+
+(trap 'kill -15 $PPID' TERM INT TSTP QUIT; \
+while true; do \
+cat "$fifo" 2>/dev/null&wait || exit \
+; done) | \
+yad --text="Keyboard Layout Switcher" --class=kbswitch --name=kbswitch \
+--notification --listen --image="$defaulticon" --menu="$menu" --no-middle &
+yadpid="$!"
+
+export catpid=$(pgrep -f "cat "$fifo"")
+wait "$yadpid"
+
+#yad --notification --listen --image="$defaulticon" --menu="$menu"
+
+#genicon $1
+

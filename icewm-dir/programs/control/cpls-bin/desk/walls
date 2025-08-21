@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "action-unavailable"
+echo "(None)"
+echo jpg
+echo Ascent
+echo png
+echo Bliss

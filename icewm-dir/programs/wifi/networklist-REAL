@@ -1,0 +1,75 @@
+#!/bin/sh
+
+
+# does system use iwd?
+if type iwctl >/dev/null 2>&1
+# for debugging purposes
+#if false
+then
+	while LC_ALL=C iwctl station $@ show | grep "Scanning" | grep -q yes
+	do
+		sleep 2
+	done
+
+	netlistcon="$(iwctl station $@ get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	netlist="$(echo "$netlistcon" | cut -c 3- )"
+	netnumber="$(echo "$netlist" | wc -l)"
+	#echo "$netlistcon"
+	#echo
+	#echo "$netlist" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' | sed 's/..... *$//' | sed 's/[[:blank:]]*$//'
+
+	dbms() {
+		if [ $dbms -ge -6000 ]; then
+		        echo "network-wireless-100"
+		elif [ $dbms -ge -6700 ]; then
+		        echo "network-wireless-75"
+		elif [ $dbms -ge -7500 ]; then
+		        echo "network-wireless-50"
+		elif [ $dbms -lt -7500 ]; then
+			        echo "network-wireless-25"
+		fi
+	}
+
+	for i in $(seq -s " " 1 $netnumber); do
+		export dbms="$(echo "$netlist" | awk 'NF>1{print $NF}' | sed -n "${i}p")"
+		dbms
+		echo "$netlistcon" | cut -c 1 | sed -n "${i}p"
+		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
+		echo "$netlist" | sed -n "${i}p" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' |  awk 'NF>1{print $NF}'
+	done
+else
+	filter() {
+		currentwifi="$(/sbin/iwconfig $1 | grep -o 'ESSID.*' | cut -c 8- | rev | cut -c 4- | rev)"
+		grep ESSID | cut -c 28- | rev | cut -c 2- | rev | sed '/^$/d' | awk '!seen[$0]++' | while read line; do
+			echo "network-wireless-100"
+			if [ "$line" = "$currentwifi" ]; then
+				echo '>'
+			else
+				echo ' '
+			fi
+			echo "$line"
+			echo psk
+		done
+	}
+
+	# if not...
+	# prototype code for wpasupplicant
+	if type sudo > /dev/null 2>&1
+	then
+		if [ -f /sbin/iwlist ]; then
+			sudo -n  /sbin/iwlist "$1" scan | filter
+		elif [ -f /usr/sbin/iwlist ]; then
+			sudo -n  /usr/sbin/iwlist "$1" scan | filter
+		else
+			echo "System has no wireless support"
+		fi
+	else
+		if [ -f /sbin/iwlist ]; then
+			/sbin/iwlist "$1" scan | filter
+		elif [ -f /usr/sbin/iwlist ]; then
+			/usr/sbin/iwlist "$1" scan | filter
+		else
+			echo "System has no wireless support"
+		fi
+	fi
+fi

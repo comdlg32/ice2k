@@ -1,0 +1,325 @@
+#!/usr/bin/env wish
+
+# All code here is licensed under LGPLv2.
+# LGPLv2 license is in the LICENSE file.
+
+# Copyright 0penrc (Toiletflusher, TechSalt.)
+
+# This is the Windows version, without some X11 specific code.
+
+# set title
+wm title . {Getting Started with Windows 2000}
+
+# set window icon
+image create photo icon -file [file dirname [file normalize [info script] ] ]/program.png
+wm iconphoto . icon
+
+# disable resizing
+wm resizable . 0 0
+
+# set fonts
+set fontfamily {Tahoma}
+set fontsize {8}
+
+set fontfamilyheader {Tahoma}
+set fontsizeheader {12}
+
+font create mainfont -family $fontfamily -size $fontsize
+font create smallfont -family $fontfamily -size 7
+font create boldfont -family $fontfamily -size $fontsize -weight bold
+font create headerfont -family $fontfamilyheader -size $fontsizeheader -weight bold
+
+# set strings
+set left_register_name {Register Now}
+set left_discover_name {Discover Windows}
+set left_connect_name {Connect to the Internet}
+set left_edition_name {Change Windows Edition}
+
+set right_main_title {Getting Started}
+set right_main_text {You can access all your documents, programs, and settings from the start button.}
+
+set right_discover_title {Discover Windows 2000}
+set right_discover_text {Windows 2000 Professional is easier to use, easier to manage, more compatible, and more powerful. The Discover Windows 2000 Professional tour highlights all the newest and coolest features.}
+
+set right_register_title {Register Windows 2000}
+set right_register_text {Register your copy of Windows 2000 Professional and help Microsoft give you:
+
+• The best possible product support
+• The right software upgrades
+• The most relevant new product information}
+
+set right_connect_title {Connect to the Internet}
+set right_connect_text {• Read the latest news and financial information
+• Visit Web sites around the world
+• Get e-mail
+
+We make it quick and simple for you to connect to the internet.
+}
+
+set right_edition_title {Change Windows Edition}
+set right_edition_text {Change Windows edition to a different one, for example:
+
+• Windows 2000 Professional
+• Windows 2000 Server
+• Windows Powered
+}
+
+set startup_checkbox_name {Show this screen at startup.}
+set exit_button_name {Exit}
+
+proc getVariable {variable} {
+        upvar $variable variableCont
+        return $variableCont
+}
+
+#puts [getVariable right_main_title]
+
+# set colors
+set leftbg {#a6caf0}
+set leftseparator {#336699}
+set headerbg {#336699}
+
+# win32-style control colors
+global backgroundColor
+global lightShadowColor
+global shadowColor
+global lightColor
+global foregroundColor
+global windowColor
+
+set backgroundColor {#d4d0c8}
+set lightShadowColor {#808080}
+set shadowColor {#404040}
+set lightColor {#FFFFFF}
+set foregroundColor {#000000}
+set windowColor {#FFFFFF}
+
+
+# center window and set size
+set x_1 [ expr {([ winfo vrootwidth  . ] - 478 ) / 2 }]
+set y_1 [ expr {([ winfo vrootheight . ] - 322 ) / 2 }]
+wm geometry . 478x322+$x_1+$y_1
+
+# create image
+image create photo logo -file [file dirname [file normalize [info script] ] ]/logo.png
+
+# create logo canvas
+canvas .logo -width 478 -height 93 -highlightthickness 0
+.logo create image 0 0 -image logo -anchor nw
+
+pack .logo
+
+# create left side canvas
+canvas .leftcanvas -width 179 -height 229 -highlightthickness 0 -background $leftbg
+pack .leftcanvas -side left
+
+# create left side lines
+.leftcanvas create line 0 24 179 24 -fill $leftseparator
+.leftcanvas create rectangle 0 0 179 24 -tags hovereffect-register -outline {}
+
+.leftcanvas create line 0 49 179 49 -fill $leftseparator
+.leftcanvas create rectangle 0 25 179 49 -tags hovereffect-discover -outline {}
+
+.leftcanvas create line 0 74 179 74 -fill $leftseparator
+.leftcanvas create rectangle 0 50 179 74 -tags hovereffect-connect -outline {}
+
+.leftcanvas create line 0 99 179 99 -fill $leftseparator
+.leftcanvas create rectangle 0 75 179 99 -tags hovereffect-edition -outline {}
+
+# create left side text
+.leftcanvas create text 10 12  -anchor w -font boldfont -underline 0 -text $left_register_name
+.leftcanvas create text 10 37 -anchor w -font boldfont -underline 0 -text $left_discover_name
+.leftcanvas create text 10 62 -anchor w -font boldfont -underline 0 -text $left_connect_name
+.leftcanvas create text 10 87 -anchor w -font boldfont -underline 0 -text $left_edition_name
+
+
+# create right side canvas
+canvas .rightcanvas -width 478 -height 229 -highlightthickness 0 -background white
+pack .rightcanvas
+
+# create right side bitmap
+image create photo welcome -file [file dirname [file normalize [info script] ] ]/welcome.png
+.rightcanvas create image 17 71 -tags image -image welcome -anchor nw
+
+# create right side corner bitmap
+image create photo connect -file [file dirname [file normalize [info script] ] ]/connect.png
+image create photo discover -file [file dirname [file normalize [info script] ] ]/discover.png
+image create photo register -file [file dirname [file normalize [info script] ] ]/register.png
+.rightcanvas create image 299 229 -tags cornerimage -anchor se -state hidden
+
+# create right side text
+.rightcanvas create text 16 11  -anchor nw -fill $headerbg -font headerfont -tags header -text $right_main_title
+.rightcanvas create text 16 37  -anchor nw -font mainfont -width 260 -tags text -text $right_main_text
+
+# create exit button
+.rightcanvas create rectangle 248 200 290 220 -outline {#808080} -fill white
+.rightcanvas create text 270 211 -fill {#808080} -underline 0 -text $exit_button_name -font boldfont
+.rightcanvas create rectangle 251 203 287 217 -tags stipple -outline {#2b2f37} -state hidden -outlinestipple @[file dirname [file normalize [info script] ] ]/stipple.xbm
+#.rightcanvas create bitmap 251 203 -tags stipple -foreground {#2b2f37} -state hidden -anchor nw -bitmap @[file dirname [file normalize [info script] ] ]/stipple.xbm
+
+# create exit button action
+.rightcanvas create rectangle 248 200 290 220 -tags exit-action -outline {} -fill {}
+.rightcanvas bind exit-action <Enter> {
+	%W configure -cursor hand2
+	%W itemconfig stipple -state normal
+}
+
+.rightcanvas bind exit-action <Leave> {
+	%W configure -cursor left_ptr
+	%W itemconfig stipple -state hidden
+}
+
+.rightcanvas bind exit-action <ButtonRelease-1> {
+	exit
+}
+
+# create left side actions
+
+# "Register Now" action
+.leftcanvas create rectangle 0 0 179 24 -tags register -outline {}
+.leftcanvas bind register <Enter> {
+	%W configure -cursor hand2
+	%W itemconfig hovereffect-register -fill white
+
+	.rightcanvas itemconfig image -state hidden
+	.rightcanvas itemconfig header -text [getVariable right_register_title]
+	.rightcanvas itemconfig text -text [getVariable right_register_text]
+	.rightcanvas itemconfig cornerimage -image register -state normal
+}
+
+.leftcanvas bind register <Leave> {
+	%W configure -cursor left_ptr
+	%W itemconfig hovereffect-register -fill {}
+
+	.rightcanvas itemconfig image -state normal
+	.rightcanvas itemconfig header -text [getVariable right_main_title]
+	.rightcanvas itemconfig text -text [getVariable right_main_text]
+	.rightcanvas itemconfig cornerimage -state hidden
+}
+
+.leftcanvas bind register <Button-1> {
+	exec winver.exe &
+}
+
+# "Discover Windows" action
+.leftcanvas create rectangle 0 25 179 49 -tags discover -outline {}
+.leftcanvas bind discover <Enter> {
+	%W configure -cursor hand2
+	%W itemconfig hovereffect-discover -fill white
+
+	.rightcanvas itemconfig image -state hidden
+	.rightcanvas itemconfig header -text [getVariable right_discover_title]
+	.rightcanvas itemconfig text -text [getVariable right_discover_text]
+	.rightcanvas itemconfig cornerimage -image discover -state normal
+}
+
+.leftcanvas bind discover <Leave> {
+	%W configure -cursor left_ptr
+	%W itemconfig hovereffect-discover -fill {}
+
+	.rightcanvas itemconfig image -state normal
+	.rightcanvas itemconfig header -text [getVariable right_main_title]
+	.rightcanvas itemconfig text -text [getVariable right_main_text]
+	.rightcanvas itemconfig cornerimage -state hidden
+}
+
+.leftcanvas bind discover <Button-1> {
+	exec winver.exe &
+#	exec xterm
+}
+
+# "Connect to the Internet" action
+.leftcanvas create rectangle 0 50 179 74 -tags connect -outline {}
+.leftcanvas bind connect <Enter> {
+	%W configure -cursor hand2
+	%W itemconfig hovereffect-connect -fill white
+
+	.rightcanvas itemconfig image -state hidden
+	.rightcanvas itemconfig header -text [getVariable right_connect_title]
+	.rightcanvas itemconfig text -text [getVariable right_connect_text]
+	.rightcanvas itemconfig cornerimage -image connect -state normal
+
+}
+
+.leftcanvas bind connect <Leave> {
+	%W configure -cursor left_ptr
+	%W itemconfig hovereffect-connect -fill {}
+
+	.rightcanvas itemconfig image -state normal
+	.rightcanvas itemconfig header -text [getVariable right_main_title]
+	.rightcanvas itemconfig text -text [getVariable right_main_text]
+	.rightcanvas itemconfig cornerimage -state hidden
+}
+
+.leftcanvas bind connect <Button-1> {
+	exec winver.exe &
+}
+
+# "Change Windows Edition" action
+.leftcanvas create rectangle 0 75 179 99 -tags edition -outline {}
+.leftcanvas bind edition <Enter> {
+	%W configure -cursor hand2
+	%W itemconfig hovereffect-edition -fill white
+
+	.rightcanvas itemconfig image -state hidden
+	.rightcanvas itemconfig header -text [getVariable right_edition_title]
+	.rightcanvas itemconfig text -text [getVariable right_edition_text]
+	.rightcanvas itemconfig cornerimage -image discover -state normal}
+
+.leftcanvas bind edition <Leave> {
+	%W configure -cursor left_ptr
+	%W itemconfig hovereffect-edition -fill {}
+
+	.rightcanvas itemconfig image -state normal
+	.rightcanvas itemconfig header -text [getVariable right_main_title]
+	.rightcanvas itemconfig text -text [getVariable right_main_text]
+	.rightcanvas itemconfig cornerimage -state hidden
+}
+
+.leftcanvas bind edition <Button-1> {
+	exec winver.exe &
+}
+
+# startup checkbox
+set x_checkbox {8}
+set y_checkbox {210}
+
+.leftcanvas create rectangle $x_checkbox $y_checkbox [expr {$x_checkbox + 13}] [expr {$y_checkbox + 13}] -fill $backgroundColor -outline {}
+
+.leftcanvas create line $x_checkbox $y_checkbox [expr {$x_checkbox + 12}] $y_checkbox -fill $lightShadowColor
+.leftcanvas create line $x_checkbox $y_checkbox $x_checkbox [expr {$y_checkbox + 12}] -fill $lightShadowColor
+
+.leftcanvas create line [expr {$x_checkbox + 1}] [expr {$y_checkbox + 1}] [expr {$x_checkbox + 1}] [expr {$y_checkbox + 11}] -fill $shadowColor
+.leftcanvas create line [expr {$x_checkbox + 1}] [expr {$y_checkbox + 1}] [expr {$x_checkbox + 11}] [expr {$y_checkbox + 1}] -fill $shadowColor
+
+.leftcanvas create line [expr {$x_checkbox + 12}] $y_checkbox [expr {$x_checkbox + 12}] [expr {$y_checkbox + 13}] -fill $lightColor
+#.leftcanvas create line 12 0 12 13 -fill $lightColor
+
+.leftcanvas create line $x_checkbox [expr {$y_checkbox + 12}] [expr {$x_checkbox + 12}] [expr {$y_checkbox + 12}] -fill $lightColor
+
+.leftcanvas create rectangle [expr {$x_checkbox + 2}] [expr {$y_checkbox + 2}] [expr {$x_checkbox + 10}] [expr {$y_checkbox + 10}] -fill $windowColor -outline $windowColor -tags cbBox
+.leftcanvas create text [expr {$x_checkbox + 17}] [expr {$y_checkbox + 5}] -anchor w -underline 0 -font smallfont -text $startup_checkbox_name
+
+.leftcanvas create rectangle [expr {$x_checkbox + 0}] [expr {$y_checkbox + 0}] [expr {$x_checkbox + 171}] [expr {$y_checkbox + 13}] -outline {} -tags "cbAction"
+
+global Startup
+set Startup {True}
+
+.leftcanvas create bitmap [expr {$x_checkbox + 3}] [expr {$y_checkbox + 3}] -anchor nw -tags checkbox -foreground $foregroundColor -bitmap @[file dirname [file normalize [info script] ] ]/checkbox.xbm
+
+.leftcanvas bind cbAction <ButtonPress-1> {
+	#%W itemconfig cbBox -outline $backgroundColor -fill $backgroundColor
+	%W itemconfig cbBox -outline [getVariable backgroundColor] -fill [getVariable backgroundColor]
+}
+
+.leftcanvas bind cbAction <ButtonRelease-1> {
+	#%W itemconfig cbBox -outline $backgroundColor -fill $backgroundColor
+	%W itemconfig cbBox -outline [getVariable windowColor] -fill [getVariable windowColor]
+	if {$Startup == {True}} {
+		%W itemconfig checkbox -state hidden
+		set Startup {False}
+	} else {
+		%W itemconfig checkbox -state normal
+		set Startup {True}
+	}
+}

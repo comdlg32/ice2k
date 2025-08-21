@@ -1,0 +1,9 @@
+#!/bin/sh
+PLUG="$(~/.icewm/programs/common/random)"
+cd ~/.icewm/programs/control/cpls-bin/timedate
+date="$(date +"%H:%M:%S")"
+yad --tabnum=2 --justify=center --entry --entry-text "$date" --image clock.png --image-on-top --no-buttons --width=0 --borders=5 --plug=$PLUG&
+yad --tabnum=1 --calendar --borders=5 --plug=$PLUG &
+yad --orient=horizontal --paned --key=$PLUG \
+--text="\n   Date							   Time" --center --on-top --skip-taskbar --window-icon=date --title="Date/Time Properties" \
+--button="OK:0" --button="Cancel:1" --button="Apply:0"

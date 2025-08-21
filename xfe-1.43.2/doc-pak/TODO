@@ -1,0 +1,44 @@
+ 
+========================= TODO list and known issues =========================
+
+
+- support HiDPI monitors
+
+
+Known issues
+------------
+
+- to allow composed characters (like ä, Ö, ê, etc.) to be entered in xfe, xfw, etc., the FOX library *must* be
+  compiled with the --with-xim configure option.
+- if the mouse pointer is on a menu title, then it is not possible to navigate using the keyboard on the menu titles.
+  This is a FOX issue.
+- in Xfw, if the wordwrap mode is selected an line numbers are displayed, then the line numbers are uncorrectly
+  displayed for wrapped lines. This is also a FOX issue.
+
+
+
+To do
+------
+
+- sort bookmarks alphabetically
+- add the ability to mount / umount file systems using sudo
+- add the ability to delete bookmarks and change their order
+- add a way to change order and display of columns in detailed mode
+- places (home + trash + mtab entries) and bookmark items could be displayed as a tab pane in the tree panel
+- use of MIME types in complement to file associations
+- use a Control Panel style for the Preferences dialog
+- implement lenghty operations in background (image thumbnails, copy...)
+- add context options (copy / paste / delete) to the location bar, like in Firefox
+- add a way to clean history lists (like the open file list, for example)
+- internationalization should handle multiple plural forms (required by languages like polish, czech, etc.)
+
+
+
+User requests
+--------------
+
+- autosize file name header in detailed view
+- context menus on text dialogs
+- hotkeys to go directly to a directory
+- Samba support (network neighborhood, using Fuse?)
+

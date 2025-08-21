@@ -1,0 +1,17 @@
+#!/bin/sh
+
+pass=$(~/.icewm/programs/sudo2k/pinentry "$*" "$* requires root. Type in your password to continue." "Password:")
+
+if [ $? -eq 0 ]; then
+	if echo "$pass" | su -c true "$USER"; then
+		BASEDIR="$(dirname "$0")"
+		trap '' PIPE
+		echo "$pass" | "$BASEDIR/doas-read-stdin" $*
+	else
+		if ~/.icewm/programs/sudo2k/pinentry-incorrect "Password Incorrect" "The password is incorrect! Try again."; then
+			exec "$0" "$*"
+		fi
+	fi
+else
+	exit 1
+fi

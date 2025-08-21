@@ -1,0 +1,11 @@
+#!/bin/sh
+yad --geometry 1920x350+0+0 --no-buttons --on-top --undecorated --skip-taskbar \
+--title "QuakeXTERM" --window-icon xterm &
+pidofyadterm="$!"
+while ! xprop -name QuakeXTERM 2>/dev/null
+do
+	sleep 0.1
+done
+#sleep 0.5
+xterm -into "$(xprop -name QuakeXTERM | grep "window id" | head -1 | cut -c 32-)"
+kill $pidofyadterm

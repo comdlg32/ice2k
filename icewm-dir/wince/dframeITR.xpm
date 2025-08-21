@@ -1,0 +1,14 @@
+/* XPM */
+static char *frameITR[] = {
+/* columns rows colors chars-per-pixel */
+"4 4 4 1 ",
+"  c #403e3b",
+". c #8b8984",
+"X c #d4d0c8",
+"o c #ffffff",
+/* pixels */
+"XXX ",
+"oo. ",
+"XX. ",
+"XX. "
+};

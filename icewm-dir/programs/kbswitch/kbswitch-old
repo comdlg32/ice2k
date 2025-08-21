@@ -1,0 +1,81 @@
+#!/bin/sh
+
+refresh()
+{
+        while true; do
+                cat "/tmp/kbswitch/tray.$USER"
+                sleep 1
+        done
+}
+
+
+genicon()
+{
+	mkdir "/tmp/kbswitch"
+	convert -background "#0a2368" -fill white -size 16x16 -gravity center -font Tahoma -pointsize 11 label:$1 "/tmp/kbswitch/$1.png"
+}
+
+
+addlayout()
+{
+	mkdir /tmp/kbswitch
+#	mkfifo /tmp/kbswitch/tray.$USER
+        genicon $1
+        if (: "${KBSWITCHER?}") 2>/dev/null; then
+                KBSWITCHER="$KBSWITCHER|$1!$HOME/.icewm/programs/kbswitch/kbswitch addlayout $1!/tmp/kbswitch/$1.png"
+        else
+                KBSWITCHER="$KBSWITCHER|menu:$1!$HOME/.icewm/programs/kbswitch/kbswitch addlayout $1!/tmp/kbswitch/$1.png"
+        fi
+}
+
+
+if [ "$1" = "addlayout" ]; then
+	addlayout $2
+	exit 0
+fi
+
+#rm -rf "/tmp/kbswitch"
+DEFAULTLAYOUT="us"
+
+
+#addlayout()
+#{
+#	genicon $1
+#	if head -n 1 /tmp/kbswitch/tray.tf | grep -q -- "^menu:"; then
+#		echo -n "|$1!"$HOME/.icewm/programs/kbswitch/kbswitch addlayout $1"!/tmp/kbswitch/$1.png" >> "/tmp/kbswitch/tray.$USER"
+#	else
+#		echo -n "menu:$1!"$HOME/.icewm/programs/kbswitch/kbswitch addlayout $1"!/tmp/kbswitch/$1.png" >> "/tmp/kbswitch/tray.$USER"
+#	fi
+#}
+
+trayicon()
+{
+	addlayout "$DEFAULTLAYOUT"
+	addlayout "nl"
+	setlayout "$DEFAULTLAYOUT"
+	cd "/tmp/kbswitch"
+	refresh | yad --notification --listen
+	traypid="$!"
+}
+
+setlayout()
+{
+	if test -f "/tmp/kbswitch/$1.png"; then
+		cd "/tmp/kbswitch"
+		setxkbmap -layout "$1"
+		echo >> "/tmp/kbswitch/tray.$USER"
+		echo -n "icon:$1.png" >> "/tmp/kbswitch/tray.$USER"
+		echo >> "/tmp/kbswitch/tray.$USER"
+	else
+		addlayout $1
+		setlayout $1
+	fi
+}
+
+#setlayout "$DEFAULTLAYOUT"
+trayicon
+#traypid="$!"
+#echo $traypid
+#sleep 1
+#setlayout us
+#wait $traypid

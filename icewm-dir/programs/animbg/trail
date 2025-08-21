@@ -1,0 +1,13 @@
+#!/usr/bin/env wish
+option add *background [exec ~/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher getcolor]
+wm attributes . -type desktop
+set geometry [winfo screenwidth .]x[winfo screenheight .]+0+0
+wm geometry . "$geometry"
+wm overrideredirect . 1
+frame .bg
+pack .bg -expand yes -fill both
+lower .
+tkwait visibility .
+lower .
+after 250
+lower .

@@ -1,0 +1,8 @@
+#!/bin/sh
+~/.icewm/programs/msgbox/msgbox 3 "dialog-information" \
+"hello" \
+"this firefox theme kinda doogie ass ngl
+it's only meant for basic ahh internet browsing
+use echelon for best browsing experience idfk
+
+do you want to install echelon?"

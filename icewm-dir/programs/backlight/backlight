@@ -1,0 +1,149 @@
+#!/usr/bin/env wish
+#wm overrideredirect . 1
+wm attributes . -type notification
+
+cd [file dirname [file normalize [info script]]]
+
+focus -force .
+
+#wm attributes . -toolwindow 1
+#set t [toplevel .abc]
+
+#wm transient $t .
+
+global backgroundColor
+global lightShadowColor
+global shadowColor
+global lightColor
+global foregroundColor
+global windowColor
+
+set backgroundColor {#d4d0c8}
+set lightShadowColor {#808080}
+set shadowColor {#404040}
+set lightColor {#FFFFFF}
+set foregroundColor {#000000}
+set windowColor {#FFFFFF}
+
+option add *background $backgroundColor
+option add *foreground $foregroundColor
+
+wm geometry . 81x136+[expr {[winfo pointerx .] - 40}]+[expr {[winfo pointery .] - 140}]
+
+#wm geometry . 81x136+1820+921
+
+frame .container
+
+#font create mainfont -family {Tahoma} -size {8}
+font create mainfont -family {Helvetica} -size {8}
+
+proc getWindowColor {} {
+	upvar windowColor windowColorCont
+	return $windowColorCont
+}
+
+proc getForegroundColor {} {
+	upvar foregroundColor foregroundColorCont
+	return $foregroundColorCont
+}
+
+
+proc createBorders {} {
+	upvar backgroundColor backgroundColorCont
+	upvar foregroundColor foregroundColorCont
+	upvar shadowColor shadowColorCont
+	upvar lightShadowColor lightShadowColorCont
+	upvar lightColor lightColorCont
+	upvar windowColor windowColorCont
+
+	canvas .container.borders -highlightthickness 0 -height 136 -width 81
+	.container.borders create line 1 1 79 1 -fill $lightColorCont
+	.container.borders create line 1 1 1 134 -fill $lightColorCont
+
+	.container.borders create line 81 135 0 135 -fill $shadowColorCont
+	.container.borders create line 80 0 80 135 -fill $shadowColorCont
+
+	.container.borders create line 79 1 79 135 -fill $lightShadowColorCont
+	.container.borders create line 80 134 1 134 -fill $lightShadowColorCont
+
+	.container.borders create text 40 17 -text "Brightness" -font mainfont -fill $foregroundColorCont
+
+	.container.borders create line 11 34 21 117 -fill $lightColorCont
+	.container.borders create line 11 34 21 34 -fill $lightColorCont
+	.container.borders create line 21 34 21 119 -fill $lightShadowColorCont
+	.container.borders create line 21 119 21 120 -fill $lightColorCont
+
+	.container.borders create line 38 36 38 118 -fill $shadowColorCont
+	.container.borders create line 37 35 37 119 -fill $lightShadowColorCont
+	.container.borders create line 40 35 40 120 -fill $lightColorCont
+	.container.borders create line 37 35 40 35 -fill $lightShadowColorCont
+	.container.borders create line 37 119 40 119 -fill $lightColorCont
+
+	canvas .container.slider -highlightthickness 0 -width 21 -height 11
+	.container.slider create line 0 0 20 0 -fill $lightColorCont
+	.container.slider create line 0 1 0 10 -fill $lightColorCont
+	.container.slider create line 0 10 20 10 -fill $shadowColorCont
+	.container.slider create line 1 9 20 9 -fill $lightShadowColorCont
+	.container.slider create line 20 0 20 11 -fill $shadowColorCont
+	.container.slider create line 19 1 19 10 -fill $lightShadowColorCont
+	#.container.slider create line 11 10 11 20 -fill $shadowColorCont
+
+	global Holding
+	set Holding {False}
+
+	bind .container.slider <ButtonPress> {
+		set Holding {True}
+	}
+
+	bind .container.slider <ButtonRelease> {
+		set Holding {False}
+	}
+
+	bind .container.slider <Motion> {
+		if {$Holding == {True}} {
+			set sliderlocation [expr {[winfo pointery .container.slider] - [winfo rooty .] - 4}]
+
+			if { $sliderlocation > 34 } {
+				if { 111 < $sliderlocation } {
+					set sliderlocation {111}
+				}
+			} else {
+				set sliderlocation {34}
+			}
+			set brightness [expr { 100 - round((( double($sliderlocation) - 34) / 77 ) * 100) } ]
+
+
+			#puts [expr {$sliderlocation - 34}]
+			exec xbacklight -time 0 -steps 1 -set $brightness
+	
+			place .container.slider -y $sliderlocation
+		}
+	}
+
+	pack .container.borders -side top
+
+	set getvolume [expr {round([exec xbacklight -get])}]
+
+	#puts [expr { round(100 - double($getvolume) * 57 / 100) } ]
+
+	#puts [expr { (100 - double($getvolume)) }]
+
+	
+	place .container.slider -x 29 -y [expr { round(100 - double($getvolume) * 77 / 100) + 11 } ]
+
+}
+
+bind . <FocusOut> {exit}
+
+pack .container
+
+#proc createWedge {
+#	canvas .wedge
+#	
+#}
+
+
+createBorders
+
+tkwait window .
+	

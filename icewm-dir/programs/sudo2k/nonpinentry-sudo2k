@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if sudo -n true; then
+	sudo XAUTHORITY="$HOME/.Xauthority" $*
+else
+	pass=$(yad --button="OK:0" --button="Cancel:1" --window-icon="keyring-manager" --title="Run As" --image="keyring-manager" --text "The program $* requires root permissions.\nType in your password below to run it." --borders=10 --entry --entry-label='
+Password:
+' --hide-text --on-top --skip-taskbar --center --width=375)
+
+	if [ $? -eq 0 ]; then
+		if echo "$pass" | su -c true "$USER"; then
+			echo $pass | sudo -S XAUTHORITY="$HOME/.Xauthority" $*
+		else
+			if yad --button="OK:0" --button="Cancel:1" --window-icon="keyring-manager" --title="Password Incorrect" --image="keyring-manager" --text "The password is incorrect! Try again." --borders=6 --on-top --skip-taskbar --center --width=375; then
+				exec sh -c "~/.icewm/programs/sudo2k/nonpinentry-sudo2k $*"
+			fi
+		fi
+	else
+		exit 1
+	fi
+fi

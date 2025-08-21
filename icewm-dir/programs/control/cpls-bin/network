@@ -1,0 +1,6 @@
+#!/bin/sh
+yad --plug=76246 --tabnum=1 --form --separator='\n' --text="If you want to configure wireless, please press the below button." --text-align=left \
+--field="IWD Configuration:FBTN" "xterm -e 'sh -c ~/aliases/wifi/wifi.sh'" --align=center &
+yad --plug=76246 --tabnum=2 --form --separator='\n' --text="If you want to configure ethernet, please press the below button." --text-align=left \
+--field="Edit interfaces file:FBTN" "xterm -e 'sudo nano /etc/network/interfaces'" --align=center &
+yad --notebook --key=76246 --tab="Wireless" --tab="Ethernet" --width=300 --height=350 --title="Network" --window-icon="network-idle" --button="OK:0" --button="Cancel:1" --button="Help:1"

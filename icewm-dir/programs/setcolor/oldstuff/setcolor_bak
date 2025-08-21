@@ -1,0 +1,401 @@
+#!/bin/sh
+# Load INI parser
+. ~/.icewm/programs/common/iniparse
+
+# Store color scheme in variable
+scheme="$(cat "$1")"
+
+# Get titlebar colors
+activetitlebartext="$(echo "$scheme" | iniparse colors activetitlebartext)"
+inactivetitlebartext="$(echo "$scheme" | iniparse colors inactivetitlebartext)"
+
+activetitlebarleft="$(echo "$scheme" | iniparse colors activetitlebarleft)"
+activetitlebarright="$(echo "$scheme" | iniparse colors activetitlebarright)"
+inactivetitlebarleft="$(echo "$scheme" | iniparse colors inactivetitlebarleft)"
+inactivetitlebarright="$(echo "$scheme" | iniparse colors inactivetitlebarright)"
+
+xptheme="$(echo "$scheme" | iniparse general xp)"
+
+test "$xptheme" || xptheme=0
+
+case "$xptheme" in
+    ''|*[!0-9]*) xptheme=0 ;;
+    *) true ;;
+esac
+
+icewmthemes="$HOME/.icewm/themes"
+icewmtheme="$HOME/.icewm/themes/Win2kmod-xpm"
+icewmogtheme="$HOME/.icewm/themes/Win2kmod-xpm-modcolors"
+
+middlecolor()
+{
+	# Input colors
+	color1="$1"
+	color2="$2"
+
+	# Step 1: Separate into RGB components
+	r1=$(echo $color1 | cut -c 2-3)
+	g1=$(echo $color1 | cut -c 4-5)
+	b1=$(echo $color1 | cut -c 6-7)
+
+	r2=$(echo $color2 | cut -c 2-3)
+	g2=$(echo $color2 | cut -c 4-5)
+	b2=$(echo $color2 | cut -c 6-7)
+
+	# Step 2: Convert to integers
+	r1=$(printf "%d" 0x$r1)
+	g1=$(printf "%d" 0x$g1)
+	b1=$(printf "%d" 0x$b1)
+
+	r2=$(printf "%d" 0x$r2)
+	g2=$(printf "%d" 0x$g2)
+	b2=$(printf "%d" 0x$b2)
+
+	# Step 3: Calculate average
+	rn=$(( (r1 + r2) / 2 ))
+	gn=$(( (g1 + g2) / 2 ))
+	bn=$(( (b1 + b2) / 2 ))
+
+	# Step 4: Convert back to hexadecimal strings
+	r=$(printf "%02X" $rn)
+	g=$(printf "%02X" $gn)
+	b=$(printf "%02X" $bn)
+
+	# Step 5: Concatenate and print the result
+	result="#$r$g$b"
+	echo $result
+}
+
+activetitlebarmiddle="$(middlecolor "$activetitlebarleft" "$activetitlebarright")"
+inactivetitlebarmiddle="$(middlecolor "$inactivetitlebarleft" "$inactivetitlebarright")"
+
+# Get base color
+basecolor="$(echo "$scheme" | iniparse colors basecolor)"
+
+# Get background and text color
+backcolor="$(echo "$scheme" | iniparse colors backcolor)"
+textcolor="$(echo "$scheme" | iniparse colors textcolor)"
+
+# Get selected background and selected text color
+selbackcolor="$(echo "$scheme" | iniparse colors selbackcolor)"
+seltextcolor="$(echo "$scheme" | iniparse colors seltextcolor)"
+
+# Get border colors
+shadowcolor="$(echo "$scheme" | iniparse colors shadowcolor)"
+lightshadowcolor="$(echo "$scheme" | iniparse colors lightshadowcolor)"
+lightcolor="$(echo "$scheme" | iniparse colors lightcolor)"
+
+#seticewm()
+#{
+#	convert "$1" \
+#	-fill "$shadowcolor" -opaque "#404040" \
+#	-fill "$basecolor"   -opaque "#d4d0c8" \
+#	-fill "$lightshadowcolor" -opaque "#808080" \
+#	-fill "$lightcolor" -opaque "#ffffff" \
+#	-fill "$activetitlebarright" -opaque "#a6caf0" \
+#	-fill "$activetitlebarleft" -opaque "#0a246a" \
+#	-fill "$activetitlebarmiddle" -opaque "#5877ad" \
+#	-fill "$inactivetitlebarright" -opaque "#c0c0c0" \
+#	-fill "$inactivetitlebarleft" -opaque "#808080" \
+#	-fill "$inactivetitlebarmiddle" -opaque "#a0a0a0" \
+#	-fill "$selbackcolor" -opaque "#0a2368" \
+#	"$1"
+#}
+
+#seticewm()
+#{
+#	sed -i "s/#404040/$shadowcolor/gI" "$1"
+#	sed -i "s/#d4d0c8/$basecolor/gI" "$1"
+#	sed -i "s/#808080/$lightshadowcolor/gI" "$1"
+#	sed -i "s/#ffffff/$lightcolor/gI" "$1"
+#	sed -i "s/#a6caf0/$activetitlebarright/gI" "$1"
+#	sed -i "s/#c0c0c0/$inactivetitlebarright/gI" "$1"
+#	sed -i "s/#0a246a/$activetitlebarleft/gI" "$1"
+#	sed -i "s/#808080/$inactivetitlebarleft/gI" "$1"
+#	sed -i "s/#5877ad/$activetitlebarmiddle/gI" "$1"
+#	sed -i "s/#a0a0a0/$inactivetitlebarmiddle/gI" "$1"
+#	sed -i "s/#0a2368/$selbackcolor/gI" "$1"
+#}
+
+echo "Base color: $basecolor"
+echo
+echo "Background color: $backcolor"
+echo "Text/foreground color: $textcolor"
+echo
+echo "Selected background color: $selbackcolor"
+echo "Selected text color: $seltextcolor"
+echo "Shadow color: $shadowcolor"
+echo
+echo "Light shadow color: $lightshadowcolor"
+echo "Light color: $lightcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS basecolor "$basecolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS scrollbarcolor "$basecolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS listbackcolor "$backcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS backcolor "$backcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS highlightcolor "$backcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS listforecolor "$textcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS forecolor "$textcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS pbarcolor "$selbackcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS selbackcolor "$selbackcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS selforecolor "$seltextcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS bordercolor "$shadowcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS shadowcolor "$lightshadowcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS hilitecolor "$lightcolor"
+
+
+iniset "$HOME/.foxrc/Desktop" SETTINGS basecolor "$basecolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS scrollbarcolor "$basecolor"
+
+iniset "$HOME/.foxrc/Desktop" SETTINGS listbackcolor "$backcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS backcolor "$backcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS highlightcolor "$backcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS listforecolor "$textcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS forecolor "$textcolor"
+
+iniset "$HOME/.foxrc/Desktop" SETTINGS pbarcolor "$selbackcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS selbackcolor "$selbackcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS selmenubackcolor "$selbackcolor"
+
+iniset "$HOME/.foxrc/Desktop" SETTINGS selforecolor "$seltextcolor"
+
+iniset "$HOME/.foxrc/Desktop" SETTINGS bordercolor "$shadowcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS shadowcolor "$lightshadowcolor"
+iniset "$HOME/.foxrc/Desktop" SETTINGS hilitecolor "$lightcolor"
+
+
+
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS texthilitebackground "$backcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textnumberbackground "$backcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textbackground "$backcolor"
+
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textforeground "$textcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textcursor "$textcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS texthiliteforeground "$textcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS texthiliteforeground "$textcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textnumberforeground "$textcolor"
+
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textselbackground "$selbackcolor"
+iniset "$HOME/.config/xfe/xfwrc" OPTIONS textselforeground "$seltextcolor"
+
+
+cp "$HOME/.themes/Ice2K/gtk-2.0/colorsmodified.rc" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+
+sed -i "s/selbackcolor/$selbackcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/seltextcolor/$seltextcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/basecolor/$basecolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/backcolor/$backcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/textcolor/$textcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/lightshadowcolor/$lightshadowcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/lightcolor/$lightcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+sed -i "s/shadowcolor/$shadowcolor/gI" "$HOME/.themes/Ice2K/gtk-2.0/colors.rc"
+
+rm -rf "$icewmtheme"
+cp -r  "$icewmogtheme" "$icewmtheme"
+cp  "$icewmogtheme/default.theme.custom" "$icewmtheme/default.theme"
+
+sed -i "s/inactivetitlebartext/$inactivetitlebartext/g" "$icewmtheme/default.theme"
+sed -i "s/activetitlebartext/$activetitlebartext/g" "$icewmtheme/default.theme"
+sed -i "s/selbackcolor/$selbackcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/seltextcolor/$seltextcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/basecolor/$basecolor/gI" "$icewmtheme/default.theme"
+sed -i "s/backcolor/$backcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/textcolor/$textcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/lightshadowcolor/$lightshadowcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/shadowcolor/$shadowcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/textcolor/$textcolor/gI" "$icewmtheme/taskbar/qarrow.xpm"
+
+
+sed -i -e \
+"s/selbackcolor/$selbackcolor/gI
+s/basecolor/$basecolor/gI; \
+s/lightshadowcolor/$lightshadowcolor/gI; \
+s/shadowcolor/$shadowcolor/gI; \
+s/backcolor/$backcolor/gI; \
+s/lightcolor/$lightcolor/gI; \
+s/textcolor/$textcolor/gI; \
+s/inactivetitlebarright/$inactivetitlebarright/gI; \
+s/inactivetitlebarleft/$inactivetitlebarleft/gI; \
+s/inactivetitlebarmiddle/$inactivetitlebarmiddle/gI; \
+s/activetitlebarright/$activetitlebarright/gI; \
+s/activetitlebarleft/$activetitlebarleft/gI; \
+s/activetitlebarmiddle/$activetitlebarmiddle/gI" $icewmtheme/*.xpm $icewmtheme/taskbar/*.xpm $icewmtheme/icons/ice2k-checkbox_16x16.xpm
+#sed -i -e \
+#"s/#0a2368/$selbackcolor/gI" $icewmtheme/menusel.xpm
+
+rm "$HOME/.icewm/icons/desk/computer.png"
+rm "$HOME/.icewm/icons/desk/documents.png"
+rm "$HOME/.icewm/icons/desk/network.png"
+rm "$HOME/.icewm/icons/desk/recyclef.png"
+rm "$HOME/.icewm/icons/desk/recyclee.png"
+rm "$HOME/.icewm/icons/desk/notepad.png"
+rm "$HOME/.icewm/icons/txt.png"
+rm "$HOME/.icewm/programs/volumecontrol/volume.png"
+rm "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
+rm "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+rm "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
+rm "$HOME/.icewm/programs/ice2krun/run_icon.png"
+
+if [ "$xptheme" -eq 1 ]; then
+	ln -s "$HOME/.icons/LinXP/devices/32/computer.png"        "$HOME/.icewm/icons/desk/computer.png"
+	ln -s "$HOME/.icons/LinXP/places/32/folder_documents.png" "$HOME/.icewm/icons/desk/documents.png"
+	ln -s "$HOME/.icewm/programs/common/icons/network.png"    "$HOME/.icewm/icons/desk/network.png"
+	ln -s "$HOME/.icons/LinXP/places/32/trashcan_full.png"    "$HOME/.icewm/icons/desk/recyclef.png"
+	ln -s "$HOME/.icons/LinXP/places/32/trashcan_empty.png"   "$HOME/.icewm/icons/desk/recyclee.png"
+	ln -s "$HOME/.icons/LinXP/apps/32/mousepad.png"           "$HOME/.icewm/icons/desk/notepad.png"
+
+	ln -s "$HOME/.icewm/programs/volumecontrol/volume-xp.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
+
+	ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject.png" "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
+	ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+
+	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_16_xp.png" "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
+	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_xp.png" "$HOME/.icewm/programs/ice2krun/run_icon.png"
+
+	ln -s "$HOME/.icons/LinXP/mimetypes/32/txt.png"           "$HOME/.icewm/icons/txt.png"
+
+	rm "$icewmtheme/icons/app_16x16.xpm"
+	rm "$icewmtheme/icons/app_32x32.xpm"
+
+	ln -s "$icewmtheme/icons/app_16x16_xp.xpm" "$icewmtheme/icons/app_16x16.xpm"
+	ln -s "$icewmtheme/icons/app_32x32_xp.xpm" "$icewmtheme/icons/app_32x32.xpm"
+
+
+	inisetnosect "$HOME/.gtkrc-2.0" "gtk-icon-theme-name" \""LinXP\""
+	inisetnosect "$HOME/.config/gtk-3.0/settings.ini" "gtk-icon-theme-name" "LinXP"
+	inisetnosect "$HOME/.icewm/preferences" "IconThemes" \""LinXP:hicolor:locolor:gnome:Adwaita:-HighContrast\""
+
+	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "type" "png"
+	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "dir" "xp"
+
+	sed -i 's/windows-theme/windowsxp-theme/g' "$HOME/.config/xfe/xferc"
+
+	rm "$icewmtheme/taskbar/start.xpm"
+	composite -geometry +4+4 "$icewmtheme/taskbar/startxpicon.bmp" "$icewmtheme/taskbar/startwologo.xpm" "$icewmtheme/taskbar/start.xpm"
+else
+	ln -s "$HOME/.icons/SE98/devices/32/computer.png"         "$HOME/.icewm/icons/desk/computer.png"
+	ln -s "$HOME/.icons/SE98/places/32/folder_home.png"       "$HOME/.icewm/icons/desk/documents.png"
+	ln -s "$HOME/.icons/SE98/status/32/network-idle.png"      "$HOME/.icewm/icons/desk/network.png"
+	ln -s "$HOME/.icons/SE98/places/32/trashcan_full.png"     "$HOME/.icewm/icons/desk/recyclef.png"
+	ln -s "$HOME/.icons/SE98/places/32/trashcan_empty.png"    "$HOME/.icewm/icons/desk/recyclee.png"
+	ln -s "$HOME/.icons/SE98/apps/32/mousepad.png"            "$HOME/.icewm/icons/desk/notepad.png"
+
+	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "type" "xpm"
+	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "dir" "2k"
+
+	ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject.png" "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
+	ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+
+	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_16_2k.png" "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
+	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_2k.png" "$HOME/.icewm/programs/ice2krun/run_icon.png"
+
+	ln -s "$HOME/.icewm/programs/volumecontrol/volume-2k.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
+
+	ln -s "$HOME/.icons/SE98/mimes/32/txt.png"                "$HOME/.icewm/icons/txt.png"
+
+	rm "$icewmtheme/icons/app_16x16.xpm"
+	rm "$icewmtheme/icons/app_32x32.xpm"
+
+	ln -s "$icewmtheme/icons/app_16x16_xp.xpm" "$icewmtheme/icons/app_16x16.xpm"
+	ln -s "$icewmtheme/icons/app_32x32_xp.xpm" "$icewmtheme/icons/app_32x32.xpm"
+
+
+	sed -i 's/windowsxp-theme/windows-theme/g' "$HOME/.config/xfe/xferc"
+
+	inisetnosect "$HOME/.gtkrc-2.0" "gtk-icon-theme-name" \""SE98\""
+	inisetnosect "$HOME/.config/gtk-3.0/settings.ini" "gtk-icon-theme-name" "SE98"
+
+	inisetnosect "$HOME/.icewm/preferences" "IconThemes" \""SE98:hicolor:locolor:gnome:Adwaita:-HighContrast\""
+fi
+
+getpid()
+{
+        local process="ksh93"
+
+        local pids="$(pidof -x "$process")"
+
+        local displayNumber="$(echo $DISPLAY \
+                | awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+        ps e -p "$pids" \
+		| grep "$1" \
+	                | awk -v n="$displayNumber" \
+        	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+
+        local process="sh"
+
+        local pids="$(pidof -x "$process")"
+
+        ps e -p "$pids" \
+		| grep "$1" \
+	                | awk -v n="$displayNumber" \
+        	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+getejecttray()
+{
+        local process="yad"
+
+        local pids="$(pidof -x "$process")"
+
+        local displayNumber="$(echo $DISPLAY \
+                | awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+        ps e -p "$pids" \
+		| grep "saferemovetray" \
+	                | awk -v n="$displayNumber" \
+        	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+kill -15 $(getpid icondetect)
+kill -15 $(getejecttray)
+
+(
+cd "$HOME/.icewm/cfg/nettray"
+for i in *
+do
+	~/.icewm/programs/nettray/nettray $i &
+	sleep 0.1
+done
+)
+
+~/.icewm/programs/explorer/ejecttray/ejecttray &
+
+#sed -i -e \
+#"s/#404040/$shadowcolor/gI; \
+#s/gray25/$shadowcolor/gI; \
+#s/#d4d0c8/$basecolor/gI; \
+#s/#808080/$lightshadowcolor/gI; \
+#s/#ffffff/$lightcolor/gI; \
+#s/white/$lightcolor/gI; \
+#s/#0a2368/$selbackcolor/gI" $icewmtheme/taskbar/*.xpm $icewmtheme/frame*.xpm
+
+(echo "$basecolor"
+echo "$textcolor"
+echo "$lightshadowcolor"
+echo "$shadowcolor"
+echo "$lightcolor"
+echo "$backcolor") > ~/.icewm/programs/volumecontrol/colors
+
+(echo '*background: '"$basecolor"
+echo '*foreground: '"$textcolor"
+echo '*bottomShadowColor: '"$lightshadowcolor"
+echo '*topShadowColor: '"$lightcolor"
+echo '*shadowThickness: 1') | tee ~/.icewm/xrescolors | xrdb -merge
+
+if test -f "/tmp/ice2k-$USER/volume.pid"; then
+	kill -15 "$(cat "/tmp/ice2k-$USER/volume.pid")"
+	rm "/tmp/ice2k-$USER/volume.pid"
+fi
+
+~/.icewm/programs/volumecontrol/volume &
+sleep 1
+#killall xxkb
+icewm -r
+~/.icewm/programs/explorer/desktopicons
+
+sleep 1
+#xxkb &

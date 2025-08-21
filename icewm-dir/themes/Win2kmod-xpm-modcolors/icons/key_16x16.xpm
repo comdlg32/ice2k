@@ -1,0 +1,27 @@
+/* XPM */
+static char *key_16x16[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1 ",
+"  c black",
+". c #808080",
+"X c #C0C0C0",
+"o c white",
+"O c None",
+/* pixels */
+"OOOOOOOOOOOOOOOO",
+"OOOOOOO..OOOOOOO",
+"OOOOO..XX..OOOOO",
+"OOO..XXX..X..OOO",
+"OO.ooX..XXXo. OO",
+"OO.oXooXXoo.. OO",
+"O.oXXXXoo..... O",
+"O.oXXXXo...... O",
+".oXXXXXo....... ",
+"O.XXXXXo...... O",
+"OO..XXXo....  OO",
+"OOOO..Xo..  OOOO",
+"OOOOOO..  OOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOOOOOOOOOOOOO"
+};

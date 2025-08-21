@@ -1,0 +1,28 @@
+/* XPM */
+static char *sendreceive_wired_png[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c black",
+". c cyan",
+"X c #808080",
+"o c #C0C0C0",
+"O c white",
+"+ c None",
+/* pixels */
+"++++++++++++++++",
+"+++++++XXXXXXX++",
+"++++++X      o +",
+"++++++X .O...o +",
+"++XXXXXXXO...o +",
+"+X      o ...o +",
+"+X O....o ...o +",
+"+X O....o XXXo +",
+"+X .....o oooo +",
+"+X .....o      +",
+"+X XXXXXo oXXoX ",
+"+Xooooooo XXXXX ",
+"+X             +",
+"XOooooXXoX +++++",
+"XXXXXXXXXX +++++",
+"+         ++++++"
+};

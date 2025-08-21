@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/.icewm/programs/nettray-test
+./icondetect $1 | yad --notification --listen \
+--image="offline-wired.png" \
+--text="$1" --no-middle

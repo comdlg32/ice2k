@@ -1,0 +1,13 @@
+#!/bin/sh
+export WIZARDPLUG="12347"
+. "$HOME/.icewm/programs/common/wizard"
+wizardheader "<b>Screenshot</b>\nWindows Whistler" "icon.png" &
+yad --plug="$WIZARDPLUG" --borders=10 --image-on-top --tabnum=2 --image="$HOME/Documents/whistler.png" \
+--form --field="This is a screenshot of Windows Whistler build 2296.":LBL --field=Cool:FBTN &
+wizardinit "xterm" "Screenshot of Windows Whistler" || exit 1
+
+wizardheader "<b>So Cool</b>\n	So Cool" "icon.png" &
+yad --plug="$WIZARDPLUG" --borders=10 --image-on-top --tabnum=2 \
+--form --field="So Cool.":LBL --field=Cool:FBTN &
+finishbutton=1 wizardinit "xterm" "So Cool"
+[ "$?" -eq 1 ] && exec "$0" "$@"

@@ -1,0 +1,5 @@
+#!/bin/sh
+yad --title=Calendar --class=calendar --name=calendar --window-icon=date \
+--on-top --borders=0 --no-buttons --calendar \
+--skip-taskbar --mouse --close-on-unfocus \
+--width=190 --buttons-layout=center --text-align=center

@@ -1,0 +1,33 @@
+#!/bin/sh
+#if pidof "yad --on-top --borders=0 --calendar --mouse --window-icon=date --title=Calendar --no-buttons"
+#then
+#	kill $(pidof "yad --on-top --borders=0 --calendar --mouse --window-icon=date --title=Calendar --no-buttons")
+#else
+
+getscriptdir()
+{
+        cd "$(dirname "${0}")"
+        echo "$PWD"
+}
+
+scriptdir="$(getscriptdir)"
+
+PATH="$scriptdir:$PATH"
+
+if test "$1"; then
+	if test "$2"; then
+		if test "$3"; then
+			if test "$4"; then
+				geometry="$3x$4+$1+$2"
+			fi
+		fi
+	fi
+fi
+
+if test "$geometry"; then
+	yad --on-top --borders=0 --calendar --geometry="$geometry" --window-icon=date --title=Calendar \
+	--width=190 --skip-taskbar --buttons-layout=center --text-align=center --button=Today!date:today
+else
+	yad --on-top --borders=0 --calendar --mouse --window-icon=date --title=Calendar \
+	--width=190 --skip-taskbar --buttons-layout=center --text-align=center --button=Today!date:today
+fi

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=System
+Icon=preferences-system
+Exec=sh -c "$HOME/.icewm/programs/control/cpls-bin/system-new/system"
+StartupNotify=true
+Terminal=false

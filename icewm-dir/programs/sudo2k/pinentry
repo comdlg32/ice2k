@@ -1,0 +1,14 @@
+#!/bin/sh
+export title="$1"
+export desc="$2"
+export prompt="$3"
+passphrase="$(sh -c '\
+echo SETTITLE "$title" && \
+echo SETDESC "$desc" && \
+echo SETPROMPT "$prompt" && \
+echo GETPIN' | pinentry-x11)"
+passphrase="$(echo $passphrase | cut -c 34-)"
+case "$passphrase" in
+	*OK) passphrase="$(echo $passphrase | rev | cut -c 4- | rev)" && echo "$passphrase" && exit 0 ;;
+	*) exit 1;;
+esac

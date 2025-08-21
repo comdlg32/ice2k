@@ -1,0 +1,27 @@
+/* XPM */
+static char *idle_wired_png[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1 ",
+"  c black",
+". c #808080",
+"X c #C0C0C0",
+"o c white",
+"O c None",
+/* pixels */
+"OOOOOOOOOOOOOOOO",
+"OOOOOOO.......OO",
+"OOOOOO.      X O",
+"OOOOOO.  o   X O",
+"OO.......o   X O",
+"O.      X    X O",
+"O. o    X    X O",
+"O. o    X ...X O",
+"O.      X XXXX O",
+"O.      X      O",
+"O. .....X X..X. ",
+"O.XXXXXXX ..... ",
+"O.             O",
+".oXXXX..X. OOOOO",
+".......... OOOOO",
+"O         OOOOOO"
+};

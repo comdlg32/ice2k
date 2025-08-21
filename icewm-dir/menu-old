@@ -1,0 +1,80 @@
+# This is the Win2k/ME theme IceWM's menu definition file.
+# Merge with your own menu file or
+# Place in $HOME/.icewm
+
+
+#prog "Add/Remove Programs" synaptic ~/.icewm/programs/sudo2k/sudo2k synaptic
+include "~/.icewm/menu-top"
+separator
+# If you would like a Documents style submenu
+# Copy "documents.sh" to your home dir and set execute permission
+# menuprog "Documents" documents ./documents.sh
+
+# menuprog "prog" programs wmmenugen -parser:xdg /usr/share/applications
+
+# See /usr/share/icewm/menu for more examples on how to configure
+menu "Programs" programs {
+	menu "Accessories" folder {
+		menu "Games" folder {
+			prog "Freecell" ace ace-freecell
+			prog "Minesweeper" ace ace-minesweeper
+			prog "Solitaire" ace ace-solitaire
+			separator
+			prog "Neverball" neverball neverball
+			prog "SuperTuxKart" supertuxkart supertuxkart
+			prog "Xye" xye xye
+		}
+		prog "Address Book" addressbook xterm -e abook
+		prog "Calculator" calculator xcalc
+		prog "Command Prompt" x-terminal-emulator xterm
+		prog "Imaging" xfi xfi
+		prog "Notepad" xfw xfw
+		prog "Windows Explorer" xfe xfe
+		prog "WordPad" abiword abiword
+	}
+
+	prog "Internet Explorer" web-browser firefox-esr
+	prog "Outlook Express" thunderbird xterm -e mutt
+	separator
+	includeprog icewm-menu-fdo --no-sub-cats
+
+}
+
+menu "Desktop" desktop {
+	menu "Active Desktop" "" {
+		includeprog ~/.icewm/programs/explorer/desktopicons menu
+	}
+	separator
+	menu "Arrange Icons By" "" {
+		prog "" "" true
+	}
+	prog "Refresh" "" "~/.icewm/programs/panel/refreshdesktop"
+	separator
+	prog "Paste" "" "true"
+	prog "Paste Shortcut" "" "true"
+	separator
+	menu "New" "" {
+		prog "" "" "true"
+	}
+	separator
+	prog "Properties" "" "~/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher"
+}
+menu "Documents" documents {
+	prog "My Computer" computer xfe /
+	prog "My Documents" documents xfe
+}
+menu "Settings" settings {
+	prog "Control Panel" settings sh -c "$HOME/.icewm/programs/control/control"
+	prog "IceWM Configuration" settings uxterm -e "nano ~/.icewm/preferences"
+	prog "Printers" printer xdg-open localhost:631/admin
+	menuprog "Monitors" computer icewm-menu-xrandr
+} 
+menu "Search" search {
+	prog "For Files..." search spacefm -f
+}
+prog "Help" help xman
+prog "Run..." run gmrun
+separator
+prog "Shut Down..." shutdown ~/.icewm/programs/shutdown/shutdown
+
+includeprog sh -c 'nohup xterm > /dev/null 2>&1 &'

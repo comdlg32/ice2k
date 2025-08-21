@@ -1,0 +1,24 @@
+#!/bin/sh
+iniparse()
+{
+	sed -nr "/^\[$1\]/ { :l /^$2[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}"
+}
+
+iniparsenosect()
+{
+	sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}"
+}
+
+section_name="$2"
+key_name="$3"
+new_value="$4"
+
+iniset()
+{
+	sed -i -E "/^\[$2\]/,/^(\[.*\]|$)/ s/(^\s*$3\s*=\s*).*/\1$4/" "$1"
+}
+
+inisetnosect()
+{
+	sed -i "/^$2/c\\$2=$3" "$1"
+}

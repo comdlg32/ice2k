@@ -1,0 +1,7 @@
+#!/bin/sh
+eval "$(xdotool getmouselocation -shell 2>/dev/null)"
+yad --list --undecorated --skip-taskbar --no-buttons --borders=0 \
+--close-on-unfocus \
+--no-headers --listen --column "Items" \
+--geometry=200x150+$X+$Y
+

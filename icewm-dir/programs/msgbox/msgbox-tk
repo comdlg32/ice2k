@@ -1,0 +1,29 @@
+#!/usr/bin/env wish
+option add *background #d4cfc7
+wm geometry . 404x223
+
+frame .frame
+
+frame .toppad -height 11
+pack .toppad -side top -fill both
+
+frame .leftpad -width 11
+pack .leftpad -side left -fill both
+
+pack .frame -expand yes -fill both
+
+frame .frame.iconframe -width 41 -height 41
+pack .frame.iconframe -anchor nw -side left
+
+canvas .frame.iconframe.canvas -highlightthickness 0 -width 49 -height 32
+pack .frame.iconframe.canvas -anchor se
+
+image create photo error -file "error.png"
+.frame.iconframe.canvas create image 0 0 -anchor nw -image error
+
+frame .frame.textframe
+pack .frame.textframe -fill both -expand yes
+canvas .frame.textframe.text -highlightthickness 0
+pack .frame.textframe.text -fill both -expand yes
+
+.frame.textframe.text create text 0 0 -anchor nw -text "a\na"

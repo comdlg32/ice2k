@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Background
+#GenericName=Appearance
+Icon=wallpaper
+Exec=sh -c "$HOME/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher"
+NotShowIn=GNOME;KDE;XFCE;MATE;
+StartupNotify=true
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;

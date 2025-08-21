@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ $var1 -ge -6000 ]; then
+       	echo "network-wireless-100"
+elif [ $var1 -ge -6700 ]; then
+        echo "network-wireless-75"
+elif [ $var1 -ge -7500 ]; then
+        echo "network-wireless-50"
+elif [ $var1 -lt -7500 ]; then
+        echo "network-wireless-25"
+fi

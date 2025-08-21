@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# apply xresources
+xrdb -merge ~/.icewm/xrescolors
+xrdb -merge ~/.Xresources
+
+~/.icewm/programs/volumecontrol/volume &
+
+read deskiconson < ~/.icewm/cfg/desk/deskiconson
+[ "${deskiconson}x" != "0x" ] && idesk &
+
+~/.icewm/programs/explorer/ejecttray/ejecttray &
+
+xidle &
+
+cd "$HOME/.icewm/cfg/nettray"
+for i in *
+do
+	~/.icewm/programs/nettray/nettray $i &
+	#sleep 0.1
+done
+
+# battery icon
+cbatticon -x "$HOME/.icewm/programs/backlight/backlight" \
+-o "sh -c 'nohup $HOME/.icewm/programs/panel/batterywarning low >/dev/null 2>&1 &'" -l 20 \
+-c "sh -c 'nohup $HOME/.icewm/programs/panel/batterywarning critical >/dev/null 2>&1 &'" -r 10 &
+
+cd "$HOME"
+
+# animated background manager
+~/.icewm/programs/animbg/animbg &
+sleep 0.5
+
+# restart icewm to fix frozen tray icons
+icewm -r
+
+# play startup sound
+aplay $ICE2KSYS_SOUND_LOGON &
+~/.icewm/programs/welcome/welcomewrap &
+
+setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us,nl,de
+
+sleep 1

@@ -1,0 +1,7 @@
+#!/bin/sh
+# TODO: make this actually functional
+yad --window-icon network-transmit-receive --title "Network Connections" \
+--center --borders=7 \
+--text " Choose a network connection:" --entry "Dial-up Connection" \
+--button "Connect...:0" --button "Properties:2" --button "New...:3" \
+--button "Close:1"

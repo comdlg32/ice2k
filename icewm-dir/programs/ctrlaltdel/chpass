@@ -1,0 +1,38 @@
+#!/bin/sh
+cd ~/.icewm/programs/ctrlaltdel
+panediag()
+{
+	yad --class caddialog --name caddialog --paned --center --on-top --skip-taskbar --title="Change Password" \
+	--window-icon="application-executable" \
+	--on-top --orient=vertical --splitter=0 --key=2361 --tab=1 --tab=2 --borders=0 --focused=2 --active-tab=2 --caddialog
+	errcode="$?"
+}
+#killthis="$!"
+#cadcancel() {
+#	kill -USR1 "$killthis"
+#}
+#export -f cadcancel
+#panediag &
+#yad --plug=2361 --tabnum=1 --image=banner.png --borders=0 --image-on-top &
+passwd="$(yad --tabnum=2 --center --title="Change Password" --class=caddialog --name=caddialog --image=banner.png --image-on-top --form \
+--field="Old Password:":h "" \
+--field="New Password:":h "$*" \
+--field="Confirm New Password:":h "$*" \
+--focus-field=1 --borders=0 --separator="\n")"
+errcode="$?"
+#echo "$errcode"
+sleep 1
+if [ "$errcode" -eq 0 ]; then
+	passwd2="$(echo "$passwd" | head -n -1)"
+	error="$(echo "$passwd" | passwd 2>&1)"
+	errcode="$?"
+	if [ "$errcode" -eq 0 ]; then
+		~/.icewm/programs/msgbox/msgbox 0 dialog-information "Change Password" "Successfully changed password."
+	else
+		~/.icewm/programs/msgbox/msgbox 0 dialog-information "Change Password" "$error"
+	fi
+fi
+
+
+#kill $backgroundpid
+#rm /tmp/tempwall.png

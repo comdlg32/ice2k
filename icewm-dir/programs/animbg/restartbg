@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# Way to kill process in the current display
+# Based on https://unix.stackexchange.com/a/181371
+ActiveProcessPID()
+{
+	local process="$1"
+
+	local processPIDs="$(pidof -x -s "$process")"
+
+	local displayNumber="$(echo $DISPLAY \
+	| awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+	ps e -p "$processPIDs" \
+	        | awk -v n="$displayNumber" \
+	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+# Spams kill till the process doesn't exist
+KillPID()
+{
+	while true; do
+		pkill -P "$(ActiveProcessPID "$1" 2>/dev/null)" 2>/dev/null || break
+	done
+}
+
+getscriptdir()
+{
+	cd "$(dirname "${0}")"
+	echo "$PWD"
+}
+
+scriptdir="$(getscriptdir)"
+PATH="$scriptdir:$PATH"
+
+KillPID animbg
+xrefresh
+icewmbg -r
+
+if [ -f "$HOME/.icewm/cfg/animdesk/enabled" ]; then
+	if [ "$(cat "$HOME/.icewm/cfg/animdesk/enabled")" -eq "1" ]; then
+		animbg
+	else
+		exit 1
+	fi
+else
+	exit 1
+fi

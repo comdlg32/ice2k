@@ -1,0 +1,25 @@
+#!/bin/sh
+beforeauthrequired()
+{
+	sudo -n XAUTHORITY="$HOME/.Xauthority" $*
+	errcode="$?"
+	true
+}
+
+if sudo -n sh -c 'XAUTHORITY="$HOME/.Xauthority" $*"; then
+	sudo XAUTHORITY="$HOME/.Xauthority" $*
+else
+	pass=$(~/.icewm/programs/sudo2k/pinentry "$*" "$* requires root. Type in your password to continue." "Password:")
+
+	if [ $? -eq 0 ]; then
+		if echo "$pass" | su -c true "$USER"; then
+			echo $pass | sudo -S XAUTHORITY="$HOME/.Xauthority" $*
+		else
+			if ~/.icewm/programs/sudo2k/pinentry-incorrect "Password Incorrect" "The password is incorrect! Try again."; then
+				exec sh -c "~/.icewm/programs/sudo2k/pinentry-sudo2k $*"
+			fi
+		fi
+	else
+		exit 1
+	fi
+fi

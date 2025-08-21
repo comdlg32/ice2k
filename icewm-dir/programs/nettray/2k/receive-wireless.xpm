@@ -1,0 +1,28 @@
+/* XPM */
+static char *receive_wireless_png[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c black",
+". c cyan",
+"X c #808080",
+"o c #C0C0C0",
+"O c white",
+"+ c None",
+/* pixels */
+"++++++++++   +++",
+"++++++++++++  ++",
+"++++++++   ++ ++",
+"++++++++++  + ++",
+"++XXXXXXX++ ++++",
+"+X      o + ++++",
+"+X O....o ++++++",
+"+X O....o ++++++",
+"+X .....o ++++++",
+"+X .....o ++++++",
+"+X XXXXXo ++++++",
+"+Xooooooo ++++++",
+"+X         +++++",
+"XOooooXXoX +++++",
+"XXXXXXXXXX +++++",
+"+         ++++++"
+};

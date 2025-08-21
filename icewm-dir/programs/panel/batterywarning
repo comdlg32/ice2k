@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ "$1" = "low" ]; then
+	#nohup yad --geometry -10-37 --skip-taskbar --undecorated --timeout=1 --on-top --no-buttons --image-on-top --text="<b>Battery is at low level!</b> Charge now." --no-focus --image=battery-020 --borders=10 >/dev/null 2>&1 &
+	notify-send -u low "Low Battery" "You should change your battery or switch to outlet power immediately to keep from losing your work."
+fi
+if [ "$1" = "critical" ]; then
+	#nohup yad --geometry -10-37 --skip-taskbar --undecorated --timeout=1 --on-top --no-buttons --image-on-top --text="<b>Battery is at critical level!</b> Charge now." --no-focus --image=battery-020 --borders=10 >/dev/null 2>&1 &
+	notify-send -u critical "Critical Battery" "You should change your battery or switch to outlet power immediately to keep from losing your work."
+fi

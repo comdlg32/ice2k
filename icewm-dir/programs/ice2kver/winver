@@ -1,0 +1,30 @@
+#!/bin/sh
+gensubline()
+{
+	yes '_' 2>/dev/null | tr -d '\n' 2>/dev/null | head -c 114 2>/dev/null
+}
+
+getmem()
+{
+	grep MemTotal /proc/meminfo | awk '{print $2}' | sed -E ':L;s=\b([0-9]+)([0-9]{3})\b=\1,\2=g;t L'
+}
+export LC_ALL=C.utf-8
+
+yad --class="winver" --name="winver" --paned --center --skip-taskbar --title "About Windows" \
+--window-icon="exec" \
+--button="OK:0" \
+--on-top --orient=vertical --splitter=0 --key=13398 --tab=1 --tab=2 --borders=0 &
+yad --tabnum=1 --image "$HOME/.icewm/programs/ice2kver/bannerwin.png" --image-on-top --borders=0 --no-buttons --plug=13398 --tab-pos=bottom &
+yad --tabnum=2 --borders=4 --tabnum=2 --plug=13398 --tab-pos=top --text \
+"\
+                 <span line_height=\"1.18\">Microsoft ® Windows</span>
+                 <span line_height=\"1.18\">Version 5.2 (Build 3790.srv03_sp1_rtm.050324-1447 : Service Pack 1 )</span>
+                 <span line_height=\"1.18\">Copyright © 1985-2005 Microsoft Corporation</span>
+
+
+                 <span line_height=\"1\">This product is licensed under the terms of the <span color=\"#000080\" underline=\"single\">End-User</span></span>
+                 <span line_height=\"1\"><span color=\"#000080\" underline=\"single\">License Agreement</span> to:</span>
+                       <span line_height=\"1.18\">$(whoami)</span>
+                       <span line_height=\"1.18\">$(cat /etc/hostname)</span>
+                 \<span font_size=\"4pt\" color=\"#808080\" baseline_shift=\"superscript\" underline=\"low\" underline_color=\"#FFFFFF\">$(gensubline)\</span\>
+                 <span line_height=\"1.18\">Physical memory available to Windows:   $(getmem) KB</span>"

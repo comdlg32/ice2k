@@ -1,0 +1,4 @@
+#define comboarrow_width 11
+#define comboarrow_height 4
+static unsigned char comboarrow_bits[] = {
+   0xfc, 0x01, 0xf8, 0x00, 0x70, 0x00, 0x20, 0x00 };

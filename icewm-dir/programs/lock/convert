@@ -1,0 +1,37 @@
+#!/bin/sh
+iniparse()
+{
+	sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.icewm/preferences
+}
+
+getcolor()
+{
+	iniparse DesktopBackgroundColor | sed -e 's/^"//'  -e 's/"$//'
+}
+
+getwallpaper()
+{
+	iniparse DesktopBackgroundImage | sed -e 's/^"//'  -e 's/"$//'
+}
+
+wallpaper="$(getwallpaper)"
+resolution="$(xdpyinfo  | grep -oP 'dimensions:\s+\K\S+')"
+horresolution="$(echo "$resolution" | tr 'x' ' ' | awk '{print $1}' )"
+
+if test "$wallpaper"; then
+	convert \
+	-depth 8 -gravity center -geometry +0+500 \
+	-extent $(xdpyinfo  | grep -oP 'dimensions:\s+\K\S+') \
+	-background 'transparent' \
+	-scale "$resolution"  ~/.icewm/wallpaper.jpg[${horresolution}x] -gravity center ~/.icewm/programs/lock/lock.ppm -transparent '#ff00ff' -composite
+	~/.icewm/programs/lock/locktemp.png
+else
+	convert ~/.icewm/programs/lock/lock.ppm \
+	-depth 8 \
+	-background "$(getcolor)" \
+	-transparent '#ff00ff' \
+	-gravity center \
+	-geometry +0+500 \
+	-extent "$resolution" \
+	~/.icewm/programs/lock/locktemp.png
+fi

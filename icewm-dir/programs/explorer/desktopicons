@@ -1,0 +1,85 @@
+#!/bin/sh
+# Desktop Icon Manager
+
+deskiconson()
+{
+	cat ~/.icewm/cfg/desk/deskiconson \
+	| grep -q 1 \
+	&& echo 1 || echo 0
+}
+
+ActiveDesktopIconsPID()
+{
+        local DesktopIcons="idesk"
+
+        local DesktopIconsPIDs="$(pidof -s -x "$DesktopIcons")"
+
+        local displayNumber="$(echo $DISPLAY \
+                | awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+        ps e -p "$DesktopIconsPIDs" \
+                | awk -v n="$displayNumber" \
+                        '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+shadowon()
+{
+	if grep -q "Shadow: false" ~/.ideskrc; then
+		echo 0
+	else
+		echo 1
+	fi
+}
+
+deskiconson="$(deskiconson)"
+shadowon="$(shadowon)"
+
+#echo $deskiconson
+#if [ "$1" = "stop" ]; then
+#	desktopiconpid="$(ActiveDesktopIconsPID 2>/dev/null)"
+#else
+	desktopiconpid="$(ActiveDesktopIconsPID 2>/dev/null)"
+if [ "$1" = "menu" ]; then
+	if [ "$deskiconson" -eq 1 ]; then
+		echo 'prog "Show Desktop Icons" "ice2k-checkbox"' "~/.icewm/programs/explorer/desktopicons switch"
+	else
+		echo 'prog "Show Desktop Icons" ""' "~/.icewm/programs/explorer/desktopicons switch"
+	fi
+	if [ "$shadowon" -eq 1 ]; then
+		echo 'prog "Show Icon Shadow" "ice2k-checkbox"' "~/.icewm/programs/explorer/desktopicons shadow"
+	else
+		echo 'prog "Show Icon Shadow" ""' "~/.icewm/programs/explorer/desktopicons shadow"
+	fi
+elif [ "$1" = "switch" ]; then
+	if [ "$deskiconson" -eq 1 ]; then
+		echo 0 > ~/.icewm/cfg/desk/deskiconson
+		exec "$0"
+	else
+		echo 1 > ~/.icewm/cfg/desk/deskiconson
+		exec "$0"
+	fi
+elif [ "$1" = "shadow" ]; then
+	if [ "$shadowon" -eq 0 ]; then
+		sed -i 's/Shadow: false/Shadow: true/' ~/.ideskrc
+		exec "$0"
+	else
+		sed -i 's/Shadow: true/Shadow: false/' ~/.ideskrc
+		exec "$0"
+	fi
+else
+	if [ "$deskiconson" -eq 1 ]; then
+		if test "$desktopiconpid"; then
+			kill "$desktopiconpid" && nohup idesk >/dev/null 2>&1 &
+		else
+			nohup idesk >/dev/null 2>&1 &
+		fi
+	else
+		if test "$desktopiconpid"; then
+			kill "$desktopiconpid"
+		fi
+	fi
+	#if [ "$deskiconson" -eq 1 ]; then
+	#	nohup idesk >/dev/null 2>&1 &
+	#fi
+fi
+#fi

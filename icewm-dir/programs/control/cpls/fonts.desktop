@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fonts
+Icon=fonts
+#Exec=xfontsel
+Exec=yad --font --window-icon font-x-generic --title Fonts --borders=12 --no-buttons --width=500 --height=350 --center
+StartupNotify=true
+Terminal=false

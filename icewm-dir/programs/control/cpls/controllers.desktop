@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Game\nControllers
+Icon=joystick
+Exec=jstest-gtk
+StartupNotify=true
+Terminal=false

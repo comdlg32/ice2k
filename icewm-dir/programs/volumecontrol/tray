@@ -1,0 +1,25 @@
+#!/usr/bin/env wish
+cd [file dirname [file normalize [info script]]]
+package require tktray
+wm withdraw .
+
+image create photo icon -file "volume.png"
+tktray::icon .volumeicon -class volumeicon -image icon
+
+wm title .volumeicon "volumeicon"
+
+bind .volumeicon <Button-4> {
+	exec amixer -q sset Master 3%+
+}
+
+bind .volumeicon <Button-5> {
+	exec amixer -q sset Master 3%-
+}
+
+bind .volumeicon <Button-1> {
+	exec ./volumeint &
+}
+
+bind .volumeicon <Button-3> {
+	exec ~/.icewm/programs/panel/volumemixer &
+}

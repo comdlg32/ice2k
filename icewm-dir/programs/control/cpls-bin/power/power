@@ -1,0 +1,34 @@
+#!/bin/sh
+cd $HOME/.icewm/programs/control/cpls-bin/power
+batterypercent="$(./capacity)"
+charging="$(cat /sys/class/power_supply/ACAD/online)"
+PLUG="$(~/.icewm/programs/common/random)"
+
+#echo $charging
+
+if [ "$batterypercent" -gt "50" ]; then
+	batterylevel=high
+else
+	batterylevel=low
+fi
+
+
+if [ "$charging" -gt "0" ]; then
+	status="charging"
+else
+	status="remaining"
+fi
+
+echo $status
+
+yad --on-top --skip-taskbar --button="OK:0" --button="Cancel:1" --button="Apply:0" --title="Power Properties" --center --window-icon="ac-adapter" --borders=10 --paned --key=$PLUG --height=395 --width=335& 
+yad --image=ac-adapter --image-on-top --text "Battery level: $batterylevel \n$batterypercent% $status" --progress --percentage=$batterypercent --plug=$PLUG --tabnum=2 --borders=15 &
+action=$(yad --text="CPU governor:" --plug=$PLUG --tabnum=1 --entry --entry-text \
+"Performance" "Powersave")
+
+case $action in
+    Performance*) cmd="sudo cpupower frequency-set --governor performance" ;;
+    Powersave*) cmd="sudo cpupower frequency-set --governor powersave" ;;
+esac
+
+eval exec $cmd

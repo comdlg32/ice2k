@@ -1,0 +1,29 @@
+/* XPM */
+static char *unreadmail[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1 ",
+"  c black",
+". c #808000",
+"X c yellow",
+"o c #808080",
+"O c #C0C0C0",
+"+ c white",
+"@ c None",
+/* pixels */
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@ooooooooooooo @",
+"@o++X+++X+++X  @",
+"@o +++X+++X+ . @",
+"@oO X+++X++ .o @",
+"@oXO +X+++ .Oo @",
+"@o++. ++X .OOo @",
+"@oX.O.   .O.Oo @",
+"@o.OOO...OOO.o @",
+"@oOOOOOOOOOOOo @",
+"@ooooooooooooo @",
+"@              @",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@"
+};

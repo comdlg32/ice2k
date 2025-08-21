@@ -1,0 +1,8 @@
+/* XPM */
+static char * dframeAT_xpm[] = {
+"1 3 2 1",
+" 	c #D4D0C8",
+".	c #FFFFFF",
+" ",
+".",
+" "};

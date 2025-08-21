@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Power
+Icon=preferences-system-power
+Exec=sh -c "$HOME/.icewm/programs/control/cpls-bin/power/power"
+StartupNotify=true
+Terminal=false

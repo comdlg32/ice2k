@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Date/Time
+Icon=date
+Exec=sh -c "$HOME/.icewm/programs/control/cpls-bin/timedate/timedate"
+StartupNotify=true
+Terminal=false

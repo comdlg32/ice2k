@@ -1,0 +1,27 @@
+/* XPM */
+static char *error[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1 ",
+"  c #800000",
+". c red",
+"X c #808080",
+"o c white",
+"O c None",
+/* pixels */
+"OOOOO     OOOOOO",
+"OOO  .....  OOOO",
+"OO ......... OOO",
+"O ..o.....o.. OO",
+"O .ooo...ooo. XO",
+" ...ooo.ooo... O",
+" ....ooooo.... X",
+" .....ooo..... X",
+" ....ooooo.... X",
+" ...ooo.ooo... X",
+"O .ooo...ooo. XX",
+"O ..o.....o.. XO",
+"OO ......... XXO",
+"OOO  .....  XXOO",
+"OOOOX     XXXOOO",
+"OOOOOOXXXXXOOOOO"
+};

@@ -1,0 +1,22 @@
+#!/bin/sh
+export fifodir="/tmp/kbswitch"
+export fifo="$fifodir/fifo"
+
+if [ "$1" = "cycle" ]; then
+	currentlayout="$(setxkbmap -query | grep "layout:" | cut -c 13-)"
+	layouts="$(cat ~/.icewm/cfg/kbswitch/layouts)"
+
+	nextlayout="$(echo "$layouts" | grep -o "$currentlayout,[^,]*" | awk -F',' '{print $2}')"
+
+	if test "$nextlayout" ; then
+		setxkbmap $nextlayout
+		echo "icon:$nextlayout.png" >> "$fifo"
+	else
+		nextlayout="$(echo "$layouts" | awk -F',' '{print $1}' | awk '{print $1}')"
+		setxkbmap $nextlayout
+		echo "icon:$nextlayout.png" >> "$fifo"
+	fi
+else
+	setxkbmap $1
+	echo "icon:$1.png" >> "$fifo"
+fi

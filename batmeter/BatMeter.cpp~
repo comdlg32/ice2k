@@ -1,0 +1,410 @@
+// Based on scribble example
+
+
+#include <X11/Xlib.h>
+//#define onPaint onPaint2
+//#define drawBorderRectangle drawBorderRectangle2
+#include <fx.h>
+#include "foxutils.h"
+
+//#include "res/foxres.h"
+#include "BatMeter.h"
+#include "Battery.h"
+
+#include "common.h"
+#include "basecontrols.h"
+//#include "AboutBox.h"
+
+
+
+// Message Map for the Uhexe Window class
+FXDEFMAP(BatMeter) BatMeterMap[] = {
+	FXMAPFUNC(SEL_COMMAND, BatMeter::ID_NOTHING, BatMeter::onCmdNothing),
+	FXMAPFUNC(SEL_COMMAND, BatMeter::ID_NEW, BatMeter::onCmdNew),
+	FXMAPFUNC(SEL_COMMAND, BatMeter::ID_ABOUT, BatMeter::onCmdAbout),
+};
+
+
+
+// Macro for the UhexeApp class hierarchy implementation
+FXIMPLEMENT(BatMeter,FXMainWindow,BatMeterMap,ARRAYNUMBER(BatMeterMap))
+
+#define TOOL_BUTTON_OPTS BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT, 0, 0, 0, 0, 2, 2, 2, 2
+#define ZERO4  0, 0, 0, 0
+#define ZERO8  0, 0, 0, 0, 0, 0, 0, 0
+#define ZERO10 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+// thank you stack overflow
+// https://stackoverflow.com/questions/20733215/how-to-make-a-window-always-on-top
+// since fox 1.6 doesnt support setting the window on top, we need to use the x11 api directly
+
+#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
+#define _NET_WM_STATE_ADD           1    /* add/set property */
+#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */
+
+
+// change a window's _NET_WM_STATE property so that it can be kept on top.
+// @display: x11 display singleton.
+// @xid    : the window to set on top.
+Status x11_window_set_on_top (Display* display, Window xid)
+{
+    XEvent event;
+    event.xclient.type = ClientMessage;
+    event.xclient.serial = 0;
+    event.xclient.send_event = True;
+    event.xclient.display = display;
+    event.xclient.window  = xid;
+    event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
+    event.xclient.format = 32;
+
+    event.xclient.data.l[0] = _NET_WM_STATE_ADD;
+    event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_ABOVE", False);
+    event.xclient.data.l[2] = 0; //unused.
+    event.xclient.data.l[3] = 0;
+    event.xclient.data.l[4] = 0;
+
+    return XSendEvent (display, DefaultRootWindow(display), False,
+                       SubstructureRedirectMask|SubstructureNotifyMask, &event);
+}
+
+Status x11_window_skip_taskbar (Display* display, Window xid)
+{
+    XEvent event;
+    event.xclient.type = ClientMessage;
+    event.xclient.serial = 0;
+    event.xclient.send_event = True;
+    event.xclient.display = display;
+    event.xclient.window  = xid;
+    event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
+    event.xclient.format = 32;
+
+    event.xclient.data.l[0] = _NET_WM_STATE_ADD;
+    event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_SKIP_TASKBAR", False);
+    event.xclient.data.l[2] = 0; //unused.
+    event.xclient.data.l[3] = 0;
+    event.xclient.data.l[4] = 0;
+
+    return XSendEvent (display, DefaultRootWindow(display), False,
+                       SubstructureRedirectMask|SubstructureNotifyMask, &event);
+}
+
+FXFont* helvcron;
+
+/*int setRecursiveFont(FXComposite* cmp, FXFont* font) {
+	int numChildren = cmp->numChildren();
+
+	for (int i = 0; i < numChildren; i++) {
+		if (cmp->childAtIndex(i)->isComposite()) {
+			if ( cmp->childAtIndex(i)->isMemberOf(&FXGroupBox::metaClass)) {
+				FXGroupBox* grp = (FXGroupBox*)cmp->childAtIndex(i);
+				grp->setFont(font);
+			}
+			setRecursiveFont((FXComposite*)cmp->childAtIndex(i), font);
+		} else {
+			//if (cmp->isMemberOf(FXLabel::metaClass)) {
+			FXWindow* child = cmp->childAtIndex(i);
+			if ( child->isMemberOf(&FXLabel::metaClass)) {
+				FXLabel* lbl = (FXLabel*)child;
+				lbl->setFont(font);
+			} else if ( child->isMemberOf(&FXGroupBox::metaClass)) {
+				FXGroupBox* grp = (FXGroupBox*)child;
+				grp->setFont(font);
+			}
+		}
+	}
+
+	return 0;
+} */
+
+#define BATSTATUS_FULL 0
+#define BATSTATUS_DISCHARGING 1
+#define BATSTATUS_CHARGING 2
+#define BATSTATUS_UNKNOWN 3
+#define BATSTATUS_NOTCHARGING 4
+
+
+BatMeter::BatMeter(FXApp *a):
+FXMainWindow(a, "Power Meter", ico_mainapp_16, ico_mainapp_16, DECOR_MENU|DECOR_TITLE|DECOR_CLOSE|DECOR_BORDER, 100, 100, 378, 354, 7, 7, 9, 9) {
+//FXMainWindow(a, "Power Meter", DECOR_MENU|DECOR_TITLE|DECOR_CLOSE|DECOR_BORDER, 100, 100, 378, 354, 7, 7, 9, 9) {
+	char battery[] = "BAT1";
+	char battery2[] = "BAT2";
+
+
+	char powersource[10] = "Batteries";
+
+	char status[13];
+	//getBatInfo(battery, "status", status, sizeof(status));
+	getAllBatteryStatus(status, sizeof(status));
+
+
+
+	//strcpy(status, "Full");
+
+	int cremain = 1;
+
+	FXIcon* baticon;
+
+
+	float avgbat;
+	int iavgbat;
+
+	int hours;
+	int minutes;
+	int seconds;
+
+	int numbatteries = getNumBatteries();
+
+	avgbat = float(getCombBatInfoInt("capacity") / numbatteries);
+	iavgbat = (int)avgbat;
+
+	{
+
+		if ( ! strcmp(status, "Charging") ) {
+			cremain = BATSTATUS_CHARGING;
+			strcpy(powersource, "AC power");
+			baticon = ico_bat_charging;
+		} else if ( ! strcmp(status, "Full")  ) {
+			// dont calculate remaining!
+			cremain = BATSTATUS_FULL;
+			strcpy(powersource, "AC power");
+			baticon = ico_bat_ac;
+		} else if ( ! strcmp(status, "Unknown")  ) {
+			cremain = BATSTATUS_UNKNOWN;
+			baticon = ico_bat_unknown;
+		} else if ( iavgbat > 64 ) {
+			baticon = ico_bat_full;
+		} else if ( iavgbat > 34 ) {
+			baticon = ico_bat_half;
+		} else if ( iavgbat > 4 ) {
+			baticon = ico_bat_low;
+		} else {
+			baticon = ico_bat_zero;
+		}
+
+		if ( ! strcmp(status, "Not charging")  ) {
+			//printf ("4\n");
+			cremain = BATSTATUS_NOTCHARGING;
+		}
+
+		//int batCount = getNumBatteries();
+
+		char batteries[256]; 
+		getBatteries(batteries, sizeof(batteries));
+
+		char *battery2 = strtok(batteries, ",");
+
+		// for new contributors: fhours means "float hours", tot = total
+
+		double totfhours = 0.0;
+
+		while (battery2) {
+			int charge_now = getBatInfoInt(battery2, "charge_now");
+			int charge_full = getBatInfoInt(battery2, "charge_full");
+			int current_now = getBatInfoInt(battery2, "current_now");
+
+			if (current_now == 0) {
+				battery2 = strtok(NULL, ",");
+				continue;
+			}
+
+			double fhours = 0.0;
+			if (cremain == BATSTATUS_CHARGING) {
+				fhours = double(charge_full - charge_now) / double(current_now);
+			} else {
+				fhours = double(charge_now) / double(current_now);
+			}
+	
+			totfhours += fhours;
+				battery2 = strtok(NULL, ",");
+		}
+
+		hours = (totfhours > 99.0) ? 99 : (int)totfhours;
+		minutes = (int)((totfhours - hours) * 60);
+		minutes = (minutes > 59.0) ? 59 : seconds;
+
+		seconds = (int)((((totfhours - hours) * 60) - minutes) * 60);
+		seconds = (seconds > 59.0) ? 59 : seconds;
+
+	}
+
+	char remaining[15];
+
+
+	if ( cremain ) {
+		if ( ! hours == 0 ) {
+			snprintf(remaining, sizeof(remaining), "%d:%02d:%02d hours", hours, minutes, seconds);
+		} else {
+			snprintf(remaining, sizeof(remaining), "%d:%02d minutes", minutes, seconds);
+		}
+	}
+
+
+	//puts(batteries);
+
+	/* char *battery2 = strtok(batteries, ",");
+	while (battery2) {
+		//func(token);
+		puts(battery2);
+		battery2 = strtok(NULL, ",");
+	} */
+
+
+	this->setIcon(ico_mainapp_16);
+
+	/* helvcron = new FXFont(a,
+	                      "Helvetica [cronyx]",
+	                      8.2999,
+	                      FXFont::Normal,
+	                      FXFont::Straight,
+	                      FONTENCODING_DEFAULT,
+	                      FXFont::NonExpanded,
+	                      0); */
+
+	checkboxes = new FXHorizontalFrame(this,LAYOUT_SIDE_TOP|FRAME_NONE|LAYOUT_FILL_X, ZERO8, 12, 0);
+
+        FXCheckButton* chkbox = NULL;
+
+	chkbox = new FXCheckButton(checkboxes, "&Always show icon on the taskbar.", NULL, 0, ICON_BEFORE_TEXT|LAYOUT_SIDE_TOP);
+	chkbox->disable();
+
+	chkbox = new FXCheckButton(checkboxes, "Show details for each &battery.", NULL, 0, ICON_BEFORE_TEXT|LAYOUT_SIDE_TOP);
+	chkbox->disable();
+
+
+	powerstatscont = new FXHorizontalFrame(this,LAYOUT_SIDE_TOP|FRAME_NONE|LAYOUT_FILL_X|LAYOUT_FILL_Y, ZERO4, 7, 6, 5, 5, 0, 0);
+	powerstatus = new FXGroupBox(powerstatscont, "Power status", GROUPBOX_TITLE_LEFT|FRAME_GROOVE|LAYOUT_FILL_X|LAYOUT_FILL_Y, ZERO4, 6, 14, 4, 4, 4, 4);
+	//FXHorizontalFrame* powerinfo = new FXHorizontalFrame(powerstatus, LAYOUT_SIDE_TOP|FRAME_NONE|LAYOUT_FILL_X, ZERO4, 20,15,4,4,11,0);
+	powerinfo = new FXHorizontalFrame(powerstatus, LAYOUT_SIDE_TOP|FRAME_NONE|LAYOUT_FILL_X, ZERO4, 20,0,4,4,11,0);
+
+	//puts(remaining);
+
+
+	new FXLabel(powerinfo, "", baticon);
+
+	powersrc = new FXMatrix(powerinfo, 4, LAYOUT_SIDE_TOP|LAYOUT_FILL_X, ZERO4, 0, 0, 2, 2, 2, 2);
+	new FXLabel(powersrc, "Current power source:", NULL, LABEL_NORMAL, ZERO8);
+	new FXLabel(powersrc, "Total battery power remaining:", NULL, LABEL_NORMAL, ZERO8);
+
+	(cremain) ? new FXLabel(powersrc, "Total time remaining:", NULL, LABEL_NORMAL, ZERO8)
+	          : new FXLabel(powersrc, " ", NULL, LABEL_NORMAL, ZERO8);
+
+	int dpi = getApp()->reg().readIntEntry("SETTINGS", "screenres", 100);
+
+	if (100 > dpi) dpi = 100;
+
+	new FXFrame(powersrc, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, (float)155 / (float)100 * (float)dpi, 12);
+	new FXLabel(powersrc, powersource, NULL, LABEL_NORMAL, ZERO8);
+
+	char percentage[5];
+	char powremain[23];
+
+	snprintf(percentage, sizeof(percentage), "%d%%", iavgbat);
+
+	//(cremain) ? strcpy(powremain, percentage)
+
+	if (cremain == 2)
+		snprintf(powremain, sizeof(powremain), "%d%%         (charging)", iavgbat);
+	else if (cremain == 3)
+		snprintf(powremain, sizeof(powremain), "%d%%          (unknown)", iavgbat);
+	else if (cremain == 4)
+		snprintf(powremain, sizeof(powremain), "%d%%    (not charging)", iavgbat);
+	else
+		strcpy(powremain, percentage);
+
+	new FXLabel(powersrc, powremain, NULL, LABEL_NORMAL, ZERO8);
+
+	(cremain) ? new FXLabel(powersrc, remaining, NULL, LABEL_NORMAL, ZERO8)
+	              : new FXLabel(powersrc, " ", NULL, LABEL_NORMAL, ZERO8);
+
+	//new FXLabel(powerstatus, " ", NULL, LAYOUT_FILL_X|FRAME_SUNKEN);
+
+	pbarcont = new FXPacker(powerstatus,FRAME_SUNKEN|LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 0, 0, 23, 1, 1, 1, 1);
+
+	pbar = new FXProgressBar(pbarcont,NULL,0,LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	pbar->setBarBGColor(a->getBaseColor());
+	pbar->setBarColor(a->reg().readColorEntry("SETTINGS", "selbackcolor", FXRGB(0, 0, 255)));
+
+	pbar->setProgress(iavgbat);
+	pbar->setTotal(100);
+
+	new FXLabel(powerstatus, percentage, NULL, LAYOUT_CENTER_X, ZERO4, 4, 4, 8, 4);
+
+
+}
+
+long BatMeter::onCmdNothing(FXObject* obj,FXSelector,void*) {
+	FXButton* btn = (FXButton*)obj;
+
+	btn->killFocus();
+	return 1;
+}
+
+long BatMeter::onCmdNew(FXObject* obj,FXSelector,void*) {
+	BatMeter* batmeter = new BatMeter(getApp());
+
+	//batmeter->show();
+	batmeter->create();
+
+	batmeter->setFocus();
+
+	FXButton* btn = (FXButton*)obj;
+
+	btn->killFocus();
+
+	return 1;
+}
+
+long BatMeter::onCmdAbout(FXObject* obj,FXSelector,void*) {
+	//AboutBox* aboutbox = new AboutBox(this);
+	//aboutbox->setFocus();
+	//aboutbox->execute(PLACEMENT_OWNER);
+	//aboutbox->setFocus();
+
+	return 1;
+}
+
+
+
+BatMeter::~BatMeter() {
+	//delete filemenu;
+	//delete helpmenu;
+}
+
+
+void BatMeter::create() {
+	FXMainWindow::create();
+	//this->hide();
+
+	x11_window_set_on_top((Display*)getApp()->getDisplay(), this->id());
+	x11_window_skip_taskbar((Display*)getApp()->getDisplay(), this->id());
+}
+
+void BatMeter::show() {
+	//x11_window_set_on_top((Display*)getApp()->getDisplay(), this->id());
+	//x11_window_skip_taskbar((Display*)getApp()->getDisplay(), this->id());
+
+	FXTopWindow::show();
+
+	x11_window_set_on_top((Display*)getApp()->getDisplay(), this->id());
+	x11_window_skip_taskbar((Display*)getApp()->getDisplay(), this->id());
+	//this->hide();
+	//printf("test\n");
+
+}
+
+
+void BatMeter::show(FXuint placement) {
+	//x11_window_set_on_top((Display*)getApp()->getDisplay(), this->id());
+	//x11_window_skip_taskbar((Display*)getApp()->getDisplay(), this->id());
+	place(placement);
+
+	FXTopWindow::show();
+
+	x11_window_set_on_top((Display*)getApp()->getDisplay(), this->id());
+	x11_window_skip_taskbar((Display*)getApp()->getDisplay(), this->id());
+	//this->hide();
+	//printf("test\n");
+
+}
+
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+exec yad --notification \
+--image=preferences-desktop-display \
+--text="Display Settings" \
+--command="sh -c 'sleep 0.2; exec gvidm'"

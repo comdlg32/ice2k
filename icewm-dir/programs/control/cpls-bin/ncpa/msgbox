@@ -1,0 +1,8 @@
+#!/bin/sh
+yad --title="Network Properties" \
+--window-icon=info --image=info \
+--buttons-layout=center --text-align=center \
+--borders=10 \
+--text="   You might need to log off for changes to apply.\n\n" \
+--button=OK:0 \
+--center --on-top --skip-taskbar

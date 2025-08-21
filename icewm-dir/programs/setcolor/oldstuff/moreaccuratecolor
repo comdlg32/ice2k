@@ -1,0 +1,56 @@
+#!/bin/sh
+# Load INI parser
+. ~/.icewm/programs/common/iniparse
+
+# Store color scheme in variable
+scheme="$(cat "$1")"
+
+icewmthemes="$HOME/.icewm/themes"
+icewmtheme="$HOME/.icewm/themes/Win2kmod-xpm"
+icewmogtheme="$HOME/.icewm/themes/Win2kmod-xpm-og"
+
+rm -rf "$icewmtheme"
+cp -r  "$icewmogtheme" "$icewmtheme"
+cp  "$icewmogtheme/default.theme.custom" "$icewmtheme/default.theme"
+
+
+sed -i -e \
+"s/#d4d0c8/basecolor/gI; \
+s/#a6caf0/activetitlebarright/gI; \
+s/#0a246a/activetitlebarleft/gI; \
+s/#5877ad/activetitlebarmiddle/gI" $icewmtheme/titleA*.xpm $icewmtheme/menuButtonA.xpm
+
+sed -i -e \
+"s/#d4d0c8/basecolor/gI; \
+s/#c0c0c0/inactivetitlebarright/gI; \
+s/#808080/inactivetitlebarleft/gI; \
+s/#a0a0a0/inactivetitlebarmiddle/gI" $icewmtheme/titleI*.xpm $icewmtheme/menuButtonI.xpm
+
+
+sed -i -e \
+"s/#404040/shadowcolor/gI; \
+s/gray25/shadowcolor/gI; \
+s/#d4d0c8/basecolor/gI; \
+s/#808080/lightshadowcolor/gI; \
+s/#ffffff/lightcolor/gI; \
+s/white/lightcolor/gI; \
+s/black/textcolor/gI; \
+s/#000000/textcolor/gI; \
+s/#a6caf0/activetitlebarright/gI; \
+s/#c0c0c0/inactivetitlebarright/gI; \
+s/#0a2368/selbackcolor/gI" $icewmtheme/minimize*.xpm $icewmtheme/restore*.xpm $icewmtheme/maximize*.xpm $icewmtheme/close*.xpm $icewmtheme/menusep.xpm
+
+sed -i -e \
+"s/#0a2368/selbackcolor/gI" $icewmtheme/menusel.xpm
+
+sed -i -e \
+"s/#404040/shadowcolor/gI; \
+s/gray25/shadowcolor/gI; \
+s/#d4d0c8/basecolor/gI; \
+s/#808080/lightshadowcolor/gI; \
+s/#ffffff/lightcolor/gI; \
+s/white/lightcolor/gI; \
+s/#0a2368/selbackcolor/gI" $icewmtheme/taskbar/*.xpm $icewmtheme/frame*.xpm $icewmtheme/buttonA.xpm
+
+sed -i -e \
+"s/#FFFFFF/backcolor/gI" $icewmtheme/listbg.xpm

@@ -1,0 +1,5 @@
+#!/bin/sh
+for arg
+do
+	sudo umount -f -l "$arg"
+done

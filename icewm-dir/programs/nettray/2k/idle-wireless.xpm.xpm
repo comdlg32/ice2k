@@ -1,0 +1,27 @@
+/* XPM */
+static char *idle_wireless[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1 ",
+"  c black",
+". c #808080",
+"X c #C0C0C0",
+"o c white",
+"O c None",
+/* pixels */
+"OOOOOOOOOO   OOO",
+"OOOOOOOOOOOO  OO",
+"OOOOOOOO   OO OO",
+"OOOOOOOOOO  O OO",
+"OO.......OO OOOO",
+"O.      X O OOOO",
+"O. o    X OOOOOO",
+"O. o    X OOOOOO",
+"O.      X OOOOOO",
+"O.      X OOOOOO",
+"O. .....X OOOOOO",
+"O.XXXXXXX OOOOOO",
+"O.         OOOOO",
+".oXXXX..X. OOOOO",
+".......... OOOOO",
+"O         OOOOOO"
+};

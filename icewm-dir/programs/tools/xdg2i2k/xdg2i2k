@@ -1,0 +1,72 @@
+#!/bin/sh
+#parsexdg()
+#{
+	# The XDG ini format is confusing. I am not implementing this.
+	# I might implement this on a later version of this tool.
+
+	# I will just hardcode the values. You can change them easily.
+#}
+
+icontheme="$1"
+
+# xdg values
+actions16="$icontheme/16x16/actions"
+actions32="$icontheme/32x32/actions"
+#actions48="$icontheme/48x48/actions"
+#actions64="$icontheme/64x64/actions"
+
+apps16="$icontheme/16x16/apps"
+apps32="$icontheme/32x32/apps"
+#apps48="$icontheme/48x48/apps"
+#apps64="$icontheme/64x64/apps"
+
+categories16="$icontheme/16x16/categories"
+categories32="$icontheme/32x32/categories"
+#categories48="$icontheme/48x48/categories"
+#categories64="$icontheme/64x64/categories"
+
+devices16="$icontheme/16x16/devices"
+devices32="$icontheme/32x32/devices"
+#devices48="$icontheme/48x48/devices"
+#devices64="$icontheme/64x64/devices"
+
+mimetypes16="$icontheme/16x16/mimetypes"
+mimetypes32="$icontheme/32x32/mimetypes"
+#mimetypes48="$icontheme/48x48/mimetypes"
+#mimetypes64="$icontheme/64x64/mimetypes"
+
+places16="$icontheme/16x16/places"
+places32="$icontheme/32x32/places"
+#places48="$icontheme/48x48/places"
+#places64="$icontheme/64x64/places"
+
+xdg2xfe()
+{
+	cp "$actions16/back.png" "$xfedir/dirback.png"
+	cp "$actions16/forward.png" "$xfedir/dirforward.png"
+	cp "$actions16/go-up.png" "$xfedir/dirup.png"
+
+	cp "$actions16/filefind.png" "$xfedir/search.png"
+	cp "$actions16/view-sidetree.png" "$xfedir/treeonepanel.png"
+
+	cp "$actions16/filefind.png" "$xfedir/search.png"
+	cp "$actions16/view-sidetree.png" "$xfedir/treeonepanel.png"
+
+	cp "$actions16/edit-copy.png" "$xfedir/copy-clp.png"
+	cp "$actions16/edit-cut.png" "$xfedir/moveit.png"
+	cp "$actions16/edit-delete.png" "$xfedir/filedelete.png"
+	cp "$actions16/edit.png" "$xfedir/attrib.png"
+
+	cp "$actions16/konsole.png" "$xfedir/shell.png"
+}
+
+usage()
+{
+	echo "$0 - Converts XDG icon themes for XDG incompatible programs in Ice2K.sys"
+}
+
+test "$1" = "-h" && usage
+test "$1" = "--help" && usage
+test "$1" = "-u" && usage
+test "$1" = "--usage" && usage
+

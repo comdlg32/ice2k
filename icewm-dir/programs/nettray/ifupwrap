@@ -1,0 +1,2 @@
+#!/bin/sh
+ifup $* || ifconfig $* up

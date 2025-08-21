@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Add/Remove\nPrograms
+Icon=system-os-install
+Exec=sh -c "$HOME/.icewm/programs/sudo2k/sudo2k synaptic"
+StartupNotify=true
+Terminal=false

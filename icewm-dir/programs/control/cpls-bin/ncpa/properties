@@ -1,0 +1,71 @@
+#!/bin/sh
+#if [ -d "/sys/class/net/$1/wireless" ]; then
+#	export WIRELESS='--field="Enable e":FBTN "sudo ifup $1"'
+#fi
+
+PLUG="$(~/.icewm/programs/common/random)"
+
+ifinfo()
+{
+	if test $1; then
+	        if /sbin/ifconfig $1 2>/dev/null >/dev/null; then
+#	                iface="$1"
+			#echo -n --field=
+			#echo -n 'Status: :LBL "" '
+			#echo -n --field=
+			#echo -n "$(echo -n '"'; /sbin/ifconfig $1 | head -n 1 | cut -d" " -f2- | grep -q "RUNNING" && echo -n Enabled || echo -n Disabled; echo -n '"')":LBL "" ' '
+			echo "$(/sbin/ifconfig $1 | head -n 1 | cut -d" " -f2- | grep -q "RUNNING" && echo -n Enabled || echo -n Disabled)"
+			echo "$(/sbin/ifconfig $1 | awk '/ether/ {print $2}')"
+	                echo "$(/sbin/ifconfig $1 | grep "inet" | grep "netmask" | grep "broadcast" | cut -d' ' -f10)"
+	                echo "$(/sbin/ifconfig $1 | grep "inet" | grep "netmask" | grep "broadcast" | cut -d' ' -f13)"
+	                echo "$(netstat -rn | awk -v iface="$1" '$NF==iface && /UG/ {print $2}')"
+	        fi
+	fi
+}
+
+yad --window-icon=network --button=OK:0 --button=Cancel:1 --title="$1 Properties" --height=415 --width=360 --notebook --key=$PLUG --tab="General" --tab="Support" --center &
+
+if [ -f "$HOME/.icewm/cfg/nettray/$1" ]; then
+	prevshowicon=TRUE
+else
+	prevshowicon=FALSE
+fi
+
+#export netinfo="$(ifinfo $1)"
+netinfo="$(ifinfo $1)"; yad --plug=$PLUG --image=network-idle --tabnum=2 --columns=2 --form \
+--field="  Status:":LBL \
+--field="  Physical Address:":LBL \
+--field="  IP Address:":LBL \
+--field="  Subnet Mask:":LBL \
+--field="  Default Gateway:":LBL \
+--field="			$(echo "$netinfo" | sed -n '1p')":LBL \
+--field="			$(echo "$netinfo" | sed -n '2p')":LBL \
+--field="			$(echo "$netinfo" | sed -n '3p')":LBL \
+--field="			$(echo "$netinfo" | sed -n '4p')":LBL \
+--field="			$(echo "$netinfo" | sed -n '5p')":LBL \
+--title="Support" & netinfo=
+
+
+showicon=$(yad --form \
+--field="Enable":FBTN "sudo ifup $1" \
+--field="Disable":FBTN "sudo ifdown $1" \
+--field=" ":LBL "" \
+--field=" ":LBL "" \
+--field=" ":LBL "" \
+--field=" ":LBL "" \
+--field=" ":LBL "" \
+--field=" ":LBL "" \
+--field="":LBL "" \
+--field="Edit interfaces file":FBTN "./editinterface" \
+--plug=$PLUG --tabnum=1 \
+--field="Show icon in notification area when connected":CHK "$prevshowicon" | sed 's/|//g')
+
+if [ "$showicon" = "TRUE" ]; then
+	touch "$HOME/.icewm/cfg/nettray/$1"
+	~/.icewm/programs/msgbox/msgbox 0 dialog-information "Network Properties" "You might need to log off for changes to apply."
+else
+	if [ "$showicon" = "FALSE" ]; then
+		rm "$HOME/.icewm/cfg/nettray/$1"
+		~/.icewm/programs/msgbox/msgbox 0 dialog-information "Network Properties" "You might need to log off for changes to apply."
+	fi
+fi

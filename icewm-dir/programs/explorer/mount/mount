@@ -1,0 +1,8 @@
+#!/bin/sh
+yad --image side.bmp --borders=0 --width=440 --center \
+--form --field="Ice2K.sys can help you connect to a shared network folder and assign a mount point to the connection so that you can access the folder using XFE. \
+\n\nSpecify the mount point for the connection and the folder that you want to connect to:":LBL "" \
+--field="Mount:" "" --field="Folder:" "" --field="Example: \\\\\\\192.168.35.14\\\share":LBL "" --field="Reconnect at startup":CHK "TRUE" --field="\n":LBL "" --field="":LBL "" \
+--button="Back":"true" --button="Finish":0 --button="Cancel":1 \
+--title="Map Network Drive" --window-icon="nfs"
+

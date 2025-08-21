@@ -1,0 +1,5 @@
+#!/bin/sh
+eval "$(xdotool getmouselocation -shell 2>/dev/null)"
+./walls | yad --list --column=Icon:IMG --column=Name:TEXT --no-headers \
+--borders=0 --no-buttons --undecorated --skip-taskbar --no-rules-hint \
+--geometry=250x150+$X+$Y --mouse --close-on-unfocus

@@ -1,0 +1,15 @@
+#!/bin/sh
+# TODO: make this actually functional
+yad --window-icon network-transmit-receive --title "Connect VPN" \
+--center --borders=8 \
+--image-on-top --image "connect.png" \
+--form \
+--field "User name:	":STXT \
+--field "Password:":H \
+--field :LBL \
+--field "Save this username and password":CHK \
+--field :LBL \
+--buttons-layout=center \
+--separator="\n" \
+--button "Connect:0" --button "Cancel:1" --button "Properties:4" \
+--button "Help:6"

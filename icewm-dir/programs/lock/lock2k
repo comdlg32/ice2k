@@ -1,0 +1,7 @@
+#!/bin/sh
+xdotool keyup Super
+xdotool keyup L
+#exec xscreensaver-command -lock
+#exec vlock -sna
+exec xlock
+#exec xset s activate

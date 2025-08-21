@@ -1,0 +1,118 @@
+# My favourite OS theme ever is Windows 2000.
+# This was later used by Microsoft for Windows ME as well. AFAIK, the only difference is WinME
+# didn't support shadows or fading. It used the Win98 "scroll" effect by default.
+# Finally, it was used as the base for "Windows Classic" theme in Windows XP.
+# There were some minor diffences, the Start Menu button size/icon come to mind.
+# Windows Vista/7 had a inaccurate implementation that was a "Software Rendered" port
+# however, it didn't use the native engine like XP did so was slower.
+
+
+ThemeDescription="Windows 2000 / ME"
+ThemeAuthor=PixelOCDGuy
+Look="flat"
+TaskbuttonIconOffset=5x
+
+DesktopBackgroundColor="rgb:3a/6e/a5"
+TaskBarClockLeds=1
+TrayDrawBevel=1
+
+TitleButtonsLeft="s"
+TitleButtonsRight="xmi"
+TitleButtonsSupported="xmis"
+TitleBarHeight=19
+Gradients="titleAB.xpm titleAT.xpm titleIB.xpm titleIT.xpm"
+TitleBarJoinRight=1
+
+BorderSizeX=4
+BorderSizeY=4
+CornerSizeX=24
+CornerSizeY=24
+DlgBorderSizeX=3
+DlgBorderSizeY=3
+
+ColorNormalButton="rgb:D4/D0/C8"
+ColorNormalButtonText="rgb:00/00/00"
+ColorActiveButton="rgb:D4/D0/C8"
+ColorActiveButtonText="rgb:00/00/00"
+
+ColorNormalTitleBarText="rgb:D4/D0/C8"
+ColorActiveTitleBarText="rgb:ff/ff/ff"
+ColorActiveBorder="rgb:D4/D0/C8"
+ColorInactiveBorder="rgb:D4/D0/C8"
+ColorNormalBorder="rgb:D4/D0/C8"
+
+ColorDialog="rgb:D4/D0/C8"
+ColorListBox="rgb:ff/ff/ff"
+ColorListBoxText="rgb:00/00/00"
+ColorListBoxSelection="rgb:0A/24/6A"
+ColorListBoxSelectionText="rgb:ff/ff/ff"
+ColorScrollBar="rgb:D4/D0/C8"
+ColorScrollBarSlider="rgb:D4/D0/C8"
+ColorScrollBarButton="rgb:D4/D0/C8"
+ColorScrollBarButtonArrow="rgb:00/00/00"
+ColorLabel="rgb:D4/D0/C8"
+ColorLabelText="rgb:00/00/00"
+
+ColorNormalMenu="rgb:D4/D0/C8"
+ColorActiveMenuItem="rgb:0A/24/6A"
+ColorNormalMenuItemText="rgb:00/00/00"
+ColorActiveMenuItemText="rgb:ff/ff/ff"
+ColorDisabledMenuItemText="rgb:80/80/80"
+
+ColorDefaultTaskBar="rgb:D4/D0/C8"
+ColorNormalTaskBarApp="rgb:D4/D0/C8"
+ColorNormalTaskBarAppText="rgb:00/00/00"
+ColorActiveTaskBarApp="rgb:ea/e8/e4"
+ColorActiveTaskBarAppText="rgb:00/00/00"
+ColorMinimizedTaskBarApp="rgb:D4/D0/C8"
+ColorMinimizedTaskBarAppText="rgb:00/00/00"
+
+ColorInput="rgb:ff/ff/ff"
+ColorInputText="rgb:00/00/00"
+ColorClock="rgb:D4/D0/C8"
+ColorClockText="rgb:00/00/00"
+
+ColorToolTip="rgb:ff/ff/e1"
+ColorToolTipText="rgb:00/00/00"
+ColorMoveSizeStatus="rgb:D4/D0/C8"
+ColorMoveSizeStatusText="rgb:00/00/00"
+ColorQuickSwitch="rgb:D4/D0/C8"
+ColorQuickSwitchText="rgb:00/00/00"
+ColorQuickSwitchActive="rgb:0A/24/6A"
+
+# Font Specification
+TitleFontNameXft	   = 	"Tahoma:size=8:bold"
+MenuFontNameXft	           =    "tahoma:size=8"
+MinimizedWindowFontNameXft =    "tahoma:size=8"
+ActiveButtonFontNameXft    =    "tahoma:size=8"
+NormalButtonFontNameXft    =    "tahoma:size=8"
+QuickSwitchFontNameXft     =    "tahoma:size=8:bold"
+ListBoxFontNameXft         =    "tahoma:size=8"
+StatusFontNameXft          =    "tahoma:size=8"
+ToolTipFontNameXft         =    "tahoma:size=8"
+ActiveTaskBarFontNameXft   =    "tahoma:size=8:bold"
+NormalTaskBarFontNameXft   =    "tahoma:size=8"
+ClockFontNameXft           =    "tahoma:size=8"
+ApmFontNameXft             =    "tahoma:size=8"
+LabelFontNameXft             =    "tahoma:size=8"
+
+TitleFontName		=	"-*-tahoma-bold-*-*-*-8-*-*-*-*-*-*-*"
+MenuFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+MinimizedWindowFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ActiveButtonFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+NormalButtonFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+QuickSwitchFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ListBoxFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+StatusFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ToolTipFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ActiveTaskBarFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+NormalTaskBarFontName	=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ClockFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+ApmFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+LabelFontName		=	"-*-tahoma-regular-*-*-*-8-*-*-*-*-*-*-*"
+
+
+#[taskbar]
+#TaskBarHeight=30
+#TaskBarEdgeTop=5
+#TaskBarEdgeBottom=5

@@ -1,0 +1,17 @@
+#!/bin/sh
+yad --form --columns=2 \
+--title="Desktops" --window-icon=desktop \
+--close-on-unfocus --undecorated --mouse \
+--field=1:FBTN "xdotool key Ctrl+Alt+1" \
+--field=2:FBTN "xdotool key Ctrl+Alt+2" \
+--field=3:FBTN "xdotool key Ctrl+Alt+3" \
+--field=4:FBTN "xdotool key Ctrl+Alt+4" \
+--no-buttons
+
+#if [ "$?" = "0" ]; then
+#	xdotool keydown Ctrl
+#	xdotool keydown Alt
+#	xdotool key M
+#	xdotool keyup Ctrl
+#	xdotool keyup Alt
+#fi

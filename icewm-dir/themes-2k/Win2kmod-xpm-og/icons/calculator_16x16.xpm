@@ -1,0 +1,29 @@
+/* XPM */
+static char *calculator_16x16[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1 ",
+"  c black",
+". c navy",
+"X c #008080",
+"o c cyan",
+"O c #C0C0C0",
+"+ c white",
+"@ c None",
+/* pixels */
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@XXXXXXXXXXXXXX@",
+"X+o+o+o+o+o+o+X ",
+"Xo        XXXX. ",
+"X+ ++++++OXXXX. ",
+"Xo OOOOOOOXXXX. ",
+"X+XXXXXXXXXXXX. ",
+"XoX + + + + + . ",
+"X+XXXXXXXXXXXX. ",
+"XoX + + + ++O . ",
+"X+XXXXXXXXXXXX. ",
+"XX............. ",
+"@              @",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@"
+};

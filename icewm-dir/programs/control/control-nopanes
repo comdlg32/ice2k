@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/.icewm/programs/control/cpls
+yad --class=control --name=control --no-buttons --width=360 --height=265 --margin=0 --borders=0 \
+--window-icon="preferences-desktop" --title="Control Panel" \
+--icons --read-dir=$HOME/.icewm/programs/control/cpls

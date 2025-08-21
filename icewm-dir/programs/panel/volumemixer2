@@ -1,0 +1,9 @@
+#!/bin/sh
+XCURSOR_THEME=default \
+xterm -class alsamixer -name alsamixer -title "Mixer" \
+-b 0 \
+-xrm "*font: -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1" \
+-xrm "*pointerShape: left_ptr" \
+-xrm "*iconHint: alsamixergui" \
+-geometry 120x25 \
+-e alsamixer -m -g

@@ -1,0 +1,13 @@
+/* XPM */
+static char *frameIB[] = {
+/* columns rows colors chars-per-pixel */
+"1 4 3 1 ",
+"  c #403e3b",
+". c #8b8984",
+"X c #d4d0c8",
+/* pixels */
+"X",
+"X",
+".",
+" "
+};

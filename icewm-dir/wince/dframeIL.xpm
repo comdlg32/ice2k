@@ -1,0 +1,9 @@
+/* XPM */
+static char *frameIL[] = {
+/* columns rows colors chars-per-pixel */
+"4 1 2 1 ",
+"  c #d4d0c8",
+". c #ffffff",
+/* pixels */
+" .  "
+};

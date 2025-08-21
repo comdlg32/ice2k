@@ -1,0 +1,8 @@
+/* XPM */
+static char * dframeATL_xpm[] = {
+"3 3 2 1",
+" 	c basecolor",
+".	c lightcolor",
+"   ",
+" ..",
+" . "};

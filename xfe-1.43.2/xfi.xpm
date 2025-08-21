@@ -1,0 +1,31 @@
+/* XPM */
+static char *xfi[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 9 1 ",
+"  c navy",
+". c #800000",
+"X c white",
+"o c cyan",
+"O c black",
+"+ c #808080",
+"@ c #008000",
+"# c #008080",
+"$ c #C0C0C0",
+/* pixels */
+"                ",
+" .............. ",
+" .XXXXXXXXXXXX. ",
+" .XoooooooOooX. ",
+" .XoooooooOOoX. ",
+" .Xo+ooooO@OoX. ",
+" .X+#+o+O@@OoX. ",
+" .X###+$@@@@OX. ",
+" .X##+$O@@@OoX. ",
+" .X#+$$$O@@@OX. ",
+" .X+$$$$$@@O$X. ",
+" .X+$$$$$$.$$X. ",
+" .X+++++++.++X. ",
+" .XXXXXXXXXXXX. ",
+" .............. ",
+"                "
+};

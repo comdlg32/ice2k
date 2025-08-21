@@ -1,0 +1,20 @@
+#!/bin/sh
+eval $(xdotool getwindowfocus getwindowgeometry --shell)
+
+getscriptdir()
+{
+        cd "$(dirname "${0}")"
+        echo "$PWD"
+}
+
+kill -USR1 $YAD_PID
+
+scriptdir="$(getscriptdir)"
+
+PATH="$scriptdir:$PATH"
+
+X="$(echo $X - 4 | bc )"
+Y="$(echo $Y - 23 | bc )"
+
+ice2kcal $X $Y $WIDTH $HEIGHT
+

@@ -1,0 +1,20 @@
+#!/bin/sh
+yad --paned --center --skip-taskbar --title "About Ice2K.sys" \
+--window-icon="exec" \
+--button="OK:0" \
+--on-top --orient=vertical --splitter=0 --key=1338 --tab=1 --tab=2 --borders=0&
+yad --tabnum=1 --image "$HOME/.icewm/programs/ice2kver/banner.png" --image-on-top --borders=0 --no-buttons --plug=1338 --tab-pos=bottom &
+yad --tabnum=2 --borders=4 --tabnum=2 --plug=1338 --tab-pos=top --text \
+"\
+                         tf's Ice2K.sys
+                         Service Pack 1 Release (Build 200)
+                         Licensed under multiple licenses.
+
+
+
+                         This product is licensed to:
+                         $(whoami)
+                         $(cat /etc/hostname)
+                         ___________________________________________________
+
+                         Physical memory available to $(uname -s):   $(grep MemTotal /proc/meminfo | awk '{print $2}') KB"

@@ -1,0 +1,7 @@
+*background: #d4d0c8
+*foreground: #000000
+*bottomShadowColor: #808080
+*topShadowColor: #ffffff
+xman*manualPage.background: #ffffff
+xman*directory.background: #ffffff
+*shadowThickness: 1

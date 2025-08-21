@@ -1,0 +1,30 @@
+#!/bin/sh
+gensubline()
+{
+	yes '_' 2>/dev/null | tr -d '\n' 2>/dev/null | head -c 114 2>/dev/null
+}
+
+getmem()
+{
+	grep MemTotal /proc/meminfo | awk '{print $2}' | sed -E ':L;s=\b([0-9]+)([0-9]{3})\b=\1,\2=g;t L'
+}
+export LC_ALL=C.utf-8
+
+yad --class="winver" --name="winver" --paned --center --skip-taskbar --title "About Ice2K.sys" \
+--window-icon="exec" \
+--button="OK:0" \
+--on-top --orient=vertical --splitter=0 --key=25398 --tab=1 --tab=2 --borders=0 &
+yad --tabnum=1 --image "$HOME/.icewm/programs/ice2kver/banner.png" --image-on-top --borders=0 --no-buttons --plug=25398 --tab-pos=bottom &
+yad --tabnum=2 --borders=4 --tabnum=2 --plug=25398 --tab-pos=top --text \
+"\
+                 <span line_height=\"1.18\">tflush's and m1nuscule_'s Ice2K.sys</span>
+                 <span line_height=\"1.18\">Service Pack 2 Release (Build 349)</span>
+                 <span line_height=\"1.18\">Licensed under multiple licenses.</span>
+
+
+                 <span line_height=\"1.18\">This product is being used by:</span>
+                       <span line_height=\"1.18\">$(whoami)</span>
+                       <span line_height=\"1.18\">$(cat /etc/hostname)</span>
+                 \<span font_size=\"4pt\" color=\"#808080\" baseline_shift=\"superscript\" underline=\"low\" underline_color=\"#FFFFFF\">$(gensubline)\</span\>
+                 <span line_height=\"1.18\">Physical memory available to $(uname -s):   $(getmem) KB</span>
+		     <span line_height=\"1.24\"></span>"

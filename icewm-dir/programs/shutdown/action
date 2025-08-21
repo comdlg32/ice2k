@@ -1,0 +1,54 @@
+#!/bin/sh
+
+ActiveWindowManagerPID()
+{
+	local windowManager="icewm"
+
+	local windowManagerPIDs="$(pidof "$windowManager")"
+
+	local displayNumber="$(echo $DISPLAY \
+		| awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+
+	ps e -p "$windowManagerPIDs" \
+		| awk -v n="$displayNumber" \
+			'$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+}
+
+icewmpid="$(ActiveWindowManagerPID)"
+
+waitforicewm(){
+    for pid in "$icewmpid"; do
+        while kill -0 "$pid"; do
+            sleep 0.5
+        done
+    done
+}
+
+playsound() {
+	aplay -q "$ICE2KSYS_SOUND_LOGOFF" 2> /dev/null
+}
+
+if [ "$1" = "shutdown" ]; then
+	playsound
+	kill -QUIT "$icewmpid"
+	waitforicewm
+	sudo poweroff
+fi
+
+if [ "$1" = "restart" ]; then
+	playsound
+	kill -QUIT "$icewmpid"
+	waitforicewm
+	sudo reboot
+fi
+
+if [ "$1" = "standby" ]; then
+	nohup sh -c 'sh -c "$HOME/.icewm/programs/lock/lock2k"' > /dev/null 2>&1 &
+	#sudo pm-suspend
+	sleep 3 && zzz
+fi
+
+if [ "$1" = "logoff" ]; then
+	playsound
+	kill -QUIT "$icewmpid"
+fi

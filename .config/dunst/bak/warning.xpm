@@ -1,0 +1,27 @@
+/* XPM */
+static char *warning[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1 ",
+"  c black",
+". c #808000",
+"X c yellow",
+"o c #808080",
+"O c None",
+/* pixels */
+"OOOOOO...OOOOOOO",
+"OOOOO.XXX OOOOOO",
+"OOOOO.XXX oOOOOO",
+"OOOO.XXXXX OOOOO",
+"OOOO.XX XX oOOOO",
+"OOO.XX   XX OOOO",
+"OOO.XX   XX oOOO",
+"OO.XXX   XXX OOO",
+"OO.XXX. .XXX oOO",
+"O.XXXXX XXXXX OO",
+"O.XXXXXXXXXXX oO",
+".XXXXXo oXXXXX O",
+".XXXXXo oXXXXX o",
+".XXXXXXXXXXXXX o",
+"O.            oo",
+"OOoooooooooooooO"
+};

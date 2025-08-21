@@ -1,0 +1,109 @@
+#!/bin/sh
+cd ~/.icewm/programs/wifi
+
+waitmsg()
+{
+	if LC_ALL=C iwctl station $@ show | grep -q "Scanning            yes"; then
+		yad --text "Scanning..." --title "Scanning..." --no-buttons --undecorated --center --on-top --skip-taskbar --no-focus --class=wifiscanmsg --name=wifiscanmsg --window-icon="" &
+		scanmsgpid="$!"
+		while LC_ALL=C iwctl station $@ show | grep -q "Scanning            yes"
+		do
+		        sleep 2
+		done
+		kill $scanmsgpid
+	fi
+}
+
+if /usr/sbin/service iwd status>/dev/null; then
+	if iwctl station $@ show > /dev/null; then
+		if [ -d "/sys/class/net/$*/wireless" ]; then
+			waitmsg $@ &
+			network="$(./networklist-REAL $@ | yad --list \
+			--column=Quality:IMG --column=Connected:TEXT --column=Network:TEXT --column=Security:TEXT \
+			--expand-column=3 --no-headers --listen --no-rules-hint \
+			--center \
+			--title="$*" --window-icon=network-wireless-100 \
+			--buttons-layout=center --button="Connect":0 --button="Disconnect":1 --button="Refresh":2 \
+			--width=250 --height=300 \
+			--skip-taskbar --borders=0 \
+			--separator=" " )"
+			errlevel="$?"
+			#network2="$(echo $network | cut -c 4- | rev | cut -c 2- | rev | sed 's|\(.*\)/.*|\1|')"
+			network2="$(echo $network | sed 's/[[:blank:]]*$//' | sed '$s/\w*$//' | sed 's/[[:blank:]]*$//')"
+		else
+			canconnect="false"
+		fi
+	else
+		canconnect="false"
+	fi
+else
+	canconnect="false"
+fi
+
+if [ "$canconnect" = "false" ]; then
+	~/.icewm/programs/msgbox/msgbox 0 "error" "$@" "Cannot display the list because either:\n	1. IWD is not running\n	2. Interface is not wireless\n	3. Interface is not up or it does not exist"
+	errlevel=5
+fi
+
+conndialog()
+{
+	passphrase2="$(yad --title "Connect $@ to $network2" --image connect.png --borders=6 --form --image-on-top --center \
+	--field="Password:      ":H "" \
+	--field="":LBL --skip-taskbar \
+	--button=Connect:0 --button=Cancel:2 \
+	--window-icon=network-wireless-100)"
+	errlevel="$?"
+	passphrase="$(echo $passphrase2 | head -c -3)"
+	echo "$passphrase"
+	sh -c "exit $errlevel"
+}
+
+if [ "$errlevel" = "2" ]; then
+	iwctl station $@ scan
+#	sleep 0.5
+	exec sh -c "$0 $@"
+fi
+
+if [ "$errlevel" -eq "0" ]; then
+	if test -z "$network2"; then
+	        exec sh -c "$0 $@"
+	fi
+	iwctl station $@ disconnect
+	connect="$(iwctl station $@ connect "$network2" --dont-ask 2>&1)"
+	errlevel="$?"
+	if [ "$errlevel" -eq "1" ]; then
+		if echo "$connect" | grep -q -F -- "No Agent registered" ; then
+		        passphrase="$(conndialog $@)"
+			export errlevel="$?"
+			if [ "$errlevel" -eq "0" ]; then
+			        if test "$passphrase"; then
+					iwctl station $@ disconnect >/dev/null 2>&1
+					if iwctl --passphrase "$passphrase" station $@ connect "$network2" --dont-ask; then
+						true
+					else
+						~/.icewm/programs/msgbox/msgbox 0 "error" "Error" "Wrong password!"
+						exec sh -c "$0 $@"
+					fi
+				else
+					~/.icewm/programs/msgbox/msgbox 0 "error" "Error" "You must enter a password!"
+					exec sh -c "$0 $@"
+				fi
+			else
+				exec sh -c "$0 $@"
+			fi
+		elif test "$connect"; then
+			errormsg="$(echo $connect | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")"
+			~/.icewm/programs/msgbox/msgbox 0 "error" "IWD error" "$errormsg"
+		fi
+	else
+		if test "$connect"; then
+			errormsg="$(echo $connect | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")"
+			~/.icewm/programs/msgbox/msgbox 0 "error" "IWD error" "$errormsg"
+		fi
+	fi
+fi
+
+if [ "$errlevel" = "1" ]; then
+	iwctl station $@ disconnect
+        exec sh -c "$0 $@"
+fi

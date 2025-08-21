@@ -1,0 +1,18 @@
+#include toolbar
+prog "Show Desktop" "desktop" sh -c 'if icesh desktop|grep -q -- 0; then icesh desktop 1;else icesh desktop 0; fi'
+#prog "Internet Explorer" browser chromium
+prog "Mozilla Firefox" firefox firefox
+prog "RisohEditor" risoheditor risoheditor
+#prog "GIMP" gimp gimp
+menu "" ../taskbar/qarrow {
+prog "My Computer" computer xfe /
+prog "Outlook Express" thunderbird xterm -title mutt -xrm "*iconHint: mutt" -e mutt
+prog "Audacious" audacious audacious
+prog "GIMP" gimp gimp
+prog "SeaMonkey" seamonkey seamonkey -browser
+}
+# hack to run xxkb on startup without breaking on icewm -r
+#includeprog sh -c "kill -9 "$(ps aux | grep xxkb | grep -- "--ice2k $DISPLAY" | awk \'{print $2}\' | tail -n 1)" >/dev/null 2>&1; echo"
+includeprog sh -c "killall -9 xxkb >/dev/null 2>&1 ; echo"
+includeprog sh -c "nohup xxkb --ice2k "$DISPLAY" > /dev/null 2>&1 & echo"
+#includeprog sleep 2

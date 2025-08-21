@@ -1,0 +1,128 @@
+#!/bin/sh
+if LC_ALL=C type sleep | grep -q -- "shell builtin" ; then
+	true
+else
+	if ksh93 -c 'true' ; then
+		exec ksh93 "$0" "$@"
+		exit
+	fi
+fi
+
+
+if [ -z "$1" ]; then
+        echo
+        echo usage: $0 network-interface
+        echo
+        echo e.g. $0 eth0
+        echo
+        echo shows packets-per-second
+        exit
+fi
+
+. ~/.icewm/programs/common/iniparse
+
+
+test -f "/usr/local/sbin/iwgetid" && iwgetid="/usr/local/sbin/iwgetid"
+test -f "/usr/sbin/iwgetid" && iwgetid="/usr/sbin/iwgetid"
+test -f "/sbin/iwgetid" && iwgetid="/sbin/iwgetid"
+
+
+cat()
+{
+	if test "$1"; then
+		while read line; do
+			echo "${line}"
+		done < "$1"
+	else
+		while read line; do
+			echo "${line}"
+		done
+	fi
+}
+
+IF=$1
+
+progdir="$(dirname -- "$( readlink -f -- "$0"; )";)"
+
+iconcfg="$(cat scheme.ini)"
+icontype="$(echo "$iconcfg" | iniparse general type)"
+icondir="$(echo "$iconcfg" | iniparse general dir)"
+
+export PATH="$progdir:$PATH"
+
+cd "$progdir"
+
+#echo $PATH
+
+ifupwrap="$(which ifupwrap)"
+ifdownwrap="$(which ifdownwrap)"
+
+if [ -d /sys/class/net/$1/wireless ]
+then
+	echo "action:"$HOME/.icewm/programs/wifi/wifi" $*"
+	if pidof iwd >/dev/null 2>&1; then
+	echo "menu:\
+Enable!sudo "$ifupwrap" $* |\
+Disable!sudo "$ifdownwrap" $* |\
+|\
+Connect!"$HOME/.icewm/programs/wifi/wifi" $*|\
+Forget!"$HOME/.icewm/programs/wifi/forget""
+	elif type wpa_gui >/dev/null 2>&1; then
+	echo "action:"$HOME/.icewm/programs/wifi/wpagui" $*"
+	echo "menu:\
+Enable!sudo "$ifupwrap" $* |\
+Disable!sudo "$ifdownwrap" $* |\
+|\
+Manage Networks!"$HOME/.icewm/programs/wifi/wpagui" $*"
+	else
+	echo "menu:Enable!sudo "$ifupwrap" $*|Disable!sudo "$ifdownwrap" $*"
+	fi
+#	echo "action:menu"
+	type=wireless
+else
+	echo "menu:Enable!sudo "$ifupwrap" $*|Disable!sudo "$ifdownwrap" $*"
+#	echo "action:menu"
+	type=wired
+fi
+
+while true
+do
+	upstatus=`cat /sys/class/net/$1/operstate`
+        R1=`cat /sys/class/net/$1/statistics/rx_packets`
+        T1=`cat /sys/class/net/$1/statistics/tx_packets`
+        sleep 0.5
+        R2=`cat /sys/class/net/$1/statistics/rx_packets`
+        T2=`cat /sys/class/net/$1/statistics/tx_packets`
+        TXPPS="$(($T2 - $T1))"
+        RXPPS="$(($R2 - $R1))"
+	if [ "$upstatus" = "up" ]; then
+		if [ "$RXPPS" -eq "0" ]; then
+			if [ "$TXPPS" -eq "0" ]; then
+				#echo "icon:$icondir/network-idle";
+				echo "icon:$icondir/idle-$type.$icontype"
+			else
+				#echo "icon:$icondir/network-transmit";
+				echo "icon:$icondir/send-$type.$icontype"
+			fi
+		else
+			if [ "$TXPPS" -eq "0" ]; then
+				#echo "icon:$icondir/network-receive";
+				echo "icon:$icondir/receive-$type.$icontype"
+			else
+				#echo "icon:$icondir/network-transmit-receive";
+				echo "icon:$icondir/sendreceive-$type.$icontype"
+			fi
+		fi
+#		if [ "$type" = "wireless" ]; then
+#			#echo menu:Disable!ifup $1||View Available Wireless Networks!xterm -e 'sh -c $HOME/aliases/wifi/wifi.sh']
+#			echo "menu:Disable!ifdown $1||View Available Wireless Networks!xterm"
+#		else
+#			#echo menu:Disable[!"ifup $1"]
+#			echo "menu:Disable!bash -c 'yad --about'!gtk-about||Quit!quit!gtk-quit"
+#		fi
+	else
+		#echo "icon:$icondir/network-offline"
+		echo "icon:$icondir/offline-$type.$icontype"
+	fi
+#        echo "tx $1: $TXPPS pkts/s rx $1: $RXPPS pkts/s"
+done

@@ -1,0 +1,24 @@
+# These overrides make sure icons are the right size;
+# time format matches Win2k/ME;
+# and Menu Mouse Tracking is on.
+# You can delete this file if you wish to customise these yourself via the normal icewm preferences menu.
+# Otherwise move to "$HOME/.icewm/"
+
+# You can still access these by right clicking on Start
+TaskBarShowWindowListMenu=0
+TaskBarShowWorkspaces=0
+TaskBarShowCollapseButton=0
+
+# Make sure icons stay the correct size
+TaskBarGraphHeight=16
+TrayIconMaxHeight=16
+
+# Show time in same format as Windows 2k/ME. Hover mouse for full date/time.
+TimeFormat="%-I:%M %p"
+
+# You can change this to 32 if you have a high DPI screen
+# Left as 16 as there is no way in icewm to show the "main" menu in 32 and the sub-menus in 16 as per Windows - without editing source.
+MenuIconSize=16
+
+# This should be left as is unless you want to click to select a menu.
+MenuMouseTracking=1 

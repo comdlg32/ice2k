@@ -1,0 +1,29 @@
+#!/bin/sh
+isup()
+{
+	read state < "/sys/class/net/$1/operstate"
+	if [ "$state" = "down" ]; then
+		echo "Disconnected"
+		return 1
+	else
+		echo "Connected"
+		return 0
+	fi
+}
+
+iswireless()
+{
+	[ -d "/sys/class/net/$1/wireless" ] && return 0 || return 1
+}
+
+getspeed()
+{
+	if iswireless "$1"; then
+		/sbin/iwconfig "$1" | grep "Bit Rate" | sed 's/Bit Rate=//' | awk '{print $1 $2}'
+	else
+		/sbin/ethtool "$1" 2>/dev/null | grep Speed | cut -c 9-
+	fi
+}
+
+getspeed "$1"
+isup "$1"

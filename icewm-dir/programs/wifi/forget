@@ -1,0 +1,36 @@
+#!/bin/sh
+cd ~/.icewm/programs/wifi
+#iwctl station wlan0 scan
+network="$(./forgetlist $@ | yad --list \
+--column=Quality:IMG --column=Connected:TEXT --column=Network:TEXT \
+--expand-column=2 --no-headers --listen --no-rules-hint \
+--center \
+--title="Forget network" --window-icon=network-wireless-100 \
+--button="Forget":0 \
+--width=250 --height=300 \
+--skip-taskbar --borders=0 \
+--buttons-layout=center --separator=" " )"
+errlevel="$?"
+#network2="$(echo $network | cut -c 4- | rev | cut -c 2- | rev | sed 's|\(.*\)/.*|\1|')"
+network2="$(echo $network | sed 's/[[:blank:]]*$//' | sed '$s/\w*$//' | sed 's/[[:blank:]]*$//')"
+#echo $network2
+#echo $network
+
+
+if [ "$errlevel" -eq "0" ]; then
+	if test "$network2"; then
+		if ~/.icewm/programs/msgbox/msgbox 3 "dialog-question" "Forget network?" "Are you sure you want to forget $network2?"; then
+			iwctl known-networks "$network2" forget
+			exec sh -c "$0 $@"
+		else
+			exec sh -c "$0 $@"
+		fi
+	else
+		exec sh -c "$0 $@"
+	fi
+fi
+
+#if [ "$errlevel" = "1" ]; then
+#	iwctl station $@ disconnect
+#        exec sh -c "$0 $@"
+#fi

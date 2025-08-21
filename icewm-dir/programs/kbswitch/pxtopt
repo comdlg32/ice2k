@@ -1,0 +1,10 @@
+#!/bin/sh
+
+pt_to_px() {
+        local pt="$(echo "$1+.5" | bc -l)"
+        local dpi=96
+        local px="$(echo "scale=0; $pt * $dpi / 72" | bc -l)"
+        echo "$px"
+}
+
+pt_to_px "$@"

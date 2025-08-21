@@ -1,0 +1,32 @@
+#!/bin/sh
+if [ "$1" = "kill" ]; then
+	kill -USR1 "$(pgrep -a "yad" | grep -- "--caddialog" | awk '{print $1}')"
+	exit
+fi
+#for i in $(cat ~/.icewm/preferences | grep "DesktopBackgroundImage"); do export $i; done
+#echo $DesktopBackgroundImage
+#feh -F $HOME/.icewm/wallpaper.jpg &
+#convert -resize 1920 1080 "$HOME/.icewm/wallpaper.jpg" /tmp/tempwall.png
+#yad --fullscreen --skip-taskbar --image /tmp/tempwall.png --image-on-top --no-buttons --borders=0&
+#backgroundpid=$!
+#sleep 0.3
+cd ~/.icewm/programs/ctrlaltdel
+yad --class caddialog --name caddialog --paned --no-buttons --center --skip-taskbar --title="Ice2K.sys Security" \
+--window-icon="application-executable" \
+--close-on-unfocus --orient=vertical --splitter=0 --key=2359 --tab=1 --tab=2 --borders=0 --caddialog &
+#killthis="$!"
+#cadcancel() {
+#	kill -USR1 "$killthis"
+#}
+#export -f cadcancel
+yad --plug=2359 --tabnum=1 --image=banner.png --borders=0 --image-on-top --no-buttons&
+yad --tabnum=2 --form --text="  Use the Task Manager to close an application that is not responding." \
+--field="Lock Computer":fbtn "sh -c '"$0" kill & $HOME/.icewm/programs/lock/lock2k'" \
+--field="  Change Password...  ":fbtn "sh -c '"$0" kill & ./chpass' " \
+--field="Log Off...":fbtn "sh -c '"$0" kill && ~/.icewm/programs/logoff/logoff' " \
+--field="       Task Manager       ":fbtn "sh -c '"$0" kill && lxtask'" \
+--field="       Shut Down...       ":fbtn "sh -c '"$0" kill && $HOME/.icewm/programs/shutdown/shutdown'" \
+--field="Cancel":fbtn ""$0" kill" \
+--columns=3 --no-buttons --plug=2359
+#kill $backgroundpid
+#rm /tmp/tempwall.png

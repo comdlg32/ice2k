@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Modems
+Icon=modem
+Exec=../../sudo2k/sudo2k xterm -e "pppconfig"
+StartupNotify=true
+Terminal=false

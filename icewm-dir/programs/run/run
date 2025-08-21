@@ -1,0 +1,16 @@
+#!/bin/sh
+command="$(yad --completion --window-icon=system-run --image=system-run --image-on-top \
+--text="   Type the name of a program. folder, document, or\n   Internet resource, and Ice2K.sys will open it for you." \
+--borders=10 --button=OK:0 --button=Cancel:1 --button=Browse...:"true" \
+--form --field="Open:  ":CE --field=" ":LBL --width=340 --title=Run --class=run --name=run)"
+
+
+exec $(echo "$command" | rev | cut -c 3- | rev)
+
+
+#runcommand()
+#{
+#	echo "$1"
+#}
+
+#runcommand $command

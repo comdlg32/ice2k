@@ -1,0 +1,30 @@
+/* XPM */
+static char *mstsc_16x16[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 8 1 ",
+"  c black",
+". c navy",
+"X c blue",
+"o c cyan",
+"O c #808080",
+"+ c #C0C0C0",
+"@ c white",
+"# c None",
+/* pixels */
+"############  ##",
+"###    ###  @+  ",
+"## OO++   @+..+ ",
+"# O +@  @+..Xo+ ",
+" O+OO@ @..XXXo+ ",
+" O+@ @ @.XXXXo+ ",
+" +@@@@ @.XXXXo+ ",
+" +@@@+ +.XXXoo+ ",
+"#  O+O @.Xoo++  ",
+"###    +oo++  ##",
+"#### @ +++    ##",
+"### @@ +  +O O #",
+"### @+  @@ + +O ",
+"####  + @+@  OO ",
+"######   @++O+ #",
+"#########     ##"
+};

@@ -1,0 +1,181 @@
+#!/bin/sh
+
+iniparse()
+{
+	sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.icewm/preferences
+}
+
+getwallpaper()
+{
+	iniparse DesktopBackgroundImage | sed -e 's/^"//'  -e 's/"$//'
+}
+
+getsolid()
+{
+	if test "$(getwallpaper)"; then
+		echo "FALSE"
+	else
+		echo "TRUE"
+	fi
+}
+
+getmultihead()
+{
+	if [ "$(iniparse DesktopBackgroundMultihead)" -eq 1 ]; then
+		echo -n "TRUE"
+	else
+		echo -n "FALSE"
+	fi
+}
+
+getposition()
+{
+        if [ "$(iniparse DesktopBackgroundCenter)" -eq 1 ]; then
+                if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+			echo -n '^Fit!Fill!Center!Tile'
+		else
+			echo -n 'Fit!Fill!^Center!Tile'
+		fi
+        else
+                if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+			echo -n 'Fit!^Fill!Center!Tile'
+		else
+			echo -n 'Fit!Fill!Center!^Tile'
+		fi
+        fi
+
+}
+
+getcolor()
+{
+	iniparse DesktopBackgroundColor | sed -e 's/^"//'  -e 's/"$//'
+}
+
+if [ "$1" = "getwallpaper" ]; then
+	getwallpaper ; exit
+elif [ "$1" = "getcolor" ]; then
+	getcolor ; exit
+fi
+
+selection="$(
+yad --skip-taskbar --on-top --window-icon=wallpaper --form --title "Change Background" --columns=1 --width=250 \
+--field="Image:	":FL "$(getwallpaper)" --field="Color:	":CLR "$(getcolor)" --field="Position:	":CB "$(getposition)" --field=:LBL "" \
+--field="Solid color":CHK "$(getsolid)" \
+--field="Spread over multiple monitors":CHK "$(getmultihead)" \
+--field=:LBL "" \
+--button="Set Background":0 --buttons-layout=center \
+--class=wallswitcher --name=wallswitcher \
+--separator="\n"
+)"
+errcode="$?"
+
+if [ "$errcode" -eq 0 ]; then
+	#echo "$selection"
+	wallpaper="$(echo "$selection" | sed -n '1p')"
+	color="$(echo "$selection" | sed -n '2p')"
+	position="$(echo "$selection" | sed -n '3p')"
+	multihead="$(echo "$selection" | sed -n '6p')"
+	onlycolor="$(echo "$selection" | sed -n '5p')"
+
+	extension="${wallpaper##*.}"
+	if [ "$onlycolor" = "TRUE" ]; then
+		break
+	else
+		case "$extension" in
+		        mp4|mkv|3gp|avi|swf|flv|hta|htm|html|htt|i2k)
+				yad --center --title="Active Desktop" \
+				--width=470 --window-icon=exec \
+				--button="Yes":0 --button="No":1 --buttons-layout=center \
+				--text="The wallpaper you selected can be displayed on the desktop only if Active Desktop is enabled.\nDo you want to enable it?\n" \
+				--borders=10 \
+				--class=animbg-msg --name=animbg-msg
+				msgboxanswer="$?"
+
+				if [ "$msgboxanswer" -eq 0 ]; then
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 1 > "$HOME/.icewm/cfg/animdesk/enabled"
+				elif [ "$msgboxanswer" -eq 252 ]; then
+					exec "$0"
+				else
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 0 > "$HOME/.icewm/cfg/animdesk/enabled"
+				fi
+				;;
+			gif)
+				if [ "$(identify "$wallpaper" | wc -l)" -gt 1 ]; then
+					yad --center --title="Active Desktop" \
+					--width=470 --window-icon=exec \
+					--button="Yes":0 --button="No":1 --buttons-layout=center \
+					--text="The wallpaper you selected can be animated on the desktop only if Active Desktop is enabled.\nDo you want to enable it?\n" \
+					--borders=10 \
+					--class=animbg-msg --name=animbg-msg
+				fi
+
+				msgboxanswer="$?"
+
+				if [ "$msgboxanswer" -eq 0 ]; then
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 1 > "$HOME/.icewm/cfg/animdesk/enabled"
+				elif [ "$msgboxanswer" -eq 252 ]; then
+					exec "$0"
+				else
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 0 > "$HOME/.icewm/cfg/animdesk/enabled"
+				fi
+				;;
+	                png|apng)
+				if [ -n "$(xxd -p -c 8 "$wallpaper" | grep -ob '6163544c' | cut -d ':' -f 1)" ]; then
+					yad --center --title="Active Desktop" \
+					--width=470 --window-icon=exec \
+					--button="Yes":0 --button="No":1 --buttons-layout=center \
+					--text="The wallpaper you selected can be animated on the desktop only if Active Desktop is enabled.\nDo you want to enable it?\n" \
+					--borders=10 \
+					--class=animbg-msg --name=animbg-msg
+				fi
+
+				msgboxanswer="$?"
+
+				if [ "$msgboxanswer" -eq 0 ]; then
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 1 > "$HOME/.icewm/cfg/animdesk/enabled"
+				elif [ "$msgboxanswer" -eq 252 ]; then
+					exec "$0"
+				else
+					mkdir -p "$HOME/.icewm/cfg/animdesk"
+					echo -n 0 > "$HOME/.icewm/cfg/animdesk/enabled"
+				fi
+				;;
+			*)
+				true
+			;;
+		esac
+	fi
+
+	if [ "$onlycolor" = "TRUE" ]; then
+		sed -i "/^DesktopBackgroundImage/c\\DesktopBackgroundImage=" ~/.icewm/preferences
+	else
+		sed -i "/^DesktopBackgroundImage/c\\DesktopBackgroundImage=\"$wallpaper\"" ~/.icewm/preferences
+	fi
+	sed -i "/^DesktopBackgroundColor/c\\DesktopBackgroundColor=\"$color\"" ~/.icewm/preferences
+	if [ "$position" = "Fit" ]; then
+		sed -i "/^DesktopBackgroundScaled/c\\DesktopBackgroundScaled=1" ~/.icewm/preferences
+		sed -i "/^DesktopBackgroundCenter/c\\DesktopBackgroundCenter=1" ~/.icewm/preferences
+	elif [ "$position" = "Fill" ]; then
+		sed -i "/^DesktopBackgroundScaled/c\\DesktopBackgroundScaled=1" ~/.icewm/preferences
+		sed -i "/^DesktopBackgroundCenter/c\\DesktopBackgroundCenter=0" ~/.icewm/preferences
+	elif [ "$position" = "Center" ]; then
+		sed -i "/^DesktopBackgroundScaled/c\\DesktopBackgroundScaled=0" ~/.icewm/preferences
+		sed -i "/^DesktopBackgroundCenter/c\\DesktopBackgroundCenter=1" ~/.icewm/preferences
+	elif [ "$position" = "Tile" ]; then
+		sed -i "/^DesktopBackgroundScaled/c\\DesktopBackgroundScaled=0" ~/.icewm/preferences
+		sed -i "/^DesktopBackgroundCenter/c\\DesktopBackgroundCenter=0" ~/.icewm/preferences
+	fi
+	if [ "$multihead" = "TRUE" ]; then
+		sed -i "/^DesktopBackgroundMultihead/c\\DesktopBackgroundMultihead=1" ~/.icewm/preferences
+	else
+		sed -i "/^DesktopBackgroundMultihead/c\\DesktopBackgroundMultihead=0" ~/.icewm/preferences
+	fi
+	#~/.icewm/programs/animbg/restartbg
+	~/.icewm/programs/panel/refreshdesktop
+	~/.icewm/programs/lock/convert
+fi

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Get the names of all connected displays
+display_names="$(xrandr | sed 's/disconnected/connected/g' | awk '/ connected/ {print $1}' )"
+
+# Count the number of connected displays
+num_displays="$(echo "$display_names" | wc -w)"
+
+# Check if there are at least two connected displays
+if [ "$num_displays" -ge 2 ]; then
+    # Extract the second detected display name
+    second_display_name="$(echo "$display_names" | head -n 2 | tail -1)"
+    
+    # Set the second detected display as the primary display
+    xrandr --output "$second_display_name" --primary
+    echo "Second display ($second_display_name) set as the primary display."
+else
+    echo "Two or more displays are required to set the second display as primary."
+fi

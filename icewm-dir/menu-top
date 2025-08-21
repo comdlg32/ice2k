@@ -1,0 +1,23 @@
+#includeprog ~/parse-desktop /home/tf/.local/share/applications/wine/Programs/KeePass.desktop
+#includeprog ~/parse-desktop /usr/share/applications/firefox-esr.desktop
+
+#menu "Favorite Programs" favorites {
+#prog "Set Programs Access and Defaults" galternatives galternatives
+prog "Windows Update_" update firefox https://toiletflusher.neocities.org/ice2k/downloads
+#separator # ------------------------------------------------
+#prog "Mozilla Firefox_" firefox firefox-esr
+#prog "Internet Explorer_" chromium chromium
+#separator # ------------------------------------------------
+#prog "Outlook Express_" ../../../SE98/apps/16/thunderbird claws-mail
+#separator # ------------------------------------------------
+#prog "htop_" htop xterm -e htop
+#prog "xkill" htop xkill
+
+#	menu "LibreOffice" libreoffice-main {
+#		prog "LibreOffice" libreoffice-main soffice
+#		prog "LibreOffice Writer" libreoffice-writer soffice --writer
+#		prog "LibreOffice Calc" libreoffice-calc soffice --calc
+#		prog "LibreOffice Draw" libreoffice-draw soffice --draw
+#		prog "LibreOffice Impress" libreoffice-impress soffice --impress
+#	}
+#}

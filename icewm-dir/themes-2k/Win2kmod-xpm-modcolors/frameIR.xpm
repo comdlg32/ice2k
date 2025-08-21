@@ -1,0 +1,10 @@
+/* XPM */
+static char *frameIR[] = {
+/* columns rows colors chars-per-pixel */
+"4 1 3 1 ",
+"  c shadowcolor",
+". c lightshadowcolor",
+"X c basecolor",
+/* pixels */
+"XX. "
+};

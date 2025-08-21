@@ -1,0 +1,28 @@
+/* XPM */
+static char *offline_wireless_png[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c black",
+". c red",
+"X c #808080",
+"o c #C0C0C0",
+"O c white",
+"+ c None",
+/* pixels */
+"++++++++++   +++",
+"++++++++++++  ++",
+"++++++++   ++ ++",
+"++++++++++  + ++",
+"++XXXXXXX++ ++++",
+"+X      o + ++++",
+"+X O    o ++++++",
+"+X O    o ++++++",
+"+X      ..+++..+",
+"+X      ...+...+",
+"+X XXXXXo.....++",
+"+Xooooooo ...+++",
+"+X       .....++",
+"XOooooXX...+...+",
+"XXXXXXXX.. ++..+",
+"+         ++++++"
+};

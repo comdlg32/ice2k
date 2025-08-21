@@ -1,0 +1,24 @@
+#!/bin/sh
+#ActiveDesktopIconsPID()
+#{
+#        local DesktopIcons="idesk"
+#
+#        local DesktopIconsPIDs="$(pidof -s -x "$DesktopIcons")"
+#
+#        local displayNumber="$(echo $DISPLAY \
+#                | awk 'BEGIN { FS = "[:.]" } { print $2 }')"
+#
+#        ps e -p "$DesktopIconsPIDs" \
+#                | awk -v n="$displayNumber" \
+#                        '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
+#}
+
+#desktopiconpid="$(ActiveDesktopIconsPID)"
+
+~/.icewm/programs/animbg/restartbg
+sleep 0.5
+exec ~/.icewm/programs/explorer/desktopicons
+
+#kill "$desktopiconpid" && idesk &
+
+#exec icewm -r

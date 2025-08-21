@@ -1,0 +1,9 @@
+# This is the Win2k/ME theme toolbar definition file for IceWM
+# The aim is to mimic the default "Quick Launch" toolbar in Win2k/ME.
+# Place in $HOME/.icewm directory.
+
+prog "Web Browser" webbrowser x-www-browser
+# Replace thunderbird with your email client and uncomment if you have a local email client installed.
+# prog "Email" email thunderbird
+
+# See "/usr/share/icewm/toolbar" for more examples.

@@ -1,0 +1,164 @@
+cbatticon.order: +1
+
+volumeicon.order: +3
+wpa_gui.order: +2
+gmrun.Gmrun.layer: AboveDock
+gmrun.Gmrun.ignoreWinList: 0
+gmrun.Gmrun.ignoreQuickSwitch: 0
+gmrun.Gmrun.ignoreTaskBar: 1
+gmrun.Gmrun.icon: gnome-do
+
+
+CtrlAltDel.ignoreWinList: 0
+CtrlAltDel.ignoreQuickSwitch: 0
+CtrlAltDel.ignoreTaskBar: 1
+
+
+winver.winver.icon: 0
+winver.winver.fMaximize: 0
+winver.winver.dMaximize: 0
+winver.winver.fMinimize: 0
+winver.winver.dMinimize: 0
+winver.winver.fResize: 1
+
+#ice2kver.layer: OnTop
+
+personalizedSettings.dClose: 0
+personalizedSettings.fClose: 0
+personalizedSettings.fResize: 0
+personalizedSettings.fRollup: 0
+personalizedSettings.fDepth: 0
+personalizedSettings.dMaximize: 0
+personalizedSettings.fMaximize: 0
+personalizedSettings.dMinimize: 0
+personalizedSettings.fMinimize: 0
+
+
+XMMS_Player.xmms.allWorkspaces: 1
+XMMS_Equalizer.xmms.allWorkspaces: 1
+XMMS_Playlist.xmms.allWorkspaces: 1
+
+XMMS_Playlist.xmms.ignoreQuickSwitch: 1
+XMMS_Playlist.xmms.ignoreTaskBar: 1
+XMMS_Playlist.xmms.ignoreUrgentHint: 1
+XMMS_Equalizer.xmms.ignoreUrgentHint: 1
+XMMS_Equalizer.xmms.ignoreQuickSwitch: 1
+XMMS_Equalizer.xmms.ignoreTaskBar: 1
+
+
+TelegramDesktop.allWorkspaces: 1
+
+#CtrlAltDelete
+caddialog.caddialog.dClose: 0
+caddialog.caddialog.fDepth: 0
+caddialog.caddialog.fHide: 0
+caddialog.caddialog.dMaximize: 0
+caddialog.caddialog.fMaximize: 0
+caddialog.caddialog.dMinimize: 0
+caddialog.caddialog.fMinimize: 0
+caddialog.caddialog.fRollup: 0
+caddialog.caddialog.dSysMenu: 0
+caddialog.caddialog.fResize: 0
+caddialog.caddialog.layer: AboveAll
+
+wifiscanmsg.wifiscanmsg.ignoreWinList: 1
+wifiscanmsg.wifiscanmsg.ignoreQuickSwitch: 1
+wifiscanmsg.wifiscanmsg.ignoreTaskBar: 1
+
+tasksep.ignoreWinList: 1
+tasksep.ignoreQuickSwitch: 1
+tasksep.ignoreTaskBar: 1
+tasksep.layer: AboveDock
+tasksep.doNotFocus: 1
+
+icefade-poweroff.ignoreWinList: 1
+icefade-poweroff.ignoreQuickSwitch: 1
+icefade-poweroff.ignoreTaskBar: 1
+#icefade-poweroff.icon: gnome-do
+icefade-poweroff.fClose: 0
+icefade-poweroff.fSysMenu: 0
+icefade-poweroff.dSysMenu: 0
+icefade-poweroff.fMaximize: 0
+icefade-poweroff.fMinimize: 0
+icefade-poweroff.fResize: 0
+#icefade-poweroff.noFocusOnMap: 1
+icefade-poweroff.doNotFocus: 1
+icefade-poweroff.layer: AboveDock
+#icefade-poweroff.startFullscreen: 0
+
+ice2k-poweroff.dMaximize: 0
+ice2k-poweroff.dMinimize: 0
+ice2k-poweroff.dSysMenu: 0
+ice2k-poweroff.fMaximize: 0
+ice2k-poweroff.fMinimize: 0
+ice2k-poweroff.fResize: 0
+ice2k-poweroff.fHide: 0
+ice2k-poweroff.fFullscreen: 0
+ice2k-poweroff.fRollup: 0
+ice2k-poweroff.layer: Fullscreen
+
+ffplay.layer: Fullscreen
+ffplay.dBorder: 0 
+ffplay.dTitleBar: 0 
+
+
+run.Run.dMaximize: 0
+run.Run.dMinimize: 0
+run.Run.fMaximize: 0
+run.Run.fMinimize: 0
+
+xeyes.ignoreWinList: 0
+xeyes.ignoreTaskBar: 0
+xeyes.allWorkspaces: 1
+xeyes.dTitleBar: 1
+xeyes.dBorder: 1
+xeyes.dSysMenu: 1
+xeyes.dResize: 1
+xeyes.dClose: 1
+xeyes.dMinimize: 1
+xeyes.dMaximize: 1
+xeyes.ignoreNoFocusHint: 1
+
+#XXkb.startClose: 1
+XXkb.order: -1
+
+note.dTitleBar: 0
+note.fMinimize: 0
+note.layer: Desktop
+note.doNotFocus: 1
+note.ignoreQuickSwitch: 1
+note.ignorePagerPreview: 1
+note.ignoreTaskBar: 1
+note.fResize: 0	
+note.fMove: 0
+note.fClose: 0
+note.fMaximize: 0
+note.ignoreWinList: 1
+
+xpad.dTitleBar: 0
+xpad.fMinimize: 0
+xpad.layer: Desktop
+xpad.doNotFocus: 1
+xpad.ignoreQuickSwitch: 1
+xpad.ignorePagerPreview: 1
+xpad.ignoreTaskBar: 1
+xpad.fClose: 0
+xpad.fMaximize: 0
+xpad.ignoreWinList: 1
+
+sober.icon: robloxnew
+
+risoheditor.exe.icon: risoheditor
+
+xterm.icon: xterm
+xfe.icon: xfe
+xfw.icon: xfw
+xfi.icon: xfi
+
+SeaMonkey.icon: communicator-browser
+SeaMonkey.Navigator.icon: communicator-browser
+SeaMonkey.Mail.icon: communicator-mail
+SeaMonkey.Composer.icon: communicator-composer
+SeaMonkey.addressbook.icon: communicator-browser
+
+TigerVNC Viewer.icon: mstsc

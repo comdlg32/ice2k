@@ -1,0 +1,9 @@
+#!/bin/sh
+convert -gravity north \( -extent 75x56+0-3 -background none "$2" \) \
+\( -background none -gravity south -font Tahoma -pointsize 11 \
+	-fill white label:"$3" -trim +repage \) \
+\( -clone 1 -background black -shadow 100000x1+2+2 \) \
+\( -clone 1 -clone 2 +swap -background none -layers merge +repage \) \
+-delete 1,2 \
+-gravity south -compose over -composite \
+"$HOME/.idesktop/$1.lnk"

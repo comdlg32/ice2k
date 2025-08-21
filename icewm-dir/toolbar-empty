@@ -1,0 +1,2 @@
+includeprog sh -c "killall -9 xxkb >/dev/null 2>&1 ; echo"
+includeprog sh -c "nohup xxkb --ice2k "$DISPLAY" > /dev/null 2>&1 & echo"

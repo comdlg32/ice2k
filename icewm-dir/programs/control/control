@@ -1,0 +1,7 @@
+#!/bin/sh
+cd ~/.icewm/programs/control/cpls
+PLUG="$(~/.icewm/programs/common/random)"
+yad --height 400 --class=control --name=control --splitter=0 --orient=horizontal --weight=400 --width=640 --paned --key=$PLUG --no-buttons --window-icon="preferences-desktop" --text=" File    Edit    View    Favorites    Tools    Help" --title="Control Panel" &
+yad --class=control --name=control --no-buttons --margin=0 --borders=0 \
+--icons --read-dir="$HOME/.icewm/programs/control/cpls" --plug=$PLUG --tabnum=2 &
+GTK2_RC_FILES="$HOME/.icewm/programs/control/webview" yad --class=control --name=control --no-buttons --borders=0 --plug=$PLUG --tabnum=1 --image="$HOME/.icewm/programs/control/webview.png"

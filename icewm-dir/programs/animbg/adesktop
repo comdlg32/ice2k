@@ -1,0 +1,11 @@
+#!/usr/bin/env wish
+wm attributes . -type desktop
+set geometry [winfo screenwidth .]x[winfo screenheight .]+0+0
+wm geometry . "$geometry"
+wm overrideredirect . 1
+lower .
+tkwait visibility .
+lower .
+after 250
+lower .
+exec dillo -f -g "$geometry" -x [winfo id .] [exec ~/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher getwallpaper]

@@ -1,0 +1,32 @@
+[colors]
+activetitlebarright=#dedede
+activetitlebarleft=#000000
+inactivetitlebarright=#d6d6d6
+inactivetitlebarleft=#a0a0a0
+
+activetitlebartext=#FFFFFF
+inactivetitlebartext=#eeeeee
+
+basecolor=#d6d6d6
+
+backcolor=#ffffff
+textcolor=#000000
+
+seltextcolor=#ffffff
+selbackcolor=#000000
+
+shadowcolor=#000000
+lightshadowcolor=#6b6b6b
+lightcolor=#FFFFFF
+
+[fonts]
+titlefont=Tahoma
+
+# fonts are measured in pt
+titlefontsize=8pt
+# b = bold, i = italic, you can have both to have both effects
+titlefontstyle=b
+
+generalfont=Tahoma
+titlefontsize=8pt
+titlefontstyle=

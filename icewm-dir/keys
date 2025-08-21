@@ -1,0 +1,51 @@
+# run dialog, gmrun is good but it doesnt look windows like.
+#key "Super+R" gmrun
+key "Super+R" /home/tf/.icewm/programs/ice2krun/run
+
+# lock
+key "Super+L" "~/.icewm/programs/lock/lock2k"
+
+key "Print" sh -c 'import -window root png:- | xclip -selection clipboard -target image/png &'
+key "Alt+Print" sh -c 'import -frame -window $(xdotool getactivewindow) png:- | xclip -selection clipboard -target image/png &'
+key "Ctrl+Print" sh -c 'scrot - --select --line mode=edge  | xclip -selection clipboard -target image/png &'
+
+key "Super+M" sh -c 'if icesh desktop|grep -q -- 0; then icesh desktop 1;else icesh desktop 0; fi'
+
+key "Ctrl+Alt+T" xterm
+
+key "Super+E" xfe
+
+# htop is objectively superior even if it doesnt look like taskmgr
+#key "Ctrl+Alt+Esc" lxtask
+key "Ctrl+Alt+Esc" htop
+
+# ctrl+alt+del key
+#key "Alt+Ctrl+Del" ~/.icewm/programs/ctrlaltdel/ctrlaltdel
+key "Alt+Ctrl+Del" ctrlaltdel
+key "Alt+Ctrl+Print" xkill
+
+# volume keys
+key "XF86AudioRaiseVolume" amixer sset Master 5%+
+key "XF86AudioLowerVolume" amixer sset Master 5%-
+key "XF86AudioMute" amixer sset Master toggle
+
+# multi-monitors config on win+p
+switchkey "Super+P" icewm-menu-xrandr
+
+key "Ctrl+Alt+Shift+Super+L" firefox linkedin.com
+key "Ctrl+Alt+Shift+Super+W" soffice --writer
+key "Ctrl+Alt+Shift+Super+P" soffice --impress
+key "Ctrl+Alt+Shift+Super+X" soffice --calc
+key "Ctrl+Alt+Shift+Super+O" xterm -e mutt
+key "Ctrl+Alt+Shift+Super+T" firefox teams.microsoft.com
+key "Ctrl+Alt+Shift+Super+D" firefox onedrive.com
+key "Ctrl+Alt+Shift+Super+N" xfw
+key "Ctrl+Alt+Shift+Super+Y" firefox yammer.com
+
+key "Ctrl+Super+Shift+B" icewm -r
+
+key "Super+1" xmms -r
+key "Super+2" xmms -t
+key "Super+3" xmms -s
+key "Super+4" xmms -f
+

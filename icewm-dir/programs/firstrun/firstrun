@@ -1,0 +1,38 @@
+#!/bin/sh
+i2kcfg="$HOME/.icewm/cfg"
+read firstrun < "$i2kcfg/ice2k/firstruncomplete"
+
+firstrunactions()
+{
+	cp ~/.icewm/preferences-default ~/.icewm/preferences
+	#sed -i "s/REPLACEWITHHOMEFOLDER/$HOME"
+	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.icewm/preferences"
+	mkdir -p "$HOME/.config/xfe"
+	cp xferc ~/.config/xfe
+	cp xres ~/.icewm
+	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.icewm/xres"
+}
+
+if [ "$firstrun" -eq 0 ]; then
+	cd "$( dirname -- "$( readlink -f -- "$0"; )"; )"
+	mv ~/.icewm/keys ~/.icewm/keys.bak
+	xsetroot -solid "#3B6EA5"
+	icewm -c "$HOME/.icewm/preferences-firstrun" &
+	icewmpid="$!"
+	sleep 1
+	yad --no-buttons --skip-taskbar \
+	--class=personalizedSettings --name=personalizedSettings --borders=10 \
+	--title="Personalized Settings" --window-icon="" \
+	--on-top --geometry="280x0+26+28" --no-escape \
+	--text="Setting up personalized settings for:\n\nIce2K.sys\n\n" &
+	dialogpid="$!"
+	sleep 3
+
+	firstrunactions
+	kill "$dialogpid"
+	sleep 1
+	kill "$icewmpid"
+	sleep 1
+	mv ~/.icewm/keys.bak ~/.icewm/keys
+	echo 1 > "$i2kcfg/ice2k/firstruncomplete"
+fi

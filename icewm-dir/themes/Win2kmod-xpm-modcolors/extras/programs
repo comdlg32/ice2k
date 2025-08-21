@@ -1,0 +1,14 @@
+## This is the Win2k/ME icewm program definition file.
+## It shows the "Programs" folder on the Start Menu which is an auto-generated menu of desktop shortcuts.
+## This is to mimic the Windows Programs folder rather then having the folders display in the root menu.
+## Merge with your own "programs" file or
+## place in $HOME/.icewm/
+##
+
+includeprog icewm-menu-fdo --no-sep-others
+#prog "Calculator" calculator xcalc
+#prog "Mousepad" org.xfce.mousepad mousepad
+#prog "Thunderbird" thunderbird thunderbird
+#prog "Thunar" org.xfce.thunar thunar
+
+## For further examples, see /usr/share/icewm/programs

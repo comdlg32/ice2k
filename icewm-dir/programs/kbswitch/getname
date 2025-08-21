@@ -1,0 +1,13 @@
+#!/bin/sh
+layoutnum="$(cat /usr/share/X11/xkb/rules/base.lst | awk '{print $1}' | grep -n -w -m1 "$1" | cut -d : -f 1)"
+fallbackname="$(echo "$1" | tr [:lower:] [:upper:] | sed 's/!/\\!/g')"
+if ! [ "${layoutnum}x" = "x" ]; then
+	layoutname="$(sed -n ${layoutnum}p /usr/share/X11/xkb/rules/base.lst | awk '{for(i=2;i<=NF;i++) printf $i " "; print ""}' | sed 's/!/\\!/g')"
+	if ! [ "${layoutnum}x" = "x" ]; then
+		echo "$layoutname"
+	else
+		echo "$fallbackname"
+	fi
+else
+	echo "$fallbackname"
+fi

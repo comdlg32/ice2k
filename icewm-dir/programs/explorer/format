@@ -1,0 +1,11 @@
+#!/bin/sh
+yad \
+--title="Format "$*"" --width=250 --button=Start:0 --button=Close:51 \
+--window-icon=3floppy_unmount --form \
+--field="Capacity:":LBL "" \
+--field=:CB "Not done" \
+--field="File system:":LBL "" \
+--field=:CB "FAT32!NTFS" \
+--field="":LBL "" \
+--field="Format options:":LBL "" \
+--field="Quick Format":CHK "TRUE"

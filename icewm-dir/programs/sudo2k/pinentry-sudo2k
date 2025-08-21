@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if sudo -n true 2>/dev/null; then
+	sudo XAUTHORITY="$HOME/.Xauthority" "$@"
+else
+	pass=$(~/.icewm/programs/sudo2k/pinentry "$*" "$* requires root. Type in your password to continue." "Password:")
+
+	if [ $? -eq 0 ]; then
+		if echo "$pass" | su -c true "$USER" 2>/dev/null; then
+			echo $pass | sudo -p '' -S XAUTHORITY="$HOME/.Xauthority" "$@"
+		else
+			if ~/.icewm/programs/sudo2k/pinentry-incorrect "Password Incorrect" "The password is incorrect! Try again."; then
+				exec sh -c "~/.icewm/programs/sudo2k/pinentry-sudo2k $@"
+			fi
+		fi
+	else
+		exit 1
+	fi
+fi

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Printers
+Icon=printer
+Exec=firefox -P kiosk "localhost:631"
+Comment=Configure printers.
+StartupNotify=true
+Terminal=false

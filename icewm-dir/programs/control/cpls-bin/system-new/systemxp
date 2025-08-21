@@ -1,0 +1,22 @@
+#!/bin/sh
+cd "$HOME/.icewm/programs/control/cpls-bin/system-new"
+PLUG="$(~/.icewm/programs/common/random)"
+cpuname="$(LC_ALL=C lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p')"
+ram="$(grep MemTotal /proc/meminfo | awk '{print $2 / 1024}')"
+yad --plug=$PLUG --tabnum=1 --text="
+<span line_height=\"1.18\">System:</span>
+<span line_height=\"1.18\">      Microsoft Windows XP</span>
+<span line_height=\"1.18\">      Professional x64 Edition</span>
+<span line_height=\"1.18\">      Version 2003</span>
+<span line_height=\"1.18\">      Service Pack 1</span>
+
+<span line_height=\"1.18\">Registered to:</span>
+<span line_height=\"1.18\">      $(whoami)</span>
+<span line_height=\"1.18\">      $(cat /etc/hostname)</span>
+
+<span line_height=\"1.18\">Computer:</span>
+<span line_height=\"1.18\">      $cpuname</span>
+<span line_height=\"1.18\">      $ram MiB RAM</span>" --text-align=left \
+--image="computer.png" &
+./devmgr | yad --plug=$PLUG --tabnum=2 --list --column Icon:IMG --column Device:TEXT --no-headers --no-click --no-rules-hint --borders=0 &
+yad --notebook --title="System Properties" --key=$PLUG --tab="General" --tab="Device Manager" --height=420 --window-icon="preferences-system" --button="OK:0" --button="Cancel:1" --skip-taskbar --on-top --center

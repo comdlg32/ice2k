@@ -1,0 +1,75 @@
+#!/bin/sh
+if type sleep | grep -q -- "shell builtin" ; then
+        true
+else
+        if ksh93 -c 'true' ; then
+                ksh93 "$0" "$*"
+                exit
+        fi
+fi
+
+
+sleep 0.05
+
+cd "$HOME/.icewm/programs/shutdown" || exit
+
+PLUG="$(~/.icewm/programs/common/random)"
+
+xwait() {
+    while ! xwininfo -name "$1" | grep 'Map State: IsViewable';do sleep 0.25;done
+}
+
+cpus="$(nproc)"
+
+getscriptdir()
+{
+        cd "$(dirname "${0}")"
+        echo "$PWD"
+}
+
+scriptdir="$(getscriptdir)"
+
+import \
+-limit thread $cpus -depth 8 -compress lzw -colorspace sRGB -window root ppm:- | composite -compress lzw -depth 8 -colorspace srgb -tile "$scriptdir/checkerboard.miff" -limit thread $cpus - ppm:- | (feh -N --theme icefade-poweroff --class icefade-poweroff --title icefade-poweroff --borderless --geometry=+0+0 -) &
+fadepid=$!
+
+#icesh -T setLayer Normal
+
+xwait icefade-poweroff > /dev/null 2>/dev/null
+
+#icesh -c icefade-poweroff sizeby 0 29
+
+yad --paned --center --skip-taskbar --title "Shut Down Ice2K.sys" \
+--window-icon="$HOME/.icewm/themes/Win2k/icons/shutdown_16x16.png" \
+--button="OK:0" --button="Cancel:1" --button="Help:1" \
+--orient=horizontal --splitter=0 --key="$PLUG" --tab=1 --tab=2 --borders=0 --class=ice2k-poweroff --name=ice2k-poweroff \
+--image "$HOME/.icewm/programs/shutdown/banner.png" --image-on-top &
+
+yad --on-top --tabnum=2  --borders=0 --no-buttons --plug="$PLUG" --tab-pos=bottom &
+
+
+action=$(yad --entry \
+--image="icon.png" \
+--borders=4 --tabnum=1 --text " What do you want the computer to do?                                    " --plug="$PLUG" --tab-pos=top \
+--entry-text \
+"Shut down" "Restart" "Stand by" "Log off")
+
+#while ! icesh -T getLayer | grep -q "Dock"; do icesh -T setLayer dock; done
+
+kill $fadepid
+
+#if [[ $ret -eq 2 ]]; then
+#    gdmflexiserver --startnew &
+#    exit 0
+#fi
+
+case $action in
+    Shut*) cmd="$HOME/.icewm/programs/shutdown/action shutdown" ;;
+    Restart*) cmd="$HOME/.icewm/programs/shutdown/action restart" ;;
+    Stand*) cmd="$HOME/.icewm/programs/shutdown/action standby" ;;
+    Log*) cmd="$HOME/.icewm/programs/shutdown/action logoff" ;;
+    *) exit 1 ;;    
+esac
+
+
+eval exec $cmd

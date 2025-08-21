@@ -1,0 +1,15 @@
+#!/bin/sh
+iswireless()
+{
+	[ -d "/sys/class/net/$1/wireless" ] && return 0 || return 1
+}
+
+getspeed()
+{
+	if iswireless "$1"; then
+		/sbin/iwconfig "$1" | grep "Bit Rate" | sed 's/Bit Rate=//' | awk '{print $1 $2}'
+	else
+		
+}
+
+getspeed "$1"

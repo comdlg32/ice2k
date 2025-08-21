@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Multimedia
+Icon=preferences-desktop-multimedia
+Exec=xterm -e "alsamixer"
+Comment=Control audio volume.
+StartupNotify=true
+Terminal=false

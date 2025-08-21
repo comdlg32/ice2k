@@ -1,0 +1,60 @@
+#!/bin/sh
+getscriptdir()
+{
+        cd "$(dirname "${0}")"
+        echo "$PWD"
+}
+
+
+scriptdir="$(getscriptdir)"
+export PATH="$scriptdir:$PATH"
+export fifodir="/tmp/kbswitch"
+export fifo="$fifodir/fifo"
+kblayouts="$(setxkbmap -query | grep layout | cut -c 13-)"
+
+#IFS="," read -ra layouts <<< "$kblayouts"
+
+pt_to_px() {
+        local pt="$(echo "$1+.5" | bc -l)"
+        local dpi=96
+        local px="$(echo "scale=0; $pt * $dpi / 72" | bc -l)"
+        echo -n "$px"
+}
+
+genicon()
+{
+	if test "$GTK2_RC_FILES"; then
+		font="$(cat "$(for arg in "$GTK2_RC_FILES"; do
+			part="${arg%%[:;]*}"
+
+			if [ -z "$part" ]; then
+				echo "$arg"
+	                else
+				echo "$part"
+			fi
+		done)" | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.gtkrc-2.0 | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+	elif test -f ~/.gtkrc-2.0; then
+		font="$(cat ~/.gtkrc-2.0 | sed -nr "{ :l /^gtk-font-name[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" | sed -e 's/^"//' -e 's/"$//' | awk '{$1=$1;print}')"
+	else
+		font="Tahoma 8"
+	fi
+
+	if ! test "$font"; then
+		font="Tahoma 8"
+	fi
+
+	typeface="$(echo -n "$font" | sed 's/[[:space:]]*\([0-9]\+\)$//')"
+
+	fontsize="$(pt_to_px "$(echo -n "$font" | grep -Eo '[0-9]+$' || echo -n "8")" )"
+
+	label="$(echo "$1" | tr [:lower:] [:upper:])"
+        mkdir -p "/tmp/kbswitch"
+        convert -background "#0a2368" -fill white -size 16x16 -gravity center -font "$typeface" -pointsize "$fontsize" label:$label "/tmp/kbswitch/${1}48.xpm"
+}
+
+IFS=","
+for layout in $kblayouts; do
+	genicon "$layout"
+done
+IFS=
+xxkb

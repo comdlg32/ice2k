@@ -1,0 +1,4 @@
+#!/bin/sh
+#dirname -- "$0"
+progdir="$(dirname -- "$( readlink -f -- "$0"; )";)"
+echo "$progdir"

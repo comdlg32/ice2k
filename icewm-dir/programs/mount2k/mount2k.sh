@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if mountpoint -q -- "$*"; then
+	>&2 echo "Already mounted!"
+	exit 1
+else
+	if mount $* 1> /dev/null 2> /dev/null; then
+		exit
+	else
+		if sudo -n mount $* 1> /dev/null 2> /dev/null; then
+			exit
+		else
+			pass=$(yad --button="OK:0" --button="Cancel:1" --window-icon="drive-harddisk" --title="Mount as root" --image="drive-harddisk" --text "Root is required to mount!\nType in your password to mount the drive." --borders=6 --entry --entry-label="Password:  " --hide-text --on-top --skip-taskbar --center --width=375)
+
+			if [ $? -eq 0 ]; then
+				if echo "$pass" | su -c true "$USER" 1> /dev/null 2> /dev/null; then
+					echo $pass | sudo -S -p "" mount $*
+					exit
+				else
+					if yad --button="OK:0" --button="Cancel:1" --window-icon="drive-harddisk" --title="Password Incorrect" --image="drive-harddisk" --text "The password is incorrect! Try again." --borders=6 --on-top --skip-taskbar --center --width=375; then
+						exec sh -c "~/.icewm/programs/mount2k/mount2k $*"
+					fi
+				fi
+			else
+				exit 1
+			fi
+		fi
+	fi
+fi

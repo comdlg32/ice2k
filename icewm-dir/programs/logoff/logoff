@@ -1,0 +1,10 @@
+#!/bin/sh
+yad --button="Yes:0" --button="No:1" \
+--text="\n     Are you sure you want to log off?             \n" \
+--title="Log Off Ice2K.sys" \
+--window-icon=lxde-logout --image=lxde-logout \
+--on-top --skip-taskbar --center --borders=10 --buttons-layout=center
+
+if [ "$?" -eq "0" ]; then
+	
+fi

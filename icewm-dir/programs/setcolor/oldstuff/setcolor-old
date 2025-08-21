@@ -1,0 +1,242 @@
+#!/bin/sh
+# Load INI parser
+. ~/.icewm/programs/common/iniparse
+
+# Store color scheme in variable
+scheme="$(cat "$1")"
+
+# Get titlebar colors
+activetitlebartext="$(echo "$scheme" | iniparse colors activetitlebartext)"
+inactivetitlebartext="$(echo "$scheme" | iniparse colors inactivetitlebartext)"
+
+activetitlebarleft="$(echo "$scheme" | iniparse colors activetitlebarleft)"
+activetitlebarright="$(echo "$scheme" | iniparse colors activetitlebarright)"
+inactivetitlebarleft="$(echo "$scheme" | iniparse colors inactivetitlebarleft)"
+inactivetitlebarright="$(echo "$scheme" | iniparse colors inactivetitlebarright)"
+
+icewmthemes="$HOME/.icewm/themes"
+icewmtheme="$HOME/.icewm/themes/Win2kmod-xpm"
+icewmogtheme="$HOME/.icewm/themes/Win2kmod-xpm-og"
+
+middlecolor()
+{
+	# Input colors
+	color1="$1"
+	color2="$2"
+
+	# Step 1: Separate into RGB components
+	r1=$(echo $color1 | cut -c 2-3)
+	g1=$(echo $color1 | cut -c 4-5)
+	b1=$(echo $color1 | cut -c 6-7)
+
+	r2=$(echo $color2 | cut -c 2-3)
+	g2=$(echo $color2 | cut -c 4-5)
+	b2=$(echo $color2 | cut -c 6-7)
+
+	# Step 2: Convert to integers
+	r1=$(printf "%d" 0x$r1)
+	g1=$(printf "%d" 0x$g1)
+	b1=$(printf "%d" 0x$b1)
+
+	r2=$(printf "%d" 0x$r2)
+	g2=$(printf "%d" 0x$g2)
+	b2=$(printf "%d" 0x$b2)
+
+	# Step 3: Calculate average
+	rn=$(( (r1 + r2) / 2 ))
+	gn=$(( (g1 + g2) / 2 ))
+	bn=$(( (b1 + b2) / 2 ))
+
+	# Step 4: Convert back to hexadecimal strings
+	r=$(printf "%02X" $rn)
+	g=$(printf "%02X" $gn)
+	b=$(printf "%02X" $bn)
+
+	# Step 5: Concatenate and print the result
+	result="#$r$g$b"
+	echo $result
+}
+
+activetitlebarmiddle="$(middlecolor "$activetitlebarleft" "$activetitlebarright")"
+inactivetitlebarmiddle="$(middlecolor "$inactivetitlebarleft" "$inactivetitlebarright")"
+
+# Get base color
+basecolor="$(echo "$scheme" | iniparse colors basecolor)"
+
+# Get background and text color
+backcolor="$(echo "$scheme" | iniparse colors backcolor)"
+textcolor="$(echo "$scheme" | iniparse colors textcolor)"
+
+# Get selected background and selected text color
+selbackcolor="$(echo "$scheme" | iniparse colors selbackcolor)"
+seltextcolor="$(echo "$scheme" | iniparse colors seltextcolor)"
+
+# Get border colors
+shadowcolor="$(echo "$scheme" | iniparse colors shadowcolor)"
+lightshadowcolor="$(echo "$scheme" | iniparse colors lightshadowcolor)"
+lightcolor="$(echo "$scheme" | iniparse colors lightcolor)"
+
+#seticewm()
+#{
+#	convert "$1" \
+#	-fill "$shadowcolor" -opaque "#404040" \
+#	-fill "$basecolor"   -opaque "#d4d0c8" \
+#	-fill "$lightshadowcolor" -opaque "#808080" \
+#	-fill "$lightcolor" -opaque "#ffffff" \
+#	-fill "$activetitlebarright" -opaque "#a6caf0" \
+#	-fill "$activetitlebarleft" -opaque "#0a246a" \
+#	-fill "$activetitlebarmiddle" -opaque "#5877ad" \
+#	-fill "$inactivetitlebarright" -opaque "#c0c0c0" \
+#	-fill "$inactivetitlebarleft" -opaque "#808080" \
+#	-fill "$inactivetitlebarmiddle" -opaque "#a0a0a0" \
+#	-fill "$selbackcolor" -opaque "#0a2368" \
+#	"$1"
+#}
+
+#seticewm()
+#{
+#	sed -i "s/#404040/$shadowcolor/gI" "$1"
+#	sed -i "s/#d4d0c8/$basecolor/gI" "$1"
+#	sed -i "s/#808080/$lightshadowcolor/gI" "$1"
+#	sed -i "s/#ffffff/$lightcolor/gI" "$1"
+#	sed -i "s/#a6caf0/$activetitlebarright/gI" "$1"
+#	sed -i "s/#c0c0c0/$inactivetitlebarright/gI" "$1"
+#	sed -i "s/#0a246a/$activetitlebarleft/gI" "$1"
+#	sed -i "s/#808080/$inactivetitlebarleft/gI" "$1"
+#	sed -i "s/#5877ad/$activetitlebarmiddle/gI" "$1"
+#	sed -i "s/#a0a0a0/$inactivetitlebarmiddle/gI" "$1"
+#	sed -i "s/#0a2368/$selbackcolor/gI" "$1"
+#}
+
+echo "Base color: $basecolor"
+echo
+echo "Background color: $backcolor"
+echo "Text/foreground color: $textcolor"
+echo
+echo "Selected background color: $selbackcolor"
+echo "Selected text color: $seltextcolor"
+echo "Shadow color: $shadowcolor"
+echo
+echo "Light shadow color: $lightshadowcolor"
+echo "Light color: $lightcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS basecolor "$basecolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS scrollbarcolor "$basecolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS listbackcolor "$backcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS backcolor "$backcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS listforecolor "$textcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS forecolor "$textcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS pbarcolor "$selbackcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS selbackcolor "$selbackcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS selforecolor "$seltextcolor"
+
+iniset "$HOME/.config/xfe/xferc" SETTINGS bordercolor "$shadowcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS shadowcolor "$lightshadowcolor"
+iniset "$HOME/.config/xfe/xferc" SETTINGS hilitecolor "$lightcolor"
+
+cp "$HOME/.themes/Redmond2000/gtk-2.0/colorsmodified.rc" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+
+sed -i "s/selbackcolor/$selbackcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/seltextcolor/$seltextcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/basecolor/$basecolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/backcolor/$backcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/textcolor/$textcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/lightshadowcolor/$lightshadowcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/lightcolor/$lightcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+sed -i "s/shadowcolor/$shadowcolor/gI" "$HOME/.themes/Redmond2000/gtk-2.0/colors.rc"
+
+rm -rf "$icewmtheme"
+cp -r  "$icewmogtheme" "$icewmtheme"
+cp  "$icewmogtheme/default.theme.custom" "$icewmtheme/default.theme"
+
+sed -i "s/inactivetitlebartext/$inactivetitlebartext/g" "$icewmtheme/default.theme"
+sed -i "s/activetitlebartext/$activetitlebartext/g" "$icewmtheme/default.theme"
+sed -i "s/selbackcolor/$selbackcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/seltextcolor/$seltextcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/basecolor/$basecolor/gI" "$icewmtheme/default.theme"
+sed -i "s/backcolor/$backcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/textcolor/$textcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/lightshadowcolor/$lightshadowcolor/gI" "$icewmtheme/default.theme"
+sed -i "s/shadowcolor/$shadowcolor/gI" "$icewmtheme/default.theme"
+
+
+#for i in $icewmtheme/*.xpm; do test -L "$i" || ((test -f "$i") && \
+#seticewm "$i" ); done
+
+#for i in $icewmtheme/taskbar/*.xpm; do test -L "$i" || ((test -f "$i") && \
+#seticewm "$i" ); done
+
+#sed -i -e "s/#404040/$shadowcolor/g" -e "s/#d4d0c8/$basecolor/g" -e "s/#808080/$lightshadowcolor/g" -e "s/#ffffff/$lightcolor/g" -e "s/#a6caf0/$activetitlebarright/g" -e "s/#c0c0c0/$inactivetitlebarright/g" -e "s/#0a246a/activetitlebarleft/g" -e "s/#808080/inactivetitlebarleft/g" -e "s/#5877ad/activetitlebarmiddle/g" -e "s/#a0a0a0/inactivetitlebarmiddle/g" -e "s/#0a2368/selbackcolor/g" $icewmtheme/*.xpm
+#sed -i -e "s/#404040/$shadowcolor/g" -e "s/#d4d0c8/$basecolor/g" -e "s/#808080/$lightshadowcolor/g" -e "s/#ffffff/$lightcolor/g" -e "s/#a6caf0/$activetitlebarright/g" -e "s/#c0c0c0/$inactivetitlebarright/g" -e "s/#0a246a/activetitlebarleft/g" -e "s/#808080/inactivetitlebarleft/g" -e "s/#5877ad/activetitlebarmiddle/g" -e "s/#a0a0a0/inactivetitlebarmiddle/g" -e "s/#0a2368/selbackcolor/g" $icewmtheme/taskbar/*.xpm
+#sed -i -e "s/#404040/$shadowcolor/g; s/#d4d0c8/$basecolor/g; s/#808080/$lightshadowcolor/g; s/#ffffff/$lightcolor/g; s/#a6caf0/$activetitlebarright/g; s/#c0c0c0/$inactivetitlebarright/g; s/#0a246a/activetitlebarleft/g; s/#808080/inactivetitlebarleft/g; s/#5877ad/activetitlebarmiddle/g; s/#a0a0a0/inactivetitlebarmiddle/g; s/#0a2368/selbackcolor/g" $icewmtheme/*.xpm
+#sed -i "s/#404040/$shadowcolor/g; s/#d4d0c8/$basecolor/g; s/#808080/$lightshadowcolor/g; s/#ffffff/$lightcolor/g; s/#a6caf0/$activetitlebarright/g; s/#c0c0c0/$inactivetitlebarright/g; s/#0a246a/activetitlebarleft/g; s/#808080/inactivetitlebarleft/g; s/#5877ad/activetitlebarmiddle/g; s/#a0a0a0/inactivetitlebarmiddle/g; s/#0a2368/selbackcolor/g" $icewmtheme/taskbar/*.xpm
+
+sed -i -e \
+"s/#d4d0c8/$basecolor/gI; \
+s/#a6caf0/$activetitlebarright/gI; \
+s/#0a246a/$activetitlebarleft/gI; \
+s/#5877ad/$activetitlebarmiddle/gI" $icewmtheme/titleA*.xpm $icewmtheme/menuButtonA.xpm
+
+sed -i -e \
+"s/#d4d0c8/$basecolor/gI; \
+s/#c0c0c0/$inactivetitlebarright/gI; \
+s/#808080/$inactivetitlebarleft/gI; \
+s/#a0a0a0/$inactivetitlebarmiddle/gI" $icewmtheme/titleI*.xpm $icewmtheme/menuButtonI.xpm
+
+
+sed -i -e \
+"s/#404040/$shadowcolor/gI; \
+s/gray25/$shadowcolor/gI; \
+s/#d4d0c8/$basecolor/gI; \
+s/#808080/$lightshadowcolor/gI; \
+s/#ffffff/$lightcolor/gI; \
+s/white/$lightcolor/gI; \
+s/black/$textcolor/gI; \
+s/#000000/$textcolor/gI; \
+s/#a6caf0/$activetitlebarright/gI; \
+s/#c0c0c0/$inactivetitlebarright/gI; \
+s/#0a2368/$selbackcolor/gI" $icewmtheme/minimize*.xpm $icewmtheme/restore*.xpm $icewmtheme/maximize*.xpm $icewmtheme/close*.xpm
+
+#sed -i -e \
+#"s/#404040/$shadowcolor/gI; \
+#s/#d4d0c8/$basecolor/gI; \
+#s/#808080/$lightshadowcolor/gI; \
+#s/#ffffff/$lightcolor/gI; \
+#s/#a6caf0/$activetitlebarright/gI; \
+#s/#c0c0c0/$inactivetitlebarright/gI; \
+#s/#0a246a/$activetitlebarleft/gI; \
+#s/#808080/$inactivetitlebarleft/gI; \
+#s/#5877ad/$activetitlebarmiddle/gI; \
+#s/#a0a0a0/$inactivetitlebarmiddle/gI; \
+#s/#0a2368/$selbackcolor/gI" $icewmtheme/*.xpm
+
+sed -i -e \
+"s/#0a2368/$selbackcolor/gI" $icewmtheme/menusel.xpm
+
+sed -i -e \
+"s/#404040/$shadowcolor/gI; \
+s/gray25/$shadowcolor/gI; \
+s/#d4d0c8/$basecolor/gI; \
+s/#808080/$lightshadowcolor/gI; \
+s/#ffffff/$lightcolor/gI; \
+s/white/$lightcolor/gI; \
+s/#0a2368/$selbackcolor/gI" $icewmtheme/taskbar/*.xpm $icewmtheme/frame*.xpm
+
+(echo "$basecolor"
+echo "$textcolor"
+echo "$lightshadowcolor"
+echo "$shadowcolor"
+echo "$lightcolor"
+echo "$backcolor") > ~/.icewm/programs/volumecontrol/colors
+
+if test -f "/tmp/ice2k-$USER/volume.pid"; then
+	kill -15 "$(cat "/tmp/ice2k-$USER/volume.pid")"
+	rm "/tmp/ice2k-$USER/volume.pid"
+fi
+
+~/.icewm/programs/volumecontrol/volume &
+sleep 0.5
+
+icewm -r

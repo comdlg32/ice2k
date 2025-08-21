@@ -1,0 +1,61 @@
+#!/bin/sh
+
+iniparse()
+{
+        sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;}" ~/.icewm/preferences
+}
+
+getwallpaper()
+{
+        iniparse DesktopBackgroundImage | sed -e 's/^"//'  -e 's/"$//'
+}
+
+getsolid()
+{
+        if test "$(getwallpaper)"; then
+                echo "FALSE"
+        else
+                echo "TRUE"
+        fi
+}
+
+getmultihead()
+{
+        if [ "$(iniparse DesktopBackgroundMultihead)" -eq 1 ]; then
+                echo -n "TRUE"
+        else
+                echo -n "FALSE"
+        fi
+}
+
+getposition()
+{
+        if [ "$(iniparse DesktopBackgroundCenter)" -eq 1 ]; then
+                if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+                        echo -n '^Fit!Fill!Center!Tile'
+                else
+                        echo -n 'Fit!Fill!^Center!Tile'
+                fi
+        else
+                if [ "$(iniparse DesktopBackgroundScaled)" -eq 1 ]; then
+                        echo -n 'Fit!^Fill!Center!Tile'
+                else
+                        echo -n 'Fit!Fill!Center!^Tile'
+                fi
+        fi
+
+}
+
+getcolor()
+{
+        iniparse DesktopBackgroundColor | sed -e 's/^"//'  -e 's/"$//'
+}
+
+yad --skip-taskbar --on-top --window-icon=wallpaper --form --title "Change Background" --columns=2 --width=250 \
+--field="":CHK "TRUE" --field=" ":LBL "" --field=" ":LBL "" --field=" ":LBL "" --field=" ":LBL ""  --field=" ":LBL "" --field=" ":LBL "" --field="Image: ":FL "$(getwallpaper)" --field="Color:  ":CLR "$(getcolor)" --field="Position:  ":CB "$(getposition)" --field=:LBL "" \
+--field="Solid color":CHK "$(getsolid)" \
+--field="Spread over multiple monitors":CHK "$(getmultihead)" \
+--field=:LBL "" \
+--button="Set Background":0 --buttons-layout=center \
+--class=wallswitcher --name=wallswitcher \
+--separator="\n"

@@ -1,0 +1,5 @@
+/* XPM */
+static char * listbg_xpm[] = {
+"1 1 1 1",
+" 	c #FFFFFF",
+" "};

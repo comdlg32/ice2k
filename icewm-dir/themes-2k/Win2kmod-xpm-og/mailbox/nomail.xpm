@@ -1,0 +1,29 @@
+/* XPM */
+static char *nomail[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1 ",
+"  c black",
+". c #767676",
+"X c #808080",
+"o c #C0C0C0",
+"O c #ECECEC",
+"+ c white",
+"@ c None",
+/* pixels */
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@XXXXXXXXXXXXX @",
+"@X++O+++O+++O  @",
+"@X +++O+++O+ . @",
+"@Xo O+++O++ .X @",
+"@XOo +O+++ .oX @",
+"@X++. ++O .ooX @",
+"@XO.o.   .o.oX @",
+"@X.ooo...ooo.X @",
+"@XoooooooooooX @",
+"@XXXXXXXXXXXXX @",
+"@              @",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@"
+};

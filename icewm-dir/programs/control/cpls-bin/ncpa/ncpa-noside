@@ -1,0 +1,17 @@
+#!/bin/sh
+cd $HOME/.icewm/programs/control/cpls-bin/ncpa
+#PLUG=$(~/.icewm/programs/common/random)
+#./icons | yad \
+#--listen --icons \
+#--no-buttons \
+#--width=400 --height=250 --item-width=70 \
+#--text=" File    Edit    View    Favorites    Tools    Advanced    Help" \
+#--title="Network and Dial-up Connections" --window-icon=network
+
+cd $HOME/.icewm/programs/control/cpls-bin/ncpa
+#yad --splitter=0 --orient=horizontal --height=400 --width=640 --paned --key=$PLUG --no-buttons --window-icon="network" --text=" File    Edit    View    Favorites    Tools    Advanced    Help" --title="Network and Dial-up Connections"  &
+./icons | yad --no-buttons --margin=0 --width=360 --height=265 \
+--text=" File    Edit    View    Favorites    Tools    Advanced    Help" \
+--window-icon="network" --title="Network and Dial-up Connections" \
+--listen --icons --item-width=70
+#GTK2_RC_FILES="$HOME/.icewm/programs/control/webview" yad --no-buttons --borders=0 --plug=$PLUG --tabnum=1 --image="$HOME/.icewm/programs/control/cpls-bin/ncpa/webview.png"

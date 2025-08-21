@@ -1,0 +1,22 @@
+#!/bin/sh
+
+wizardheader()
+{
+	GTK2_RC_FILES="$HOME/.icewm/programs/common/whitegtk" yad \
+	--text="$1" --no-buttons --image="$2" --image-on-top \
+	--plug="$WIZARDPLUG" --tabnum=1 \
+	--borders=5
+}
+
+wizardinit()
+{
+	[ "$finishbutton" -eq 1 ] && \
+	nextbutton="Finish" || \
+	nextbutton="Next &gt;"
+
+        yad --paned --key="$WIZARDPLUG" --orient=vertical --focused=2 \
+	--center --borders=0 --width=500 --height=350 \
+	--window-icon="$1" --title="$2" \
+	--button="&lt; Back":1 --button="$nextbutton":0 --button=Cancel:2
+}
+

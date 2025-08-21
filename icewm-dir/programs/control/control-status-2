@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/.icewm/programs/control/cpls
+yad --image-on-top --no-buttons --width=360 --height=265 --margin=0 \
+--window-icon="preferences-desktop" --text=" File    Edit    View    Favorites    Tools    Help" --title="Control Panel" \
+--icons --read-dir=$HOME/.icewm/programs/control/cpls

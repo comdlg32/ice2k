@@ -1,0 +1,28 @@
+/* XPM */
+static char *app_16x16_xp[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1 ",
+"  c black",
+". c #0000BF",
+"X c #808080",
+"o c #C0C0C0",
+"O c white",
+"+ c None",
+/* pixels */
+"++++++++++++++++",
+"XXXXXXXXXXXXXXXX",
+"XoooooooooooooX ",
+"Xo............X ",
+"Xo......O O O X ",
+"XoXXXXXXXXXXXXX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XoOOOOOOOOOOOOX ",
+"XXXXXXXXXXXXXXX ",
+"                ",
+"++++++++++++++++"
+};

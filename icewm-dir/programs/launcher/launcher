@@ -1,0 +1,6 @@
+#!/bin/sh
+yad --center --no-buttons --borders=0 --title="Ice2K.sys Test" --window-icon=application-executable \
+--form --columns=3 \
+--field="Messagebox Demo":FBTN "sh -c '~/.icewm/programs/msgbox/example'" --field="Ice2K.sys Version":FBTN "sh -c '~/.icewm/programs/ice2kver/ice2kver'" --field="Control Panel":FBTN "sh -c '~/.icewm/programs/control/control'" \
+--field="X File Explorer":FBTN "xfe" --field="X File Image":FBTN "xfi" --field="X File Write":FBTN "xfw" \
+--field="Synaptic Sudo2K":FBTN "sh -c '~/.icewm/programs/sudo2k/sudo2k synaptic'" --field="System Properties":FBTN "sh -c '~/.icewm/programs/control/cpls-bin/system-new/system'" --field="CAD Dialog":FBTN "sh -c '~/.icewm/programs/ctrlaltdel/ctrlaltdel'"

@@ -1,0 +1,11 @@
+#!/bin/sh
+export title="$1"
+export desc="$2"
+incorr="$(sh -c '\
+echo SETTITLE "$title" && \
+echo SETDESC "$desc" && \
+echo CONFIRM' | pinentry)"
+case "$incorr" in
+        *OK) exit 0 ;;
+        *) exit 1;;
+esac

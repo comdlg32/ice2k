@@ -1,0 +1,5 @@
+prog "Show Desktop" "desktop" sh -c 'if icesh desktop|grep -q -- 0; then icesh desktop 1;else icesh desktop 0; fi'
+prog "Mozilla Firefox" firefox firefox
+prog "Outlook Express" thunderbird xterm -title mutt -xrm "*iconHint: mutt" -e mutt
+prog "Audacious" audacious audacious
+prog "GIMP" gimp gimp
