@@ -24,5 +24,7 @@ Credits to rozniak for porting XP/2K cursors
 http://roland65.free.fr/xfe/
 Credits to nestoris for SE98 icon theme
 Credits to b00merang for linxp icon theme
+Credits to the FOX toolkit contributors for contributing to the FOX project,
+some code of it is being used here.
 
 If I forgot to credit someone, let me know.
