@@ -4,7 +4,7 @@ CC = g++
 
 CFLAGS = -Wall -c
 CPPFLAGS = -Wall -c
-LDFLAGS = `fox-config --libs` -lctl32
+LDFLAGS = `fox-config --libs`
 
 PREFIX=/usr/local
 
@@ -15,7 +15,7 @@ EXECUTABLE = ice2kver
 # "-D_WINVER_WIN2K" for windows 2000
 # "-D_WINVER_WINXP" for windows xp
 # "-D_WINVER_WINSRV03" for windows server 2003
-CPPFLAGS += `fox-config --cflags` -D_WINVER_WIN2K
+CPPFLAGS += `fox-config --cflags` -D_WINVER_WINSRV03
 
 all: $(EXECUTABLE)
 

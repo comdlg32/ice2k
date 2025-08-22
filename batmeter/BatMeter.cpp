@@ -12,7 +12,8 @@
 #include "Battery.h"
 
 #include "common.h"
-#include "basecontrols.h"
+//#include "basecontrols.h"
+#include <ice2k/comctl32.h>
 //#include "AboutBox.h"
 
 

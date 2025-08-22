@@ -1,0 +1,41 @@
+.PHONY: clean uninstall install
+
+CC = gcc
+CXX = g++
+
+CFLAGS = -Wall -c
+CXXFLAGS = -Wall -c
+
+PREFIX = /usr/local
+
+
+# for non developers, do not touch this
+VERSION = 0.0.1
+CFLAGS += -c --std=c99
+CXXFLAGS += `fox-config --cflags` -lctl32 -c --std=c++98
+LDFLAGS += `fox-config --libs`
+
+EXECUTABLE = groupbox
+
+#COBJECTS = $(CSOURCES:.c=.o)
+
+CXXSOURCES = groupbox.cpp
+CXXOBJECTS = $(CXXSOURCES:.cpp=.o)
+
+
+OBJECTS = $(CXXOBJECTS) $(COBJECTS)
+
+all: $(EXECUTABLE)
+
+# link executable
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)
+
+install: all
+	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
+
+uninstall:
+	rm -f $(PREFIX)/bin/$(EXECUTABLE)

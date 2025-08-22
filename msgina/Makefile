@@ -8,12 +8,12 @@ OS = `uname -s | tr '[a-z]' '[A-Z]'`
 
 CFLAGS = -Wall -c --std=c99 -D "OS_$(OS)"
 CPPFLAGS = -Wall -c --std=c++98 -D "OS_$(OS)"
-LDFLAGS = `fox-config --libs`
+LDFLAGS = `fox-config --libs` -lctl32
 
 PREFIX=/usr/local
 
-SOURCES = controls.cpp ctrlaltdel.cpp
-OBJECTS = controls.o   ctrlaltdel.o
+SOURCES = ctrlaltdel.cpp
+OBJECTS = ctrlaltdel.o
 ICONS = res/banner.gif res/banner2k.gif res/banner03.gif
 EXECUTABLE = ctrlaltdel
 

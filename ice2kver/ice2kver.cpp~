@@ -15,7 +15,7 @@
 #include <locale.h>
 
 #include "res/foxres.h"
-#include <ice2k/comctl32.h>
+
 // set windows version here!
 //#define _WINVER_WIN2K
 //#define _WINVER_WINXP

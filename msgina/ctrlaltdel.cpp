@@ -13,7 +13,7 @@
 #include <sys/sysinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <ice2k/comctl32.h>
 
 // thank you stack overflow
 // https://stackoverflow.com/questions/20733215/how-to-make-a-window-always-on-top
