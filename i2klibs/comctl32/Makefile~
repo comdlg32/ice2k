@@ -11,8 +11,8 @@ PREFIX = /usr/local
 
 # for non developers, do not touch this
 CFLAGS += -D UHEXE_VERSION="0.0.1" -c --std=c99
-CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic
-LDFLAGS += `fox-config --libs | sed 's/-lGLU//g' | sed 's/-lGL//g' `
+CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic -D_COMCTL32_BUILDING
+LDFLAGS += `fox-config --libs`
 
 OUTPUT = libctl32.so
 VERSION = 0.0.1

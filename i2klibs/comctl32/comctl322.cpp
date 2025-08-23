@@ -416,7 +416,6 @@ void I2KButton::drawBorderRectangle(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint
 
 
 FXDEFMAP(I2KMenuButton) I2KMenuButtonMap[] = {
-	FXMAPFUNC(SEL_PAINT, 0, I2KMenuButton::onPaint),
 };
 
 
@@ -430,32 +429,15 @@ I2KMenuButton::I2KMenuButton(FXComposite* p,const FXString& text,FXIcon* ic,FXPo
 }
 	
 
-#define MENUBUTTONARROW_WIDTH   7
-#define MENUBUTTONARROW_HEIGHT  4
+#define MENUBUTTONARROW_WIDTH   11
+#define MENUBUTTONARROW_HEIGHT  5
 
 #define MENUBUTTON_MASK         (MENUBUTTON_AUTOGRAY|MENUBUTTON_AUTOHIDE|MENUBUTTON_TOOLBAR|MENUBUTTON_NOARROWS)
 #define POPUP_MASK              (MENUBUTTON_UP|MENUBUTTON_LEFT)
 #define ATTACH_MASK             (MENUBUTTON_ATTACH_RIGHT|MENUBUTTON_ATTACH_CENTER)
 
-void FXScrollBar::drawButton(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint h,FXbool down){
-  dc.setForeground(backColor);
-  dc.fillRectangle(x+2,y+2,w-4,h-4);
-  dc.setForeground(backColor);
-  dc.fillRectangle(x,y,w-1,1);
-  dc.fillRectangle(x,y,1,h-1);
-  dc.setForeground(hiliteColor);
-  dc.fillRectangle(x+1,y+1,w-2,1);
-  dc.fillRectangle(x+1,y+1,1,h-2);
-  dc.setForeground(shadowColor);
-  dc.fillRectangle(x+1,y+h-2,w-2,1);
-  dc.fillRectangle(x+w-2,y+1,1,h-2);
-  dc.setForeground(borderColor);
-  dc.fillRectangle(x,y+h-1,w,1);
-  dc.fillRectangle(x+w-1,y,1,h);
-}
 
 long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
-	//puts("a");
   FXint tw=0,th=0,iw=0,ih=0,tx,ty,ix,iy;
   FXEvent *ev=(FXEvent*)ptr;
   FXPoint points[3];
@@ -497,22 +479,7 @@ long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
       if(!isEnabled() || !state){
         dc.setForeground(backColor);
         dc.fillRectangle(border,border,width-border*2,height-border*2);
-        if(options&FRAME_THICK){ // taken from fxscrollbar cuz im chopped n lazy
-		    dc.setForeground(backColor);
-  dc.fillRectangle(2,2,width-4,height-4);
-  dc.setForeground(backColor);
-  dc.fillRectangle(0,0,width-1,1);
-  dc.fillRectangle(0,0,1,height-1);
-  dc.setForeground(hiliteColor);
-  dc.fillRectangle(1,1,width-2,1);
-  dc.fillRectangle(1,1,1,height-2);
-  dc.setForeground(shadowColor);
-  dc.fillRectangle(1,height-2,width-2,1);
-  dc.fillRectangle(width-2,1,1,height-2);
-  dc.setForeground(borderColor);
-  dc.fillRectangle(0,height-1,width,1);
-  dc.fillRectangle(width-1,0,1,height);
-	  }
+        if(options&FRAME_THICK) drawDoubleRaisedRectangle(dc,0,0,width,height);
         else drawRaisedRectangle(dc,0,0,width,height);
         }
 
@@ -633,9 +600,9 @@ long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
         dc.setForeground(textColor);
       else
         dc.setForeground(shadowColor);
-      points[0].x=ix;
+      points[0].x=ix+1;
       points[0].y=iy;
-      points[2].x=ix+MENUBUTTONARROW_WIDTH;
+      points[2].x=ix+MENUBUTTONARROW_WIDTH-1;
       points[2].y=iy;
       points[1].x=(FXshort)(ix+(MENUBUTTONARROW_WIDTH>>1));
       points[1].y=iy+MENUBUTTONARROW_HEIGHT;
@@ -666,7 +633,3 @@ long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
     }
   return 1;
   }
-
-FXint I2KMenuButton::getDefaultWidth() {
-	return FXMenuButton::getDefaultWidth() + 1;
-}

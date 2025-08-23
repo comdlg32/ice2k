@@ -1,6 +1,8 @@
 #pragma once
 #include <fx.h>
 
+
+
 /* class FXAPI I2KGroupBox : public FXGroupBox {
 	FXDECLARE(I2KGroupBox)
 
@@ -75,46 +77,9 @@ class FXAPI I2KButton : public FXButton {
 };
 
 
-
-class FXAPI I2KMenuButton : public FXMenuButton {
-	FXDECLARE(I2KMenuButton)
-
-	protected:
-		I2KMenuButton(){}
-
-	private:
-		I2KMenuButton(const I2KMenuButton&);
-		I2KMenuButton &operator=(const I2KMenuButton&);
-
-	public:
-		//long onPaint(FXObject*,FXSelector,void*);
-            //void drawBorderRectangle(FXDCWindow&,FXint,FXint,FXint,FXint);
-		long onPaint(FXObject*,FXSelector,void*);
-                FXint getDefaultWidth();
-		
-
-		I2KMenuButton(FXComposite* p,const FXString& text,FXIcon* ic=NULL,FXPopup* pup=NULL,
-				FXuint opts=JUSTIFY_NORMAL|ICON_BEFORE_TEXT|MENUBUTTON_DOWN,
-				FXint x=0,FXint y=0,FXint w=0,FXint h=0,FXint pl=0,FXint pr=0,FXint pt=0,FXint pb=0);
-		//I2KButton(FXComposite* p,const FXString& text,FXIcon* ic=NULL,FXObject* tgt=NULL,FXSelector sel=0,FXuint opts=BUTTON_NORMAL,FXint x=0,FXint y=0,FXint w=0,FXint h=0,FXint pl=DEFAULT_PAD,FXint pr=DEFAULT_PAD,FXint pt=DEFAULT_PAD,FXint pb=DEFAULT_PAD);
-
-};
-
-#ifdef _COMCTL32_BUILDING
-#include "I2KComboBox.h"
-#include "I2KListBox.h"
-#else
-#include <ice2k/I2KComboBox.h>
-#include <ice2k/I2KListBox.h>
-#endif
-
 #ifndef _DO_NOT_OVERRIDE_FOX_CONTROLS
 	#define FXButton I2KButton
 	#define FXDragCorner I2KDragCorner
 	#define FXGroupBox I2KGroupBox
-	#define FXComboBox I2KComboBox
-	#define FXMenuButton I2KMenuButton
-	#define FXComboBox I2KComboBox
-	#define FXListBox I2KListBox
 	#define _DO_NOT_OVERRIDE_FOX_CONTROLS
 #endif

@@ -5,20 +5,20 @@
 #define _DO_NOT_OVERRIDE_FOX_CONTROLS
 #include "comctl32.h"
 
-
 static FXColor focuscolor;
 
-// Object implementation
-//
-FXDEFMAP(I2KButton) I2KButtonMap[] = {
-	FXMAPFUNC(SEL_PAINT, 0, I2KButton::onPaint),
-};
 
+// Object implementation
 FXIMPLEMENT(I2KButton,FXButton,I2KButtonMap,ARRAYNUMBER(I2KButtonMap))
 
 I2KButton::I2KButton(FXComposite* p,const FXString& text,FXIcon* ic, FXObject* tgt,FXSelector sel,FXuint opts,FXint x,FXint y,FXint w,FXint h,FXint pl,FXint pr,FXint pt,FXint pb): 
            FXButton(p,text,ic,tgt,sel,opts,x,y,w,h,pl,pr,pt,pb) {
 }
+
+FXDEFMAP(I2KButton) I2KButtonMap[] = {
+	FXMAPFUNC(SEL_PAINT, 0, I2KButton::onPaint),
+};
+
 
 void I2KButton::drawBorderRectangle(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint h) {
 // void FXFrame::drawBorderRectangle(dc,x,y,w,h) {
@@ -404,269 +404,10 @@ FXint I2KDragCorner::getDefaultHeight(){
 
 void I2KButton::drawBorderRectangle(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint h) {
   if (focuscolor == 0) {
-    focuscolor = getApp()->reg().readColorEntry("SETTINGS", "focuscolo	r", FXRGB(0, 0, 0));
+    focuscolor = getApp()->reg().readColorEntry("SETTINGS", "focuscolor", FXRGB(0, 0, 0));
   }
 
   dc.setForeground(focuscolor);
   dc.drawRectangle(x,y,w-1,h-1);
 } */
 
-
-// MENUBUTTON IMPLEMENTATION
-
-
-FXDEFMAP(I2KMenuButton) I2KMenuButtonMap[] = {
-	FXMAPFUNC(SEL_PAINT, 0, I2KMenuButton::onPaint),
-};
-
-
-FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
-
-//I2KMenuButton::I2KMenuButton(FXComposite* p) : FXMenuButton(p) {
-//}
-
-I2KMenuButton::I2KMenuButton(FXComposite* p,const FXString& text,FXIcon* ic,FXPopup* pup,FXuint opts,FXint x,FXint y,FXint w,FXint h,FXint pl,FXint pr,FXint pt,FXint pb):
-  FXMenuButton(p,text,ic,pup,opts,x,y,w,h,pl,pr,pt,pb) {
-}
-	
-
-#define MENUBUTTONARROW_WIDTH   7
-#define MENUBUTTONARROW_HEIGHT  4
-
-#define MENUBUTTON_MASK         (MENUBUTTON_AUTOGRAY|MENUBUTTON_AUTOHIDE|MENUBUTTON_TOOLBAR|MENUBUTTON_NOARROWS)
-#define POPUP_MASK              (MENUBUTTON_UP|MENUBUTTON_LEFT)
-#define ATTACH_MASK             (MENUBUTTON_ATTACH_RIGHT|MENUBUTTON_ATTACH_CENTER)
-
-void FXScrollBar::drawButton(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint h,FXbool down){
-  dc.setForeground(backColor);
-  dc.fillRectangle(x+2,y+2,w-4,h-4);
-  dc.setForeground(backColor);
-  dc.fillRectangle(x,y,w-1,1);
-  dc.fillRectangle(x,y,1,h-1);
-  dc.setForeground(hiliteColor);
-  dc.fillRectangle(x+1,y+1,w-2,1);
-  dc.fillRectangle(x+1,y+1,1,h-2);
-  dc.setForeground(shadowColor);
-  dc.fillRectangle(x+1,y+h-2,w-2,1);
-  dc.fillRectangle(x+w-2,y+1,1,h-2);
-  dc.setForeground(borderColor);
-  dc.fillRectangle(x,y+h-1,w,1);
-  dc.fillRectangle(x+w-1,y,1,h);
-}
-
-long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
-	//puts("a");
-  FXint tw=0,th=0,iw=0,ih=0,tx,ty,ix,iy;
-  FXEvent *ev=(FXEvent*)ptr;
-  FXPoint points[3];
-  FXDCWindow dc(this,ev);
-
-  // Got a border at all?
-  if(options&(FRAME_RAISED|FRAME_SUNKEN)){
-
-    // Toolbar style
-    if(options&MENUBUTTON_TOOLBAR){
-
-      // Enabled and cursor inside, and not popped up
-      if(isEnabled() && underCursor() && !state){
-        dc.setForeground(backColor);
-        dc.fillRectangle(border,border,width-border*2,height-border*2);
-        if(options&FRAME_THICK) drawDoubleRaisedRectangle(dc,0,0,width,height);
-        else drawRaisedRectangle(dc,0,0,width,height);
-        }
-
-      // Enabled and popped up
-      else if(isEnabled() && state){
-        dc.setForeground(hiliteColor);
-        dc.fillRectangle(border,border,width-border*2,height-border*2);
-        if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
-        else drawSunkenRectangle(dc,0,0,width,height);
-        }
-
-      // Disabled or unchecked or not under cursor
-      else{
-        dc.setForeground(backColor);
-        dc.fillRectangle(0,0,width,height);
-        }
-      }
-
-    // Normal style
-    else{
-
-      // Draw in up state if disabled or up
-      if(!isEnabled() || !state){
-        dc.setForeground(backColor);
-        dc.fillRectangle(border,border,width-border*2,height-border*2);
-        if(options&FRAME_THICK){ // taken from fxscrollbar cuz im chopped n lazy
-		    dc.setForeground(backColor);
-  dc.fillRectangle(2,2,width-4,height-4);
-  dc.setForeground(backColor);
-  dc.fillRectangle(0,0,width-1,1);
-  dc.fillRectangle(0,0,1,height-1);
-  dc.setForeground(hiliteColor);
-  dc.fillRectangle(1,1,width-2,1);
-  dc.fillRectangle(1,1,1,height-2);
-  dc.setForeground(shadowColor);
-  dc.fillRectangle(1,height-2,width-2,1);
-  dc.fillRectangle(width-2,1,1,height-2);
-  dc.setForeground(borderColor);
-  dc.fillRectangle(0,height-1,width,1);
-  dc.fillRectangle(width-1,0,1,height);
-	  }
-        else drawRaisedRectangle(dc,0,0,width,height);
-        }
-
-      // Draw sunken if enabled and either checked or pressed
-      else{
-        dc.setForeground(backColor);
-        dc.fillRectangle(1,1,width-2,height-2);
-        dc.setForeground(shadowColor);
-        dc.drawRectangle(0,0,width,height);
-        //if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
-        //else drawSunkenRectangle(dc,0,0,width,height);
-        }
-      }
-    }
-
-  // No borders
-  else{
-    if(isEnabled() && state){
-      dc.setForeground(hiliteColor);
-      dc.fillRectangle(0,0,width,height);
-      }
-    else{
-      dc.setForeground(backColor);
-      dc.fillRectangle(0,0,width,height);
-      }
-    }
-
-  // Position text & icon
-  if(!label.empty()){
-    tw=labelWidth(label);
-    th=labelHeight(label);
-    }
-
-  // Icon?
-  if(icon){
-    iw=icon->getWidth();
-    ih=icon->getHeight();
-    }
-
-  // Arrows?
-  else if(!(options&MENUBUTTON_NOARROWS)){
-    if(options&MENUBUTTON_LEFT){
-      ih=MENUBUTTONARROW_WIDTH;
-      iw=MENUBUTTONARROW_HEIGHT;
-      }
-    else{
-      iw=MENUBUTTONARROW_WIDTH;
-      ih=MENUBUTTONARROW_HEIGHT;
-      }
-    }
-
-  // Keep some room for the arrow!
-  just_x(tx,ix,tw,iw);
-  just_y(ty,iy,th,ih);
-
-  // Move a bit when pressed
-  if(state){ ++tx; ++ty; ++ix; ++iy; }
-
-  // Draw icon
-  if(icon){
-    if(isEnabled())
-      dc.drawIcon(icon,ix,iy);
-    else
-      dc.drawIconSunken(icon,ix,iy);
-    }
-
-  // Draw arrows
-  else if(!(options&MENUBUTTON_NOARROWS)){
-
-    // Right arrow
-    if((options&MENUBUTTON_RIGHT)==MENUBUTTON_RIGHT){
-      if(isEnabled())
-        dc.setForeground(textColor);
-      else
-        dc.setForeground(shadowColor);
-      points[0].x=ix+1; // CHECK ARROW CODE HERE
-      points[0].y=iy;
-      points[1].x=ix+1;
-      points[1].y=iy+MENUBUTTONARROW_WIDTH-1 - 2;
-      points[2].x=ix+MENUBUTTONARROW_HEIGHT - 1;
-      points[2].y=(FXshort)(iy+(MENUBUTTONARROW_WIDTH>>1));
-      dc.fillPolygon(points,3);
-      }
-
-    // Left arrow
-    else if(options&MENUBUTTON_LEFT){
-      if(isEnabled())
-        dc.setForeground(textColor);
-      else
-        dc.setForeground(shadowColor);
-      points[0].x=ix+MENUBUTTONARROW_HEIGHT;
-      points[0].y=iy;
-      points[1].x=ix+MENUBUTTONARROW_HEIGHT;
-      points[1].y=iy+MENUBUTTONARROW_WIDTH-1;
-      points[2].x=ix;
-      points[2].y=(FXshort)(iy+(MENUBUTTONARROW_WIDTH>>1));
-      dc.fillPolygon(points,3);
-      }
-
-    // Up arrow
-    else if(options&MENUBUTTON_UP){
-      if(isEnabled())
-        dc.setForeground(textColor);
-      else
-        dc.setForeground(shadowColor);
-      points[0].x=(FXshort)(ix+(MENUBUTTONARROW_WIDTH>>1));
-      points[0].y=iy-1;
-      points[1].x=ix;
-      points[1].y=iy+MENUBUTTONARROW_HEIGHT;
-      points[2].x=ix+MENUBUTTONARROW_WIDTH;
-      points[2].y=iy+MENUBUTTONARROW_HEIGHT;
-      dc.fillPolygon(points,3);
-      }
-
-    // Down arrow
-    else{
-      if(isEnabled())
-        dc.setForeground(textColor);
-      else
-        dc.setForeground(shadowColor);
-      points[0].x=ix;
-      points[0].y=iy;
-      points[2].x=ix+MENUBUTTONARROW_WIDTH;
-      points[2].y=iy;
-      points[1].x=(FXshort)(ix+(MENUBUTTONARROW_WIDTH>>1));
-      points[1].y=iy+MENUBUTTONARROW_HEIGHT;
-      dc.fillPolygon(points,3);
-      }
-    }
-
-  // Draw text
-  if(!label.empty()){
-    dc.setFont(font);
-    if(isEnabled()){
-      dc.setForeground(textColor);
-      drawLabel(dc,label,hotoff,tx,ty,tw,th);
-      }
-    else{
-      dc.setForeground(hiliteColor);
-      drawLabel(dc,label,hotoff,tx+1,ty+1,tw,th);
-      dc.setForeground(shadowColor);
-      drawLabel(dc,label,hotoff,tx,ty,tw,th);
-      }
-    }
-
-  // Draw focus
-  if(hasFocus()){
-    if(isEnabled()){
-      dc.drawFocusRectangle(border+1,border+1,width-2*border-2,height-2*border-2);
-      }
-    }
-  return 1;
-  }
-
-FXint I2KMenuButton::getDefaultWidth() {
-	return FXMenuButton::getDefaultWidth() + 1;
-}

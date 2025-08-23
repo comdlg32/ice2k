@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <ice2k/I2KListBox.h>
+//#include <ice2k/I2KComboBox.h>
 #include <ice2k/comctl32.h>
 
 #include "xincs.h"
@@ -374,7 +376,7 @@ GroupWindow::GroupWindow(FXApp* a):FXMainWindow(a,"Group Box Test",NULL,NULL,DEC
   realspinner->setValue(1.0);
   realspinner->setIncrement(0.1);
 
-  FXComboBox* combobox=new FXComboBox(group3,5,NULL,0,COMBOBOX_INSERT_LAST|FRAME_SUNKEN|FRAME_THICK|LAYOUT_SIDE_TOP);
+  I2KListBox* combobox=new I2KListBox(group3,NULL,0,COMBOBOX_INSERT_LAST|FRAME_SUNKEN|FRAME_THICK|LAYOUT_SIDE_TOP);
   combobox->setNumVisible(5);
   combobox->appendItem("Very Wide Item");
   for(int i=0; i<3; i++){

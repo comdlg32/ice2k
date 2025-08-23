@@ -1,0 +1,403 @@
+In file included from comctl32.h:4,
+                 from comctl32.cpp:6:
+I2KComboBox.h:35:2: warning: #warning "local" [-Wcpp]
+   35 | #warning "local"
+      |  ^~~~~~~
+I2KComboBox.h:36:21: note: '#pragma message: a'
+   36 | #pragma message ("a")
+      |                     ^
+In file included from /usr/include/fox-1.6/fx.h:55,
+                 from comctl32.cpp:4:
+comctl32.cpp:418:10: error: reference to 'I2KMenuButton' is ambiguous
+  418 | FXDEFMAP(I2KMenuButton) I2KMenuButtonMap[] = {
+      |          ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:140:42: note: in definition of macro 'FXDEFMAP'
+  140 | #define FXDEFMAP(classname) static const classname::FXMapEntry
+      |                                          ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:106:17: note: in definition of macro 'FXIMPLEMENT'
+  106 |   FX::FXObject* classname::manufacture(){return new classname;} \
+      |                 ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp: In function 'FX::FXObject* manufacture()':
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:106:53: note: in definition of macro 'FXIMPLEMENT'
+  106 |   FX::FXObject* classname::manufacture(){return new classname;} \
+      |                                                     ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp: At global scope:
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:25: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                         ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:57: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                                                         ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp:422:40: error: 'I2KMenuButtonMap' was not declared in this scope; did you mean 'I2KMenuButton'?
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |                                        ^~~~~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:106: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                                                                                                          ^~~~~~~
+comctl32.cpp:422:69: error: 'I2KMenuButtonMap' was not declared in this scope; did you mean 'I2KMenuButton'?
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |                                                                     ^~~~~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:114: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                                                                                                                  ^~~~~~~~~
+comctl32.cpp:422:57: note: in expansion of macro 'ARRAYNUMBER'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |                                                         ^~~~~~~~~~~
+comctl32.cpp:422:69: error: 'I2KMenuButtonMap' was not declared in this scope; did you mean 'I2KMenuButton'?
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |                                                                     ^~~~~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:114: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                                                                                                                  ^~~~~~~~~
+comctl32.cpp:422:57: note: in expansion of macro 'ARRAYNUMBER'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |                                                         ^~~~~~~~~~~
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:107:131: note: in definition of macro 'FXIMPLEMENT'
+  107 |   const FX::FXMetaClass classname::metaClass(#classname,classname::manufacture,&baseclassname::metaClass,mapping,nmappings,sizeof(classname::FXMapEntry)); \
+      |                                                                                                                                   ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp:422:13: error: reference to 'I2KMenuButton' is ambiguous
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      |             ^~~~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:108:8: note: in definition of macro 'FXIMPLEMENT'
+  108 |   long classname::handle(FX::FXObject* sender,FX::FXSelector sel,void* ptr){ \
+      |        ^~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp: In function 'long int handle(FX::FXObject*, FX::FXSelector, void*)':
+/usr/include/fox-1.6/FXObject.h:109:11: error: 'FXMapEntry' does not name a type
+  109 |     const FXMapEntry* me=(const FXMapEntry*)metaClass.search(sel); \
+      |           ^~~~~~~~~~
+comctl32.cpp:422:1: note: in expansion of macro 'FXIMPLEMENT'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      | ^~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:110:12: error: 'me' was not declared in this scope
+  110 |     return me ? (this->* me->func)(sender,sel,ptr) : baseclassname::handle(sender,sel,ptr); \
+      |            ^~
+comctl32.cpp:422:1: note: in expansion of macro 'FXIMPLEMENT'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      | ^~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:110:18: error: invalid use of 'this' in non-member function
+  110 |     return me ? (this->* me->func)(sender,sel,ptr) : baseclassname::handle(sender,sel,ptr); \
+      |                  ^~~~
+comctl32.cpp:422:1: note: in expansion of macro 'FXIMPLEMENT'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      | ^~~~~~~~~~~
+/usr/include/fox-1.6/FXObject.h:110:75: error: cannot call member function 'virtual long int FX::FXMenuButton::handle(FX::FXObject*, FX::FXSelector, void*)' without object
+  110 |     return me ? (this->* me->func)(sender,sel,ptr) : baseclassname::handle(sender,sel,ptr); \
+comctl32.cpp:422:1: note: in expansion of macro 'FXIMPLEMENT'
+  422 | FXIMPLEMENT(I2KMenuButton,FXMenuButton,I2KMenuButtonMap,ARRAYNUMBER(I2KMenuButtonMap))
+      | ^~~~~~~~~~~
+comctl32.cpp: At global scope:
+comctl32.cpp:427:1: error: reference to 'I2KMenuButton' is ambiguous
+  427 | I2KMenuButton::I2KMenuButton(FXComposite* p,const FXString& text,FXIcon* ic,FXPopup* pup,FXuint opts,FXint x,FXint y,FXint w,FXint h,FXint pl,FXint pr,FXint pt,FXint pb):
+      | ^~~~~~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp:440:6: error: reference to 'I2KMenuButton' is ambiguous
+  440 | long I2KMenuButton::onPaint(FXObject*,FXSelector,void* ptr){
+      |      ^~~~~~~~~~~~~
+I2KComboBox.h:59:7: note: candidates are: 'class FX::I2KMenuButton'
+   59 | class I2KMenuButton;
+      |       ^~~~~~~~~~~~~
+comctl32.h:84:13: note:                 'class I2KMenuButton'
+   84 | class FXAPI I2KMenuButton : public FXMenuButton {
+      |             ^~~~~~~~~~~~~
+comctl32.cpp: In function 'long int onPaint(FX::FXObject*, FX::FXSelector, void*)':
+comctl32.cpp:444:17: error: invalid use of 'this' in non-member function
+  444 |   FXDCWindow dc(this,ev);
+      |                 ^~~~
+comctl32.cpp:447:6: error: 'options' was not declared in this scope
+  447 |   if(options&(FRAME_RAISED|FRAME_SUNKEN)){
+      |      ^~~~~~~
+comctl32.cpp:453:10: error: 'isEnabled' was not declared in this scope
+  453 |       if(isEnabled() && underCursor() && !state){
+      |          ^~~~~~~~~
+comctl32.cpp:453:25: error: 'underCursor' was not declared in this scope
+  453 |       if(isEnabled() && underCursor() && !state){
+      |                         ^~~~~~~~~~~
+comctl32.cpp:453:43: error: 'state' was not declared in this scope; did you mean 'static'?
+  453 |       if(isEnabled() && underCursor() && !state){
+      |                                           ^~~~~
+      |                                           static
+comctl32.cpp:454:26: error: 'backColor' was not declared in this scope
+  454 |         dc.setForeground(backColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:455:26: error: 'border' was not declared in this scope
+  455 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                          ^~~~~~
+comctl32.cpp:455:40: error: 'width' was not declared in this scope
+  455 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                        ^~~~~
+comctl32.cpp:455:55: error: 'height' was not declared in this scope
+  455 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                                       ^~~~~~
+comctl32.cpp:456:33: error: 'drawDoubleRaisedRectangle' was not declared in this scope
+  456 |         if(options&FRAME_THICK) drawDoubleRaisedRectangle(dc,0,0,width,height);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+comctl32.cpp:457:14: error: 'drawRaisedRectangle' was not declared in this scope
+  457 |         else drawRaisedRectangle(dc,0,0,width,height);
+      |              ^~~~~~~~~~~~~~~~~~~
+comctl32.cpp:462:26: error: 'hiliteColor' was not declared in this scope
+  462 |         dc.setForeground(hiliteColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:463:26: error: 'border' was not declared in this scope
+  463 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                          ^~~~~~
+comctl32.cpp:463:40: error: 'width' was not declared in this scope
+  463 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                        ^~~~~
+comctl32.cpp:463:55: error: 'height' was not declared in this scope
+  463 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                                       ^~~~~~
+comctl32.cpp:464:33: error: 'drawDoubleSunkenRectangle' was not declared in this scope
+  464 |         if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+comctl32.cpp:465:14: error: 'drawSunkenRectangle' was not declared in this scope
+  465 |         else drawSunkenRectangle(dc,0,0,width,height);
+      |              ^~~~~~~~~~~~~~~~~~~
+comctl32.cpp:470:26: error: 'backColor' was not declared in this scope
+  470 |         dc.setForeground(backColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:471:30: error: 'width' was not declared in this scope
+  471 |         dc.fillRectangle(0,0,width,height);
+      |                              ^~~~~
+comctl32.cpp:471:36: error: 'height' was not declared in this scope
+  471 |         dc.fillRectangle(0,0,width,height);
+      |                                    ^~~~~~
+comctl32.cpp:479:11: error: 'isEnabled' was not declared in this scope
+  479 |       if(!isEnabled() || !state){
+      |           ^~~~~~~~~
+comctl32.cpp:479:27: error: 'state' was not declared in this scope; did you mean 'static'?
+  479 |       if(!isEnabled() || !state){
+      |                           ^~~~~
+      |                           static
+comctl32.cpp:480:26: error: 'backColor' was not declared in this scope
+  480 |         dc.setForeground(backColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:481:26: error: 'border' was not declared in this scope
+  481 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                          ^~~~~~
+comctl32.cpp:481:40: error: 'width' was not declared in this scope
+  481 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                        ^~~~~
+comctl32.cpp:481:55: error: 'height' was not declared in this scope
+  481 |         dc.fillRectangle(border,border,width-border*2,height-border*2);
+      |                                                       ^~~~~~
+comctl32.cpp:482:33: error: 'drawDoubleRaisedRectangle' was not declared in this scope
+  482 |         if(options&FRAME_THICK) drawDoubleRaisedRectangle(dc,0,0,width,height);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+comctl32.cpp:483:14: error: 'drawRaisedRectangle' was not declared in this scope
+  483 |         else drawRaisedRectangle(dc,0,0,width,height);
+      |              ^~~~~~~~~~~~~~~~~~~
+comctl32.cpp:488:26: error: 'backColor' was not declared in this scope
+  488 |         dc.setForeground(backColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:489:30: error: 'width' was not declared in this scope
+  489 |         dc.fillRectangle(1,1,width-2,height-2);
+      |                              ^~~~~
+comctl32.cpp:489:38: error: 'height' was not declared in this scope
+  489 |         dc.fillRectangle(1,1,width-2,height-2);
+      |                                      ^~~~~~
+comctl32.cpp:490:26: error: 'shadowColor' was not declared in this scope
+  490 |         dc.setForeground(shadowColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:500:8: error: 'isEnabled' was not declared in this scope
+  500 |     if(isEnabled() && state){
+      |        ^~~~~~~~~
+comctl32.cpp:500:23: error: 'state' was not declared in this scope; did you mean 'static'?
+  500 |     if(isEnabled() && state){
+      |                       ^~~~~
+      |                       static
+comctl32.cpp:501:24: error: 'hiliteColor' was not declared in this scope
+  501 |       dc.setForeground(hiliteColor);
+      |                        ^~~~~~~~~~~
+comctl32.cpp:502:28: error: 'width' was not declared in this scope
+  502 |       dc.fillRectangle(0,0,width,height);
+      |                            ^~~~~
+comctl32.cpp:502:34: error: 'height' was not declared in this scope
+  502 |       dc.fillRectangle(0,0,width,height);
+      |                                  ^~~~~~
+comctl32.cpp:505:24: error: 'backColor' was not declared in this scope
+  505 |       dc.setForeground(backColor);
+      |                        ^~~~~~~~~
+comctl32.cpp:506:28: error: 'width' was not declared in this scope
+  506 |       dc.fillRectangle(0,0,width,height);
+      |                            ^~~~~
+comctl32.cpp:506:34: error: 'height' was not declared in this scope
+  506 |       dc.fillRectangle(0,0,width,height);
+      |                                  ^~~~~~
+comctl32.cpp:511:7: error: 'label' was not declared in this scope
+  511 |   if(!label.empty()){
+      |       ^~~~~
+comctl32.cpp:512:8: error: 'labelWidth' was not declared in this scope
+  512 |     tw=labelWidth(label);
+      |        ^~~~~~~~~~
+comctl32.cpp:513:8: error: 'labelHeight' was not declared in this scope
+  513 |     th=labelHeight(label);
+      |        ^~~~~~~~~~~
+comctl32.cpp:517:6: error: 'icon' was not declared in this scope
+  517 |   if(icon){
+      |      ^~~~
+comctl32.cpp:523:13: error: 'options' was not declared in this scope
+  523 |   else if(!(options&MENUBUTTON_NOARROWS)){
+      |             ^~~~~~~
+comctl32.cpp:535:3: error: 'just_x' was not declared in this scope
+  535 |   just_x(tx,ix,tw,iw);
+      |   ^~~~~~
+comctl32.cpp:536:3: error: 'just_y' was not declared in this scope
+  536 |   just_y(ty,iy,th,ih);
+      |   ^~~~~~
+comctl32.cpp:539:6: error: 'state' was not declared in this scope; did you mean 'static'?
+  539 |   if(state){ ++tx; ++ty; ++ix; ++iy; }
+      |      ^~~~~
+      |      static
+comctl32.cpp:542:6: error: 'icon' was not declared in this scope
+  542 |   if(icon){
+      |      ^~~~
+comctl32.cpp:543:8: error: 'isEnabled' was not declared in this scope
+  543 |     if(isEnabled())
+      |        ^~~~~~~~~
+comctl32.cpp:550:13: error: 'options' was not declared in this scope
+  550 |   else if(!(options&MENUBUTTON_NOARROWS)){
+      |             ^~~~~~~
+comctl32.cpp:554:10: error: 'isEnabled' was not declared in this scope
+  554 |       if(isEnabled())
+      |          ^~~~~~~~~
+comctl32.cpp:555:26: error: 'textColor' was not declared in this scope
+  555 |         dc.setForeground(textColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:557:26: error: 'shadowColor' was not declared in this scope
+  557 |         dc.setForeground(shadowColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:569:10: error: 'isEnabled' was not declared in this scope
+  569 |       if(isEnabled())
+      |          ^~~~~~~~~
+comctl32.cpp:570:26: error: 'textColor' was not declared in this scope
+  570 |         dc.setForeground(textColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:572:26: error: 'shadowColor' was not declared in this scope
+  572 |         dc.setForeground(shadowColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:584:10: error: 'isEnabled' was not declared in this scope
+  584 |       if(isEnabled())
+      |          ^~~~~~~~~
+comctl32.cpp:585:26: error: 'textColor' was not declared in this scope
+  585 |         dc.setForeground(textColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:587:26: error: 'shadowColor' was not declared in this scope
+  587 |         dc.setForeground(shadowColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:599:10: error: 'isEnabled' was not declared in this scope
+  599 |       if(isEnabled())
+      |          ^~~~~~~~~
+comctl32.cpp:600:26: error: 'textColor' was not declared in this scope
+  600 |         dc.setForeground(textColor);
+      |                          ^~~~~~~~~
+comctl32.cpp:602:26: error: 'shadowColor' was not declared in this scope
+  602 |         dc.setForeground(shadowColor);
+      |                          ^~~~~~~~~~~
+comctl32.cpp:614:7: error: 'label' was not declared in this scope
+  614 |   if(!label.empty()){
+      |       ^~~~~
+comctl32.cpp:615:16: error: 'font' was not declared in this scope
+  615 |     dc.setFont(font);
+      |                ^~~~
+comctl32.cpp:616:8: error: 'isEnabled' was not declared in this scope
+  616 |     if(isEnabled()){
+      |        ^~~~~~~~~
+comctl32.cpp:617:24: error: 'textColor' was not declared in this scope
+  617 |       dc.setForeground(textColor);
+      |                        ^~~~~~~~~
+comctl32.cpp:618:26: error: 'hotoff' was not declared in this scope
+  618 |       drawLabel(dc,label,hotoff,tx,ty,tw,th);
+      |                          ^~~~~~
+comctl32.cpp:618:7: error: 'drawLabel' was not declared in this scope
+  618 |       drawLabel(dc,label,hotoff,tx,ty,tw,th);
+      |       ^~~~~~~~~
+comctl32.cpp:621:24: error: 'hiliteColor' was not declared in this scope
+  621 |       dc.setForeground(hiliteColor);
+      |                        ^~~~~~~~~~~
+comctl32.cpp:622:26: error: 'hotoff' was not declared in this scope
+  622 |       drawLabel(dc,label,hotoff,tx+1,ty+1,tw,th);
+      |                          ^~~~~~
+comctl32.cpp:622:7: error: 'drawLabel' was not declared in this scope
+  622 |       drawLabel(dc,label,hotoff,tx+1,ty+1,tw,th);
+      |       ^~~~~~~~~
+comctl32.cpp:623:24: error: 'shadowColor' was not declared in this scope
+  623 |       dc.setForeground(shadowColor);
+      |                        ^~~~~~~~~~~
+comctl32.cpp:629:6: error: 'hasFocus' was not declared in this scope
+  629 |   if(hasFocus()){
+      |      ^~~~~~~~
+comctl32.cpp:630:8: error: 'isEnabled' was not declared in this scope
+  630 |     if(isEnabled()){
+      |        ^~~~~~~~~
+comctl32.cpp:631:29: error: 'border' was not declared in this scope
+  631 |       dc.drawFocusRectangle(border+1,border+1,width-2*border-2,height-2*border-2);
+      |                             ^~~~~~
+comctl32.cpp:631:47: error: 'width' was not declared in this scope
+  631 |       dc.drawFocusRectangle(border+1,border+1,width-2*border-2,height-2*border-2);
+      |                                               ^~~~~
+comctl32.cpp:631:64: error: 'height' was not declared in this scope
+  631 |       dc.drawFocusRectangle(border+1,border+1,width-2*border-2,height-2*border-2);
+      |                                                                ^~~~~~
+make: *** [<builtin>: comctl32.o] Error 1
