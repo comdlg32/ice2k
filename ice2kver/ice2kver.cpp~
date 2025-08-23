@@ -14,7 +14,7 @@
 #include <string.h>
 #include <locale.h>
 
-#include "res/foxres.h"
+//#include "res/foxres.h"
 #include <ice2k/comctl32.h>
 #include <ice2k/branding.h>
 // set windows version here!

@@ -24,10 +24,10 @@
 #define _NET_WM_STATE_TOGGLE        2    /* toggle property  */
 
 // comment to disable """secure""" desktop
-//#define _SEC_DESKTOP
+#define _SEC_DESKTOP
 
 // comment to not exit on unfocus
-//#define _EXIT_ON_UNFOCUS
+#define _EXIT_ON_UNFOCUS
 
 int currentwksp;
 int workspaces;

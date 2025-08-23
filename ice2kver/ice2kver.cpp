@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
   FXApp application("ice2kver", "Ice2KProj");
   FXApp* ptrapp = &application;
 
-  const unsigned char *banner = i2kBGetWinShutBrandingImage();
+  const unsigned char *banner = i2kBGetWinBrandingImage();
   FXIcon* bannericon = new FXGIFIcon(&application, banner,0,IMAGE_OPAQUE);
 
   application.init(argc, argv);
