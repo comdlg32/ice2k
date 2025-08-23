@@ -276,13 +276,13 @@ long ShutdownDialog::onAccept(FXObject* sender, FXSelector sel, void* ptr)
 {
   int option = listbox->getCurrentItem();
   if (option == _OPTION_LOGOFF) {
-	puts("Logging off...");
+	system("~/.icewm/programs/shutdown/action logoff &");
   } else if (option == _OPTION_SHUTDOWN) {
-	puts("Shutting down...");
+	system("~/.icewm/programs/shutdown/action shutdown &");
   } else if (option == _OPTION_RESTART) {
-	puts("Restarting...");
+	system("~/.icewm/programs/shutdown/action restart &");
   } else if (option == _OPTION_STANDBY) {
-	puts("Suspending...");
+	system("~/.icewm/programs/shutdown/action standby &");
   } else {
 	puts("What the helly :joy: :joy: :joy: :joy: :joy: :joy: :joy: :joy:");
   }

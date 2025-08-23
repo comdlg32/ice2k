@@ -76,7 +76,8 @@ menu "Sear_ch" search {
 prog "Help" help xman
 prog "Run..." run gmrun
 separator
-prog "Sh_ut Down..." shutdown ~/.icewm/programs/shutdown/shutdown
+#prog "Sh_ut Down..." shutdown ~/.icewm/programs/shutdown/shutdown
+prog "Sh_ut Down..." shutdown shutdlg
 
 #includeprog sh -c 'nohup xterm > /dev/null 2>&1 &'
 #includeprog sh -c 'yad --close-on-unfocus --mouse >/dev/null 2>&1 &'
