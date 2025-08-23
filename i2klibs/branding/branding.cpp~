@@ -13,7 +13,7 @@ static FXSettings settings;
 static int loaded = 0;
 const unsigned char* wbanner;
 
-// gpt helped me for certain stuff here
+// gpt kinda help me tell how i should do certain things
 
 static void loadSettings() {
   if (!loaded) {

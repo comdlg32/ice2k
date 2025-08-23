@@ -1,5 +1,4 @@
 #include <stddef.h>
 
-char *i2kBGetWinVersion();
 const unsigned char *i2kBGetWinBrandingImage(size_t *size = 0);
 const unsigned char *i2kBGetWinShutBrandingImage(size_t *size = 0);

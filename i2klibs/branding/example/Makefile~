@@ -10,15 +10,12 @@ PREFIX=/usr/local
 
 SOURCES = ice2kver.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = ice2kver
+EXECUTABLE = brdexmpl
 
 CPPFLAGS += `fox-config --cflags`
 
 all: $(EXECUTABLE)
 
-$(OBJECTS): res/foxres.h
-
-# link executable
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
@@ -26,9 +23,7 @@ clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
 
 install:
-	cp ice2kver $(PREFIX)/bin/ice2kver
-	ln -sf $(PREFIX)/bin/ice2kver $(PREFIX)/bin/winver
+	cp brdexmpl $(PREFIX)/bin/brdexmpl
 
 uninstall:
-	rm -f $(PREFIX)/bin/ice2kver
-	rm -f $(PREFIX)/bin/winver
+	rm -f $(PREFIX)/bin/brdexmpl

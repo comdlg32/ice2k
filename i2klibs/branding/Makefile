@@ -8,31 +8,34 @@ CXXFLAGS = -Wall -c
 
 PREFIX = /usr/local
 
-
-# for non developers, do not touch this
 CFLAGS += -c --std=c99
 CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic
 LDFLAGS += `fox-config --libs`
 
-OUTPUT = libctl32.so
-VERSION = 0.0.1
+ICONS = res/banner.gif res/banner2k.gif res/banner03.gif res/banner2kshut.gif
 
-#COBJECTS = $(CSOURCES:.c=.o)
+OUTPUT = libi2kbrand.so
+VERSION = 0.0.1
 
 CXXSOURCES = branding.cpp
 CXXOBJECTS = $(CXXSOURCES:.cpp=.o)
 
-
 OBJECTS = $(CXXOBJECTS) $(COBJECTS)
 
 all: $(OUTPUT)
+
+$(OBJECTS): res/foxres.h
+
+# generate icon resources
+res/foxres.h: $(ICONS)
+	reswrap -o res/foxres.h $(ICONS)
 
 # link executable
 $(OUTPUT): $(OBJECTS)
 	$(CXX) $(OBJECTS) -shared -o $@ $(LDFLAGS)
 
 clean:
-	rm -f $(OBJECTS) $(OUTPUT)
+	rm -f $(OBJECTS) $(OUTPUT) res/foxres.h
 
 install: all
 	mkdir -p $(PREFIX)/include/ice2k

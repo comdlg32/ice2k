@@ -5,8 +5,7 @@
 #include <FXPNGImage.h>
 #include "fxkeys.h"
 
-
-#include "res/foxres.h"
+//#include "res/foxres.h"
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <unistd.h>
@@ -19,6 +18,8 @@
 #include <ice2k/I2KListBox.h>
 #undef _DO_NOT_OVERRIDE_FOX_CONTROLS
 #include <ice2k/comctl32.h>
+#include <ice2k/branding.h>
+
 
 // thank you stack overflow
 // https://stackoverflow.com/questions/20733215/how-to-make-a-window-always-on-top
@@ -186,7 +187,10 @@ FXIMPLEMENT(ShutdownDialog,FXDialogBox,ShutdownDialogMap,ARRAYNUMBER(ShutdownDia
 
 // Construct a ShutdownDialog
 ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Windows", DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
-  FXIcon* bannericon = new FXGIFIcon(getApp(), _BANNER_IMG,0,IMAGE_OPAQUE);
+  const unsigned char *banner = i2kBGetWinShutBrandingImage();
+
+
+  FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);
   FXIcon* shuticon = new FXGIFIcon(getApp(), shutdlg);
   bannericon->crop(0, 0, 411, 77);
   bannericon->render();
@@ -276,13 +280,13 @@ long ShutdownDialog::onAccept(FXObject* sender, FXSelector sel, void* ptr)
 {
   int option = listbox->getCurrentItem();
   if (option == _OPTION_LOGOFF) {
-	system("~/.icewm/programs/shutdown/action logoff");
+	system("~/.icewm/programs/shutdown/action logoff &");
   } else if (option == _OPTION_SHUTDOWN) {
-	system("~/.icewm/programs/shutdown/action shutdown");
+	system("~/.icewm/programs/shutdown/action shutdown &");
   } else if (option == _OPTION_RESTART) {
-	system("~/.icewm/programs/shutdown/action restart");
+	system("~/.icewm/programs/shutdown/action restart &");
   } else if (option == _OPTION_STANDBY) {
-	system("~/.icewm/programs/shutdown/action standby");
+	system("~/.icewm/programs/shutdown/action standby &");
   } else {
 	puts("What the helly :joy: :joy: :joy: :joy: :joy: :joy: :joy: :joy:");
   }

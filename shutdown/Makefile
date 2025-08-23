@@ -8,13 +8,13 @@ OS = `uname -s | tr '[a-z]' '[A-Z]'`
 
 CFLAGS = -Wall -c --std=c99 -D "OS_$(OS)"
 CPPFLAGS = -Wall -c --std=c++98 -D "OS_$(OS)"
-LDFLAGS = `fox-config --libs` -lctl32
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
 SOURCES = shutdlg.cpp
 OBJECTS = shutdlg.o
-ICONS = res/banner.gif res/banner2k.gif res/banner03.gif res/shutdlg.gif
+ICONS = res/shutdlg.gif
 EXECUTABLE = shutdlg
 
 CPPFLAGS += `fox-config --cflags`
