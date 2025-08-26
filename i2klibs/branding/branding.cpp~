@@ -13,7 +13,7 @@ static FXSettings settings;
 static int loaded = 0;
 const unsigned char* wbanner;
 
-// gpt kinda help me tell how i should do certain things
+// gpt helped me for certain stuff here
 
 static void loadSettings() {
   if (!loaded) {
@@ -67,4 +67,23 @@ const unsigned char *i2kBGetWinShutBrandingImage(size_t *size) {
   }
 
   return wbanner;
+}
+
+char *i2kBGetMicrosoftName() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
+    return (char*)"Microsoft ®";
+  else
+    return (char*)"Microsoft (R)";
+}
+
+
+char *i2kBGetCopyrightSymbol() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
+    return (char*)"©";
+  else
+    return (char*)"(C)";
 }

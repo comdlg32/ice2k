@@ -68,3 +68,44 @@ const unsigned char *i2kBGetWinShutBrandingImage(size_t *size) {
 
   return wbanner;
 }
+
+char *i2kBGetMicrosoftName() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
+    return (char*)"Microsoft ®";
+  else
+    return (char*)"Microsoft (R)";
+}
+
+
+char *i2kBGetCopyrightSymbol() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
+    return (char*)"©";
+  else
+    return (char*)"(C)";
+}
+
+char *i2kBGetFullOSName() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp"))
+    return (char*)"Microsoft Windows XP";
+  else if (!strcmp(windows, "srv03"))
+    return (char*)"Microsoft Windows Server 2003";
+  else
+    return (char*)"Microsoft Windows 2000";
+}
+
+char *i2kBGetOSName() {
+  loadSettings();
+  char* windows = i2kBGetWinVersion();
+  if (!strcmp(windows, "xp"))
+    return (char*)"Windows XP";
+  else if (!strcmp(windows, "srv03"))
+    return (char*)"Windows Server 2003";
+  else
+    return (char*)"Windows 2000";
+}

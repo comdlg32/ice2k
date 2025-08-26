@@ -197,7 +197,7 @@ ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Wi
   bannericon->create();
 
   new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
-  FXHorizontalFrame* horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0, 0, 0, 0, 20, 85, 9, 41, 14, 0);
+  FXHorizontalFrame* horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0, 0, 0, 0, 20, 85, 5, 37, 14, 0);
   new FXLabel(horcont, "", shuticon, LABEL_NORMAL, 0, 0, 411, 0, 0, 0, 0, 2);
 
   FXVerticalFrame* vercont = new FXVerticalFrame(horcont, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);

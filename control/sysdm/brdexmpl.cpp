@@ -1,0 +1,378 @@
+#include <fx.h>
+#include <ice2k/comctl32.h>
+#include <ice2k/branding.h>
+#include "res/foxres.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <cpuid.h>
+#include <sys/sysinfo.h>
+#include <stdint.h>
+#include <locale.h>
+#include <unistd.h>
+#include <limits.h>
+
+#include <ifaddrs.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <errno.h>
+
+
+
+FXMainWindow* sysdmwin;
+
+
+int getIPAddress(char* str) // taken from hostname utility, slightly modified
+{                           // only returns 1 ipv4 address
+	struct ifaddrs *ifa, *ifap;
+	//char *p;
+	char buf[NI_MAXHOST];
+	int flags, ret, family, addrlen;
+
+	flags = NI_NUMERICHOST;
+
+	if (getifaddrs(&ifa) != 0) {
+		fprintf(stderr, "%s", strerror(errno));
+		return errno;
+	}
+
+	for (ifap = ifa; ifap != NULL; ifap = ifap->ifa_next) {
+		/* Skip interfaces that have no configured addresses */
+		if (ifap->ifa_addr == NULL)
+			continue;
+
+		/* Skip the loopback interface */
+		if (ifap->ifa_flags & IFF_LOOPBACK)
+			continue;
+
+		/* Skip interfaces that are not UP */
+		if (!(ifap->ifa_flags & IFF_UP))
+			continue;
+
+		/* Only handle IPv4 addresses */
+		family = ifap->ifa_addr->sa_family;
+		if (family != AF_INET)
+			continue;
+
+		addrlen = (family == AF_INET) ? sizeof(struct sockaddr_in) :
+		                                sizeof(struct sockaddr_in6);
+
+		ret = getnameinfo(ifap->ifa_addr, addrlen,
+		                  buf, sizeof(buf), NULL, 0, flags);
+
+		/* Just skip addresses that cannot be translated */
+		if (ret != 0) {
+			if (ret != EAI_NONAME) {
+				fprintf(stderr, "%s", gai_strerror(ret));
+				return ret;
+			}
+		} else {
+			strcpy(str, buf);
+			break;
+		}
+	}
+	freeifaddrs(ifa);
+	return 0;
+}
+
+// thank you https://en.wikipedia.org/wiki/CPUID#EAX=8000'0002h,8000'0003h,8000'0004h:_Processor_Brand_String
+int getCpuString(char* output) {
+  #ifdef __x86_64__
+    #define _CPUID
+  #endif
+
+  #ifdef __i386__
+    #define _CPUID
+  #endif
+
+  #ifdef _CPUID
+    unsigned int regs[12];      // i know i can use the linux apis for this...
+                                // but that's boring and i want to have fun :P
+    __cpuid(0x80000000, regs[0], regs[1], regs[2], regs[3]);
+
+    if (regs[0] < 0x80000004)
+      return 1;
+
+    __cpuid(0x80000002, regs[0], regs[1], regs[2], regs[3]);
+    __cpuid(0x80000003, regs[4], regs[5], regs[6], regs[7]);
+    __cpuid(0x80000004, regs[8], regs[9], regs[10], regs[11]);
+
+    memcpy(output, regs, sizeof(regs));
+    output[sizeof(regs)] = '\0';
+
+    return 0;
+  #else
+    return 1;
+  #endif
+}
+
+// https://stackoverflow.com/questions/22582989/word-wrap-program-c
+inline int wordlen(const char * str){
+  int tempindex=0;
+  while (str[tempindex]!=' ' && str[tempindex]!=0 && str[tempindex]!='\n') {
+    ++tempindex;
+  }
+  return(tempindex);
+}
+
+void wrap(char * s, const int wrapline){
+  int index = 0;
+  int curlinelen = 0;
+  
+  while (s[index] != '\0') {
+    if (s[index] == '\n')
+      curlinelen = 0;
+
+    else if (s[index] == ' ') {
+      if (curlinelen+wordlen(&s[index+1]) >= wrapline) {
+        s[index] = '\n';
+        curlinelen = 0;
+      }
+    }
+
+    curlinelen++;
+    index++;
+  }
+}
+
+void formatnum(long unsigned num, char *buffer) { // from ice2kver
+  char temp[1024];
+  sprintf(temp, "%lu", num / 1024);
+
+  int len = strlen(temp);
+  int commas = (len - 1) / 3;
+  int new_len = len + commas;
+
+  buffer[new_len] = '\0';
+  int i = len - 1, j = new_len - 1;
+
+  int count = 0;
+  while (i >= 0) {
+    if (count == 3) {
+      buffer[j--] = ',';
+      count = 0;
+    }
+    buffer[j--] = temp[i--];
+    count++;
+  }
+}
+
+
+// Main Window
+class SystemPropertiesWindow : public FXMainWindow {
+
+  // Macro for class hierarchy declarations
+  FXDECLARE(SystemPropertiesWindow)
+
+private:
+  FXVerticalFrame*          generalframe;
+  FXVerticalFrame*          networkframe;
+  FXVerticalFrame*          hardwareframe;
+  FXVerticalFrame*          userframe;
+  FXVerticalFrame*          advframe;
+
+  FXHorizontalFrame*        btncont;
+  FXTabBook*                tabbook;
+  FXButton*                 okbtn;
+  FXButton*                 cancelbtn;
+  FXButton*                 applybtn;
+
+  FXHorizontalFrame*        horcont;
+  FXVerticalFrame*          vercont;
+
+
+
+protected:
+  SystemPropertiesWindow(){}
+
+public:
+
+  // Message handlers
+  //long onUnfocus(FXObject*,FXSelector,void*);
+
+
+public:
+
+  // Messages for our class
+  enum {
+    ID_MAINWIN=FXMainWindow::ID_LAST
+  };
+
+public:
+
+  // CtrlAltDelWindow's constructor
+  SystemPropertiesWindow(FXApp* a);
+
+  // Initialize
+  virtual void create();
+
+  virtual ~SystemPropertiesWindow();
+};
+
+FXDEFMAP(SystemPropertiesWindow) SystemPropertiesWindowMap[] = {
+};
+
+FXIMPLEMENT(SystemPropertiesWindow,FXMainWindow,SystemPropertiesWindowMap,ARRAYNUMBER(SystemPropertiesWindowMap))
+
+
+SystemPropertiesWindow::~SystemPropertiesWindow() {
+}
+
+void SystemPropertiesWindow::create() {
+  FXMainWindow::create();
+}
+
+
+//int main(int argc, char *argv[]) {
+SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0) {
+  FXIcon* monitorimage = new FXGIFIcon(app, resico_monitor);
+
+  //application.init(argc, argv);
+  //FXMainWindow *main=new FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0);
+  generalframe = new FXVerticalFrame(this,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0);
+  tabbook = new FXTabBook(generalframe,NULL,0,LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_RIGHT, 0,0,0,0, 6,6,7,7);
+
+
+  btncont = new FXHorizontalFrame(generalframe, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 6, 0, 7, 6, 0);
+
+  okbtn = new FXButton(btncont, "OK", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+  cancelbtn = new FXButton(btncont, "Cancel", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+  applybtn = new FXButton(btncont, "&Apply", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+  applybtn->disable();
+
+
+  new FXTabItem(tabbook,"General",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+
+  FXHorizontalFrame* horcont = new FXHorizontalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,380,361, 24,24,15,16); 
+  new FXLabel(horcont, "", monitorimage, LABEL_NORMAL, 0,0,0,0,  20,29,24,20);
+
+  //new FXLabel(a, "", NULL,LAYOUT_FIX_X|LAYOUT_FIX_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 380, 361);
+  //new FXLabel(a, "a", NULL, LAYOUT_FILL_X|LAYOUT_FILL_Y,0, 0, 380, 361);
+  //new FXLabel(a, "", monitoricon);
+  vercont = new FXVerticalFrame(horcont,FRAME_NONE, 0,0,380,361, 2,2,2,2);
+  new FXLabel(vercont, "System:",                    NULL, LABEL_NORMAL,              0,0,0,0,   0,0, 0,0);
+  new FXLabel(vercont,    i2kBGetFullOSName(),       NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+  new FXLabel(vercont,    "5.00.2195",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+  new FXLabel(vercont,    "Service Pack 4",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+
+  new FXSeparator(vercont, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,4); // i could use a fxframe, but semantics r cute
+
+  char hostname[HOST_NAME_MAX+1];
+  gethostname(hostname, HOST_NAME_MAX+1);
+
+  new FXLabel(vercont, "Registered to:",             NULL, LABEL_NORMAL,              0,0,0,0,  0,0, 0,0);
+  new FXLabel(vercont,    getlogin(),                NULL, LABEL_NORMAL,              0,0,0,0, 18,0, 0,0);
+  new FXLabel(vercont,    hostname,                  NULL, LABEL_NORMAL,              0,0,0,0, 18,0, 0,0);
+  new FXLabel(vercont,    "51873-016-2312562-09215", NULL, LABEL_NORMAL,              0,0,0,0, 18,0, 0,0);
+
+  //new FXLabel(vercont, " ", NULL, LABEL_NORMAL, 0,0,0,0,          0,0, 0,0);
+  new FXSeparator(vercont, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,13);
+
+  new FXLabel(vercont, "Computer:", NULL, LABEL_NORMAL, 0,0,0,0,          0,0, 0,0);
+  //new FXLabel(vercont,    "Intel (R) Xeon(R) CPU", NULL, LABEL_NORMAL, 0,0,0,0,          18,0, 0,0);
+
+  char cpubrand[49];
+  if (!getCpuString(cpubrand)) {
+    wrap(cpubrand, 28); //https://stackoverflow.com/questions/2351744/insert-line-breaks-in-long-string-word-wrap
+
+    char* curLine = cpubrand;
+    while (curLine) { // I LOVE STACK OVERFLOW https://stackoverflow.com/a/17983619
+      char* nextLine = strchr(curLine, '\n');
+      if (nextLine) *nextLine = '\0';
+      new FXLabel(vercont, curLine,                  NULL, JUSTIFY_LEFT|LABEL_NORMAL, 0,0,0,0, 18,0, 0,0);    
+      if (nextLine) *nextLine = '\n';
+      curLine = nextLine ? (nextLine+1) : NULL;
+    }
+  } else {
+    new FXLabel(vercont, "Unknown",                  NULL, JUSTIFY_LEFT|LABEL_NORMAL, 0,0,0,0, 18,0, 0,0); // if you are on a toy arm cpu
+  }
+
+  new FXLabel(vercont,    "AT/AT COMPATIBLE", NULL, LABEL_NORMAL, 0,0,0,0,          18,0, 0,0);
+
+  struct sysinfo sys_info; // from my own jawn ice2kver
+                           // i should have probably just used sprintf...
+  if( sysinfo(&sys_info) != 0)
+    perror("sysinfo");
+
+  char physmemtext[1024];
+  formatnum(sys_info.totalram, physmemtext);
+
+  strcat(physmemtext, " KB RAM");
+
+  new FXLabel(vercont, physmemtext, NULL, LABEL_NORMAL, 0,0,0,0,          18,0, 0,0);
+
+
+  new FXTabItem(tabbook,"Network Identification",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+  networkframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_FILL_Y);
+
+  FXIcon* computericon = new FXGIFIcon(app, resico_compuzer);
+
+  FXHorizontalFrame* nettop = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,7,5,  17,16);
+
+  new FXLabel(nettop, "", computericon, LABEL_NORMAL, 0,0,0,0,  0,0,0,0);
+ 
+  new FXLabel(nettop, "Windows uses the following information to identify your computer\n"
+		          "on the network.", NULL, LAYOUT_CENTER_Y|JUSTIFY_LEFT|LABEL_NORMAL, 0,0,0,0,  0,0,0,0);
+
+  FXHorizontalFrame* compname = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,4,2,  0,0);
+  new FXLabel(compname, "Full computer name:", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH,0,0,124,0, 0,0,0,0);
+  new FXLabel(compname, hostname, NULL, LABEL_NORMAL,0,0,0,0, 0,0,0,0);
+
+  FXHorizontalFrame* ipaddr = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,4,2,  0,0);
+  new FXLabel(ipaddr, "IPv4 address:", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH,0,0,124,0, 0,0,0,0);
+  char ip[16];
+  if (!getIPAddress(ip)) {
+    new FXLabel(ipaddr, ip, NULL, LABEL_NORMAL,0,0,0,0, 0,0,0,0);
+  } else {
+    new FXLabel(ipaddr, "Unknown", NULL, LABEL_NORMAL,0,0,0,0, 0,0,0,0);
+  }
+
+  FXHorizontalFrame* netidcont = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,15,4,  17,16);
+
+  FXLabel* netidlbl = new FXLabel(netidcont, "To use the Network Identification Wizard to join a\n"
+                         "domain and create a local user, click Network ID.",
+                         NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH, 0,0,265,0,  0,0,0,0);
+
+  netidlbl->disable();
+
+  FXButton* netidbtn = new FXButton(netidcont, "&Network ID", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);  
+
+  netidbtn->disable();
+
+  FXHorizontalFrame* renamecont = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,15,4,  17,16);
+  
+  new FXLabel(renamecont, "To rename this computer, click Properties.",
+                         NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH, 0,0,265,0,  0,0,0,0);
+
+  new FXButton(renamecont, "&Properties", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);  
+
+
+
+  new FXTabItem(tabbook,"Hardware",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+  hardwareframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED); 
+
+  new FXTabItem(tabbook,"User Profiles",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+  userframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED); 
+
+  new FXTabItem(tabbook,"Advanced",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+  advframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED); 
+}
+
+
+int main(int argc,char *argv[]) {
+  FXApp application("sysdm", "Ice2KProj");
+  FXApp* ptrapp = &application;
+
+  application.init(argc,argv);
+
+  sysdmwin = new SystemPropertiesWindow(&application);
+
+  // create windows
+  application.create();
+
+  sysdmwin->show(PLACEMENT_SCREEN);
+
+  // Run the application
+  return application.run();
+}
+
