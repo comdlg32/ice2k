@@ -28,7 +28,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
 
 install:
 	cp brdexmpl $(PREFIX)/bin/brdexmpl

@@ -18,6 +18,9 @@
 #include <errno.h>
 
 
+#include <sys/types.h>
+#include <pwd.h>
+#include <ctype.h>
 
 FXMainWindow* sysdmwin;
 
@@ -187,7 +190,7 @@ public:
   // Messages for our class
   enum {
     ID_MAINWIN=FXMainWindow::ID_LAST,
-    ID_SETFOCUS
+    ID_SETFOCUS_T
   };
 
 	public:
@@ -205,7 +208,7 @@ public:
 
 // Change computer name window
 FXDEFMAP(ChangeHostnameBox) ChangeHostnameBoxMap[] = {
-  FXMAPFUNC(SEL_TIMEOUT, ChangeHostnameBox::ID_SETFOCUS, ChangeHostnameBox::onSetFocus),
+  FXMAPFUNC(SEL_TIMEOUT, ChangeHostnameBox::ID_SETFOCUS_T, ChangeHostnameBox::onSetFocus),
 };
 
 FXIMPLEMENT(ChangeHostnameBox,FXDialogBox,ChangeHostnameBoxMap,ARRAYNUMBER(ChangeHostnameBoxMap))
@@ -269,7 +272,7 @@ FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOS
 	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL,
 	BUTTON_DEFAULT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
 	0, 0, 75, 23, 3, 3, 2, 3);
-  getApp()->addTimeout(this,ChangeHostnameBox::ID_SETFOCUS,10); // hacky but only reliable way i found to do it...
+  getApp()->addTimeout(this,ChangeHostnameBox::ID_SETFOCUS_T,10); // hacky but only reliable way i found to do it...
 
 	//okbtn->setFocus();
 }
@@ -317,6 +320,10 @@ public:
   // Message handlers
   long onAccept(FXObject*,FXSelector,void*);
   long onChangeHostname(FXObject*,FXSelector,void*);
+  long onCmdEnvVars(FXObject*,FXSelector,void*);
+  long onCmdNtldr(FXObject*,FXSelector,void*);
+  long onSetFocus(FXObject*,FXSelector,void*);
+  long onUnFocus(FXObject*,FXSelector,void*);
 
 
 public:
@@ -326,7 +333,11 @@ public:
     ID_MAINWIN=FXMainWindow::ID_LAST,
     ID_CHANGEHOSTNAME,
     ID_ACCEPT,
-    ID_CANCEL
+    ID_CANCEL,
+    ID_ENVVARS,
+    ID_NTLDR,
+    ID_SETFOCUS_T,
+    ID_UNFOCUS_T
   };
 
 public:
@@ -344,12 +355,30 @@ FXDEFMAP(SystemPropertiesWindow) SystemPropertiesWindowMap[] = {
   FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_ACCEPT, SystemPropertiesWindow::onAccept),
   FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_CANCEL, SystemPropertiesWindow::onAccept),
   FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_CHANGEHOSTNAME, SystemPropertiesWindow::onChangeHostname),
+  FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_ENVVARS, SystemPropertiesWindow::onCmdEnvVars),
+  FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_NTLDR, SystemPropertiesWindow::onCmdNtldr),
+
+  FXMAPFUNC(SEL_TIMEOUT, SystemPropertiesWindow::ID_SETFOCUS_T, SystemPropertiesWindow::onSetFocus),
+  FXMAPFUNC(SEL_TIMEOUT, SystemPropertiesWindow::ID_UNFOCUS_T, SystemPropertiesWindow::onUnFocus),
 };
 
 FXIMPLEMENT(SystemPropertiesWindow,FXMainWindow,SystemPropertiesWindowMap,ARRAYNUMBER(SystemPropertiesWindowMap))
 
 
+
 SystemPropertiesWindow::~SystemPropertiesWindow() {
+}
+
+long SystemPropertiesWindow::onSetFocus(FXObject* sender, FXSelector sel, void* ptr) {
+  this->killFocus();
+  this->setFocus();
+  //puts("a");
+  return 1;
+}
+long SystemPropertiesWindow::onUnFocus(FXObject* sender, FXSelector sel, void* ptr) {
+  this->setFocus();
+  //puts("a");
+  return 1;
 }
 
 void SystemPropertiesWindow::create() {
@@ -362,6 +391,24 @@ long SystemPropertiesWindow::onAccept(FXObject* sender, FXSelector sel, void* pt
   return 0;
 }
 
+long SystemPropertiesWindow::onCmdEnvVars(FXObject* sender, FXSelector sel, void* ptr) {
+
+
+  system("xfw ~/.profile &"); // there is no good way of finding out where env vars are set on linux
+  return 1;                   // and to globally set them because linux SUCKS
+}
+
+long SystemPropertiesWindow::onCmdNtldr(FXObject* sender, FXSelector sel, void* ptr) {
+  if (access("/boot/extlinux/extlinux.conf", F_OK) == 0)
+    system("xfw /boot/extlinux/extlinux.conf &");
+  else if (access("/boot/efi/loader/loader.conf", F_OK) == 0)
+    system("xfw /boot/efi/loader/loader.conf &");
+  else
+    system("xfw /etc/default/grub &");
+
+  return 1;
+}
+
 long SystemPropertiesWindow::onChangeHostname(FXObject* sender, FXSelector sel, void* ptr) {
   ChangeHostnameBox* hostnamebox = new ChangeHostnameBox(sysdmwin);
   hostnamebox->execute(PLACEMENT_OWNER);
@@ -370,7 +417,9 @@ long SystemPropertiesWindow::onChangeHostname(FXObject* sender, FXSelector sel, 
 
 
 //int main(int argc, char *argv[]) {
-SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0) {
+SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,404,436,  0,0,0,0,  0,0) {
+  this->changeFocus((FXWindow*)0);
+  this->killFocus();
   FXIcon* monitorimage = new FXGIFIcon(app, resico_monitor);
 
   //application.init(argc, argv);
@@ -460,9 +509,20 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   new FXLabel(nettop, "Windows uses the following information to identify your computer\n"
 		          "on the network.", NULL, LAYOUT_CENTER_Y|JUSTIFY_LEFT|LABEL_NORMAL, 0,0,0,0,  0,0,0,0);
 
+  char hostnameup[HOST_NAME_MAX+1];
+
+  memcpy(hostnameup, hostname, sizeof(hostnameup));
+
+  char *upper = hostnameup;
+
+  while (*upper) {
+    *upper = toupper((unsigned char) *upper);
+    upper++;
+  }
+
   FXHorizontalFrame* compname = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,4,2,  0,0);
   new FXLabel(compname, "Full computer name:", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH,0,0,124,0, 0,0,0,0);
-  new FXLabel(compname, hostname, NULL, LABEL_NORMAL,0,0,0,0, 0,0,0,0);
+  new FXLabel(compname, hostnameup, NULL, LABEL_NORMAL,0,0,0,0, 0,0,0,0);
 
   FXHorizontalFrame* ipaddr = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,4,2,  0,0);
   new FXLabel(ipaddr, "IPv4 address:", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_FIX_WIDTH,0,0,124,0, 0,0,0,0);
@@ -544,10 +604,130 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 
   new FXTabItem(tabbook,"User Profiles",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  userframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED); 
+  userframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED,0,0,0,0,  14,13,18,10, 0,0); 
+
+  FXIcon* userproficon = new FXGIFIcon(app, resico_userprof);
+  FXPacker* infocont = new FXPacker(userframe,FRAME_NONE,0,0,0,0,  0,0,0,25, 26,-1);
+  new FXLabel(infocont, "", userproficon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT, 0,0,0,0,  0,0,0,0);
+  new FXLabel(infocont, "User profiles contain desktop settings and other information", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+  new FXLabel(infocont, "related to your logon.  A different profile can be created on", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+  new FXLabel(infocont, "each computer you use, or you can select a roaming profile", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+  new FXLabel(infocont, "that is the same on every computer you use.", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+
+  new FXLabel(userframe, "&Profiles stored on this computer:", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,4);
+
+  FXPacker* tablecont = new FXPacker(userframe,LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0,  0,1,0,0, 0,0);  
+  FXPacker* tablecont2 = new FXPacker(tablecont,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_SUNKEN,0,0,0,0,  0,0,0,0, 0,0);  
+  FXTable* table=new FXTable(tablecont2,NULL,NULL,TABLE_READONLY|LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0, 2,2,2,2);
+
+  FXFont* deffont = getApp()->getNormalFont();
+  
+  int res = getApp()->reg().readUnsignedEntry("SETTINGS","screenres",100); // since we cant get the actual font size, we have to calculate it ourselves
+
+  float fontpxf = (float)deffont->getSize() / (float)10 * (float)res / (float)72;
+  int fontpx = roundf(fontpxf);
+
+  table->setCellBorderWidth(0);
+  table->setRowHeaderWidth(0);
+  table->setTableSize(0, 3);
+  table->showHorzGrid(FALSE);
+  table->showVertGrid(FALSE);
+ 
+  struct passwd *user;
+
+  unsigned int nobodyuid = getpwnam("nobody")->pw_uid;
+  // https://stackoverflow.com/questions/14970938/print-out-all-users-of-a-machine-in-c
+  int users = 0;
+
+  table->setColumnText(0, "Name");
+  table->setColumnText(1, "UID");
+  table->setColumnText(2, "Type");	
+
+  table->setDefRowHeight(fontpx + 3);
+
+  table->setMarginLeft(4);
+
+
+  char passwdname[LOGIN_NAME_MAX+1];
+  char uidstr[6]; // 16 bit integer = 5 characters + 1 for null byte
+
+  while ( (user = getpwent() )) {
+    if ( (user->pw_uid >= 1000 || user->pw_uid == 0 ) && !(user->pw_uid == nobodyuid)) {
+      //printf("name: %d: %s\n", user->pw_uid, user->pw_name);
+      table->insertRows(users,1);
+	sprintf(passwdname, "%s\\%s", hostnameup, user->pw_name);
+	table->setItemJustify(users, 0, FXTableItem::LEFT);
+	table->setItemText(users, 0, passwdname);
+
+	sprintf(uidstr, "%d", user->pw_uid);
+	table->setItemText(users, 1, uidstr);
+
+	table->setItemJustify(users, 2, FXTableItem::LEFT);
+	table->setItemText(users, 2, "Local");
+      users++;
+
+    }
+  }
+
+  table->setColumnWidth(0, 215);
+  table->setColumnWidth(1, 50);
+  table->setColumnWidth(2, 75);
+
+  //FXHorizontalFrame* renamecont = new FXHorizontalFrame(userframe, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0,  17,16);
+  FXMatrix* botbuttons = new FXMatrix(userframe, 3, LAYOUT_FILL_COLUMN|LAYOUT_FILL_X|MATRIX_BY_COLUMNS|PACK_UNIFORM_WIDTH|PACK_UNIFORM_HEIGHT, 0,0,0,0,  0,0,9,0,  12,0);
+  //botbuttons->setBackColor(FXRGB(255,0,0));
+
+
+  btn = new FXButton(botbuttons, "&Delete", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_COLUMN|LAYOUT_FILL_X,         0,0,0,21, 0,0,0,0);
+  btn->disable();
+  btn = new FXButton(botbuttons, "&Change Type...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_COLUMN|LAYOUT_FILL_X, 0,0,0,21, 0,0,0,0);  
+  btn->disable();
+  btn = new FXButton(botbuttons, "Copy &To...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_COLUMN|LAYOUT_FILL_X,     0,0,0,21, 0,0,0,0);  
+  btn->disable();
+ 
 
   new FXTabItem(tabbook,"Advanced",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  advframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED); 
+  advframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,19,8, 0,0); 
+
+  FXGroupBox* performgrp = new FXGroupBox(advframe, "Performance", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,11, 0,0);
+  FXIcon* performicon = new FXGIFIcon(app, resico_perform);
+  new FXLabel(performgrp, "", performicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,70,  0,16,0,0);
+  new FXLabel(performgrp, "Performance options control how applications use memory,\n"
+                          "which affects the speed of your computer.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+
+
+  btn = new FXButton(performgrp, "&Performance Options...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
+  btn->disable();
+
+
+  new FXSeparator(advframe, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,5);
+
+  FXGroupBox* envvarsgrp = new FXGroupBox(advframe, "Environment Variables", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,10, 7,0);
+  FXIcon* envvarsicon = new FXGIFIcon(app, resico_envvars);
+  new FXLabel(envvarsgrp, "", envvarsicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,71,  0,9,1,0);
+  /* new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed\n"
+                          "on your computer. Use the Device Manager to change the\n"
+                          "properties of any device.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0); */
+  new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,-1);
+  new FXLabel(envvarsgrp, "certain types of information.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+
+  btn = new FXButton(envvarsgrp, "&Environment Variables...", NULL, this, ID_ENVVARS, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
+
+  new FXSeparator(advframe, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,6);
+
+
+
+  FXGroupBox* ntldrgrp = new FXGroupBox(advframe, "Startup and Recovery", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,10, 0,0);
+  FXIcon* ntldricon = new FXGIFIcon(app, resico_ntldr);
+  new FXLabel(ntldrgrp, "", ntldricon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,76,  0,16,0,0);
+  new FXLabel(ntldrgrp, "Startup and recovery options tell your computer how to start\n"
+                         "and what to do if an error causes your computer to stop.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+
+
+  btn = new FXButton(ntldrgrp, "&Startup and Recovery...", NULL, this, ID_NTLDR, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
+
+  getApp()->addTimeout(this,SystemPropertiesWindow::ID_SETFOCUS_T,10);
+
 }
 
 
@@ -560,8 +740,17 @@ int main(int argc,char *argv[]) {
 
   // create windows
   application.create();
+  sysdmwin->killFocus();
 
-  sysdmwin->show(PLACEMENT_SCREEN);
+  sysdmwin->show(PLACEMENT_OWNER);
+  sysdmwin->killFocus();
+
+  sysdmwin->changeFocus((FXWindow*)0);
+
+  //sysdmwin->changeFocus(sysdmwin);
+
+
+  //sysdmwin->show(PLACEMENT_SCREEN);
 
   // Run the application
   return application.run();
