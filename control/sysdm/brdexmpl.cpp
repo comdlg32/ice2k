@@ -372,6 +372,7 @@ SystemPropertiesWindow::~SystemPropertiesWindow() {
 long SystemPropertiesWindow::onSetFocus(FXObject* sender, FXSelector sel, void* ptr) {
   this->killFocus();
   this->setFocus();
+
   //puts("a");
   return 1;
 }
@@ -399,6 +400,7 @@ long SystemPropertiesWindow::onCmdEnvVars(FXObject* sender, FXSelector sel, void
 }
 
 long SystemPropertiesWindow::onCmdNtldr(FXObject* sender, FXSelector sel, void* ptr) {
+  //getApp()->beginWaitCursor();
   if (access("/boot/extlinux/extlinux.conf", F_OK) == 0)
     system("xfw /boot/extlinux/extlinux.conf &");
   else if (access("/boot/efi/loader/loader.conf", F_OK) == 0)
@@ -406,6 +408,14 @@ long SystemPropertiesWindow::onCmdNtldr(FXObject* sender, FXSelector sel, void* 
   else
     system("xfw /etc/default/grub &");
 
+  /* if (access("/boot/extlinux/extlinux.conf", F_OK) == 0)
+    system("xfw /boot/extlinux/extlinux.conf &");
+  else if (access("/boot/efi/loader/loader.conf", F_OK) == 0)
+    system("xfw /boot/efi/loader/loader.conf &");
+  else
+    system("xfw /etc/default/grub &"); */
+
+  //getApp()->endWaitCursor();
   return 1;
 }
 
@@ -726,7 +736,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
   btn = new FXButton(ntldrgrp, "&Startup and Recovery...", NULL, this, ID_NTLDR, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
 
-  getApp()->addTimeout(this,SystemPropertiesWindow::ID_SETFOCUS_T,10);
+  //getApp()->addTimeout(this,SystemPropertiesWindow::ID_SETFOCUS_T,10);
 
 }
 
