@@ -537,6 +537,7 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
   propbtn->hide();
   propsep->hide();
 
+  propbtn->getParent()->recalc();
 
 
 	top = tree->appendItem(0,hostname,ico_devmgmt,ico_devmgmt);
