@@ -47,6 +47,7 @@ FXMainWindow* devmgmtwin;
 FXIcon* ico_devmgmt;
 
 
+
 // thank you https://en.wikipedia.org/wiki/CPUID#EAX=8000'0002h,8000'0003h,8000'0004h:_Processor_Brand_String
 /* int getCpuString(char* output) {
   #ifdef __x86_64__
@@ -308,7 +309,11 @@ int getMonitors(char* buf, int bufsize ) {
 			}
 			y = 1;
 		}
+
+		XRRFreeOutputInfo(outputInfo);
 	}
+
+	XRRFreeScreenResources(resources);
 
 	return 0;
 }
@@ -321,21 +326,73 @@ class DeviceManager : public FXMainWindow {
   FXDECLARE(DeviceManager)
 
 private:
-  FXVerticalFrame*          generalframe;
-  FXVerticalFrame*          networkframe;
-  FXVerticalFrame*          hardwareframe;
-  FXVerticalFrame*          userframe;
-  FXVerticalFrame*          advframe;
+  // gui
+  FXDockSite*              topdock;
+  
+  FXHorizontalFrame*       statusbarcont;
 
-  FXHorizontalFrame*        btncont;
-  FXTabBook*                tabbook;
-  FXButton*                 okbtn;
-  FXButton*                 cancelbtn;
-  FXButton*                 applybtn;
+  FXToolBarShell*          mbshell;
+  FXMenuBar*               menubar;
+  
+  FXMenuPane*              actionmenu;
+  FXMenuPane*              viewmenu;
 
-  FXHorizontalFrame*        horcont;
-  FXVerticalFrame*          vercont;
+  FXToolBarShell*          tbshell;
+  FXToolBarShell*          tb2shell;
+  
+  FXToolBar*               toolbar;
+  FXToolBar*               toolbar2;
 
+
+  // tree
+  FXPacker*                treeframe;
+  FXTreeList*              tree;
+
+  FXTreeItem               *branch, *top;
+
+  FXTreeItem*              devVga;
+  FXTreeItem*              devCdRom;
+  FXTreeItem*              devFloppyCon;
+  FXTreeItem*              devFloppyDrive;
+  FXTreeItem*              devStorage;
+  FXTreeItem*              devFirewire;
+  FXTreeItem*              devKeyboards;
+  FXTreeItem*              devMice;
+  FXTreeItem*              devMonitors;
+  FXTreeItem*              devNetwork;
+  FXTreeItem*              devUnknown;
+  FXTreeItem*              devSerial;
+  FXTreeItem*              devSound;
+  FXTreeItem*              devSystem;
+  FXTreeItem*              devUsbCon;
+
+  // icons
+  FXIcon*                  ico_back;
+  FXIcon*                  ico_forward;
+
+  FXIcon*                  ico_up;
+  FXIcon*                  ico_contree;
+  
+  FXIcon*                  ico_properties;
+
+  FXIcon*                  ico_help;
+
+  FXIcon*                  ico_scan;
+
+  FXIcon*                  ico_dev_computer;
+  FXIcon*                  ico_dev_cdrom;
+  FXIcon*                  ico_dev_disk;
+  FXIcon*                  ico_dev_disp;
+  FXIcon*                  ico_dev_ide;
+  FXIcon*                  ico_dev_floppy;
+  FXIcon*                  ico_dev_mice;
+  FXIcon*                  ico_dev_keyb;
+  FXIcon*                  ico_dev_network;
+  FXIcon*                  ico_dev_unknown;
+  FXIcon*                  ico_dev_serial;
+  FXIcon*                  ico_dev_sound;
+  FXIcon*                  ico_dev_usb;
+  FXIcon*                  ico_dev_firewire;
 
 
 protected:
@@ -347,6 +404,7 @@ public:
   long onItemChange(FXObject*,FXSelector,void*);
   long onStatus(FXObject*,FXSelector,void*);
   long onChangeText(FXObject*,FXSelector,void*);
+  long addDevices(FXObject*,FXSelector,void*);
 
 
 public:
@@ -355,6 +413,7 @@ public:
   enum {
     ID_MAINWIN=FXMainWindow::ID_LAST,
     ID_TREE,
+    ID_ADDDEV,
   };
 
 public:
@@ -371,6 +430,7 @@ public:
 FXDEFMAP(DeviceManager) DeviceManagerMap[] = {
   FXMAPFUNC(SEL_UPDATE, 0, DeviceManager::onStatus),
   FXMAPFUNC(SEL_COMMAND, DeviceManager::ID_SETSTRINGVALUE, DeviceManager::onChangeText),
+  FXMAPFUNC(SEL_COMMAND, DeviceManager::ID_ADDDEV, DeviceManager::addDevices),
 
   FXMAPFUNC(SEL_CHANGED, DeviceManager::ID_TREE, DeviceManager::onItemChange),
 };
@@ -383,24 +443,15 @@ DeviceManager::~DeviceManager() {
 }
 // from FXStatusLine src
 long DeviceManager::onStatus(FXObject* sender, FXSelector sel, void* ptr) {
-  //puts((char*)ptr);
   FXWindow *helpsource=getApp()->getCursorWindow();
-  //FXFrame::onUpdate(sender,sel,ptr);
-  if (helpsource && getShell()->isOwnerOf(helpsource) && helpsource->handle(this,FXSEL(SEL_QUERY_HELP,0),NULL)) {
-    //FXString* helpstr = ((FXString*)ptr);
-    //printf("%s\n", helpstr->text());
+  if (helpsource && getShell()->isOwnerOf(helpsource) && helpsource->handle(this,FXSEL(SEL_QUERY_HELP,0),NULL))
     return 1;
-    
-    //puts(helpstr->text());
-  }
 
   statuslbl->setText(" ");
-  //puts("a");
   return 1;
 }
 
 long DeviceManager::onChangeText(FXObject* sender, FXSelector sel, void* ptr) {
-  //const FXString* helpstr = (*((FXString*)ptr));
   statuslbl->setText(*((FXString*)ptr));
   
   return 1;
@@ -456,115 +507,11 @@ void getComputerName(char* computerType, int size) {
     snprintf(computerType, size, "%s%s PC", biosType, arch);
 }
 
-
-//int main(int argc, char *argv[]) {
-DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico_devmgmt, NULL, DECOR_ALL, 0,0,520,380,  0,0,0,0,  0,0) {
-  FXDockSite* topdock = new FXDockSite(this, FRAME_SUNKEN|DOCKSITE_NO_WRAP|LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
-
-  FXPacker* statusbarcont = new FXHorizontalFrame(this, JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_SIDE_BOTTOM, 0, 0, 0, 0, 0, 1, 2, 0, 2, 2);
-  statuslbl = new FXLabel(statusbarcont, " ", NULL, LABEL_NORMAL|FRAME_SUNKEN|LAYOUT_FILL_X|JUSTIFY_LEFT, 0,0,0,0, 1,1,1,1);
-  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0,131,0, 0,0,0,0);
-  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0, 83,0, 0,0,0,0);
-
-  FXToolBarShell* mbshell = new FXToolBarShell(this,FRAME_SUNKEN);
-
-
-  FXMenuBar* menubar = new FXMenuBar(topdock,mbshell,LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|FRAME_RAISED,0,0,0,0,  2,6,2,2,  4,4);
-  new FXToolBarGrip(menubar,menubar,FXMenuBar::ID_TOOLBARGRIP,TOOLBARGRIP_SINGLE, 0,0,0,0, 0,2,0,0);
-
-  FXMenuPane* actionmenu = new FXMenuPane(this);
-  FXMenuPane* viewmenu = new FXMenuPane(this);
-
-  FXMenuCommand* menucmd; FXMenuRadio* menurad; FXMenuCheck* menuchk;
-
-  new FXMenuTitle(menubar, "&Action", NULL, actionmenu);
-  menucmd = new FXMenuCommand(actionmenu, "&Help"); menucmd->disable();
-
-  new FXMenuTitle(menubar, "&View", NULL, viewmenu);
-
-  //menucmd = new FXMenuCommand(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menucmd->disable();
-  menurad = new FXMenuRadio(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menurad->disable();
-  menurad->setCheck(TRUE);
-  menurad = new FXMenuRadio(viewmenu, "De&vices by connection\t\tDisplays devices by connection."); menurad->disable();
-  menurad = new FXMenuRadio(viewmenu, "Resources by t&ype\t\tDisplays resources by type."); menurad->disable();
-  menurad = new FXMenuRadio(viewmenu, "Resources by co&nnection\t\tDisplays resources by connection"); menurad->disable();
-
-  new FXMenuSeparator(viewmenu);
-
-  menuchk = new FXMenuCheck(viewmenu, "Sho&w hidden devices\t\tDisplays legacy devices and devices that are no longer installed."); menuchk->disable();
-
-  new FXMenuSeparator(viewmenu);
-  menucmd = new FXMenuCommand(viewmenu, "&Print\t\tPrints a report of the devices that are installed."); menucmd->disable();
-  new FXMenuSeparator(viewmenu);
-  menucmd = new FXMenuCommand(viewmenu, "C&ustomize...\t\tCustomizes the view"); menucmd->disable();
-
-  // Toolbar
-  FXToolBarShell* tbshell = new FXToolBarShell(this,FRAME_SUNKEN);
-
-  FXToolBar* toolbar = new FXToolBar(topdock,tbshell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|FRAME_RAISED,0,0,0,0, 0,5,0,0,  1,1);
-  new FXToolBarGrip(toolbar, toolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
-
-  FXIcon* ico_back = new FXGIFIcon(app, resico_mmc_back);
-  FXIcon* ico_forward = new FXGIFIcon(app, resico_mmc_forward);
-
-  FXIcon* ico_up = new FXGIFIcon(app, resico_mmc_up);
-  FXIcon* ico_contree = new FXGIFIcon(app, resico_mmc_contree);
-
-  FXIcon* ico_properties = new FXGIFIcon(app, resico_mmc_properties);
-
-  FXIcon* ico_help = new FXGIFIcon(app, resico_mmc_help);
-
-  FXIcon* ico_scan = new FXGIFIcon(app, resico_dmg_scan);
-
-
-  //FXIcon* ico_hist_up = new FXGIFIcon(app, resico_hist_up);
-  FXButton* btn;
-
-  btn = new FXButton(toolbar,"\tBack",ico_back,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-  btn->disable();
-  btn = new FXButton(toolbar,"\tForward",ico_forward,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-  btn->disable();
-  new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
-  btn = new FXButton(toolbar,"\tUp one level",ico_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-  btn->disable();
-  btn = new FXButton(toolbar,"\tShow/Hide Console Tree/Favorites",ico_contree,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-  new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
-
-  propbtn = new FXButton(toolbar,"\tProperties",ico_properties,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2); propbtn->hide();
-  propsep = new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2); propsep->hide();
-
-  btn = new FXButton(toolbar,"\tHelp",ico_help,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-
-  FXToolBarShell* tb2shell = new FXToolBarShell(this,FRAME_SUNKEN);
-
-  FXToolBar* toolbar2 = new FXToolBar(topdock,tb2shell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_RAISED,0,0,0,0, 0,0,0,0,  1,1);
-  new FXToolBarGrip(toolbar2, toolbar2, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
-
-  btn = new FXButton(toolbar2,"\tScan for hardware changes",ico_scan,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
-
-  new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,2); // semantics r cute  
-
-  FXIcon* ico_dev_computer = new FXGIFIcon(app, resico_dev_computer);
-  FXIcon* ico_dev_cdrom = new FXGIFIcon(app, resico_dev_cdrom);
-  FXIcon* ico_dev_disk = new FXGIFIcon(app, resico_dev_disk);
-  FXIcon* ico_dev_disp = new FXGIFIcon(app, resico_dev_disp);
-  FXIcon* ico_dev_ide = new FXGIFIcon(app, resico_dev_ide);
-  FXIcon* ico_dev_floppy = new FXGIFIcon(app, resico_dev_floppy);
-  FXIcon* ico_dev_mice = new FXGIFIcon(app, resico_dev_mice);
-  FXIcon* ico_dev_keyb = new FXGIFIcon(app, resico_dev_keyb);
-  FXIcon* ico_dev_network = new FXGIFIcon(app, resico_dev_network);
-  FXIcon* ico_dev_unknown = new FXGIFIcon(app, resico_dev_unknown);
-  FXIcon* ico_dev_serial = new FXGIFIcon(app, resico_dev_serial);
-  FXIcon* ico_dev_sound = new FXGIFIcon(app, resico_dev_sound);
-  FXIcon* ico_dev_usb = new FXGIFIcon(app, resico_dev_usb);
-  FXIcon* ico_dev_firewire = new FXGIFIcon(app, resico_dev_firewire);
-
-  FXPacker* treeframe = new FXPacker(this, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
-  FXTreeList* tree = new FXTreeList(treeframe,this,ID_TREE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_SHOWS_BOXES|TREELIST_SHOWS_LINES|TREELIST_BROWSESELECT|TREELIST_ROOT_BOXES);
-
-  FXTreeItem *branch, *top;
+long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
+  FXApp* app = getApp();
 
   char hostname[HOST_NAME_MAX+1];
+
   gethostname(hostname, HOST_NAME_MAX+1);
 
   char *upper = hostname;
@@ -577,29 +524,37 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
   // pci related code is based off here
   // thank you https://josuedhg.wordpress.com/2014/11/15/how-to-list-pci-devices-with-c-on-linux/
 
-  struct pci_access* pciaccess;
-  struct pci_dev* dev;
-  char namebuf[1024];
 
-  pciaccess = pci_alloc();
+
+  struct pci_access* pciaccess = pci_alloc();
+  struct pci_dev* dev;
   pci_init(pciaccess);
   pci_scan_bus(pciaccess);
 
-  top = tree->appendItem(0,hostname,ico_devmgmt,ico_devmgmt);
+  // clear everything first...
+  tree->clearItems();
+
+  propbtn->hide();
+  propsep->hide();
+
+
+
+	top = tree->appendItem(0,hostname,ico_devmgmt,ico_devmgmt);
   tree->expandTree(top);
-    char computerType[64];
-    getComputerName(computerType, sizeof(computerType));
+
+  char computerType[64];
+  getComputerName(computerType, sizeof(computerType));
 
     branch = tree->appendItem(top,"Computer",ico_dev_computer,ico_dev_computer);    
       tree->appendItem(branch,computerType,ico_dev_computer,ico_dev_computer);
 
-
     char hardDrives[256];
+    char* hardDrive;
+    char hardDriveModel[256];
     getHardDrives(hardDrives, sizeof(hardDrives));
 
-    char* hardDrive = strtok(hardDrives, ",");
+    hardDrive = strtok(hardDrives, ",");
 
-    char hardDriveModel[256];
 
     //puts(hardDrives);
 
@@ -611,24 +566,27 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
       }
 
 
-    FXTreeItem* devVga = tree->appendItem(top,"Display adapters",ico_dev_disp,ico_dev_disp);
-    FXTreeItem* devCdRom = tree->appendItem(top,"DVD/CD-ROM drives",ico_dev_cdrom,ico_dev_cdrom);
-    FXTreeItem* devFloppyCon = tree->appendItem(top,"Floppy disk controllers",ico_dev_ide,ico_dev_ide);
-    FXTreeItem* devFloppyDrive = tree->appendItem(top,"Floppy disk drives",ico_dev_floppy,ico_dev_floppy);
-    FXTreeItem* devStorage = tree->appendItem(top,"IDE ATA/ATAPI controllers",ico_dev_ide,ico_dev_ide);
-    FXTreeItem* devFirewire = tree->appendItem(top,"IEEE 1394 Bus host controllers",ico_dev_firewire,ico_dev_firewire);
-    FXTreeItem* devKeyboards = tree->appendItem(top,"Keyboards",ico_dev_keyb,ico_dev_keyb);
-    FXTreeItem* devMice = tree->appendItem(top,"Mice and other pointing devices",ico_dev_mice,ico_dev_mice);
-    FXTreeItem* devMonitors = tree->appendItem(top,"Monitors",ico_dev_disp,ico_dev_disp);
-    FXTreeItem* devNetwork = tree->appendItem(top,"Network adapters",ico_dev_network,ico_dev_network);
-    FXTreeItem* devUnknown = tree->appendItem(top,"Other devices",ico_dev_unknown,ico_dev_unknown);
+    devVga = tree->appendItem(top,"Display adapters",ico_dev_disp,ico_dev_disp);
+    devCdRom = tree->appendItem(top,"DVD/CD-ROM drives",ico_dev_cdrom,ico_dev_cdrom);
+    devFloppyCon = tree->appendItem(top,"Floppy disk controllers",ico_dev_ide,ico_dev_ide);
+    devFloppyDrive = tree->appendItem(top,"Floppy disk drives",ico_dev_floppy,ico_dev_floppy);
+    devStorage = tree->appendItem(top,"IDE ATA/ATAPI controllers",ico_dev_ide,ico_dev_ide);
+    devFirewire = tree->appendItem(top,"IEEE 1394 Bus host controllers",ico_dev_firewire,ico_dev_firewire);
+    devKeyboards = tree->appendItem(top,"Keyboards",ico_dev_keyb,ico_dev_keyb);
+    devMice = tree->appendItem(top,"Mice and other pointing devices",ico_dev_mice,ico_dev_mice);
+    devMonitors = tree->appendItem(top,"Monitors",ico_dev_disp,ico_dev_disp);
+    devNetwork = tree->appendItem(top,"Network adapters",ico_dev_network,ico_dev_network);
+    devUnknown = tree->appendItem(top,"Other devices",ico_dev_unknown,ico_dev_unknown);
 
-    FXTreeItem* devSerial = tree->appendItem(top,"Ports (COM & LPT)",ico_dev_serial,ico_dev_serial);
-    FXTreeItem* devSound = tree->appendItem(top,"Sound, video and game controllers",ico_dev_sound,ico_dev_sound);
+    devSerial = tree->appendItem(top,"Ports (COM & LPT)",ico_dev_serial,ico_dev_serial);
+    devSound = tree->appendItem(top,"Sound, video and game controllers",ico_dev_sound,ico_dev_sound);
     //branch = tree->appendItem(top,"Storage volumes",ico_dev_disk,ico_dev_disk);
 
-    FXTreeItem* devSystem = tree->appendItem(top,"System devices",ico_dev_computer,ico_dev_computer);
-    FXTreeItem* devUsbCon = tree->appendItem(top,"Universal Serial Bus controllers",ico_dev_usb,ico_dev_usb);    
+    devSystem = tree->appendItem(top,"System devices",ico_dev_computer,ico_dev_computer);
+    devUsbCon = tree->appendItem(top,"Universal Serial Bus controllers",ico_dev_usb,ico_dev_usb);
+
+    tree->update();
+    tree->recalc();
 
     char* cdDrives = hardDrives; // we save space, why not?
     getCdDrives(cdDrives, sizeof(cdDrives));
@@ -672,6 +630,7 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
     //puts(monitors);
 
     tree->appendItem(devSystem, "Black Mesa Mark IV Hazardous Environment Suit", ico_dev_computer, ico_dev_computer);
+    char namebuf[1024];
 
     for (dev = pciaccess->devices; dev; dev = dev->next) {
       pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES | PCI_FILL_CLASS);
@@ -700,6 +659,8 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
         tree->appendItem(devSystem, namebuf, ico_dev_computer, ico_dev_computer);
 	}
     }
+
+    pci_cleanup(pciaccess);
 
     int inputDevices, inputDevice=0;
     XDeviceInfo *devList, *curDev;
@@ -746,6 +707,10 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
       tree->appendItem(devKeyboards, "PC/AT Enhanced PS/2 Keyboard (101/102-Key)", ico_dev_keyb, ico_dev_keyb);
     }
 
+    XFreeDeviceList(devList);
+
+
+
     tree->expandTree(devUnknown);
 
     // serial ports
@@ -762,6 +727,8 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 	}
     } else
 	 puts("not ok");
+
+    sp_free_port_list(portList);
 
     FXTreeItem* loopthruprev;
     FXTreeItem* loopthru = top->getFirst();
@@ -788,9 +755,117 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 
 
     }
+  return 1;
+    
+}
+
+//int main(int argc, char *argv[]) {
+DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico_devmgmt, NULL, DECOR_ALL, 0,0,520,380,  0,0,0,0,  0,0) {
+  topdock = new FXDockSite(this, FRAME_SUNKEN|DOCKSITE_NO_WRAP|LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
+
+  statusbarcont = new FXHorizontalFrame(this, JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_SIDE_BOTTOM, 0, 0, 0, 0, 0, 1, 2, 0, 2, 2);
+  statuslbl = new FXLabel(statusbarcont, " ", NULL, LABEL_NORMAL|FRAME_SUNKEN|LAYOUT_FILL_X|JUSTIFY_LEFT, 0,0,0,0, 1,1,1,1);
+  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0,131,0, 0,0,0,0);
+  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0, 83,0, 0,0,0,0);
+
+  mbshell = new FXToolBarShell(this,FRAME_SUNKEN);
 
 
+  menubar = new FXMenuBar(topdock,mbshell,LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|FRAME_RAISED,0,0,0,0,  2,6,2,2,  4,4);
+  new FXToolBarGrip(menubar,menubar,FXMenuBar::ID_TOOLBARGRIP,TOOLBARGRIP_SINGLE, 0,0,0,0, 0,2,0,0);
 
+  actionmenu = new FXMenuPane(this);
+  viewmenu = new FXMenuPane(this);
+
+  FXMenuCommand* menucmd; FXMenuRadio* menurad; FXMenuCheck* menuchk;
+
+  new FXMenuTitle(menubar, "&Action", NULL, actionmenu);
+  menucmd = new FXMenuCommand(actionmenu, "&Help"); menucmd->disable();
+  new FXMenuSeparator(actionmenu);
+  menucmd = new FXMenuCommand(actionmenu, "&Sc&an for hardware changes", NULL, this, ID_ADDDEV);
+
+  new FXMenuTitle(menubar, "&View", NULL, viewmenu);
+
+  //menucmd = new FXMenuCommand(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menucmd->disable();
+  menurad = new FXMenuRadio(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menurad->disable();
+  menurad->setCheck(TRUE);
+  menurad = new FXMenuRadio(viewmenu, "De&vices by connection\t\tDisplays devices by connection."); menurad->disable();
+  menurad = new FXMenuRadio(viewmenu, "Resources by t&ype\t\tDisplays resources by type."); menurad->disable();
+  menurad = new FXMenuRadio(viewmenu, "Resources by co&nnection\t\tDisplays resources by connection"); menurad->disable();
+
+  new FXMenuSeparator(viewmenu);
+
+  menuchk = new FXMenuCheck(viewmenu, "Sho&w hidden devices\t\tDisplays legacy devices and devices that are no longer installed."); menuchk->disable();
+
+  new FXMenuSeparator(viewmenu);
+  menucmd = new FXMenuCommand(viewmenu, "&Print\t\tPrints a report of the devices that are installed."); menucmd->disable();
+  new FXMenuSeparator(viewmenu);
+  menucmd = new FXMenuCommand(viewmenu, "C&ustomize...\t\tCustomizes the view"); menucmd->disable();
+
+  tbshell = new FXToolBarShell(this,FRAME_SUNKEN);
+
+  toolbar = new FXToolBar(topdock,tbshell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|FRAME_RAISED,0,0,0,0, 0,5,0,0,  1,1);
+  new FXToolBarGrip(toolbar, toolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+
+  ico_back = new FXGIFIcon(app, resico_mmc_back);
+  ico_forward = new FXGIFIcon(app, resico_mmc_forward);
+
+  ico_up = new FXGIFIcon(app, resico_mmc_up);
+  ico_contree = new FXGIFIcon(app, resico_mmc_contree);
+
+  ico_properties = new FXGIFIcon(app, resico_mmc_properties);
+
+  ico_help = new FXGIFIcon(app, resico_mmc_help);
+
+  ico_scan = new FXGIFIcon(app, resico_dmg_scan);
+
+
+  //FXIcon* ico_hist_up = new FXGIFIcon(app, resico_hist_up);
+  FXButton* btn;
+
+  btn = new FXButton(toolbar,"\tBack",ico_back,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+  btn->disable();
+  btn = new FXButton(toolbar,"\tForward",ico_forward,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+  btn->disable();
+  new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
+  btn = new FXButton(toolbar,"\tUp one level",ico_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+  btn->disable();
+  btn = new FXButton(toolbar,"\tShow/Hide Console Tree/Favorites",ico_contree,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+  new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
+
+  propbtn = new FXButton(toolbar,"\tProperties",ico_properties,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+  propsep = new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
+
+  btn = new FXButton(toolbar,"\tHelp",ico_help,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+
+  tb2shell = new FXToolBarShell(this,FRAME_SUNKEN);
+
+  toolbar2 = new FXToolBar(topdock,tb2shell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_RAISED,0,0,0,0, 0,0,0,0,  1,1);
+  new FXToolBarGrip(toolbar2, toolbar2, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+
+  btn = new FXButton(toolbar2,"\tScan for hardware changes",ico_scan,this,ID_ADDDEV,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+
+  new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,2); // semantics r cute  
+
+  treeframe = new FXPacker(this, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
+  tree = new FXTreeList(treeframe,this,ID_TREE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_SHOWS_BOXES|TREELIST_SHOWS_LINES|TREELIST_BROWSESELECT|TREELIST_ROOT_BOXES);
+
+  ico_dev_computer = new FXGIFIcon(app, resico_dev_computer, IMAGE_NEAREST); ico_dev_computer->create();
+  ico_dev_cdrom = new FXGIFIcon(app, resico_dev_cdrom, IMAGE_NEAREST); ico_dev_cdrom->create();
+  ico_dev_disk = new FXGIFIcon(app, resico_dev_disk, IMAGE_NEAREST); ico_dev_disk->create();
+  ico_dev_disp = new FXGIFIcon(app, resico_dev_disp, IMAGE_NEAREST); ico_dev_disp->create();
+  ico_dev_ide = new FXGIFIcon(app, resico_dev_ide, IMAGE_NEAREST); ico_dev_ide->create();
+  ico_dev_floppy = new FXGIFIcon(app, resico_dev_floppy, IMAGE_NEAREST); ico_dev_floppy->create();
+  ico_dev_mice = new FXGIFIcon(app, resico_dev_mice, IMAGE_NEAREST); ico_dev_mice->create();
+  ico_dev_keyb = new FXGIFIcon(app, resico_dev_keyb, IMAGE_NEAREST); ico_dev_keyb->create();
+  ico_dev_network = new FXGIFIcon(app, resico_dev_network, IMAGE_NEAREST); ico_dev_network->create();
+  ico_dev_unknown = new FXGIFIcon(app, resico_dev_unknown, IMAGE_NEAREST); ico_dev_unknown->create();
+  ico_dev_serial = new FXGIFIcon(app, resico_dev_serial, IMAGE_NEAREST); ico_dev_serial->create();
+  ico_dev_sound = new FXGIFIcon(app, resico_dev_sound, IMAGE_NEAREST); ico_dev_sound->create();
+  ico_dev_usb = new FXGIFIcon(app, resico_dev_usb, IMAGE_NEAREST); ico_dev_usb->create();
+  ico_dev_firewire = new FXGIFIcon(app, resico_dev_firewire, IMAGE_NEAREST); ico_dev_firewire->create();
+
+  addDevices(NULL, 0, NULL);
 
   //new FXButton(toolbar,"\tUp",ico_hist_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  0,0,0,0);
 
