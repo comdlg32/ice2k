@@ -1,0 +1,155 @@
+#include <fx.h>
+#include <ice2k/comctl32.h>
+#include "res/foxres.h"
+
+FXIcon*                  ico_control;
+
+class ControlPanel : public FXMainWindow {
+
+  // Macro for class hierarchy declarations
+  FXDECLARE(ControlPanel)
+
+private:
+  // gui
+  FXDockSite*              topdock;
+  
+  FXHorizontalFrame*       statusbarcont;
+  FXLabel*                 statuslbl;
+
+  FXToolBarShell*          mbshell;
+  FXMenuBar*               menubar;
+  
+  FXMenuPane*              actionmenu;
+  FXMenuPane*              viewmenu;
+
+  FXToolBarShell*          tbshell;
+  FXToolBarShell*          tb2shell;
+  
+  FXToolBar*               toolbar;
+  FXToolBar*               toolbar2;
+
+
+
+
+
+protected:
+  ControlPanel(){}
+
+public:
+
+  // Message handlers
+  long onItemChange(FXObject*,FXSelector,void*);
+  long onStatus(FXObject*,FXSelector,void*);
+  long onChangeText(FXObject*,FXSelector,void*);
+  long addDevices(FXObject*,FXSelector,void*);
+
+
+public:
+
+  // Messages for our class
+  enum {
+    ID_MAINWIN=FXMainWindow::ID_LAST,
+    ID_TREE,
+    ID_ADDDEV,
+  };
+
+public:
+
+  // CtrlAltDelWindow's constructor
+  ControlPanel(FXApp* a);
+
+  // Initialize
+  virtual void create();
+
+  virtual ~ControlPanel();
+};
+
+FXDEFMAP(ControlPanel) ControlPanelMap[] = {
+  /* FXMAPFUNC(SEL_UPDATE, 0, ControlPanel::onStatus),
+  FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_SETSTRINGVALUE, ControlPanel::onChangeText),
+  FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_ADDDEV, ControlPanel::addDevices),
+
+  FXMAPFUNC(SEL_CHANGED, ControlPanel::ID_TREE, ControlPanel::onItemChange), */
+};
+
+FXIMPLEMENT(ControlPanel,FXMainWindow,ControlPanelMap,ARRAYNUMBER(ControlPanelMap))
+
+void ControlPanel::create() {
+	FXMainWindow::create();
+}
+
+ControlPanel::~ControlPanel() {
+}
+
+ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_ALL, 0,0,520,380,  0,0,0,0,  0,0) {
+  topdock = new FXDockSite(this, FRAME_SUNKEN|DOCKSITE_NO_WRAP|LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
+
+  statusbarcont = new FXHorizontalFrame(this, JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_SIDE_BOTTOM, 0, 0, 0, 0, 0, 1, 2, 0, 2, 2);
+  statuslbl = new FXLabel(statusbarcont, " ", NULL, LABEL_NORMAL|FRAME_SUNKEN|LAYOUT_FILL_X|JUSTIFY_LEFT, 0,0,0,0, 1,1,1,1);
+  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0,131,0, 0,0,0,0);
+  new FXFrame(statusbarcont, FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0,0, 83,0, 0,0,0,0);
+
+  mbshell = new FXToolBarShell(this,FRAME_SUNKEN);
+
+
+  menubar = new FXMenuBar(topdock,mbshell,LAYOUT_DOCK_SAME|LAYOUT_FILL_X|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|FRAME_RAISED,0,0,0,0,  2,6,2,2,  4,4);
+  new FXToolBarGrip(menubar,menubar,FXMenuBar::ID_TOOLBARGRIP,TOOLBARGRIP_SINGLE, 0,0,0,0, 0,2,0,0);
+
+  actionmenu = new FXMenuPane(this);
+  viewmenu = new FXMenuPane(this);
+
+  FXMenuCommand* menucmd; FXMenuRadio* menurad; FXMenuCheck* menuchk;
+
+  new FXMenuTitle(menubar, "&File", NULL, actionmenu);
+  menucmd = new FXMenuCommand(actionmenu, "&Help"); menucmd->disable();
+  new FXMenuSeparator(actionmenu);
+  menucmd = new FXMenuCommand(actionmenu, "&Sc&an for hardware changes", NULL, this, ID_ADDDEV);
+
+  new FXMenuTitle(menubar, "&Edit", NULL, viewmenu);
+
+  //menucmd = new FXMenuCommand(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menucmd->disable();
+  menurad = new FXMenuRadio(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menurad->disable();
+  menurad->setCheck(TRUE);
+  menurad = new FXMenuRadio(viewmenu, "De&vices by connection\t\tDisplays devices by connection."); menurad->disable();
+  menurad = new FXMenuRadio(viewmenu, "Resources by t&ype\t\tDisplays resources by type."); menurad->disable();
+  menurad = new FXMenuRadio(viewmenu, "Resources by co&nnection\t\tDisplays resources by connection"); menurad->disable();
+
+  new FXMenuTitle(menubar, "&View", NULL, viewmenu);
+  new FXMenuTitle(menubar, "F&avorites", NULL, viewmenu);
+  new FXMenuTitle(menubar, "&Tools", NULL, viewmenu);
+  new FXMenuTitle(menubar, "&Help", NULL, viewmenu);
+
+
+  new FXMenuSeparator(viewmenu);
+
+  menuchk = new FXMenuCheck(viewmenu, "Sho&w hidden devices\t\tDisplays legacy devices and devices that are no longer installed."); menuchk->disable();
+
+  new FXMenuSeparator(viewmenu);
+  menucmd = new FXMenuCommand(viewmenu, "&Print\t\tPrints a report of the devices that are installed."); menucmd->disable();
+  new FXMenuSeparator(viewmenu);
+  menucmd = new FXMenuCommand(viewmenu, "C&ustomize...\t\tCustomizes the view"); menucmd->disable();
+
+
+  tbshell = new FXToolBarShell(this,FRAME_SUNKEN);
+
+  toolbar = new FXToolBar(topdock,tbshell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|FRAME_RAISED,0,0,0,0, 0,5,0,0,  1,1);
+  new FXToolBarGrip(toolbar, toolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+
+}
+
+int main(int argc, char *argv[]) {
+
+	FXApp application("Control", "Ice2KProj");
+	application.init(argc, argv);
+
+	FXApp* app = &application;
+
+
+	ico_control = new FXGIFIcon(app, resico_control, IMAGE_NEAREST);
+
+	FXMainWindow* controlwin = new ControlPanel(app);
+
+	application.create();
+	controlwin->show(PLACEMENT_OWNER);
+	return application.run();
+}
