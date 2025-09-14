@@ -8,7 +8,7 @@ LDFLAGS = `fox-config --libs` -lctl32
 
 PREFIX=/usr/local
 
-ICONS = res/*/*.gif res/*.gif
+ICONS = res/*.gif
 SOURCES = control.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = control

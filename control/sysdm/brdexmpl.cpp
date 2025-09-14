@@ -629,6 +629,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   FXPacker* tablecont = new FXPacker(userframe,LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0,  0,1,0,0, 0,0);  
   FXPacker* tablecont2 = new FXPacker(tablecont,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_SUNKEN,0,0,0,0,  0,0,0,0, 0,0);  
   FXTable* table=new FXTable(tablecont2,NULL,NULL,TABLE_READONLY|LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0, 2,2,2,2);
+  table->setSelMode(SELECTTABLE_ROWS);
 
   FXFont* deffont = getApp()->getNormalFont();
   

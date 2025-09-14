@@ -1,0 +1,3 @@
+XLock.mode: maze3d
+XIdle.delay: 120
+XIdle.program: /usr/local/bin/xlock -lockdelay 5
