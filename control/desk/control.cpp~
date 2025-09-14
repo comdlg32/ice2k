@@ -483,6 +483,8 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 	fclose(fptr);
 
 	char xrdbCmd[strlen(xrdbPath)+13];
+
+	// Let's just say I'm not implementing xrdb myself :joy: :rofl:
 	snprintf(xrdbCmd, sizeof(xrdbCmd), "xrdb -merge %s", xrdbPath);
 	system(xrdbCmd);
 

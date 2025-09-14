@@ -473,6 +473,7 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 
 	fprintf(fptr, "XLock.mode: %s\n", scrvalue);
 	fprintf(fptr, "XIdle.delay: %d\n", scrdelay * 60);
+	fprintf(fptr, "XIdle.timeout: %d\n", scrdelay * 60);
 
 	if (scrpassword) {
 		fprintf(fptr, "XIdle.program: /usr/local/bin/xlock -lockdelay 5\n");
