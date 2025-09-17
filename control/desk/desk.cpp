@@ -16,7 +16,14 @@
 #include <errno.h>
 #include <limits.h>
 
+#include <dirent.h>
+
+#include <FXPNGIcon.h>
+
 FXIcon*                  ico_control;
+FXIcon*                  prvimage;
+
+FXColorWell* colorwell;
 
 class DesktopProperties : public FXMainWindow {
 
@@ -45,6 +52,9 @@ private:
   FXSpinner*               waitspin;
   FXCheckButton*           passchk;
 
+  FXTreeList* tree;
+
+
 protected:
   DesktopProperties(){}
 
@@ -67,6 +77,7 @@ public:
   long onCmdApply(FXObject*,FXSelector,void*);
 
   long onChange(FXObject*,FXSelector,void*);
+  long onImageChange(FXObject*,FXSelector,void*);
 
 public:
 
@@ -84,7 +95,9 @@ public:
     ID_DLG_CANCEL,
     ID_DLG_APPLY,
 
-    ID_CHANGE
+    ID_CHANGE,
+    ID_IMAGECHANGE,
+    ID_COLORCHANGE
   };
 
 public:
@@ -117,6 +130,9 @@ FXDEFMAP(DesktopProperties) DesktopPropertiesMap[] = {
 
   FXMAPFUNC(SEL_CLOSE, 0, DesktopProperties::onClose),
   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_CHANGE, DesktopProperties::onChange),
+  
+  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_IMAGECHANGE, DesktopProperties::onImageChange),
+  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onChange),
 };
 
 FXIMPLEMENT(DesktopProperties,FXMainWindow,DesktopPropertiesMap,ARRAYNUMBER(DesktopPropertiesMap))
@@ -133,13 +149,46 @@ typedef struct {
 	size_t size;
 } iniString;
 
-int inihandle(void* udata, const char* section, const char* name, const char* value) {
-	iniString* inistr = (iniString*)udata;
 
-	if (!strcmp(name, "DesktopBackgroundImage")) {
-		//printf("Parsed: [%s] %s = %s\n", section, name, value);
-		strncpy(inistr->buffer, value, inistr->size-1);
-		inistr->buffer[inistr->size-1] = '\0';
+#define _IMGMODE_TILED   0
+#define _IMGMODE_CENTER  1
+#define _IMGMODE_STRETCH 2
+#define _IMGMODE_FILL    3
+
+
+typedef struct {
+	int mode;
+	const char* color;
+	const char* image;
+} wallConfiguration;
+
+int inihandle(void* udata, const char* section, const char* name, const char* value) {
+	wallConfiguration* wallcfg = (wallConfiguration*)udata;
+
+	if (!strcmp(section, "Wallpaper")) {
+		if (!strcmp(name, "Mode")) {
+			if (!strcasecmp(value, "Tiled")) {
+				wallcfg->mode = _IMGMODE_TILED;
+			} else if (!strcasecmp(value, "Center")) {
+				wallcfg->mode = _IMGMODE_CENTER;
+			} else if (!strcasecmp(value, "Stretch")) {
+				wallcfg->mode = _IMGMODE_STRETCH;
+			} else {
+				wallcfg->mode = _IMGMODE_FILL;
+			}
+		} else if (!strcmp(name, "Color")) {
+			if (value[0] == '#' && strlen(value) == 7) {
+				wallcfg->color = strdup(value);
+			} else {
+				return 0;
+			}
+		} else if (!strcmp(name, "Image")) {
+			wallcfg->image = strdup(value);
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
 	}
 
 	return 1;
@@ -292,10 +341,157 @@ long DesktopProperties::onChange(FXObject* obj,FXSelector sel,void* ptr) {
 }
 
 
+const char* imageExtensions[] = {
+	".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff",
+	".bmp", ".tga", ".pbm", ".ppm", ".pgm"
+};
+
+const int imageExtensionsNum = sizeof(imageExtensions) / sizeof(imageExtensions[0]);
+
+enum imageLoaders {
+	_I2K_PNG,
+	_I2K_JPG,
+	_I2K_BMP,
+	_I2K_GIF,
+	_I2K_TIF,
+	_I2K_TGA,
+	_I2K_PPM
+};
+
+FXImage* loadImage(FXApp* app, const char* path) {
+	FXIconSource* iconsrc = new FXIconSource(app);
+
+	if (path) {
+		if (access(path, F_OK) != 0) {
+			return NULL;
+		}
+	} else {
+		return NULL;
+	}
+
+	if (!iconsrc) {
+		return NULL;
+	}
+
+	FXImage* img = iconsrc->loadImageFile(path);
+
+	if (img) {
+		return img;
+	}
+	
+	return NULL;
+		
+}
+
+int isImageFormat(const char* ext) {
+	if (!ext) return 0;
+
+	for (int i = 0; i < imageExtensionsNum; i++) {
+		if (strcasecmp(ext, imageExtensions[i]) == 0) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+FXIcon* monitorsource;
+
+
+
 FXLabel* monitor;
 FXMainWindow* controlwin;
 I2KListBox* scrsel;
 FXButton* previewbtn;
+FXLabel* prvlbl;
+
+FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img) {
+	//img = loadImage(app, wallcfg.image);
+
+	//if (!img)
+	//	return NULL;
+
+	//FXIcon* output = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	output->create();
+	//puts("b");
+	FXDCWindow prvdc(output);
+
+	if (img != NULL) {
+		img->scale(152, 112, 1);
+		img->create();
+	}
+
+	prvdc.clipChildren(FALSE);
+
+	prvdc.setForeground(app->getBaseColor());
+	prvdc.fillRectangle(0, 0, 184, 170);
+	prvdc.drawIcon(monitorsource, 0, 0);
+
+	prvdc.setForeground(FXRGB(128,0,0));
+	prvdc.fillRectangle(16, 17, 152, 112);
+
+	prvdc.clipChildren(TRUE);
+
+	if (img != NULL) {
+		prvdc.drawImage(img, 16, 17);
+	}
+
+
+	output->restore();
+	output->render();
+
+
+
+	//img->detach();
+	//img->release();
+	//delete img;
+
+	return output;
+}
+
+long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
+	//puts("test");
+
+	char* udata = (char*)tree->getItemData(tree->getCurrentItem());
+
+	onChange(obj, sel, ptr);
+
+	prvimage->detach();
+	prvimage->release();
+
+	FXImage* img;
+
+	if (udata)
+		img = loadImage(getApp(), udata);
+	//else
+	//	img = loadImage(getApp(), NULL);
+
+	//printf("%u\n", tree->getCurrentItem());
+	prvimage->detach();
+	prvimage->release();
+
+
+	if (udata)
+		genMonitorPreview(getApp(), prvimage, img);
+	else
+		genMonitorPreview(getApp(), prvimage, NULL);
+
+
+	if (udata) {
+		img->detach();
+		img->release();
+		delete img;
+	}
+
+
+	prvlbl->setIcon(NULL);
+	prvlbl->setIcon(prvimage);
+
+
+	
+	return 1;
+}
+
 
 long changeScr(const char* scr) {
 	if (scrsel->getCurrentItem()) {
@@ -446,6 +642,57 @@ const char* getHomeDir() {
 }
 
 
+int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=NULL) {
+	char cfgpath[512] = "";
+	snprintf(cfgpath, sizeof(cfgpath), "%s/%s", getHomeDir(), ".icewm/cfg");
+
+	unsigned int cfgpathlen = strlen(cfgpath);
+
+	if (makeDirectory(cfgpath)) {
+		strncat(cfgpath, "/backmgr.ini", sizeof(cfgpath)-cfgpathlen-1);
+		cfgpath[sizeof(cfgpath)-1] = '\0';
+	}
+
+	FILE* fp = fopen(cfgpath, "w");
+	
+	fputs("[Wallpaper]\n", fp);
+
+	if (imgmode == _IMGMODE_TILED) {
+		fputs("Mode=Tiled\n", fp);
+	} else if (imgmode == _IMGMODE_CENTER) {
+		fputs("Mode=Center\n", fp);
+	} else if (imgmode == _IMGMODE_STRETCH) {
+		fputs("Mode=Stretch\n", fp);
+	} else {
+		fputs("Mode=Fill\n", fp);
+	}
+
+	char hex[8];
+
+	//color = ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
+	
+	unsigned char r = FXREDVAL(color);
+	unsigned char g = FXGREENVAL(color);
+	unsigned char b = FXBLUEVAL(color);
+
+	snprintf(hex, sizeof(hex), "#%02X%02X%02X", r, g, b);
+
+	fprintf(fp, "Color=%s\n", hex);
+
+	char* img = (char*)image;
+	if (img)
+	//	fprintf(fp, "Image=\n")else
+		fprintf(fp, "Image=%s\n", image);
+
+	//fprintf(stdout, 
+	
+	fclose(fp);
+
+	return 1;
+}
+
+I2KListBox* picdisplay;
+
 long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 	if (!valuesChanged)
 		return 1;
@@ -491,39 +738,20 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 
 	system("killall -9 xidle && xidle &");
 
+	void* walldat =  tree->getCurrentItem()->getData();
+	char* wallpath = (char*)walldat;
+
+	intptr_t wallmode = (intptr_t)picdisplay->getItemData(picdisplay->getCurrentItem());
+
+	writeWallpaperConfig(wallpath, wallmode, colorwell->getRGBA());
+
 	valuesChanged = 0;
+
+	system("backmgr &");
 
 	return 1;
 }
 
-
-#define _IMGMODE_TILED   0
-#define _IMGMODE_CENTER  1
-#define _IMGMODE_STRETCH 2
-#define _IMGMODE_FILL    3
-int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=NULL) {
-	fputs("[Wallpaper]\n", stdout);
-
-	if (imgmode == _IMGMODE_TILED) {
-		fputs("Mode=Tiled\n", stdout);
-	} else if (imgmode == _IMGMODE_CENTER) {
-		fputs("Mode=Center\n", stdout);
-	} else if (imgmode == _IMGMODE_STRETCH) {
-		fputs("Mode=Stretch\n", stdout);
-	} else {
-		fputs("Mode=Fill\n", stdout);
-	}
-
-	char hex[9];
-
-	color = ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
-	snprintf(hex, sizeof(hex)-1, "#%06X", color & 0xFFFFFF);
-
-	fprintf(stdout, "Color=%s\n", hex);
-	fprintf(stdout, "Image=%s\n", image);
-
-	//fprintf(stdout, 
-}
 
 long DesktopProperties::onCmdCancel(FXObject* obj,FXSelector sel,void* ptr) {
 	if (pid >= 0) {
@@ -556,12 +784,70 @@ long DesktopProperties::onTabChange(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 
-DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
 
-  writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
+char** getWallpapers(char* path, int* count) {
+	// https://stackoverflow.com/a/4204758
+
+	DIR* walldir = opendir(path);
+
+	if (!walldir) {
+		perror("opendir");
+		return NULL;
+	}
+
+	char **files = NULL;
+	struct dirent *dir;
+	int size = 0;
+
+	char fullpath[PATH_MAX];
+	struct stat pstat;
+
+	char* ext;
+
+	while ((dir = readdir(walldir)) != NULL) {
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, dir->d_name);
+		stat(fullpath, &pstat);
+
+		if (S_ISDIR(pstat.st_mode))
+			continue;
+
+		ext = strrchr(dir->d_name, '.');
+
+		if (!ext || !isImageFormat(ext))
+			continue;
+
+		files = (char**)realloc(files, (size + 1) * sizeof(char*));
+		files[size] = strdup(fullpath);
+		size++;
+	}
+
+	closedir(walldir);
+	*count = size;
+
+	return files;
+}
+
+FXColor hex2FXColor(const char* hex) {
+	if (hex[0] == '#') hex++;
+
+	char rs[3] = { hex[0], hex[1], '\0' };
+	char gs[3] = { hex[2], hex[3], '\0' };
+	char bs[3] = { hex[4], hex[5], '\0' };
+
+	int r = strtol(rs, NULL, 16);
+	int g = strtol(gs, NULL, 16);
+	int b = strtol(bs, NULL, 16);
+
+	return FXRGB(r,g,b);
+}
+
+
+
+DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
+//writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
   // create monitor images
-  FXIcon* monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
+  monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
   FXIcon* previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
 
   FXIcon* monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
@@ -582,6 +868,16 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   monitorimage->restore();
   monitorimage->render();
 
+  prvimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+  /* prvimage->create();
+  FXDCWindow prvdc(prvimage);
+
+  prvdc.setForeground(app->getBaseColor());
+  prvdc.fillRectangle(0, 0, 184, 170);
+  prvdc.drawIcon(monitorsource, 0, 0);
+
+  prvdc.setForeground(FXRGB(128,0,0));
+  prvdc.fillRectangle(16, 17, 152, 112); */
 
 
 
@@ -604,12 +900,12 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   FXIcon* ico_nobg = new FXGIFIcon(app, resico_nobg);
   FXIcon* ico_bmp = new FXGIFIcon(app, resico_bmp);
 
-  char buf[256] = {0};
+  //char buf[256] = {0};
 
-  iniString config;
+  /* iniString config;
 
   config.buffer = buf;
-  config.size = sizeof(buf);
+  config.size = sizeof(buf); */
 
   // https://stackoverflow.com/questions/2910377/get-home-directory-in-linux
 
@@ -619,16 +915,29 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
     homedir = getpwuid(getuid())->pw_dir;
   } */
 
+
+
+
   const char* homedir = getHomeDir();
 
-  char prefname[256] = {0};  // if your username is 230 characters, wtf are you doing with your life?
+  char cfgpath[256] = {0};  // if your username is 230 characters, wtf are you doing?
 
-  snprintf(prefname, sizeof(prefname), "%s/.icewm/preferences", homedir);
+  snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
+
+  wallConfiguration wallcfg;
+  wallcfg.image = NULL;
+
+  ini_parse(cfgpath, inihandle, &wallcfg);
+
+  //puts("a");
 
 
-  int iniresult = ini_parse(prefname, inihandle, &config);
+  char fehcmd[1024] = "";
 
-  int buflen = strlen(config.buffer);
+
+  FXColor deskcol = hex2FXColor(wallcfg.color);
+
+  /* int buflen = strlen(config.buffer);
   config.buffer[buflen-1] = '\0';
   buflen--;
 
@@ -645,6 +954,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   }
   //puts(config.buffer);
 
+  char* ogpath = strdup(config.buffer);
 
   char buf2[sizeof(buf)] = {0};
   memcpy(buf2, buf, sizeof(buf2));
@@ -652,14 +962,16 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   char *basename = strrchr(buf2, '/');
 
   if (basename == NULL) {
-    basename = config.buffer;
+    basename = strdup(config.buffer);
   }
 
   if (basename[0] == '/') {
     for (i = 1; i < buflen; i++) {
       basename[i-1] = basename[i];
     }
-  }
+  } */
+
+  
 
   //printf("%s\n",basename);
 
@@ -673,7 +985,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
   new FXTabItem(tabbook,"Background",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
   FXVerticalFrame* bgframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-  new FXLabel(bgframe, "", monitorimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,30);
+  prvlbl = new FXLabel(bgframe, "", prvimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,30);
 
   new FXLabel(bgframe, "&Select a background picture or HTML document as Wallpaper:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
 
@@ -683,28 +995,102 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   //bglist->setBackColor(app->getBackColor());
  
   FXPacker* treeframe = new FXPacker(setbgframe, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
-  FXTreeList* tree = new FXTreeList(treeframe,NULL,0,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_BROWSESELECT);
+  tree = new FXTreeList(treeframe,this,ID_IMAGECHANGE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_BROWSESELECT);
 
-  tree->appendItem(0,"(None)",ico_nobg,ico_nobg);
-  tree->appendItem(0,basename,ico_bmp,ico_bmp);
+  //FXTreeItem* ogselect = tree->appendItem(0,basename,ico_bmp,ico_bmp,ogpath);
+
+  int count = 0;
+
+
+  char** wallpapers = getWallpapers("/home/tf/walls", &count);
+  char* wallname;
+  char* wallnamecur = "";
+  FXTreeItem* ogselect = NULL;
+
+  FXImage* img;
+
+  if (wallcfg.image != NULL) {
+    char* imgpath = strdup(wallcfg.image);
+
+    wallnamecur = strrchr(imgpath, '/');
+    wallnamecur++;
+
+    img = loadImage(app, wallcfg.image);
+    //createPreviewImage
+    //prvimage = genMonitorPreview(app, img);
+    genMonitorPreview(app, prvimage, img);
+    prvimage->create();
+
+    ogselect = tree->appendItem(0, wallnamecur, ico_bmp, ico_bmp, imgpath);
+  }
+
+
+  for (int i = 0; i < count; i++) {
+    wallname = strrchr(wallpapers[i], '/');
+    wallname++;
+
+    if (strcmp(wallname, wallnamecur) == 0)
+      continue;
+
+    tree->appendItem(0, wallname, ico_bmp, ico_bmp, strdup(wallpapers[i]));
+    free(wallpapers[i]);
+  }
+
+
+  //new FXImageFrame(bgframe, prvimage, FRAME_NONE);
+
+
+  free(wallpapers);
+
+  //puts(wallname);
+
+
+  tree->setSortFunc(FXTreeList::ascendingCase);
+  tree->sortItems();
+
+
+  if (ogselect) {
+    tree->selectItem(ogselect);
+
+  }
+
+  FXTreeItem* noneitem = tree->prependItem(0,"(None)",ico_nobg,ico_nobg,NULL);
+
+  if (!ogselect) {
+    tree->selectItem(noneitem);
+  }
 
 
 
   FXVerticalFrame* setbgcontrols = new FXVerticalFrame(setbgframe,LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,2,0, 0,0); 
   FXButton* btn;
   new FXButton(setbgcontrols, "&Browse...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,13); // i could use a fxframe, but semantics r cute
+  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9); // i could use a fxframe, but semantics r cute
   new FXLabel(setbgcontrols, "Picture &Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
-  I2KListBox* picdisplay = new I2KListBox(setbgcontrols,NULL,NULL,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
-  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,13);
-  btn = new FXButton(setbgcontrols, "&Pattern...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  btn->disable();
+  picdisplay = new I2KListBox(setbgcontrols,this,ID_CHANGE,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9);
+  new FXLabel(setbgcontrols, "Color:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
+  
+  //btn = new FXButton(setbgcontrols, "&Pattern...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
+  //btn->disable();
 
-  picdisplay->insertItem(0, "Center");
-  picdisplay->insertItem(1, "Tile");
-  picdisplay->insertItem(2, "Stretch");
+
+  colorwell = new FXColorWell(setbgcontrols,deskcol,this,ID_COLORCHANGE,COLORWELL_OPAQUEONLY|LAYOUT_FIX_WIDTH|LAYOUT_FILL_Y, 0,0,75,0, 0,0,0,0);
+
+  //colorwell->setRGBA(FXRGB(59, 110, 165));
+
+
+  picdisplay->insertItem(0, "Center", NULL, (void*)_IMGMODE_CENTER);
+  picdisplay->insertItem(1, "Tile", NULL, (void*)_IMGMODE_TILED);
+  picdisplay->insertItem(2, "Stretch", NULL, (void*)_IMGMODE_STRETCH);
+  picdisplay->insertItem(3, "Fill", NULL, (void*)_IMGMODE_FILL);
 
   picdisplay->setNumVisible(picdisplay->getNumItems());
+
+  if (wallcfg.mode == _IMGMODE_CENTER) picdisplay->setCurrentItem(0);
+  if (wallcfg.mode == _IMGMODE_TILED) picdisplay->setCurrentItem(1);
+  if (wallcfg.mode == _IMGMODE_STRETCH) picdisplay->setCurrentItem(2);
+  if (wallcfg.mode == _IMGMODE_FILL) picdisplay->setCurrentItem(3);
 
 
   // !! SCREENSAVER TAB
@@ -757,7 +1143,6 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
         }
 
 	  //puts(token);
-
 	  token = strtok(NULL, " ");
       }
     }

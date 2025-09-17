@@ -516,11 +516,9 @@ int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=
 
 	char hex[9];
 
-	color = ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
-	snprintf(hex, sizeof(hex)-1, "#%06X", color & 0xFFFFFF);
+	snprintf(hex, sizeof(hex)-1, "#%06X", FXRGB(128,128,128));
 
-	fprintf(stdout, "Color=%s\n", hex);
-	fprintf(stdout, "Image=%s\n", image);
+	puts(hex);
 
 	//fprintf(stdout, 
 }
@@ -557,8 +555,6 @@ long DesktopProperties::onTabChange(FXObject* obj,FXSelector sel, void* ptr) {
 
 
 DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
-
-  writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
   // create monitor images
   FXIcon* monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();

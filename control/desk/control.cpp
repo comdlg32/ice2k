@@ -476,9 +476,9 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 	fprintf(fptr, "XIdle.timeout: %d\n", scrdelay * 60);
 
 	if (scrpassword) {
-		fprintf(fptr, "XIdle.program: /usr/local/bin/xlock -lockdelay 5\n");
+		fputs("XIdle.program: /usr/local/bin/xlock -lockdelay 5\n", fptr);
 	} else {
-		fprintf(fptr, "XIdle.program: /usr/local/bin/xlock -nolock\n");
+		fputs("XIdle.program: /usr/local/bin/xlock -nolock\n",      fptr);
 	}
 
 	fclose(fptr);
@@ -494,6 +494,35 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 	valuesChanged = 0;
 
 	return 1;
+}
+
+
+#define _IMGMODE_TILED   0
+#define _IMGMODE_CENTER  1
+#define _IMGMODE_STRETCH 2
+#define _IMGMODE_FILL    3
+int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=NULL) {
+	fputs("[Wallpaper]\n", stdout);
+
+	if (imgmode == _IMGMODE_TILED) {
+		fputs("Mode=Tiled\n", stdout);
+	} else if (imgmode == _IMGMODE_CENTER) {
+		fputs("Mode=Center\n", stdout);
+	} else if (imgmode == _IMGMODE_STRETCH) {
+		fputs("Mode=Stretch\n", stdout);
+	} else {
+		fputs("Mode=Fill\n", stdout);
+	}
+
+	char hex[9];
+
+	color = ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
+	snprintf(hex, sizeof(hex)-1, "#%06X", color & 0xFFFFFF);
+
+	fprintf(stdout, "Color=%s\n", hex);
+	fprintf(stdout, "Image=%s\n", image);
+
+	//fprintf(stdout, 
 }
 
 long DesktopProperties::onCmdCancel(FXObject* obj,FXSelector sel,void* ptr) {
@@ -528,6 +557,8 @@ long DesktopProperties::onTabChange(FXObject* obj,FXSelector sel, void* ptr) {
 
 
 DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
+
+  writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
   // create monitor images
   FXIcon* monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
@@ -590,7 +621,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
   const char* homedir = getHomeDir();
 
-  char prefname[256] = {0};  // if your username is 230 characters, wtf are you doing with your life?
+  char prefname[256] = {0};  // if your username is 230 characters, wtf are you doing?
 
   snprintf(prefname, sizeof(prefname), "%s/.icewm/preferences", homedir);
 
@@ -621,7 +652,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   char *basename = strrchr(buf2, '/');
 
   if (basename == NULL) {
-    basename = config.buffer;
+    basename = strdup(config.buffer);
   }
 
   if (basename[0] == '/') {
@@ -629,6 +660,8 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
       basename[i-1] = basename[i];
     }
   }
+
+  
 
   //printf("%s\n",basename);
 
@@ -655,7 +688,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   FXTreeList* tree = new FXTreeList(treeframe,NULL,0,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_BROWSESELECT);
 
   tree->appendItem(0,"(None)",ico_nobg,ico_nobg);
-  tree->appendItem(0,basename,ico_bmp,ico_bmp);
+  tree->appendItem(0,basename,ico_bmp,ico_bmp,config.buffer);
 
 
 

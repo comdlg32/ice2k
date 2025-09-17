@@ -9,9 +9,9 @@ LDFLAGS = `fox-config --libs` -lctl32 -linih-i2k
 PREFIX=/usr/local
 
 ICONS = res/*.gif
-SOURCES = control.cpp
+SOURCES = desk.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = control
+EXECUTABLE = deskcpl
 
 CPPFLAGS += `fox-config --cflags`
 
