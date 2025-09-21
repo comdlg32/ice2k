@@ -7,6 +7,7 @@
 #include <pwd.h>
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
+#include <X11/extensions/Xcomposite.h>
 
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -20,10 +21,12 @@
 
 #include <FXPNGIcon.h>
 
+
 FXIcon*                  ico_control;
 FXIcon*                  prvimage;
 
-FXColorWell* colorwell;
+FXTreeItem* noneitem;
+
 
 class DesktopProperties : public FXMainWindow {
 
@@ -78,7 +81,12 @@ public:
 
   long onChange(FXObject*,FXSelector,void*);
   long onImageChange(FXObject*,FXSelector,void*);
+  long onColorChange(FXObject*,FXSelector,void*);
 
+  long onColorChangeCmd(FXObject*,FXSelector,void*);
+  
+  long onCloseCmd(FXObject*,FXSelector,void*);
+  
 public:
 
   // Messages for our class
@@ -128,14 +136,22 @@ FXDEFMAP(DesktopProperties) DesktopPropertiesMap[] = {
   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_APPLY, DesktopProperties::onCmdApply),
 
 
-  FXMAPFUNC(SEL_CLOSE, 0, DesktopProperties::onClose),
   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_CHANGE, DesktopProperties::onChange),
   
   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_IMAGECHANGE, DesktopProperties::onImageChange),
-  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onChange),
+  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChange),
+  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChangeCmd),
+
+
+  FXMAPFUNC(SEL_CLOSE, 0, DesktopProperties::onClose),
+
 };
 
 FXIMPLEMENT(DesktopProperties,FXMainWindow,DesktopPropertiesMap,ARRAYNUMBER(DesktopPropertiesMap))
+
+
+FXColorWell* colorwell;
+
 
 void DesktopProperties::create() {
 	FXMainWindow::create();
@@ -143,6 +159,9 @@ void DesktopProperties::create() {
 
 DesktopProperties::~DesktopProperties() {
 }
+
+
+FXColor deskcol;
 
 typedef struct {
 	char* buffer;
@@ -321,6 +340,8 @@ int previewScr(int x, int y, int w, int h, FXWindow* window, const char* scr) {
 }
 
 long DesktopProperties::onClose(FXObject* obj,FXSelector sel,void* ptr) {
+	puts("closed");
+
 	if (pid >= 0) {
 		kill(pid, SIGTERM);
 		pid = -1;
@@ -337,9 +358,124 @@ long DesktopProperties::onChange(FXObject* obj,FXSelector sel,void* ptr) {
 	//puts("test");
 	applybtn->enable();
 	valuesChanged = 1;
+
 	return 0;
 }
 
+long DesktopProperties::onColorChange(FXObject* obj,FXSelector sel,void* ptr) {
+	deskcol = (FXColor)(intptr_t)ptr;
+
+	return onChange(obj, sel, ptr);
+}
+
+FXColor lastColor;
+
+
+FXIcon* monitorsource;
+FXIcon* previewsource;
+FXIcon* monitorimage;
+FXIcon* monitornopimage;
+
+
+FXLabel* scrmonitor;
+FXMainWindow* controlwin;
+I2KListBox* scrsel;
+FXButton* previewbtn;
+FXLabel* prvlbl;
+
+FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img2, FXColor col) {
+	//img = loadImage(app, wallcfg.image);
+
+	//if (!img)
+	//	return NULL;
+
+	//FXIcon* output = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	FXIcon* img = (FXIcon*)img2;
+
+
+
+	output->create();
+	//puts("b");
+	FXDCWindow prvdc(output);
+
+	if (img != NULL) {
+		img->scale(152, 112, 1);
+		img->create();
+	}
+
+	prvdc.clipChildren(FALSE);
+
+	prvdc.setForeground(app->getBaseColor());
+	prvdc.fillRectangle(0, 0, 184, 170);
+	prvdc.drawIcon(monitorsource, 0, 0);
+
+	prvdc.setForeground(col);
+	prvdc.fillRectangle(16, 17, 152, 112);
+
+	prvdc.clipChildren(TRUE);
+
+	if (img != NULL) {
+		if (img->isMemberOf(&FXIcon::metaClass))
+			prvdc.drawIcon(img, 16, 17);
+		else
+			prvdc.drawImage(img, 16, 17);
+	}
+
+
+	output->restore();
+	output->render();
+
+
+
+	//img->detach();
+	//img->release();
+	//delete img;
+
+	return output;
+}
+
+
+long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr) {
+	//deskcol = (FXColor)(intptr_t)ptr;
+	char* udata = (char*)tree->getItemData(tree->getCurrentItem());
+	//puts(udata);
+
+	FXColor newColor = (FXColor)(intptr_t)ptr;
+
+	//puts("a");
+
+	FXColorWell* well = (FXColorWell*)obj;
+	if (!lastColor)
+		lastColor = newColor;
+
+	if (newColor != lastColor) {
+		deskcol = newColor;
+
+
+		printf("%d, %d, %d\n", FXREDVAL(newColor), FXGREENVAL(newColor), FXBLUEVAL(newColor));
+		lastColor = newColor;
+
+		onChange(obj, sel, ptr);
+
+		genMonitorPreview(getApp(), monitorimage, previewsource, deskcol);
+		genMonitorPreview(getApp(), monitornopimage, NULL, deskcol);
+	
+		if (udata == NULL) {
+			prvimage->detach();
+			prvimage->release();
+
+			genMonitorPreview(getApp(), prvimage, NULL, deskcol);
+
+			prvlbl->setIcon(NULL);
+			prvlbl->setIcon(prvimage);
+		}
+		return 1;
+	}
+
+
+
+	return 0;
+}
 
 const char* imageExtensions[] = {
 	".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff",
@@ -395,59 +531,10 @@ int isImageFormat(const char* ext) {
 	return 0;
 }
 
-FXIcon* monitorsource;
 
 
 
-FXLabel* monitor;
-FXMainWindow* controlwin;
-I2KListBox* scrsel;
-FXButton* previewbtn;
-FXLabel* prvlbl;
 
-FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img) {
-	//img = loadImage(app, wallcfg.image);
-
-	//if (!img)
-	//	return NULL;
-
-	//FXIcon* output = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-	output->create();
-	//puts("b");
-	FXDCWindow prvdc(output);
-
-	if (img != NULL) {
-		img->scale(152, 112, 1);
-		img->create();
-	}
-
-	prvdc.clipChildren(FALSE);
-
-	prvdc.setForeground(app->getBaseColor());
-	prvdc.fillRectangle(0, 0, 184, 170);
-	prvdc.drawIcon(monitorsource, 0, 0);
-
-	prvdc.setForeground(FXRGB(128,0,0));
-	prvdc.fillRectangle(16, 17, 152, 112);
-
-	prvdc.clipChildren(TRUE);
-
-	if (img != NULL) {
-		prvdc.drawImage(img, 16, 17);
-	}
-
-
-	output->restore();
-	output->render();
-
-
-
-	//img->detach();
-	//img->release();
-	//delete img;
-
-	return output;
-}
 
 long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 	//puts("test");
@@ -472,9 +559,9 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 
 	if (udata)
-		genMonitorPreview(getApp(), prvimage, img);
+		genMonitorPreview(getApp(), prvimage, img, deskcol);
 	else
-		genMonitorPreview(getApp(), prvimage, NULL);
+		genMonitorPreview(getApp(), prvimage, NULL, deskcol);
 
 
 	if (udata) {
@@ -486,8 +573,6 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 	prvlbl->setIcon(NULL);
 	prvlbl->setIcon(prvimage);
-
-
 	
 	return 1;
 }
@@ -498,7 +583,7 @@ long changeScr(const char* scr) {
 		int absx = 0;
 		int absy = 0;
 
-		monitor->translateCoordinatesTo(absx, absy, controlwin, 0, 0);
+		scrmonitor->translateCoordinatesTo(absx, absy, controlwin, 0, 0);
 
 		previewbtn->enable();
 	
@@ -841,19 +926,32 @@ FXColor hex2FXColor(const char* hex) {
 	return FXRGB(r,g,b);
 }
 
-
+wallConfiguration wallcfg;
 
 DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Panel", ico_control, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
 //writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
+  const char* homedir = getHomeDir();
+
+  char cfgpath[256] = {0};  // if your username is 230 characters, wtf are you doing?
+
+  snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
+
+  wallcfg.image = NULL;
+
+  ini_parse(cfgpath, inihandle, &wallcfg);
+
+  deskcol = hex2FXColor(wallcfg.color);
+
   // create monitor images
   monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
-  FXIcon* previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
+  previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
 
-  FXIcon* monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-  monitorimage->create();
+  monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+  //monitorimage->create();
+  genMonitorPreview(app, monitorimage, previewsource, deskcol);
 
-  FXDCWindow mondc(monitorimage);
+  /* FXDCWindow mondc(monitorimage);
 
   mondc.clipChildren(FALSE);
 
@@ -866,9 +964,12 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   mondc.drawIcon(previewsource, 16, 17);
 
   monitorimage->restore();
-  monitorimage->render();
+  monitorimage->render(); */
 
   prvimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+
+  //FXIcon* monitorimage = NEW FXIcon(A
+
   /* prvimage->create();
   FXDCWindow prvdc(prvimage);
 
@@ -881,8 +982,8 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
 
 
-  FXIcon* monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-  monitornopimage->create();
+  monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+  /* monitornopimage->create();
   FXDCWindow monndc(monitornopimage);
 
   monndc.clipChildren(FALSE);
@@ -895,7 +996,11 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   monndc.fillRectangle(16, 17, 152, 112);
 
   monitornopimage->restore();
-  monitornopimage->render();
+  monitornopimage->render(); */
+
+  genMonitorPreview(app, monitorimage, previewsource, deskcol);
+  genMonitorPreview(app, monitornopimage, NULL, deskcol);
+  
 
   FXIcon* ico_nobg = new FXGIFIcon(app, resico_nobg);
   FXIcon* ico_bmp = new FXGIFIcon(app, resico_bmp);
@@ -918,16 +1023,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
 
 
-  const char* homedir = getHomeDir();
 
-  char cfgpath[256] = {0};  // if your username is 230 characters, wtf are you doing?
-
-  snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
-
-  wallConfiguration wallcfg;
-  wallcfg.image = NULL;
-
-  ini_parse(cfgpath, inihandle, &wallcfg);
 
   //puts("a");
 
@@ -935,7 +1031,6 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   char fehcmd[1024] = "";
 
 
-  FXColor deskcol = hex2FXColor(wallcfg.color);
 
   /* int buflen = strlen(config.buffer);
   config.buffer[buflen-1] = '\0';
@@ -1007,6 +1102,17 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   char* wallnamecur = "";
   FXTreeItem* ogselect = NULL;
 
+  // if you are going to question my order of adding treelist items
+  // you're right
+  //
+  // i have to do this otherwise theres some item thats like selected
+  // and not selected at the same time for some reason, even if i select
+  // it in the code...
+  //
+  // the first item added becomes "semi selected"
+  //
+  // its really weird, i know
+
   FXImage* img;
 
   if (wallcfg.image != NULL) {
@@ -1018,11 +1124,15 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
     img = loadImage(app, wallcfg.image);
     //createPreviewImage
     //prvimage = genMonitorPreview(app, img);
-    genMonitorPreview(app, prvimage, img);
-    prvimage->create();
+    genMonitorPreview(app, prvimage, img, deskcol);
+    //prvimage->create();
 
     ogselect = tree->appendItem(0, wallnamecur, ico_bmp, ico_bmp, imgpath);
+  } else {
+    genMonitorPreview(app, prvimage, NULL, deskcol);
   }
+	  
+  noneitem = tree->appendItem(0,"(None)",ico_nobg,ico_nobg,NULL);
 
 
   for (int i = 0; i < count; i++) {
@@ -1049,16 +1159,15 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   tree->sortItems();
 
 
+
   if (ogselect) {
     tree->selectItem(ogselect);
 
   }
 
-  FXTreeItem* noneitem = tree->prependItem(0,"(None)",ico_nobg,ico_nobg,NULL);
+  tree->moveItem(tree->getFirstItem(), 0, noneitem);
 
-  if (!ogselect) {
-    tree->selectItem(noneitem);
-  }
+
 
 
 
@@ -1076,6 +1185,8 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
 
   colorwell = new FXColorWell(setbgcontrols,deskcol,this,ID_COLORCHANGE,COLORWELL_OPAQUEONLY|LAYOUT_FIX_WIDTH|LAYOUT_FILL_Y, 0,0,75,0, 0,0,0,0);
+
+  deskcol = colorwell->getRGBA();
 
   //colorwell->setRGBA(FXRGB(59, 110, 165));
 
@@ -1096,8 +1207,8 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   // !! SCREENSAVER TAB
   // i think it should be obvious but i somehow get confused on what is what sometimes
   new FXTabItem(tabbook,"Screen Saver",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-  monitor = new FXLabel(scrframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
+  FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0);
+  scrmonitor = new FXLabel(scrframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
 
   FXGroupBox* scrgrp = new FXGroupBox(scrframe, "Screen Saver", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,12,-1,5);
 
@@ -1193,6 +1304,11 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
   // !! EFFECTS TAB
   new FXTabItem(tabbook,"Effects",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+
+  // coffee spelt backwards is eeffoc
+  // because when i dont have my morning coffee
+  // i dont give eeffoc
+
   FXVerticalFrame* effxframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
 
   FXGroupBox* effxbotgrp = new FXGroupBox(effxframe, "Visual effects", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,8,4,6);
@@ -1200,26 +1316,76 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
 
   chk = new FXCheckButton(effxbotgrp, "&Smooth edges of screen fonts", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
   chk = new FXCheckButton(effxbotgrp, "Show &window contents while dragging", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
+
+
   // !! SETTINGS TAB
+
+  Window root = DefaultRootWindow(dpy);
+
+  XWindowAttributes attr;
+
+  if (XGetWindowAttributes(dpy, root, &attr)) {
+	  printf("depth: %d\n", attr.depth);
+  }
+
+  int evbase, errbase;
+  char xcomposite;
+
+  if (XCompositeQueryExtension(dpy, &evbase, &errbase)) {
+    xcomposite = 1;
+  } else {
+    xcomposite = 0;
+  }
+
 
   new FXTabItem(tabbook,"Settings",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
   FXVerticalFrame* settingsframe = new FXVerticalFrame(tabbook,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-  new FXLabel(settingsframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,15);
+  new FXLabel(settingsframe, "", monitorimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,18);
 
-  new FXLabel(settingsframe, "Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
-  new FXLabel(settingsframe, "Default Monitor on Cirrus Logic 5446 Compatible Graphics Adapter", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
+  new FXLabel(settingsframe, "Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
+  new FXLabel(settingsframe, "Default Monitor on Cirrus Logic 5446 Compatible Graphics Adapter", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,13);
 
   // bottom groupboxes
   //FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
   FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,PACK_UNIFORM_WIDTH|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X, 0,0,0,0, 0,1,0,0, 10,0);
 
 
-  FXGroupBox* settingsgrpcol = new FXGroupBox(settingsgrpc, "Colors", PACK_UNIFORM_WIDTH|LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,12,-1,5);
-  I2KListBox* moncolsel = new I2KListBox(settingsgrpcol,NULL,NULL,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+  FXGroupBox* settingsgrpcol = new FXGroupBox(settingsgrpc, "Colors", LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,7,0,7, 8,8);
+  I2KListBox* moncolsel = new I2KListBox(settingsgrpcol,NULL,NULL,LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+
+
+  FXImage* img_hicolor = new FXGIFImage(app, resico_hicolor, IMAGE_OPAQUE);
+  FXImage* img_medcolor = new FXGIFImage(app, resico_medcolor, IMAGE_OPAQUE);
+
+  if (attr.depth <= 4) {
+    moncolsel->appendItem("16 Color", NULL, (void*)4);
+    new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
+  } else if (attr.depth <= 8) {
+    moncolsel->appendItem("256 Colors", NULL, (void*)8);
+    new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
+  } else if (attr.depth <= 16) {
+    moncolsel->appendItem("High Color (16 bit)", NULL, (void*)16);
+    new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
+  } else if (attr.depth <= 24) {
+    // there isnt really a concept of 32 bit color in X
+    // so i think the closest thing would be checking if
+    // the x server is 24 bit color and checking if xcomposite
+    // is supported
+
+    if (xcomposite) moncolsel->appendItem("True Color (32 bit)", NULL, (void*)32);
+    else moncolsel->appendItem("True Color (24 bit)", NULL, (void*)24);
+
+    new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
+  }
+
+  moncolsel->setNumVisible(moncolsel->getNumItems());
+  moncolsel->disable();
+
 
   FXGroupBox* settingsgrpcr = new FXGroupBox(settingsgrpc, "Screen area", LAYOUT_FILL_X|PACK_UNIFORM_WIDTH|FRAME_THICK, 0,0,0,0, 7,12,-1,5);
   //FXHorizontalFrame* settingsgrpres = new FXHorizontalFrame(settingsgrpcr,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
   I2KListBox* reslistbox = new I2KListBox(settingsgrpcr,NULL,NULL,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+
 
   //FXHorizontalFrame* rescolgrpbot = new FXHorizontalFrame(resgrpcc,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,7,0, 0,0); 
 
@@ -1231,6 +1397,13 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Control Pane
   FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
   FXButton* cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
   applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+
+  if (!ogselect) {
+    tree->selectItem(noneitem);
+  }
+
+
+
   applybtn->disable();
 }
 

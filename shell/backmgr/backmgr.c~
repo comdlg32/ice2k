@@ -8,6 +8,7 @@
 #include <pwd.h>
 
 #include <ice2k/ini.h>
+#include <sys/wait.h>
 
 #define _IMGMODE_TILED   0
 #define _IMGMODE_CENTER  1
@@ -109,7 +110,7 @@ int main() {
 		return 1;
 	}
 
-	char fehcmd[1024] = "";
+	//char fehcmd[1024] = "";
 
 	char mode[16];
 
@@ -125,11 +126,38 @@ int main() {
 
 	char* image = strdup(wallcfg.image);
 
+	pid_t pid = vfork();
+
+	char imgbg[64];
+	char bgarg[32];
+	char path[PATH_MAX];
+
 	if (!strcmp(image, "")) {
-		snprintf(fehcmd, sizeof(fehcmd), "feh --no-fehbg --bg-center --image-bg=%s %s/%s", mode, getHomeDir(), ".icewm/clear.png"); // temporary hack until we make our own proper wallpaper manager
+		snprintf(imgbg, sizeof(imgbg), "--image-bg=%s", wallcfg.color);
+		puts(imgbg);
+		snprintf(path, sizeof(path), "%s/.icewm/clear.png", getHomeDir());
 	} else {
-		snprintf(fehcmd, sizeof(fehcmd), "feh --no-fehbg --bg-%s --image-bg=%s %s", mode, wallcfg.color, image);
+		snprintf(imgbg, sizeof(imgbg), "--image-bg=%s", wallcfg.color);
+		snprintf(bgarg, sizeof(bgarg), "--bg-%s", mode);
 	}
 
-	system(fehcmd);
+
+
+	if (pid < 0) {
+		perror("vfork");
+		exit(1);
+	} else if (pid == 0) {
+		if (!strcmp(image, "")) {
+			execlp("feh", "feh",
+			"--no-fehbg", "--bg-center", imgbg, path, (char*)NULL); // temporary hack until we make our own proper wallpaper manager
+		} else {
+			execlp("feh", "feh",
+			"--no-fehbg", bgarg, imgbg, image, (char*)NULL);
+		}
+		//wait(NULL);
+	}
+
+	wait(NULL);
+
+	//system(fehcmd);
 }

@@ -9,7 +9,7 @@ LDFLAGS = `fox-config --libs` -lctl32 -linih-i2k
 PREFIX=/usr/local
 
 ICONS = res/*.gif
-SOURCES = deskcpl.cpp
+SOURCES = desk.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = deskcpl
 
