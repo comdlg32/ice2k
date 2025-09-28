@@ -1,90 +1,28 @@
-/********************************************************************************
-*                                                                               *
-*                         Scribble  Application coding sample                   *
-*                                                                               *
-********************************************************************************/
+// if i gotta be honest
+// chatgpt helped me a lot with the game logic lol
 #include <fx.h>
+#include <time.h>
 
-// optional
-// common controls library, replaces certain fox toolkit controls with
-// more accurate widnows ones
-//
-// if you do not want to override fox toolkit controls use
-// #define _DO_NOT_OVERRIDE_FOX_CONTROLS
-//
-// before including common controls!
-
-// #include <ice2k/comctl32.h>
+#ifndef BOOL
+#define BOOL int
+#define TRUE 1
+#define FALSE 0
+#endif
 
 
-// if you are using one, you include your resources file here
+
+#include <ice2k/comctl32.h>
+
+
+
 #include "res/foxres.h"
 
+FXApp* app;
+
 FXIcon* mainIcon;
+FXIcon* mainIconBig;
 
-// Main Window
-class MineSweeper : public FXMainWindow {
-
-	// Macro for class hierarchy declarations
-	FXDECLARE(MineSweeper)
-
-private:
-	FXHorizontalFrame *contents;                // Content frame
-	FXVerticalFrame   *canvasFrame;             // Canvas frame
-	FXVerticalFrame   *buttonFrame;             // Button frame
-	FXCanvas          *canvas;                  // Canvas to draw into
-	int                mdflag;                  // Mouse button down?
-	int                dirty;                   // Canvas has been painted?
-	FXColor            drawColor;               // Color for the line
-
-protected:
-	MineSweeper() {}
-
-public:
-	// Message handlers
-	long onPaint(FXObject*, FXSelector, void*);
-	long onMouseDown(FXObject*, FXSelector, void*);
-	long onMouseUp(FXObject*, FXSelector, void*);
-	long onMouseMove(FXObject*, FXSelector, void*);
-	long onCmdClear(FXObject*, FXSelector, void*);
-	long onUpdClear(FXObject*, FXSelector, void*);
-
-public:
-	// Messages for our class
-	enum {
-		ID_CANVAS = FXMainWindow::ID_LAST,
-		ID_CLEAR,
-		ID_LAST
-	};
-
-public:
-
-	// MineSweeper's constructor
-	MineSweeper(FXApp* a);
-
-	// Initialize
-	virtual void create();
-
-	virtual ~MineSweeper();
-};
-
-
-
-// Message Map for the Scribble Window class
-FXDEFMAP(MineSweeper) MineSweeperMap[] = {
-	FXMAPFUNC(SEL_PAINT,             MineSweeper::ID_CANVAS, MineSweeper::onPaint),
-	FXMAPFUNC(SEL_LEFTBUTTONPRESS,   MineSweeper::ID_CANVAS, MineSweeper::onMouseDown),
-	FXMAPFUNC(SEL_LEFTBUTTONRELEASE, MineSweeper::ID_CANVAS, MineSweeper::onMouseUp),
-	FXMAPFUNC(SEL_MOTION,            MineSweeper::ID_CANVAS, MineSweeper::onMouseMove),
-	FXMAPFUNC(SEL_COMMAND,           MineSweeper::ID_CLEAR,  MineSweeper::onCmdClear),
-	FXMAPFUNC(SEL_UPDATE,            MineSweeper::ID_CLEAR,  MineSweeper::onUpdClear),
-};
-
-
-
-// Macro for the ScribbleApp class hierarchy implementation
-FXIMPLEMENT(MineSweeper, FXMainWindow, MineSweeperMap, ARRAYNUMBER(MineSweeperMap))
-
+enum { ID_TIMER = 12931 };
 
 class MSPacker : public FXPacker {
 	FXDECLARE(MSPacker)
@@ -185,6 +123,8 @@ MSPacker::MSPacker(FXComposite* p, FXuint opts, FXint x, FXint y, FXint w, FXint
 }
 
 // SEVEN SEGMENT WIDGET
+
+
 
 #define _SEGMENTVAL(name, index) name = (index * -23)
 
@@ -351,9 +291,14 @@ public:
 
 
 };
+MSSevenSegment* timedisp;
 
 FXImage*      mineimg;
+FXImage*      smileimg;
+BOOL lost = FALSE;
+BOOL disfield = FALSE;
 
+void refreshBoard();
 
 FXDEFMAP(MSSevenSegment) MSSevenSegmentMap[] = {
 	FXMAPFUNC(SEL_PAINT, 0, MSSevenSegment::onPaint),
@@ -374,6 +319,552 @@ FXIMPLEMENT(MSSevenSegment, FXFrame, MSSevenSegmentMap, ARRAYNUMBER(MSSevenSegme
 
 #define _BUTTONVAL(name, index) name = (index * -16)
 
+BOOL pressed;
+
+
+#define _ROWS_BEGINNER 9
+#define _COLS_BEGINNER 9
+#define _MINES_BEGINNER 10
+
+#define _ROWS_INTERMEDIATE 16
+#define _COLS_INTERMEDIATE 16
+#define _MINES_INTERMEDIATE 40
+//#define _MINES_INTERMEDIATE 2
+
+#define _ROWS_EXPERT 16
+#define _COLS_EXPERT 30
+#define _MINES_EXPERT 99
+//#define _MINES_EXPERT 2
+
+int rows;
+int cols;
+int mines;
+
+#define CELLSTATE int
+#define NOFLAG 0
+#define FLAG 1
+#define UNKNOWN 2
+#define CLICKEDBOMB 3
+
+struct Cell {
+	BOOL mine;
+	BOOL revealed;
+
+	CELLSTATE state;
+	
+	int neighbors;
+};
+
+Cell** board;
+
+BOOL firstclk = TRUE;
+
+void updateBoard();
+
+void placeMines(int row, int col) {
+	srand(time(NULL));
+
+	int placed = 0;
+
+	while (placed < mines) {
+		int r = rand() % rows;
+		int c = rand() % cols;
+
+		//board[row][col].mine = TRUE;
+
+
+		if (board[r][c].mine || (r == row && c == col))
+			continue;
+
+		board[r][c].mine = TRUE;
+		++placed;
+	}
+
+	for (int r = 0; r < rows; ++r) {
+		for (int c = 0; c < cols; ++c) {
+			if (board[r][c].mine) continue;
+
+			int neigh = 0;
+			
+			for (int dr = -1; dr <= 1; ++dr) {
+				for (int dc = -1; dc <= 1; ++dc) {
+					int nr = r + dr;
+					int nc = c + dc;
+
+					if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+						if (board[nr][nc].mine) ++neigh;
+					}
+				}
+			}
+
+			board[r][c].neighbors = neigh;
+
+		}
+	}
+}
+
+
+#define _SMILEVAL(name, index) name = (index * -24)
+
+class MSSmileButton: public FXFrame {
+	FXDECLARE(MSSmileButton);
+protected:
+	FXint         state;
+	FXint         oldstate;
+
+	BOOL          pressed;
+	BOOL          hover;
+
+	FXObject*     target;
+	FXSelector    selector;
+
+
+protected:
+	MSSmileButton() {}
+			
+
+public:
+
+	MSSmileButton(FXComposite* parent, FXuint opts=FRAME_NONE, FXint x=0, FXint y=0, FXint w=0, FXint h=0):
+		FXFrame(parent, opts, x,y,w,h,0,0,0,0),
+		state(SMILEBUTTON_NORMAL),
+		oldstate(SMILEBUTTON_NORMAL),
+		pressed(FALSE)
+	{
+		enable();
+
+		if (!smileimg) {
+			smileimg = new FXBMPImage(getApp(), resico_coolsmil, IMAGE_OPAQUE);
+			smileimg->create();
+		}
+	}
+
+
+	void setState(FXint val, BOOL write = TRUE) {
+		if (val != state) {
+			if (write) oldstate = val;
+			state = val;
+			update();
+		}
+	}
+
+	FXint getState() { return state; }
+
+	enum buttonPos {
+		_SMILEVAL(SMILEBUTTON_PRESSED, 0),
+
+		_SMILEVAL(SMILEBUTTON_COOL, 1),
+		_SMILEVAL(SMILEBUTTON_DEAD, 2),
+		_SMILEVAL(SMILEBUTTON_WATCHOUT, 3),
+
+		_SMILEVAL(SMILEBUTTON_NORMAL, 4),
+	};
+
+
+
+	long onPaint(FXObject* sender, FXSelector sel, void* ptr) {
+		//FXFrame::onPaint(sender, sel, ptr);
+ 
+		FXEvent* event = (FXEvent*)ptr;
+		FXDCWindow dc(this, event);
+
+		dc.setForeground(FXRGB(192,192,192));
+		dc.fillRectangle(0,0,width,height);
+		dc.setForeground(FXRGB(128,128,128));
+
+		dc.fillRectangle(0,0,1,height-1);
+		dc.fillRectangle(0,0,width-1,1);
+
+		dc.fillRectangle(width-1,1, 1, height-1);
+		dc.fillRectangle(1,height-1, width-1, 1);
+
+		dc.setClipRectangle(1,1,width-2,height-2);
+		dc.drawImage(smileimg, 1, state+1);
+		dc.clearClipRectangle();
+		
+		return 1;
+	}
+
+
+	FXint getDefaultWidth() {
+		return 26;
+	}
+
+	FXint getDefaultHeight() {
+		return 26;
+	}
+
+	long onLeftButtonPress(FXObject*,FXSelector,void* ptr) {
+		ungrab();
+		pressed = TRUE;
+		hover = TRUE;
+
+		oldstate = state;
+		setState(SMILEBUTTON_PRESSED, FALSE);
+
+		return 1;
+	}
+
+	long onLeftButtonRelease(FXObject* obj,FXSelector sel,void* ptr){
+		ungrab();
+
+		if (pressed && hover) {
+			refreshBoard();
+			setState(SMILEBUTTON_NORMAL);
+
+			oldstate = state;
+		}
+		pressed = FALSE;
+
+
+		return 1;
+	}
+
+	long onEnter(FXObject*obj,FXSelector sel,void* ptr) {
+		hover = TRUE;
+		
+		if (pressed) {
+			setState(SMILEBUTTON_PRESSED, FALSE);
+		}
+
+		return 1;
+	}
+
+	long onLeave(FXObject* obj,FXSelector sel,void* ptr){
+		hover = FALSE;
+		setState(oldstate, FALSE);
+		pressed = FALSE;
+
+		return 0;
+	}
+
+
+
+	enum {
+		ID_CANVAS = FXFrame::ID_LAST,
+		ID_LAST
+	};
+
+	bool canFocus() const { return true; }
+	
+
+
+};
+
+
+FXMatrix* minegrid;
+
+BOOL checkWin();
+
+BOOL won = FALSE;
+
+MSSmileButton* smilebtn;
+FXMainWindow* mainwin;
+
+class HighScoreBox: public FXDialogBox {
+	FXDECLARE(HighScoreBox);
+
+	FXHorizontalFrame* cont;
+	FXLabel* begScoreLbl;
+	FXLabel* intScoreLbl;
+	FXLabel* expScoreLbl;
+
+	FXLabel* begNameLbl;
+	FXLabel* intNameLbl;
+	FXLabel* expNameLbl;
+
+protected:
+	HighScoreBox() {}
+
+public:
+	enum {
+		ID_DIALOG = FXDialogBox::ID_LAST,
+		ID_CLEAR,
+	};
+
+	HighScoreBox(FXWindow* owner);
+	long clearScores(FXObject*, FXSelector, void*);
+
+	virtual void create();
+	virtual ~HighScoreBox();
+};
+
+
+FXDEFMAP(HighScoreBox) HighScoreBoxMap[] = {
+	FXMAPFUNC(SEL_COMMAND, HighScoreBox::ID_CLEAR, HighScoreBox::clearScores),
+};
+FXIMPLEMENT(HighScoreBox, FXDialogBox, HighScoreBoxMap, ARRAYNUMBER(HighScoreBoxMap));
+
+HighScoreBox::HighScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Mine Sweepers", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0,0,0,0, 16,0,23,13, 10,18) {
+	FXApp* appl = getApp();
+	char timestr[24];
+
+	int   beginnerScore = appl->reg().readIntEntry   ("Scores", "Beginner", 999);
+	const char* beginnerName  = appl->reg().readStringEntry("Names",  "Beginner", "Anonymous");
+
+	int   intermediateScore = appl->reg().readIntEntry   ("Scores", "Intermediate", 999);
+	const char* intermediateName  = appl->reg().readStringEntry("Names",  "Intermediate", "Anonymous");
+
+	int   expertScore = appl->reg().readIntEntry   ("Scores", "Expert", 999);
+	const char* expertName  = appl->reg().readStringEntry("Names",  "Expert", "Anonymous");
+
+	FXMatrix* scoregrid = new FXMatrix(this, 3, PACK_UNIFORM_HEIGHT, 0,0,0,0, 0,0,0,0, 0,3);
+	new FXLabel(scoregrid, "Beginner:", NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,00,0);
+	new FXLabel(scoregrid, "Intermediate:", NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,0,0);
+	new FXLabel(scoregrid, "Expert:", NULL, JUSTIFY_LEFT|LAYOUT_FIX_WIDTH, 0,0,75,0, 00,0,0,0);
+
+	snprintf(timestr, sizeof(timestr), "%d seconds", beginnerScore);
+	begScoreLbl = new FXLabel(scoregrid, timestr, NULL, JUSTIFY_LEFT|LAYOUT_FIX_WIDTH, 0,0,82,0, 0,0,0,0);
+
+	snprintf(timestr, sizeof(timestr), "%d seconds", intermediateScore);
+	intScoreLbl = new FXLabel(scoregrid, timestr, NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,0,0);
+
+	snprintf(timestr, sizeof(timestr), "%d seconds", expertScore);
+	expScoreLbl = new FXLabel(scoregrid, timestr, NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,0,0);
+
+	begNameLbl = new FXLabel(scoregrid, beginnerName, NULL, JUSTIFY_LEFT|LAYOUT_FIX_WIDTH, 0,0,82,0, 0,0,0,0);
+	intNameLbl = new FXLabel(scoregrid, intermediateName, NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,0,0);
+	expNameLbl = new FXLabel(scoregrid, expertName, NULL, JUSTIFY_LEFT, 0,0,0,0, 0,0,0,0);
+
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X, 0,0,0,0, 22,37,0,0, 0,0);
+
+	new FXButton(btncont, "&Reset Scores", NULL, this, ID_CLEAR, LAYOUT_LEFT|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,20, 0,0,0,0);
+	FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_RIGHT|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,45,20, 0,0,0,0);
+	this->show();
+	this->setFocus();
+	okbtn->setFocus();
+}
+
+long HighScoreBox::clearScores(FXObject* sender, FXSelector sel, void* ptr) {
+	getApp()->reg().writeStringEntry("Names", "Beginner", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Beginner", 999);
+	
+	getApp()->reg().writeStringEntry("Names", "Intermediate", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Intermediate", 999);
+
+	getApp()->reg().writeStringEntry("Names", "Expert", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Expert", 999);
+
+	begNameLbl->setText("Anonymous");
+	intNameLbl->setText("Anonymous");
+	expNameLbl->setText("Anonymous");
+
+	begScoreLbl->setText("999 seconds");
+	intScoreLbl->setText("999 seconds");
+	expScoreLbl->setText("999 seconds");
+
+	return 1;
+}
+
+
+HighScoreBox::~HighScoreBox() {}
+void HighScoreBox::create() { FXDialogBox::create(); }
+
+
+
+#define _DIFF_BEGINNER 0
+#define _DIFF_INTERMEDIATE 1
+#define _DIFF_EXPERT 2
+#define _DIFF_CUSTOM 3
+
+int difficulty = _DIFF_BEGINNER;
+
+int newscore = 999;
+
+class NewScoreBox: public FXDialogBox {
+	FXDECLARE(NewScoreBox);
+
+	FXHorizontalFrame* cont;
+	FXTextField* textfield;
+	char* name;
+
+protected:
+	NewScoreBox() {}
+	
+
+public:
+	NewScoreBox(FXWindow* owner);
+	long onCmdAccept(FXObject*, FXSelector, void*);
+
+	virtual void create();
+	virtual ~NewScoreBox();
+};
+
+long NewScoreBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
+	name = strndup(textfield->getText().text(), 12);
+
+	if (difficulty == _DIFF_BEGINNER) {
+		getApp()->reg().writeStringEntry("Names", "Beginner", name);
+		getApp()->reg().writeIntEntry("Scores", "Beginner", newscore);
+	} else if (difficulty == _DIFF_INTERMEDIATE) {
+		getApp()->reg().writeStringEntry("Names", "Intermediate", name);
+		getApp()->reg().writeIntEntry("Scores", "Intermediate", newscore);
+	} else {
+		getApp()->reg().writeStringEntry("Names", "Expert", name);
+		getApp()->reg().writeIntEntry("Scores", "Expert", newscore);
+	}
+
+	FXDialogBox* highscorebox = new HighScoreBox(mainwin);
+	FXDialogBox::onCmdAccept(obj, sel, ptr);
+
+	highscorebox->execute(PLACEMENT_OWNER);
+	return 1;
+}
+
+FXDEFMAP(NewScoreBox) NewScoreBoxMap[] = {
+	FXMAPFUNC(SEL_COMMAND, NewScoreBox::ID_ACCEPT, NewScoreBox::onCmdAccept),
+};
+
+FXIMPLEMENT(NewScoreBox, FXDialogBox, NewScoreBoxMap, ARRAYNUMBER(NewScoreBoxMap));
+
+NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Mine Sweepers", DECOR_BORDER, 0,0,0,0, 9,9,6,22, 0,0) {
+	FXApp* appl = getApp();
+
+	new FXLabel(this, "You have the fastest time", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+	if (difficulty == _DIFF_BEGINNER) {
+		name = strdup(appl->reg().readStringEntry("Names", "Beginner", "Anonymous"));
+		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+	} else if (difficulty == _DIFF_INTERMEDIATE) {
+		name = strdup(appl->reg().readStringEntry("Names", "Intermediate", "Anonymous"));
+		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+	} else {
+		name = strdup(appl->reg().readStringEntry("Names", "Expert", "Anonymous"));
+		new FXLabel(this, "for expert level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+	}
+
+	new FXLabel(this, "Please enter your name.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
+
+	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0,0,132,37);	
+	textfield = new FXTextField(this, 18,this,ID_ACCEPT,TEXTFIELD_ENTER_ONLY|LAYOUT_CENTER_X|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
+	textfield->setText(name);
+	textfield->selectAll();
+
+
+	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0,0,132,12);
+	new FXButton(this, "OK", NULL, this, ID_ACCEPT, LAYOUT_CENTER_X|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,54,26, 0,0,0,0);
+}
+
+
+NewScoreBox::~NewScoreBox() {}
+void NewScoreBox::create() { FXDialogBox::create(); textfield->setFocus(); }
+
+void revealCell(int row, int col, BOOL click) {
+	if (row < 0 || row >= rows || col < 0 || col >= cols) return;
+
+	Cell &cell = board[row][col];
+	if (cell.revealed || cell.state == FLAG) return;
+
+
+	cell.revealed = TRUE;
+
+	if (cell.mine) {
+
+		if (click) {
+			for (int r = 0; r < rows; ++r) {
+				for (int c = 0; c < cols; ++c) {
+					if (board[r][c].mine || board[r][c].state == FLAG)
+						board[r][c].revealed = TRUE;
+				}
+			}
+		}
+
+		lost = TRUE;
+		disfield = TRUE;
+		board[row][col].state = CLICKEDBOMB;
+
+		smilebtn->setState(MSSmileButton::SMILEBUTTON_DEAD);
+		app->removeTimeout(mainwin, ID_TIMER);
+		updateBoard();
+
+		return;
+	}
+
+	if (cell.neighbors == 0) {
+		for (int dr = -1; dr <= 1; ++dr) {
+			for (int dc = -1; dc <= 1; ++dc) {
+				if (dr != 0 || dc != 0) {
+					revealCell(row + dr, col + dc, FALSE);
+				}
+			}
+		}
+	}
+
+	if (!won && checkWin()) {
+		app->removeTimeout(mainwin, ID_TIMER);
+		smilebtn->setState(MSSmileButton::SMILEBUTTON_COOL);
+		for (int r = 0; r < rows; ++r) {
+			for (int c = 0; c < cols; ++c) {
+				if (board[r][c].mine) {
+					board[r][c].state = FLAG;
+					board[r][c].revealed = TRUE;
+				}
+			}
+		}
+		updateBoard();
+
+
+		disfield = TRUE;
+		won = TRUE;
+		if (difficulty != _DIFF_CUSTOM) {
+			newscore = timedisp->getValue();
+			int oldscore = 999;
+
+			if (difficulty == _DIFF_BEGINNER) {
+				oldscore = app->reg().readIntEntry("Scores", "Beginner", 999);
+			} else if (difficulty == _DIFF_INTERMEDIATE) {
+				oldscore = app->reg().readIntEntry("Scores", "Intermediate", 999);
+			} else if (difficulty == _DIFF_EXPERT) {
+				oldscore = app->reg().readIntEntry("Scores", "Expert", 999);
+			}
+
+			if (oldscore > newscore) {
+				FXDialogBox* newscorebox = new NewScoreBox(mainwin);
+				newscorebox->create();
+
+				newscorebox->execute(PLACEMENT_OWNER);
+			}
+		}
+		
+		//puts("You won");
+
+	} else {
+		updateBoard();
+	}
+}
+
+MSSevenSegment* minedisp;
+
+void toggleState(int r, int c) {
+	if (!board[r][c].revealed) {
+		switch (board[r][c].state) {
+			case NOFLAG:
+				minedisp->setValue(minedisp->getValue() - 1);
+				board[r][c].state = FLAG; break;
+
+			case FLAG:
+				minedisp->setValue(minedisp->getValue() + 1);
+				board[r][c].state = UNKNOWN; break;
+
+			default:
+				board[r][c].state = NOFLAG; break;
+		}
+	}
+}
+
+BOOL checkWin() {
+	int cells = rows * cols - mines;
+	int revealed = 0;
+
+	for (int row = 0; row < rows; ++row) {
+		for(int col = 0; col < cols; ++col) {
+			if(board[row][col].revealed && !board[row][col].mine)
+				++revealed;
+		}
+	}
+
+	return revealed == cells;
+}
+
 
 class MSMineButton: public FXFrame {
 	FXDECLARE(MSMineButton);
@@ -382,6 +873,11 @@ protected:
 
 	FXObject*     target;
 	FXSelector    selector;
+	
+	int           row;
+	int           col;
+
+	int           reveal;
 
 protected:
 	MSMineButton() {}
@@ -389,14 +885,21 @@ protected:
 
 public:
 
-	MSMineButton(FXComposite* parent, FXuint opts=FRAME_NONE, FXint x=0, FXint y=0, FXint w=0, FXint h=0):
+	MSMineButton(FXComposite* parent, int r, int c, FXuint opts=FRAME_NONE, FXint x=0, FXint y=0, FXint w=0, FXint h=0):
 		FXFrame(parent, opts, x,y,w,h,0,0,0,0),
-		state(MINEBUTTON_NORMAL)		
+		state(MINEBUTTON_NORMAL)
 	{
+		reveal = 0;
+		row = r;
+		col = c;
+		enable();
+
 		if (!mineimg) {
 			mineimg = new FXBMPImage(getApp(), resico_coolmine, IMAGE_OPAQUE);
 			mineimg->create();
 		}
+
+		update();
 	}
 
 
@@ -407,8 +910,14 @@ public:
 		}
 	}
 
-
 	FXint getState() { return state; }
+
+	void setReveal(FXint rev) {
+		reveal = rev;
+	}
+
+	FXint getReveal() { return reveal; }
+
 
 	enum buttonPos {
 		_BUTTONVAL(MINEBUTTON_NORMAL, 0),
@@ -416,7 +925,7 @@ public:
 		_BUTTONVAL(MINEBUTTON_UNKNOWN, 2),
 		
 		_BUTTONVAL(MINEBUTTON_CLICKEDMINE, 3),
-		_BUTTONVAL(MINEBUTTON_FLAGGEDMINE, 4),
+		_BUTTONVAL(MINEBUTTON_NOTMINE, 4),
 
 		_BUTTONVAL(MINEBUTTON_MINE, 5),
 
@@ -461,29 +970,478 @@ public:
 		return 16;
 	}
 
+	long onLeftButtonPress(FXObject*,FXSelector,void* ptr){
+		ungrab();
+		if (disfield) return 0;
+
+		pressed = TRUE;
+		smilebtn->setState(MSSmileButton::SMILEBUTTON_WATCHOUT);
+		//puts("Pressed");
+
+		if (!reveal) {
+			if (state == MINEBUTTON_NORMAL)
+				setState(MINEBUTTON_NORMAL_PRESSED);
+			if (state == MINEBUTTON_UNKNOWN)
+				setState(MINEBUTTON_UNKNOWN_PRESSED);
+		}
+
+		return 1;
+	}
+
+	long onRightButtonPress(FXObject*,FXSelector,void* ptr){
+		ungrab();
+		if (disfield) return 0;
+
+		if (!reveal) {
+			toggleState(row, col);
+			updateBoard();
+		}
+
+		return 1;
+	}
+
+	long onLeftButtonRelease(FXObject* obj,FXSelector sel,void* ptr){
+		if (disfield) return 0;
+			smilebtn->setState(MSSmileButton::SMILEBUTTON_NORMAL);
+
+
+		//minegrid->rowOfChild(mine);
+
+		//puts("test");
+
+		if ((!reveal) && pressed) {
+			//printf("Clicked row=%d col=%d\n", row, col);
+
+			if (firstclk) {
+				placeMines(row, col);
+				getApp()->addTimeout(mainwin, ID_TIMER, 0);
+				firstclk = FALSE;
+			}
+
+			revealCell(row, col, TRUE);
+		}
+
+		pressed = FALSE;
+		//puts("UnPressed");
+		//setState(MINEBUTTON_NORMAL);
+
+		return 1;
+	}
+
+	long onEnter(FXObject*obj,FXSelector sel,void* ptr) {
+		if (disfield) return 0;
+
+		if ((!reveal) && pressed) {
+
+			if (state == MINEBUTTON_NORMAL)
+				setState(MINEBUTTON_NORMAL_PRESSED);
+			else if (state == MINEBUTTON_UNKNOWN)
+				setState(MINEBUTTON_UNKNOWN_PRESSED);
+
+			return 1;
+		}
+
+		return 0;
+	}
+
+	long onLeave(FXObject* obj,FXSelector sel,void* ptr){
+		if (disfield) return 0;
+
+		if ((!reveal) && pressed) {
+			if (state == MINEBUTTON_NORMAL_PRESSED)
+				setState(MINEBUTTON_NORMAL);
+			else if (state == MINEBUTTON_UNKNOWN_PRESSED)
+				setState(MINEBUTTON_UNKNOWN);
+
+			return 1;
+		}
+
+		return 0;
+	}
+
+	long onCmdPress(FXObject* obj,FXSelector sel,void* ptr){
+		if (disfield) return 0;
+
+		return 0;
+	}
+
+
 	enum {
 		ID_CANVAS = FXFrame::ID_LAST,
 		ID_LAST
 	};
 
+	bool canFocus() const { return true; }
+	
 
 
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+FXDEFMAP(MSSmileButton) MSSmileButtonMap[] = {
+	FXMAPFUNC(SEL_PAINT, 0, MSSmileButton::onPaint),
+
+
+	FXMAPFUNC(SEL_LEFTBUTTONPRESS, 0, MSSmileButton::onLeftButtonPress),
+	FXMAPFUNC(SEL_LEFTBUTTONRELEASE, 0, MSSmileButton::onLeftButtonRelease),
+
+	FXMAPFUNC(SEL_ENTER, 0, MSSmileButton::onEnter),
+	FXMAPFUNC(SEL_LEAVE, 0, MSSmileButton::onLeave),
+	
+};
+
+FXIMPLEMENT(MSSmileButton, FXFrame, MSSmileButtonMap, ARRAYNUMBER(MSSmileButtonMap));
+
+
+
+void updateBoard() {
+	for (int row = 0; row < rows; ++row) {
+		for (int col = 0; col < cols; ++col) {
+			MSMineButton* btn = (MSMineButton*)minegrid->childAtRowCol(row, col);
+			Cell &cell = board[row][col];
+
+			if (cell.revealed) {
+				btn->setReveal(1);
+
+				if (cell.mine) {
+					if (cell.state == FLAG)
+						btn->setState(MSMineButton::MINEBUTTON_FLAG);
+					else if (cell.state == CLICKEDBOMB)
+						btn->setState(MSMineButton::MINEBUTTON_CLICKEDMINE);
+					else
+						btn->setState(MSMineButton::MINEBUTTON_MINE);
+				} else {
+					if (cell.state == FLAG)
+						btn->setState(MSMineButton::MINEBUTTON_NOTMINE);
+					else if (cell.neighbors > 8)
+						btn->setState(MSMineButton::MINEBUTTON_EIGHT);
+					else
+						btn->setState(MSMineButton::MINEBUTTON_NORMAL_PRESSED - cell.neighbors * -16);
+				}
+			} else {
+				btn->setReveal(0);
+
+				switch (cell.state) {
+					case NOFLAG: btn->setState(MSMineButton::MINEBUTTON_NORMAL); break;
+					case FLAG: btn->setState(MSMineButton::MINEBUTTON_FLAG); break;
+					case UNKNOWN: btn->setState(MSMineButton::MINEBUTTON_UNKNOWN); break;
+				}
+			}
+		}
+	}
+}
+
+void allocBoard() {
+	if (board) return;
+
+	board = new Cell*[rows];
+
+	for (int row = 0; row<rows; ++row) {
+		board[row] = new Cell[cols];
+
+		for (int col = 0; col<cols; ++col) {
+			board[row][col].mine = FALSE;
+			board[row][col].revealed = FALSE;
+			board[row][col].state = NOFLAG;
+
+			board[row][col].neighbors = 0;
+		}
+	}
+}
+
+void freeBoard() {
+	if (board == NULL) return;
+
+	for (int row = 0; row < rows; ++row) {
+		delete[] board[row];
+	}
+
+	delete[] board;
+	board = NULL;
+}
+
+
+
 FXDEFMAP(MSMineButton) MSMineButtonMap[] = {
 	FXMAPFUNC(SEL_PAINT, 0, MSMineButton::onPaint),
+
+	FXMAPFUNC(SEL_COMMAND, 0, MSMineButton::onCmdPress),
+
+	FXMAPFUNC(SEL_RIGHTBUTTONPRESS, 0, MSMineButton::onRightButtonPress),
+
+
+	FXMAPFUNC(SEL_LEFTBUTTONPRESS, 0, MSMineButton::onLeftButtonPress),
+	FXMAPFUNC(SEL_LEFTBUTTONRELEASE, 0, MSMineButton::onLeftButtonRelease),
+
+	//FXMAPFUNC(SEL_CLICKED, 0, MSMineButton::onLeftButtonPress),
+
+
+	FXMAPFUNC(SEL_ENTER, 0, MSMineButton::onEnter),
+	FXMAPFUNC(SEL_LEAVE, 0, MSMineButton::onLeave),
+	
 
 	//FXMAPFUNC(SEL_CHANGED, 0, MSSevenSegment::onChange),
 
 };
 
+
 FXIMPLEMENT(MSMineButton, FXFrame, MSMineButtonMap, ARRAYNUMBER(MSMineButtonMap));
 
+void removeCells(FXComposite* cont) {
+	FXWindow* child = cont->getFirst();
+
+	while (child) {
+		FXWindow* next = child->getNext();
+
+		child->destroy();
+		child->detach();
+		delete child;
+
+		child = next;
+	}
+}
+
+void addCells(FXComposite* cont) {
+	MSMineButton* btn;
+
+	for (int row = 0; row < rows; ++row) {
+		for (int col = 0; col < cols; ++col) {		
+			btn = new MSMineButton(cont, row, col, FRAME_NONE, 0,0,0,0);
+			if (mainwin && mainwin->shown()) btn->create();
+		}
+	}
+}
 
 
+void deleteBoard() {
+	freeBoard();
+	removeCells(minegrid);
+}
+
+void makeBoard() {
+	allocBoard();
+	addCells(minegrid);
+
+	app->removeTimeout(mainwin, ID_TIMER);
+	timedisp->setValue(0);
+
+	minedisp->setValue(mines);
+
+	firstclk = TRUE;
+	lost = FALSE;
+	won = FALSE;
+	disfield = FALSE;
+}
+
+void refreshBoard() {
+	deleteBoard();
+	makeBoard();
+}
+
+FXMenuRadio* begradio;
+FXMenuRadio* intradio;
+FXMenuRadio* expradio;
+FXMenuRadio* cusradio;
+
+// Main Window
+class MineSweeper : public FXMainWindow {
+
+	// Macro for class hierarchy declarations
+	FXDECLARE(MineSweeper)
+
+private:
+	FXHorizontalFrame *contents;                // Content frame
+	FXVerticalFrame   *canvasFrame;             // Canvas frame
+	FXVerticalFrame   *buttonFrame;             // Button frame
+	FXCanvas          *canvas;                  // Canvas to draw into
+	int                mdflag;                  // Mouse button down?
+	int                dirty;                   // Canvas has been painted?
+	FXColor            drawColor;               // Color for the line
+								  //
+
+protected:
+	MineSweeper() {}
+
+public:
+
+	long onEnter(FXObject*, FXSelector, void*);
+	long onLeave(FXObject*, FXSelector, void*);
+	
+	long changeDifficultyBeginner(FXObject*, FXSelector, void*);
+	long changeDifficultyIntermediate(FXObject*, FXSelector, void*);
+	long changeDifficultyExpert(FXObject*, FXSelector, void*);
+
+	long onTimer(FXObject*, FXSelector, void*);
+
+	long displayBestScores(FXObject*, FXSelector, void*);
+	long newBoard(FXObject*, FXSelector, void*);
+	long aboutBox(FXObject*, FXSelector, void*);
+
+
+public:
+	// Messages for our class
+	enum {
+		ID_CANVAS = FXMainWindow::ID_LAST,
+		ID_CLEAR,
+		ID_LAST,
+		ID_MINEGRID,
+
+		ID_NEW,
+		
+		ID_DIFFICULTY_BEGINNER,
+		ID_DIFFICULTY_INTERMEDIATE,
+		ID_DIFFICULTY_EXPERT,
+		ID_DIFFICULTY_CUSTOM,
+
+		ID_MARKS,
+		ID_COLOR,
+
+		ID_SOUND,
+
+		ID_BESTSCORE,
+		ID_ABOUT,
+	};
+
+public:
+
+	// MineSweeper's constructor
+	MineSweeper(FXApp* a);
+
+	// Initialize
+	virtual void create();
+
+	virtual ~MineSweeper();
+};
+
+
+
+class AboutBox: public FXDialogBox {
+	FXDECLARE(AboutBox);
+protected:
+	AboutBox() {}
+public:
+	AboutBox(FXWindow* owner);
+	virtual void create();
+	virtual ~AboutBox() {};
+};
+
+FXIMPLEMENT(AboutBox, FXDialogBox, NULL, 0);
+// about box code comes from uhexe
+// hexeditor i used to work on
+AboutBox::AboutBox(FXWindow* owner): FXDialogBox(owner,"About Minesweeper",DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0,0,0,0,10,10,10,10,8,12) {
+	FXHorizontalFrame* cont = new FXHorizontalFrame(this, LAYOUT_SIDE_TOP, 0,0,0,0, 4,4,4,4, 10,10);
+
+	new FXLabel(cont, "", mainIconBig);
+
+	new FXLabel(cont,
+	"Minesweeper 1.0.0\n"
+	"Clear the board, avoid mines and win.\n"
+	"\n"
+	"Written by xcomposite\n"
+	"\n"
+	"Thanks to Curt Johnson and Robert Donner\n"
+	"for the original game!",
+	NULL, JUSTIFY_LEFT|LAYOUT_FILL_X);
+
+	FXButton* okbtn = new FXButton(this, "OK", NULL, this, ID_ACCEPT,
+	BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_RIGHT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+	0,0,75,23, 3,3,2,3);
+
+	okbtn->setFocus();
+}
+
+void AboutBox::create() { FXDialogBox::create(); }
+
+
+// Message Map for the Scribble Window class
+FXDEFMAP(MineSweeper) MineSweeperMap[] = {
+	//FXMAPFUNC(SEL_ENTER, 0, MineSweeper::onLeave),
+	//FXMAPFUNC(SEL_LEAVE, 0, MineSweeper::onLeave),
+
+	//FXMAPFUNC(SEL_LEFTBUTTONRELEASE, 0, MineSweeper::onLeftBtnRelease),
+	FXMAPFUNC(SEL_LEAVE, MineSweeper::ID_MINEGRID, MineSweeper::onLeave),
+
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_BEGINNER, MineSweeper::changeDifficultyBeginner),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_INTERMEDIATE, MineSweeper::changeDifficultyIntermediate),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_EXPERT, MineSweeper::changeDifficultyExpert),
+
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_BESTSCORE, MineSweeper::displayBestScores),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_NEW, MineSweeper::newBoard),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_ABOUT, MineSweeper::aboutBox),
+
+	FXMAPFUNC(SEL_TIMEOUT, ID_TIMER, MineSweeper::onTimer),
+};
+
+long MineSweeper::onTimer(FXObject* obj, FXSelector sel, void* ptr) {
+	//puts("timer");
+
+
+	timedisp->setValue(timedisp->getValue() + 1);
+	getApp()->addTimeout(this, ID_TIMER);
+
+	return 1;
+}
+
+// Macro for the ScribbleApp class hierarchy implementation
+FXIMPLEMENT(MineSweeper, FXMainWindow, MineSweeperMap, ARRAYNUMBER(MineSweeperMap));
+
+FXMenuPane* gamemenu;
 
 // Construct a MineSweeper
-MineSweeper::MineSweeper(FXApp *a) : FXMainWindow(a, "Scribble Application", mainIcon, NULL, DECOR_ALL, 0,0,320,200) {
+MineSweeper::MineSweeper(FXApp *a) : FXMainWindow(a, "Minesweeper", mainIcon, NULL, DECOR_TITLE|DECOR_MINIMIZE|DECOR_CLOSE|DECOR_BORDER|DECOR_MENU, 0,0,0,0) {
+
+	FXMenuBar* menubar = new FXMenuBar(this, this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,1, 0,0);
+
+	gamemenu = new FXMenuPane(this);
+	FXMenuPane* helpmenu = new FXMenuPane(this);
+	
+	new FXMenuTitle(menubar,"&Game", NULL, gamemenu);
+	new FXMenuTitle(menubar,"&Help", NULL, helpmenu);
+
+	new FXMenuCommand(gamemenu, "&New\tF2",NULL,this,ID_NEW);
+
+	new FXMenuSeparator(gamemenu);
+
+	begradio = new FXMenuRadio(gamemenu, "&Beginner",this,ID_DIFFICULTY_BEGINNER);
+	begradio->setCheck(TRUE);
+
+	intradio = new FXMenuRadio(gamemenu, "&Intermediate",this,ID_DIFFICULTY_INTERMEDIATE);
+	expradio = new FXMenuRadio(gamemenu, "&Expert",this,ID_DIFFICULTY_EXPERT);
+	cusradio = new FXMenuRadio(gamemenu, "&Custom...",this,ID_DIFFICULTY_CUSTOM);
+
+	new FXMenuSeparator(gamemenu);
+
+	new FXMenuCheck(gamemenu, "&Narks (?)",this,ID_MARKS);
+	new FXMenuCheck(gamemenu, "Co&lor",this,ID_COLOR);
+	new FXMenuCheck(gamemenu, "&Sound",this,ID_SOUND);
+
+	new FXMenuSeparator(gamemenu);
+
+	new FXMenuCommand(gamemenu, "Best &Times",NULL,this,ID_BESTSCORE);
+
+	new FXMenuSeparator(gamemenu);
+
+	new FXMenuCommand(gamemenu,"E&xit",NULL,getApp(),FXApp::ID_QUIT);
+
+	new FXMenuCommand(helpmenu, "&About Minesweeper...",NULL,this,ID_ABOUT);
+
+
+	rows = _ROWS_BEGINNER;
+	cols = _COLS_BEGINNER;
+	mines = _MINES_BEGINNER;
+
+	allocBoard();
 
 	FXPacker* rootcont = new FXPacker(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
 	rootcont->setBackColor(FXRGB(192,192,192));
@@ -501,26 +1459,48 @@ MineSweeper::MineSweeper(FXApp *a) : FXMainWindow(a, "Scribble Application", mai
 
 	//FXPacker* minegrid = new FXPacker(this, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
 
-	MSPacker* topstatscont = new MSPacker(cont, FRAME_SUNKEN|LAYOUT_FILL_X, 0,0,0,0, 5,7,4,4, 0,0);
+	MSPacker* topstatscont = new MSPacker(cont, FRAME_SUNKEN|LAYOUT_FILL_X, 0,0,0,0, 5,7,4,3, 0,0);
 	topstatscont->setBackColor(FXRGB(192,192,192));
 
 	FXHorizontalFrame* topstats = new FXHorizontalFrame(topstatscont, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
 	topstats->setBackColor(FXRGB(192,192,192));
 
-	new MSSevenSegment(topstats, LAYOUT_LEFT|FRAME_NONE, 0,0,0,0);
-	new MSSevenSegment(topstats, LAYOUT_CENTER_X|LAYOUT_CENTER_X|FRAME_NONE, 0,0,0,0);
+	minedisp = new MSSevenSegment(topstats, LAYOUT_LEFT|FRAME_SUNKEN, 0,0,0,0);
+	minedisp->setValue(mines);
+	//new MSSevenSegment(topstats, LAYOUT_CENTER_X|LAYOUT_CENTER_X|FRAME_NONE, 0,0,0,0);
+      new FXSeparator(topstats, SEPARATOR_NONE|LAYOUT_FIX_WIDTH, 0,0,2,0);
+	smilebtn = new MSSmileButton(topstats, LAYOUT_CENTER_X|FRAME_NONE, 0,0,0,0);
 
-	new MSSevenSegment(topstats, LAYOUT_RIGHT|LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0);
+	timedisp = new MSSevenSegment(topstats, LAYOUT_RIGHT|LAYOUT_RIGHT|FRAME_SUNKEN, 0,0,0,0);
 
-	new MSMineButton(topstats, LAYOUT_RIGHT|LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0);
-	new MSMineButton(topstats, LAYOUT_RIGHT|LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0);
 
-	MSPacker* minegrid = new MSPacker(cont, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
+	MSPacker* minegridcont = new MSPacker(cont, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
+	minegridcont->setBackColor(FXRGB(192,192,192));
+
+	minegrid = new FXMatrix(minegridcont, cols, MATRIX_BY_COLUMNS|PACK_UNIFORM_WIDTH|PACK_UNIFORM_HEIGHT, 0,0,0,0, 0,0,0,0, 0,0);
 	minegrid->setBackColor(FXRGB(192,192,192));
+	minegrid->setTarget(this);
+	minegrid->setSelector(ID_MINEGRID);
+	minegrid->enable();
+
+	this->enable();
+
+
+	//FXMatrix* 
+
+
+	//for (int mine = 0; mine < (cols*rows); mine++) {
+
+	addCells(minegrid);
+	//removeCells(minegrid);
+	//addCells(minegrid);
+
+	//new MSMineButton(minegrid, FRAME_NONE, 0,0,0,0);
+
 }
 
-
 MineSweeper::~MineSweeper() {
+	delete gamemenu;
 }
 
 
@@ -533,105 +1513,95 @@ void MineSweeper::create() {
 	show(PLACEMENT_SCREEN);
 }
 
+long MineSweeper::onLeave(FXObject* obj, FXSelector sel, void* ptr) {
+	pressed = FALSE;
+
+	return FXWindow::onLeave(obj, sel, ptr);
+}
+
+long MineSweeper::aboutBox(FXObject* obj, FXSelector sel, void* ptr) {
+	AboutBox* aboutbox = new AboutBox(this);
+	aboutbox->setFocus();
+	aboutbox->execute(PLACEMENT_OWNER);
+	aboutbox->setFocus();
+
+	return 1;
+}
+
+long MineSweeper::newBoard(FXObject* obj, FXSelector sel, void* ptr) {
+	refreshBoard();
+
+	smilebtn->setState(MSSmileButton::SMILEBUTTON_NORMAL);
+
+	return 1;
+}
 
 
-// Mouse button was pressed somewhere
-long MineSweeper::onMouseDown(FXObject*, FXSelector, void*) {
-	canvas->grab();
+long MineSweeper::displayBestScores(FXObject* obj, FXSelector sel, void* ptr) {
+	FXDialogBox* highscorebox = new HighScoreBox(mainwin);
 
-	// While the mouse is down, we'll draw lines
-	mdflag = 1;
+	return highscorebox->execute(PLACEMENT_OWNER);
+}
+
+
+
+void changeDifficulty(int c, int r, int m) {
+	deleteBoard();
+
+	cols = c;
+	rows = r;
+	mines = m;
+
+	makeBoard();
+	minegrid->setNumColumns(cols);
+
+	smilebtn->setState(MSSmileButton::SMILEBUTTON_NORMAL);
+
+	mainwin->recalc();
+	mainwin->resize(mainwin->getDefaultWidth(), mainwin->getDefaultHeight());
+}
+
+
+
+long MineSweeper::changeDifficultyBeginner(FXObject* obj, FXSelector sel, void* ptr) {
+	changeDifficulty(_COLS_BEGINNER, _ROWS_BEGINNER, _MINES_BEGINNER);
+	difficulty = _DIFF_BEGINNER;
+
+	begradio->setCheck(TRUE);
+	intradio->setCheck(FALSE);
+	expradio->setCheck(FALSE);
+	cusradio->setCheck(FALSE);
+
+	return 1;
+}
+
+long MineSweeper::changeDifficultyIntermediate(FXObject* obj, FXSelector sel, void* ptr) {
+	changeDifficulty(_COLS_INTERMEDIATE, _ROWS_INTERMEDIATE, _MINES_INTERMEDIATE);
+	difficulty = _DIFF_INTERMEDIATE;
+
+	begradio->setCheck(FALSE);
+	intradio->setCheck(TRUE);
+	expradio->setCheck(FALSE);
+	cusradio->setCheck(FALSE);
+
+	return 1;
+}
+
+
+long MineSweeper::changeDifficultyExpert(FXObject* obj, FXSelector sel, void* ptr) {
+	changeDifficulty(_COLS_EXPERT, _ROWS_EXPERT, _MINES_EXPERT);
+	difficulty = _DIFF_EXPERT;
+
+	begradio->setCheck(FALSE);
+	intradio->setCheck(FALSE);
+	expradio->setCheck(TRUE);
+	cusradio->setCheck(FALSE);
 
 	return 1;
 }
 
 
 
-// The mouse has moved, draw a line
-long MineSweeper::onMouseMove(FXObject*, FXSelector, void* ptr) {
-	FXEvent *ev =(FXEvent*) ptr;
-
-	// Draw
-	if (mdflag) {
-
-		// Get DC for the canvas
-		FXDCWindow dc(canvas);
-
-		// Set foreground color
-		dc.setForeground(drawColor);
-
-		// Draw line
-		dc.drawLine(ev->last_x, ev->last_y, ev->win_x, ev->win_y);
-
-		// We have drawn something, so now the canvas is dirty
-		dirty = 1;
-	}
-
-	return 1;
-}
-
-
-
-// The mouse button was released again
-long MineSweeper::onMouseUp(FXObject*, FXSelector, void* ptr) {
-	FXEvent *ev =(FXEvent*) ptr;
-
-	canvas->ungrab();
-	if (mdflag) {
-		FXDCWindow dc(canvas);
-
-		dc.setForeground(drawColor);
-		dc.drawLine(ev->last_x, ev->last_y, ev->win_x, ev->win_y);
-
-		// We have drawn something, so now the canvas is dirty
-		dirty = 1;
-
-		// Mouse no longer down
-		mdflag = 0;
-	}
-	return 1;
-}
-
-
-// Paint the canvas
-long MineSweeper::onPaint(FXObject*, FXSelector, void* ptr) {
-	FXEvent *ev =(FXEvent*) ptr;
-	FXDCWindow dc(canvas, ev);
-	dc.setForeground(canvas->getBackColor());
-	dc.fillRectangle(ev->rect.x, ev->rect.y, ev->rect.w, ev->rect.h);
-
-	return 1;
-}
-
-
-// Handle the clear message
-long MineSweeper::onCmdClear(FXObject*, FXSelector, void*) {
-	FXDCWindow dc(canvas);
-	dc.setForeground(canvas->getBackColor());
-	dc.fillRectangle(0, 0, canvas->getWidth(), canvas->getHeight());
-	dirty = 0;
-
-	return 1;
-}
-
-
-
-// Update the clear button:- each gui element (widget) in FOX
-// receives a message during idle processing asking it to be updated.
-// For example, buttons can be sensitized or desensitized when the
-// state of the application changes.
-// In this case, we desensitize the sender (the clear button) when
-// the canvas has already been cleared, and sensitize it when it has
-// been painted (as indicated by the dirty flag).
-long MineSweeper::onUpdClear(FXObject* sender, FXSelector, void*) {
-	
-	if (dirty)
-		sender->handle(this, FXSEL(SEL_COMMAND, FXWindow::ID_ENABLE), NULL);
-	else
-		sender->handle(this, FXSEL(SEL_COMMAND, FXWindow::ID_DISABLE), NULL);
-
-	return 1;
-}
 
 
 // Here we begin
@@ -639,17 +1609,21 @@ int main(int argc, char *argv[]) {
 	// Make application
 	FXApp application("WinMine", "Ice2KProj");
 
+	app = &application;
+
 	// Load program icon
-	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
+	mainIcon = new FXGIFIcon(&application, resico_mainicon);
+	mainIconBig = new FXGIFIcon(&application, resico_mainicon_big);
 
 	// Start app
 	application.init(argc, argv);
 
 	// Scribble window
-	new MineSweeper(&application);
-
+	mainwin = new MineSweeper(&application);
+	//FXDialogBox* newscorebox = new NewScoreBox(mainwin);
 	// Create the application's windows
 	application.create();
+	//newscorebox->execute(PLACEMENT_OWNER);
 
 	// Run the application
 	return application.run();

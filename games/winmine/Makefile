@@ -13,7 +13,7 @@ PREFIX=/usr/local
 
 SOURCES = winmine.cpp
 OBJECTS = winmine.o
-ICONS = res/*.gif res/segment.bmp res/coolmine.bmp
+ICONS = res/*.gif res/segment.bmp res/coolmine.bmp res/coolsmil.bmp
 EXECUTABLE = winmine
 
 CPPFLAGS += `fox-config --cflags`
