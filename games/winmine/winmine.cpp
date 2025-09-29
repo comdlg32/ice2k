@@ -22,7 +22,14 @@ FXApp* app;
 FXIcon* mainIcon;
 FXIcon* mainIconBig;
 
+FXMenuRadio* begradio;
+FXMenuRadio* intradio;
+FXMenuRadio* expradio;
+FXMenuRadio* cusradio;
+
 enum { ID_TIMER = 12931 };
+
+void changeDifficulty(int, int, int);
 
 class MSPacker : public FXPacker {
 	FXDECLARE(MSPacker)
@@ -329,12 +336,10 @@ BOOL pressed;
 #define _ROWS_INTERMEDIATE 16
 #define _COLS_INTERMEDIATE 16
 #define _MINES_INTERMEDIATE 40
-//#define _MINES_INTERMEDIATE 2
 
 #define _ROWS_EXPERT 16
 #define _COLS_EXPERT 30
 #define _MINES_EXPERT 99
-//#define _MINES_EXPERT 2
 
 int rows;
 int cols;
@@ -661,7 +666,6 @@ HighScoreBox::~HighScoreBox() {}
 void HighScoreBox::create() { FXDialogBox::create(); }
 
 
-
 #define _DIFF_BEGINNER 0
 #define _DIFF_INTERMEDIATE 1
 #define _DIFF_EXPERT 2
@@ -670,6 +674,143 @@ void HighScoreBox::create() { FXDialogBox::create(); }
 int difficulty = _DIFF_BEGINNER;
 
 int newscore = 999;
+
+// CUSTOM GAME BOX
+
+class CustomGameBox: public FXDialogBox {
+	FXDECLARE(CustomGameBox);
+
+	FXHorizontalFrame* cont;
+	FXLabel* begScoreLbl;
+	FXLabel* intScoreLbl;
+	FXLabel* expScoreLbl;
+
+	FXLabel* begNameLbl;
+	FXLabel* intNameLbl;
+	FXLabel* expNameLbl;
+
+	FXTextField* heighttfield;
+	FXTextField* widthtfield;
+	FXTextField* minestfield;
+
+
+protected:
+	CustomGameBox() {}
+
+public:
+	enum {
+		ID_DIALOG = FXDialogBox::ID_LAST,
+		ID_CLEAR,
+	};
+
+	CustomGameBox(FXWindow* owner);
+	long clearScores(FXObject*, FXSelector, void*);
+	long onCmdAccept(FXObject*, FXSelector, void*);
+
+	virtual void create();
+	virtual ~CustomGameBox();
+};
+
+
+FXDEFMAP(CustomGameBox) CustomGameBoxMap[] = {
+	FXMAPFUNC(SEL_COMMAND, CustomGameBox::ID_ACCEPT, CustomGameBox::onCmdAccept),
+};
+
+
+long CustomGameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
+	difficulty = _DIFF_CUSTOM;
+
+	int nrows = atoi(heighttfield->getText().text());
+	if (nrows < 9) nrows = 9;
+	else if (nrows > 24) nrows = 24;
+
+	int ncols = atoi(widthtfield->getText().text());
+	if (ncols < 9) ncols = 9;
+	else if (ncols > 30) ncols = 30;
+
+	int totsize = ncols * nrows;
+
+	int nmines = atoi(minestfield->getText().text());
+	if (nmines < 1) nmines = 1;
+	else if ( (nmines > totsize-1) ) nmines = totsize-1;
+
+	changeDifficulty(nrows, ncols, nmines);
+
+	begradio->setCheck(FALSE);
+	intradio->setCheck(FALSE);
+	expradio->setCheck(FALSE);
+	cusradio->setCheck(TRUE);
+
+
+	FXDialogBox::onCmdAccept(obj, sel, ptr);
+
+	return 1;
+}
+
+
+FXIMPLEMENT(CustomGameBox, FXDialogBox, CustomGameBoxMap, ARRAYNUMBER(CustomGameBoxMap));
+
+CustomGameBox::CustomGameBox(FXWindow* owner): FXDialogBox(owner, "Custom Field", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0,0,0,0, 10,10,10,10, 20,10) {
+
+
+	//FXApp* appl = getApp();
+	char fieldstr[6];
+
+
+
+	FXMatrix* scoregrid = new FXMatrix(this, 3, LAYOUT_SIDE_LEFT|PACK_UNIFORM_HEIGHT, 0,0,0,0, 0,0,0,0, 0,2);
+	new FXLabel(scoregrid, "Height:", NULL, JUSTIFY_LEFT, 0,0,0,0, 0,16,0,0);
+	new FXLabel(scoregrid, "Width:", NULL, JUSTIFY_LEFT, 0,0,0,0,   0,16,0,0);
+	new FXLabel(scoregrid, "Mines:", NULL, JUSTIFY_LEFT, 0,0,0,0,   0,16,0,0);
+
+
+	heighttfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
+	snprintf(fieldstr, sizeof(fieldstr), "%d", rows);
+	heighttfield->setText(fieldstr);
+
+	widthtfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
+	snprintf(fieldstr, sizeof(fieldstr), "%d", cols);
+	widthtfield->setText(fieldstr);
+
+	minestfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
+	snprintf(fieldstr, sizeof(fieldstr), "%d", mines);
+	minestfield->setText(fieldstr);
+
+	FXVerticalFrame* btncont = new FXVerticalFrame(this, LAYOUT_SIDE_RIGHT|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
+
+	new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_TOP|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,60,23, 0,0,0,0);
+	new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, LAYOUT_BOTTOM|BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,60,23, 0,0,0,0);
+	this->show();
+	//this->setFocus();
+}
+
+long CustomGameBox::clearScores(FXObject* sender, FXSelector sel, void* ptr) {
+	getApp()->reg().writeStringEntry("Names", "Beginner", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Beginner", 999);
+	
+	getApp()->reg().writeStringEntry("Names", "Intermediate", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Intermediate", 999);
+
+	getApp()->reg().writeStringEntry("Names", "Expert", "Anonymous");
+	getApp()->reg().writeIntEntry("Scores", "Expert", 999);
+
+	begNameLbl->setText("Anonymous");
+	intNameLbl->setText("Anonymous");
+	expNameLbl->setText("Anonymous");
+
+	begScoreLbl->setText("999 seconds");
+	intScoreLbl->setText("999 seconds");
+	expScoreLbl->setText("999 seconds");
+
+
+	return 1;
+}
+
+
+CustomGameBox::~CustomGameBox() {}
+void CustomGameBox::create() { FXDialogBox::create(); heighttfield->setFocus(); }
+
+// --
 
 class NewScoreBox: public FXDialogBox {
 	FXDECLARE(NewScoreBox);
@@ -717,7 +858,7 @@ FXDEFMAP(NewScoreBox) NewScoreBoxMap[] = {
 
 FXIMPLEMENT(NewScoreBox, FXDialogBox, NewScoreBoxMap, ARRAYNUMBER(NewScoreBoxMap));
 
-NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Mine Sweepers", DECOR_BORDER, 0,0,0,0, 9,9,6,22, 0,0) {
+NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Time", DECOR_BORDER, 0,0,0,0, 9,9,6,22, 0,0) {
 	FXApp* appl = getApp();
 
 	new FXLabel(this, "You have the fastest time", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
@@ -726,7 +867,7 @@ NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Mine Swee
 		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
 	} else if (difficulty == _DIFF_INTERMEDIATE) {
 		name = strdup(appl->reg().readStringEntry("Names", "Intermediate", "Anonymous"));
-		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+		new FXLabel(this, "for intermediate level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
 	} else {
 		name = strdup(appl->reg().readStringEntry("Names", "Expert", "Anonymous"));
 		new FXLabel(this, "for expert level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
@@ -834,6 +975,8 @@ void revealCell(int row, int col, BOOL click) {
 
 MSSevenSegment* minedisp;
 
+BOOL unmarks = TRUE;
+
 void toggleState(int r, int c) {
 	if (!board[r][c].revealed) {
 		switch (board[r][c].state) {
@@ -843,7 +986,11 @@ void toggleState(int r, int c) {
 
 			case FLAG:
 				minedisp->setValue(minedisp->getValue() + 1);
-				board[r][c].state = UNKNOWN; break;
+
+				if (unmarks) board[r][c].state = UNKNOWN;
+				else board[r][c].state = NOFLAG;
+
+				break;
 
 			default:
 				board[r][c].state = NOFLAG; break;
@@ -1224,6 +1371,8 @@ void addCells(FXComposite* cont) {
 }
 
 
+
+
 void deleteBoard() {
 	freeBoard();
 	removeCells(minegrid);
@@ -1249,10 +1398,7 @@ void refreshBoard() {
 	makeBoard();
 }
 
-FXMenuRadio* begradio;
-FXMenuRadio* intradio;
-FXMenuRadio* expradio;
-FXMenuRadio* cusradio;
+
 
 // Main Window
 class MineSweeper : public FXMainWindow {
@@ -1288,6 +1434,9 @@ public:
 	long newBoard(FXObject*, FXSelector, void*);
 	long aboutBox(FXObject*, FXSelector, void*);
 
+	long customDiffBox(FXObject*, FXSelector, void*);
+	long toggleMarks(FXObject*, FXSelector, void*);
+	
 
 public:
 	// Messages for our class
@@ -1305,9 +1454,6 @@ public:
 		ID_DIFFICULTY_CUSTOM,
 
 		ID_MARKS,
-		ID_COLOR,
-
-		ID_SOUND,
 
 		ID_BESTSCORE,
 		ID_ABOUT,
@@ -1375,10 +1521,12 @@ FXDEFMAP(MineSweeper) MineSweeperMap[] = {
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_BEGINNER, MineSweeper::changeDifficultyBeginner),
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_INTERMEDIATE, MineSweeper::changeDifficultyIntermediate),
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_EXPERT, MineSweeper::changeDifficultyExpert),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_DIFFICULTY_CUSTOM, MineSweeper::customDiffBox),
 
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_BESTSCORE, MineSweeper::displayBestScores),
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_NEW, MineSweeper::newBoard),
 	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_ABOUT, MineSweeper::aboutBox),
+	FXMAPFUNC(SEL_COMMAND, MineSweeper::ID_MARKS, MineSweeper::toggleMarks),
 
 	FXMAPFUNC(SEL_TIMEOUT, ID_TIMER, MineSweeper::onTimer),
 };
@@ -1422,9 +1570,10 @@ MineSweeper::MineSweeper(FXApp *a) : FXMainWindow(a, "Minesweeper", mainIcon, NU
 
 	new FXMenuSeparator(gamemenu);
 
-	new FXMenuCheck(gamemenu, "&Narks (?)",this,ID_MARKS);
-	new FXMenuCheck(gamemenu, "Co&lor",this,ID_COLOR);
-	new FXMenuCheck(gamemenu, "&Sound",this,ID_SOUND);
+	FXMenuCheck* markchk = new FXMenuCheck(gamemenu, "&Marks (?)",this,ID_MARKS);
+	markchk->setCheck(TRUE);
+	//new FXMenuCheck(gamemenu, "Co&lor",this,ID_COLOR);
+	//new FXMenuCheck(gamemenu, "&Sound",this,ID_SOUND);
 
 	new FXMenuSeparator(gamemenu);
 
@@ -1528,6 +1677,12 @@ long MineSweeper::aboutBox(FXObject* obj, FXSelector sel, void* ptr) {
 	return 1;
 }
 
+long MineSweeper::toggleMarks(FXObject* obj, FXSelector sel, void* ptr) {
+	unmarks = !unmarks;
+
+	return 0;
+}
+
 long MineSweeper::newBoard(FXObject* obj, FXSelector sel, void* ptr) {
 	refreshBoard();
 
@@ -1544,8 +1699,17 @@ long MineSweeper::displayBestScores(FXObject* obj, FXSelector sel, void* ptr) {
 }
 
 
+long MineSweeper::customDiffBox(FXObject* obj, FXSelector sel, void* ptr) {
+	cusradio->setCheck(FALSE);
 
-void changeDifficulty(int c, int r, int m) {
+	FXDialogBox* customgamebox = new CustomGameBox(mainwin);
+
+	return customgamebox->execute(PLACEMENT_OWNER);
+}
+
+
+
+void changeDifficulty(int r, int c, int m) {
 	deleteBoard();
 
 	cols = c;
@@ -1564,7 +1728,7 @@ void changeDifficulty(int c, int r, int m) {
 
 
 long MineSweeper::changeDifficultyBeginner(FXObject* obj, FXSelector sel, void* ptr) {
-	changeDifficulty(_COLS_BEGINNER, _ROWS_BEGINNER, _MINES_BEGINNER);
+	changeDifficulty(_ROWS_BEGINNER, _COLS_BEGINNER, _MINES_BEGINNER);
 	difficulty = _DIFF_BEGINNER;
 
 	begradio->setCheck(TRUE);
@@ -1576,7 +1740,7 @@ long MineSweeper::changeDifficultyBeginner(FXObject* obj, FXSelector sel, void* 
 }
 
 long MineSweeper::changeDifficultyIntermediate(FXObject* obj, FXSelector sel, void* ptr) {
-	changeDifficulty(_COLS_INTERMEDIATE, _ROWS_INTERMEDIATE, _MINES_INTERMEDIATE);
+	changeDifficulty(_ROWS_INTERMEDIATE, _COLS_INTERMEDIATE, _MINES_INTERMEDIATE);
 	difficulty = _DIFF_INTERMEDIATE;
 
 	begradio->setCheck(FALSE);
@@ -1589,7 +1753,7 @@ long MineSweeper::changeDifficultyIntermediate(FXObject* obj, FXSelector sel, vo
 
 
 long MineSweeper::changeDifficultyExpert(FXObject* obj, FXSelector sel, void* ptr) {
-	changeDifficulty(_COLS_EXPERT, _ROWS_EXPERT, _MINES_EXPERT);
+	changeDifficulty(_ROWS_EXPERT, _COLS_EXPERT, _MINES_EXPERT);
 	difficulty = _DIFF_EXPERT;
 
 	begradio->setCheck(FALSE);
@@ -1620,10 +1784,11 @@ int main(int argc, char *argv[]) {
 
 	// Scribble window
 	mainwin = new MineSweeper(&application);
+	//FXDialogBox* customdialog = new CustomGameBox(mainwin);
 	//FXDialogBox* newscorebox = new NewScoreBox(mainwin);
 	// Create the application's windows
 	application.create();
-	//newscorebox->execute(PLACEMENT_OWNER);
+	//customdialog->execute(PLACEMENT_OWNER);
 
 	// Run the application
 	return application.run();
