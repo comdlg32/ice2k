@@ -358,6 +358,8 @@ rm "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
 rm "$HOME/.icewm/programs/ice2krun/run_icon.png"
 
 if [ "$xptheme" -eq 1 ]; then
+	iniset "$HOME/.foxrc/Desktop" ICE2K windows xp
+
 	ln -s "$HOME/.icons/LinXP/devices/32/computer.png"        "$HOME/.icewm/icons/desk/computer.png"
 	ln -s "$HOME/.icons/LinXP/places/32/folder_documents.png" "$HOME/.icewm/icons/desk/documents.png"
 	ln -s "$HOME/.icewm/programs/common/icons/network.png"    "$HOME/.icewm/icons/desk/network.png"
@@ -396,6 +398,8 @@ if [ "$xptheme" -eq 1 ]; then
 	rm "$icewmtheme/taskbar/start.xpm"
 	composite -geometry +4+4 "$icewmtheme/taskbar/startxpicon.bmp" "$icewmtheme/taskbar/startwologo.xpm" "$icewmtheme/taskbar/start.xpm"
 else
+	iniset "$HOME/.foxrc/Desktop" ICE2K windows 2k
+
 	ln -s "$HOME/.icons/SE98/devices/32/computer.png"         "$HOME/.icewm/icons/desk/computer.png"
 	ln -s "$HOME/.icons/SE98/places/32/folder_home.png"       "$HOME/.icewm/icons/desk/documents.png"
 	ln -s "$HOME/.icons/SE98/status/32/network-idle.png"      "$HOME/.icewm/icons/desk/network.png"

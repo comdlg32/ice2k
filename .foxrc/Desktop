@@ -29,3 +29,6 @@ pbarcolor=#4d4f7d
 tiptime=3000
 shadowcolor=#808080
 focuscolor=#000000
+
+[ICE2K]
+windows=xp

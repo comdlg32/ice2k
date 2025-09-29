@@ -425,12 +425,31 @@ long SystemPropertiesWindow::onChangeHostname(FXObject* sender, FXSelector sel, 
   return 1;
 }
 
+int xp = 0;
+int srv03 = 0;
 
 //int main(int argc, char *argv[]) {
 SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,404,436,  0,0,0,0,  0,0) {
   this->changeFocus((FXWindow*)0);
   this->killFocus();
-  FXIcon* monitorimage = new FXGIFIcon(app, resico_monitor);
+  char* windows = i2kBGetWinVersion();
+
+  if ( !(strcmp(windows, "srv03")) ) {
+    xp = 1;
+    srv03 = 1;
+  }
+
+  if ( xp || (!(strcmp(windows, "xp"))) ) {
+    xp = 1;
+  }
+
+  FXIcon* monitorimage;
+
+  if (xp)
+    monitorimage = new FXGIFIcon(app, resico_monitorxp);
+  else
+    monitorimage = new FXGIFIcon(app, resico_monitor);
+
 
   //application.init(argc, argv);
   //FXDialogBox *main=new FXDialogBox(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0);
@@ -451,14 +470,27 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   FXHorizontalFrame* horcont = new FXHorizontalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,380,361, 24,24,15,16); 
   new FXLabel(horcont, "", monitorimage, LABEL_NORMAL, 0,0,0,0,  20,29,24,20);
 
+
+#ifdef __x86_64__
+#define PROFSTR "Professional x64 Edition"
+#else
+#define PROFSTR "Professional"
+#endif
+
   //new FXLabel(a, "", NULL,LAYOUT_FIX_X|LAYOUT_FIX_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 380, 361);
   //new FXLabel(a, "a", NULL, LAYOUT_FILL_X|LAYOUT_FILL_Y,0, 0, 380, 361);
   //new FXLabel(a, "", monitoricon);
   vercont = new FXVerticalFrame(horcont,FRAME_NONE, 0,0,380,361, 2,2,2,2);
   new FXLabel(vercont, "System:",                    NULL, LABEL_NORMAL,              0,0,0,0,   0,0, 0,0);
   new FXLabel(vercont,    i2kBGetFullOSName(),       NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
-  new FXLabel(vercont,    "5.00.2195",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
-  new FXLabel(vercont,    "Service Pack 4",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+  if (xp) {
+    new FXLabel(vercont,    PROFSTR,               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+    new FXLabel(vercont,    "Version 2003",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+    new FXLabel(vercont,    "Service Pack 1",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+  } else {
+    new FXLabel(vercont,    "5.00.2195",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+    new FXLabel(vercont,    "Service Pack 4",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+  }
 
   new FXSeparator(vercont, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,4); // i could use a fxframe, but semantics r cute
 
@@ -500,9 +532,13 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
     perror("sysinfo");
 
   char physmemtext[1024];
-  formatnum(sys_info.totalram, physmemtext);
-
-  strcat(physmemtext, " KB RAM");
+  if (xp) {
+    formatnum(sys_info.totalram / 1024, physmemtext);
+    strcat(physmemtext, " MB of RAM");
+  } else {
+    formatnum(sys_info.totalram, physmemtext);
+    strcat(physmemtext, " KB RAM");
+  }
 
   new FXLabel(vercont, physmemtext, NULL, LABEL_NORMAL, 0,0,0,0,          18,0, 0,0);
 
@@ -510,7 +546,13 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   new FXTabItem(tabbook,"Network Identification",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
   networkframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 
-  FXIcon* computericon = new FXGIFIcon(app, resico_compuzer);
+  FXIcon* computericon;
+  if (xp) {
+    computericon = new FXBMPIcon(app, resico_compuzer_xp);
+    computericon->blend(app->getBaseColor());
+  } else {
+    computericon = new FXGIFIcon(app, resico_compuzer);
+  }
 
   FXHorizontalFrame* nettop = new FXHorizontalFrame(networkframe, LAYOUT_FILL_X, 0,0,0,0,   9,7,7,5,  17,16);
 
@@ -570,7 +612,13 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   FXButton* btn;
 
   FXGroupBox* hdwwizgrp = new FXGroupBox(hardwareframe, "Hardware Wizard", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,11, 0,0);
-  FXIcon* hdwwizicon = new FXGIFIcon(app, resico_hdwwiz);
+  FXIcon* hdwwizicon;
+  if (xp) {
+    hdwwizicon = new FXBMPIcon(app, resico_hdwwiz_xp);
+    hdwwizicon->blend(app->getBaseColor());
+  } else {
+    hdwwizicon = new FXGIFIcon(app, resico_hdwwiz);
+  }
   new FXLabel(hdwwizgrp, "", hdwwizicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,70,  0,16,0,0);
   new FXLabel(hdwwizgrp, "The Hardware wizard helps you install, uninstall, repair,\n"
                          "unplug, eject, and configure your hardware.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
@@ -629,6 +677,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
   FXPacker* tablecont = new FXPacker(userframe,LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0,  0,1,0,0, 0,0);  
   FXPacker* tablecont2 = new FXPacker(tablecont,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_SUNKEN,0,0,0,0,  0,0,0,0, 0,0);  
   FXTable* table=new FXTable(tablecont2,NULL,NULL,TABLE_READONLY|LAYOUT_FILL_X|LAYOUT_FILL_Y,0,0,0,0, 2,2,2,2);
+  //table->setSelMode(SELECTTABLE_ROWS);
 
   FXFont* deffont = getApp()->getNormalFont();
   

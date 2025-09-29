@@ -1,4 +1,6 @@
 #include <fx.h>
+#include <ice2k/branding.h>
+
 #include <ice2k/comctl32.h>
 #include <ice2k/ini.h>
 #include "res/foxres.h"
@@ -1049,6 +1051,7 @@ FXColor hex2FXColor(const char* hex) {
 wallConfiguration wallcfg;
 
 DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Properties", ico_mainico, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
+  int xp = 0;
 //writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
   const char* homedir = getHomeDir();
@@ -1064,8 +1067,20 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
   deskcol = hex2FXColor(wallcfg.color);
 
   // create monitor images
-  monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
-  previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
+
+  char* windows = i2kBGetWinVersion();
+
+  if ( !(strcmp(windows, "srv03")) )
+    strcpy(windows, "xp");
+
+  if ( !(strcmp(windows, "xp")) ) {
+    xp = 1;
+    monitorsource = new FXGIFIcon(app, resico_monitorxp); monitorsource->create();
+    previewsource = new FXGIFIcon(app, resico_previewxp); previewsource->create();
+  } else {
+    monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
+    previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
+  }
 
   monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
   //monitorimage->create();
@@ -1122,8 +1137,17 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
   genMonitorPreview(app, monitornopimage, NULL, deskcol);
   
 
-  FXIcon* ico_nobg = new FXGIFIcon(app, resico_nobg);
-  ico_bmp = new FXGIFIcon(app, resico_bmp);
+  FXIcon* ico_nobg;
+
+  if (xp) {
+    ico_nobg = new FXBMPIcon(app, resico_nobg_xp);
+    ico_nobg->blend(app->getBackColor());
+    ico_bmp = new FXBMPIcon(app, resico_bmp_xp);
+    ico_bmp->blend(app->getBackColor());
+  } else {
+    ico_nobg = new FXGIFIcon(app, resico_nobg);
+    ico_bmp = new FXGIFIcon(app, resico_bmp);
+  }
 
   //char buf[256] = {0};
 
@@ -1214,7 +1238,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   int count = 0;
 
-  char wallpaperpath[] = "/home/tf/walls";
+  char wallpaperpath[] = "/home/tf/Pictures";
 
 
   char** wallpapers = getWallpapers(wallpaperpath, &count);

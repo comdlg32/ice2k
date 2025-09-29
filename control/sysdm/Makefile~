@@ -11,7 +11,7 @@ PREFIX=/usr/local
 ICONS = res/*.gif
 SOURCES = brdexmpl.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = brdexmpl
+EXECUTABLE = sysdm
 
 CPPFLAGS += `fox-config --cflags`
 

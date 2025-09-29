@@ -8,7 +8,7 @@ LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*.gif
+ICONS = res/*.gif res/*.bmp
 SOURCES = brdexmpl.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = sysdm

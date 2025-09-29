@@ -1,6 +1,6 @@
 #include <fx.h>
 #include <ice2k/comctl32.h>
-//#include <ice2k/branding.h>
+#include <ice2k/branding.h>
 #include "res/foxres.h"
 #include <dirent.h>
 
@@ -542,7 +542,7 @@ HotplugDialog::HotplugDialog(FXApp *app):FXMainWindow(app, "Device Manager", ico
   //new FXButton(toolbar,"\tUp",ico_hist_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  0,0,0,0);
 
 }
-
+int xp = 0;
 
 int main(int argc,char *argv[]) {
   mainargv = argv;
@@ -556,8 +556,21 @@ int main(int argc,char *argv[]) {
 
   application.init(argc,argv);
 
+  char* windows = i2kBGetWinVersion();
+
+  if ( !(strcmp(windows, "srv03")) )
+    strcpy(windows, "xp");
+
   ico_hotplug = new FXGIFIcon(app, resico_hotplug);
-  ico_hotplug_big = new FXGIFIcon(app, resico_hotplug_big);
+
+  if ( !(strcmp(windows, "xp")) ) {
+    xp = 1;
+    ico_hotplug_big = new FXBMPIcon(app, resico_hotplug_big_xp);
+    ico_hotplug_big->blend(app->getBaseColor());
+  } else {
+    ico_hotplug_big = new FXGIFIcon(app, resico_hotplug_big);
+  }
+
 
   //ico_hotplug_big = new FXGIFIcon(app, resico_hotplug);
   

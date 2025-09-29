@@ -4,11 +4,11 @@ CC = g++
 
 CFLAGS = -Wall -c -fno-rtti -fno-exceptions
 CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions
-LDFLAGS = `fox-config --libs` -lctl32 -linih-i2k -lXcomposite
+LDFLAGS = `fox-config --libs` -lctl32 -linih-i2k -lXcomposite -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*.gif
+ICONS = res/*.gif res/*.bmp
 SOURCES = desk.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = deskcpl
