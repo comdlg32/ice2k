@@ -1,0 +1,233 @@
+# Hebrew translation for cbatticon.
+# Copyright (C) 2017-2018 Valère Monseur
+# This file is distributed under the same license as the cbatticon package.
+# Yotam Salmon <yotam.salmon@gmail.com>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cbatticon 1.6.7\n"
+"Report-Msgid-Bugs-To: valere.monseur@ymail.com\n"
+"POT-Creation-Date: 2015-07-17 20:38+0200\n"
+"PO-Revision-Date: 2018-04-08 23:49+0200\n"
+"Last-Translator: Valère Monseur <valere.monseur@ymail.com>\n"
+"Language-Team: N/A\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+
+#: cbatticon.c:154
+msgid "Display the version"
+msgstr "הצג את הגרסה"
+
+#: cbatticon.c:155
+msgid "Display debug information"
+msgstr "הצגת מידע ניפוי-באגים"
+
+#: cbatticon.c:156
+msgid "Set update interval (in seconds)"
+msgstr "הגדר מרווח עדכונים (בשניות)"
+
+#: cbatticon.c:157
+msgid "Set icon type ('standard', 'notification' or 'symbolic')"
+msgstr "הגדר סוג אייקון (רגיל, התראה או סימבולי)"
+
+#: cbatticon.c:158
+msgid "Set low battery level (in percent)"
+msgstr "הגדר מצב סוללה נמוכה (באחוזים)"
+
+#: cbatticon.c:159
+msgid "Set critical battery level (in percent)"
+msgstr "הגדר מצב חירום לסוללה נמוכה קריטית (באחוזים)"
+
+#: cbatticon.c:160
+msgid "Command to execute when critical battery level is reached"
+msgstr "פקודה לביצוע כאשר הסוללה מגיעה למצב קריטי"
+
+#: cbatticon.c:161
+msgid "Command to execute when left clicking on tray icon"
+msgstr "פקודה לביצוע בלחיצה שמאלית על האייקון בשורת המשימות"
+
+#: cbatticon.c:163
+msgid "Hide the notification popups"
+msgstr "העלם את חלוניות ההתראה הקופצות"
+
+#: cbatticon.c:165
+msgid "List available icon types"
+msgstr "הצג את סוגי האייקונים האפשריים"
+
+#: cbatticon.c:166
+msgid "List available power supplies (battery and AC)"
+msgstr "הצג את סוגי אספקת החשמל האפשריים (סוללה ו-AC)"
+
+#: cbatticon.c:170
+msgid "[BATTERY ID]"
+msgstr "[מזהה סוללה]"
+
+#: cbatticon.c:174
+#, c-format
+msgid "Cannot parse command line arguments: %s\n"
+msgstr "אין אפשרות לעבד את הפרמטר: %s\n"
+
+#: cbatticon.c:185
+msgid ""
+"cbatticon: a lightweight and fast battery icon that sits in your system tray\n"
+msgstr "cbatticon: אייקון סוללה פשוט ומהיר שנמצא בשורת המשימות שלך \n"
+
+#: cbatticon.c:186
+#, c-format
+msgid "version %s\n"
+msgstr "גרסה %s\n"
+
+#: cbatticon.c:194
+msgid "List of available power supplies:\n"
+msgstr "רשימה של אספקות חשמל אפשריות:\n"
+
+#: cbatticon.c:209
+msgid "List of available icon types:\n"
+msgstr "רשימה של סוגי אייקונים אפשריים:\n"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212
+msgid "available"
+msgstr "אפשרי"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212 cbatticon.c:540 cbatticon.c:548
+#: cbatticon.c:570
+msgid "unavailable"
+msgstr "לא אפשרי"
+
+#: cbatticon.c:226
+#, c-format
+msgid "Unknown icon type: %s\n"
+msgstr "סוג אייקון לא ידוע: %s\n"
+
+#: cbatticon.c:238
+msgid "No icon type found!\n"
+msgstr "לא נמצא סוג אייקון!\n"
+
+#: cbatticon.c:245
+#, c-format
+msgid "Invalid update interval! It has been reset to default (%d seconds)\n"
+msgstr "מרווח עדכון לא אפשרי! חייבים לאפס אותו לברירת המחדל (%d שניות)\n"
+
+#: cbatticon.c:252
+#, c-format
+msgid "Invalid low level! It has been reset to default (%d percent)\n"
+msgstr "רמת סוללה נמוכה לא אפשרית! איפסנו אותה לברירת המחדל (%d אחוזים)\n"
+
+#: cbatticon.c:257
+#, c-format
+msgid "Invalid critical level! It has been reset to default (%d percent)\n"
+msgstr ""
+"רמת סוללה נמוכה קריטית לא אפשרית! איפסנו אותה לברירת המחדל שלה  (%d אחוזים)\n"
+
+#: cbatticon.c:263
+msgid "Critical level is higher than low level! They have been reset to default\n"
+msgstr ""
+"רמת סוללה קריטית גבוהה יותר מרמת הסוללה הנמוכה (לא קריטית). איפסנו את שתיהן לברירת "
+"המחדל\n"
+
+#: cbatticon.c:294 cbatticon.c:326
+#, c-format
+msgid "type: %-*.*s\tid: %-*.*s\tpath: %s\n"
+msgstr "סוג: %-*.*s\tמזהה: %-*.*s\tנתיב: %s\n"
+
+#: cbatticon.c:294
+msgid "Battery"
+msgstr "סוללה"
+
+#: cbatticon.c:326
+msgid "AC"
+msgstr "AC"
+
+#: cbatticon.c:348
+#, c-format
+msgid "Cannot open sysfs directory: %s (%s)\n"
+msgstr "לא אפשרי לפתוח את תקיית sysfs: %s (%s)\n"
+
+#: cbatticon.c:355
+#, c-format
+msgid "No battery with suffix %s found!\n"
+msgstr "לא נמצאה סוללה בעלת סיומת %s\n"
+
+#: cbatticon.c:360
+msgid "No battery nor AC power supply found!\n"
+msgstr "לא נמצאה סוללה או אספקת AC!\n"
+
+#: cbatticon.c:672 cbatticon.c:675
+msgid "AC only, no battery!"
+msgstr "AC בלבד, ללא סוללה!"
+
+#: cbatticon.c:793
+#, c-format
+msgid "Spawning critical battery level command in 30 seconds: %s"
+msgstr "מבצע פקודת סוללה נמוכה ברמה קריטית בעוד 30 שניות: %s"
+
+#: cbatticon.c:797
+#, c-format
+msgid "Cannot spawn critical battery level command: %s\n"
+msgstr "לא מסוגל לבצע את פקודת הסוללה הנמוכה קריטית: %s\n"
+
+#: cbatticon.c:800
+msgid "Cannot spawn critical battery level command!"
+msgstr "לא מסוגל לבצע את פקודת הסוללה הנמוכה קריטית!"
+
+#: cbatticon.c:817
+#, c-format
+msgid "Cannot spawn left click command: %s\n"
+msgstr "לא מסוגל לבצע את פקודת הלחצן השמאלי: %s\n"
+
+#: cbatticon.c:820
+msgid "Cannot spawn left click command!"
+msgstr "לא מסוגל לבצע את פקודת הלחצן השמאלי!"
+
+#: cbatticon.c:884
+msgid "Battery is missing!"
+msgstr "הסוללה חסרה!"
+
+#: cbatticon.c:888
+msgid "Battery status is unknown!"
+msgstr "מצב הסוללה לא ידוע!"
+
+#: cbatticon.c:892
+msgid "Battery is charged!"
+msgstr "הסוללה טעונה!"
+
+#: cbatticon.c:896
+msgid "Battery is discharging (%i%% remaining)"
+msgstr "הסוללה לא בהטענה (%i%% נשארו)"
+
+#: cbatticon.c:900
+msgid "Battery is not charging (%i%% remaining)"
+msgstr "הסוללה לא בהטענה (%i%% נשארו)"
+
+#: cbatticon.c:904
+msgid "Battery level is low! (%i%% remaining)"
+msgstr "רמת הסוללה נמוכה! (%i%% נשארו)"
+
+#: cbatticon.c:908
+msgid "Battery level is critical! (%i%% remaining)"
+msgstr "רמת הסוללה נמוכה בצורה קריטית! (%i%% נשארו)"
+
+#: cbatticon.c:912
+msgid "Battery is charging (%i%%)"
+msgstr "הסוללה בהטענה (%i%%)"
+
+#: cbatticon.c:941
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d דקה"
+msgstr[1] "%d דקות"
+
+#: cbatticon.c:942
+msgid "%d hour, %s remaining"
+msgid_plural "%d hours, %s remaining"
+msgstr[0] "%d שעה, %s נשארה"
+msgstr[1] "%d שעות, %s נשארו"
+
+#: cbatticon.c:944
+msgid "%d minute remaining"
+msgid_plural "%d minutes remaining"
+msgstr[0] "%d דקה נשארה"
+msgstr[1] "%d דקות נשארו"

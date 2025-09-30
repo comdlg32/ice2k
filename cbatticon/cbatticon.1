@@ -1,0 +1,59 @@
+.TH "CBATTICON" "1" "June 11, 2019" "cbatticon" "User manual"
+.SH "NAME"
+cbatticon \(em a lightweight and fast battery icon that sits in your system tray
+.SH "SYNOPSIS"
+.PP
+\fBcbatticon\fR [\fBoption\fP] [\fBbattery id\fP]
+.SH "DESCRIPTION"
+.PP
+The cbatticon utility displays battery information (battery status, remaining percentage, remaining time) using an icon in the system tray.
+.br
+If no \fBbattery id\fP is specified, it will display the first battery that is found.
+You can list the available batteries using the option \fB\-\-list-power-supplies\fP.
+.SH "OPTIONS"
+.IP "\fB\-c\fP, \fB\-\-command-critical-level\fP \fIcommand\fR" 5
+Specify the command to execute when the critical battery level is reached.
+.IP "\fB-d\fP, \fB\-\-debug\fP" 5
+Display debug information.
+.IP "\fB-h\fP, \fB\-\-help\fP" 5
+Show help information and exit.
+.IP "\fB\-i\fP, \fB\-\-icon-type\fP \fItype\fR" 5
+Specify the icon type to display in the system tray.
+.br
+If not specified, cbatticon will use the first one that is available in this sequence: standard, notification, symbolic.
+.br
+The available icon types on your system can be listed using the option \fB\-\-list-icon-types\fP.
+.IP "\fB\-l\fP, \fB\-\-low-level\fP \fIpercentage\fR" 5
+Specify the low level percentage of the battery.
+.br
+The default is set to 20%.
+.IP "\fB-n\fP, \fB\-\-hide-notification\fP" 5
+Hide the notification popups.
+.IP "\fB\-o\fP, \fB\-\-command-low-level\fP \fIcommand\fR" 5
+Specify the command to execute when the low battery level is reached.
+.IP "\fB-p\fP, \fB\-\-list-power-supplies\fP" 5
+List the available power supplies on your system.
+.IP "\fB\-r\fP, \fB\-\-critical-level\fP \fIpercentage\fR" 5
+Specify the critical level percentage of the battery.
+.br
+The default is set to 5%.
+.IP "\fB-t\fP, \fB\-\-list-icon-types\fP" 5
+List the available icon types (standard, notification, symbolic).
+.IP "\fB\-u\fP, \fB\-\-update-interval\fP \fIinterval\fR" 5
+Specify the number of seconds between updates of the battery information.
+.br
+The default is set to 5 seconds.
+.IP "\fB-v\fP, \fB\-\-version\fP" 5
+Display the version information and exit.
+.IP "\fB\-x\fP, \fB\-\-command-left-click\fP \fIcommand\fR" 5
+Specify the command to execute when left clicking on the tray icon.
+.SH EXAMPLES
+.EX
+.TP
+cbatticon
+.TP
+cbatticon -t
+.TP
+cbatticon -p
+.TP
+cbatticon -u 20 -i notification -c "poweroff" -l 15 -r 3

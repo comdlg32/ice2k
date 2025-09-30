@@ -1,0 +1,266 @@
+# Copyright (C) 2015-2018 ValÃ¨re Monseur
+# This file is distributed under the same license as the cbatticon package.
+# Jose Riha, <jose1711 gmail com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cbatticon 1.6.7\n"
+"Report-Msgid-Bugs-To: valere.monseur@ymail.com\n"
+"POT-Creation-Date: 2015-12-13 22:28+0100\n"
+"PO-Revision-Date: 2020-02-25 23:22+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: Jose Riha <jose1711@gmail.com>\n"
+"Language: sk_SK\n"
+
+#: cbatticon.c:154
+msgid "Display the version"
+msgstr "Zobraziť verziu"
+
+#: cbatticon.c:155
+msgid "Display debug information"
+msgstr "Zobraziť informácie pre ladenie"
+
+#: cbatticon.c:156
+msgid "Set update interval (in seconds)"
+msgstr "Nastaviť interval obnovenia (v sekundách)"
+
+#: cbatticon.c:157
+msgid "Set icon type ('standard', 'notification' or 'symbolic')"
+msgstr "Nastaviť typ ikony ('standard', 'notification' alebo 'symbolic')"
+
+#: cbatticon.c:158
+msgid "Set low battery level (in percent)"
+msgstr "Nastaviť nízku úroveň nabitia batérie (v percentách)"
+
+#: cbatticon.c:159
+msgid "Set critical battery level (in percent)"
+msgstr "Nastaviť kriticky nízku úroveň nabitia batérie (v percentách)"
+
+#: cbatticon.c:160
+msgid "Command to execute when critical battery level is reached"
+msgstr ""
+"Príkaz, ktorý sa spustí pri dosiahnutí kriticky nízkej úrovne nabitia batérie"
+
+#: cbatticon.c:161
+msgid "Command to execute when left clicking on tray icon"
+msgstr "Príkaz, ktorý sa spustí po kliknutí na ikonu v systémovej lište"
+
+#: cbatticon.c:163
+msgid "Hide the notification popups"
+msgstr "Skryť vyskakovacie oznámenia"
+
+#: cbatticon.c:165
+msgid "List available icon types"
+msgstr "Zobraziť zoznam dostupných typov ikon"
+
+#: cbatticon.c:166
+msgid "List available power supplies (battery and AC)"
+msgstr "Zobraziť dostupné zdroje napätia (batéria a elektrická sieť)"
+
+#: cbatticon.c:170
+msgid "[BATTERY ID]"
+msgstr "[ID BATÉRIE]"
+
+#: cbatticon.c:174
+#, c-format
+msgid "Cannot parse command line arguments: %s\n"
+msgstr "Nepodarilo sa analyzovať voľby príkazového riadku: %s\n"
+
+#: cbatticon.c:185
+msgid ""
+"cbatticon: a lightweight and fast battery icon that sits in your system "
+"tray\n"
+msgstr ""
+"cbatticon: malý a svižný program, ktorý zobrazuje ikonu batérie v "
+"systémovej lište\n"
+
+#: cbatticon.c:186
+#, c-format
+msgid "version %s\n"
+msgstr "verzia %s\n"
+
+#: cbatticon.c:194
+msgid "List of available power supplies:\n"
+msgstr "Zoznam dostupných zdrojov napätia:\n"
+
+#: cbatticon.c:209
+msgid "List of available icon types:\n"
+msgstr "Zoznam dostupných typov ikon:\n"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212
+msgid "available"
+msgstr "dostupné"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212 cbatticon.c:540
+#: cbatticon.c:548 cbatticon.c:570
+msgid "unavailable"
+msgstr "nedostupné"
+
+#: cbatticon.c:226
+#, c-format
+msgid "Unknown icon type: %s\n"
+msgstr "Neznámy typ ikony: %s\n"
+
+#: cbatticon.c:238
+msgid "No icon type found!\n"
+msgstr "Nebol nájdený žiaden typ ikony!\n"
+
+#: cbatticon.c:245
+#, c-format
+msgid ""
+"Invalid update interval! It has been reset to default (%d seconds)\n"
+msgstr ""
+"Neplatný interval obnovenia! Nastavujem predvolený interval (%d "
+"sekúnd)\n"
+
+#: cbatticon.c:252
+#, c-format
+msgid "Invalid low level! It has been reset to default (%d percent)\n"
+msgstr ""
+"Neplatná úroveň nízkeho nabitia! Nastavujem predvolenú úroveň (%d "
+"percent)\n"
+
+#: cbatticon.c:257
+#, c-format
+msgid ""
+"Invalid critical level! It has been reset to default (%d percent)\n"
+msgstr ""
+"Neplatná úroveň kriticky nízkeho nabitia! Nastavujem predvolenú úroveň "
+"(%d percent)\n"
+
+#: cbatticon.c:263
+msgid ""
+"Critical level is higher than low level! They have been reset to "
+"default\n"
+msgstr ""
+"Úroveň kriticky nízkeho nabitia je vyššia ako úroveň nízkeho nabitia! "
+"Nastavujem obe hodnoty na predvolenú úroveň\n"
+
+#: cbatticon.c:294 cbatticon.c:326
+#, c-format
+msgid "type: %-*.*s\tid: %-*.*s\tpath: %s\n"
+msgstr "typ: %-*.*s\tid: %-*.*s\tcesta: %s\n"
+
+#: cbatticon.c:294
+msgid "Battery"
+msgstr "Batéria"
+
+#: cbatticon.c:326
+msgid "AC"
+msgstr "AC"
+
+#: cbatticon.c:348
+#, c-format
+msgid "Cannot open sysfs directory: %s (%s)\n"
+msgstr "Nie je možné otvoriť adresár sysfs: %s (%s)\n"
+
+#: cbatticon.c:355
+#, c-format
+msgid "No battery with suffix %s found!\n"
+msgstr "Nebola nájdená batéria %s!\n"
+
+#: cbatticon.c:360
+msgid "No battery nor AC power supply found!\n"
+msgstr "Nebola nájdená batéria alebo iný zdroj napätia!\n"
+
+#: cbatticon.c:672 cbatticon.c:675
+msgid "AC only, no battery!"
+msgstr "Iba elektrická sieť, žiadna batéria!"
+
+#: cbatticon.c:793
+#, c-format
+msgid "Spawning critical battery level command in 30 seconds: %s"
+msgstr ""
+"O 30 sekúnd sa spustí príkaz definovaný pre kriticky nízku úroveň "
+"batérie: %s"
+
+#: cbatticon.c:797
+#, c-format
+msgid "Cannot spawn critical battery level command: %s\n"
+msgstr ""
+"Nepodarilo sa spustiť príkaz definovaný pre kriticky nízku úroveň "
+"batérie: %s\n"
+
+#: cbatticon.c:800
+msgid "Cannot spawn critical battery level command!"
+msgstr ""
+"Nepodarilo sa spustiť príkaz definovaný pre kriticky nízku úroveň "
+"batérie!"
+
+#: cbatticon.c:817
+#, c-format
+msgid "Cannot spawn left click command: %s\n"
+msgstr ""
+"Nepodarilo sa spustiť príkaz priradený ľavému tlačidlu myši: "
+"%s\n"
+
+#: cbatticon.c:820
+msgid "Cannot spawn left click command!"
+msgstr ""
+"Nepodarilo sa spustiť príkaz priradeny ľavému tlačidlu myši!"
+
+#: cbatticon.c:884
+msgid "Battery is missing!"
+msgstr "Batéria nebola nájdená!"
+
+#: cbatticon.c:888
+msgid "Battery status is unknown!"
+msgstr "Stav batérie je neznámy!"
+
+#: cbatticon.c:892
+msgid "Battery is charged!"
+msgstr "Batéria je nabitá!"
+
+#: cbatticon.c:896
+#, c-format
+msgid "Battery is discharging (%i%% remaining)"
+msgstr "Batéria sa vybíja (%i%% zostáva)"
+
+#: cbatticon.c:900
+#, c-format
+msgid "Battery is not charging (%i%% remaining)"
+msgstr "Batéria sa nenabíja (%i%% zostáva)"
+
+#: cbatticon.c:904
+#, c-format
+msgid "Battery level is low! (%i%% remaining)"
+msgstr "Nízka úroveň nabitia batérie! (%i%% zostáva)"
+
+#: cbatticon.c:908
+#, c-format
+msgid "Battery level is critical! (%i%% remaining)"
+msgstr "Kriticky nízka úroveň batérie! (%i%% zostáva)"
+
+#: cbatticon.c:912
+#, c-format
+msgid "Battery is charging (%i%%)"
+msgstr "Batéria sa nabíja (%i%%)"
+
+#: cbatticon.c:941
+#, c-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minúta"
+msgstr[1] "%d minúty"
+msgstr[2] "%d minút"
+
+#: cbatticon.c:942
+#, c-format
+msgid "%d hour, %s remaining"
+msgid_plural "%d hours, %s remaining"
+msgstr[0] "%d hodina, %s zostáva"
+msgstr[1] "%d hodiny, %s zostáva"
+msgstr[2] "%d hodín, %s zostáva"
+
+#: cbatticon.c:944
+#, c-format
+msgid "%d minute remaining"
+msgid_plural "%d minutes remaining"
+msgstr[0] "zostáva %d minúta"
+msgstr[1] "zostávajú %d minúty"
+msgstr[2] "zostáva %d minút"

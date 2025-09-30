@@ -1,0 +1,11 @@
+# target
+cbatticon
+
+# object files
+*.o
+
+# messages catalog
+*.mo
+
+# vim files
+*.swp

@@ -1,0 +1,217 @@
+2022-04-27  Valère Monseur  <archlinux@vale.re>
+
+ * Release 1.6.13
+
+ * Fix #58 : added support for batteries with only percentage capacity
+
+ * Fix #61 : added a command for low battery level
+
+2022-02-09  Valère Monseur  <archlinux@vale.re>
+
+ * Release 1.6.12
+
+ * Fix Makefile for error: '-Wformat-security' ignored without '-Wformat'
+
+2022-02-09  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.11
+
+ * Fix #57 : wrong version number
+
+ * Fix #68 : added Spanish translation
+
+2019-10-06  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.10
+
+ * Fix #53 : if last_chance option true, check one last time if charging before running critical
+
+ * make the last_chance option the default
+
+2019-06-11  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.9
+
+ * Fix #48 : added Example section in the man page
+
+ * Fix #52 : added Brazilian Portuguese translation
+
+2018-04-08  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.8
+
+ * Fix #43 : added traditional Chinese translation
+
+ * Fix #44 : update existing notifications instead of creating new ones
+
+ * Add missing end of line
+
+2017-10-05  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.7
+
+ * Fix #41 : added Indonesia translation
+
+ * Fix #42 : added Hebrew translation
+
+2017-08-15  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.6
+
+ * Fix #38 : notification shown twice at startup
+
+ * Fix #40 : unexpected behaviour for hidpp battery type
+
+2016-12-27  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.5
+
+ * Fix #30 : notification spam when there are multiple batteries
+
+ * Fix #33 : added a man page
+
+ * Fix #34 : added Japanese translation
+
+2016-03-14  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.4
+
+ * Fix #29 : added Bosnian, Croatian and Serbian translations
+
+2016-02-08  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.3
+
+ * Fix #28 : dynamic (runtime) detection of power supplies doesn't work
+
+2016-01-30  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.2
+
+ * Fix plural translations in Turkish
+
+2016-01-30  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.1
+
+ * Add missing translation in Makefile
+
+2016-01-30  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.6.0
+
+ * Changing Copyright to 2016
+
+ * Fix #26 : 'hours, minutes remaining' use plural translations
+
+ * Fix #27 : add greek translation
+
+ * Dynamic detection of power supplies (batteries and AC)
+
+ * Some code rework, cleaning
+
+2015-07-21  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.5.0
+
+ * Build with gtk3 by default (instead of gtk2)
+
+ * Build with deprecation warning disabled
+
+ * Fix #17 : cbatticon --version shouldn't need X display
+
+ * Fix #20 : initial translation support
+
+ * Fix #21 : add turkish translation
+
+ * Fix #22 : update turkish translation
+
+ * Fix #23 : add german translation
+
+ * Fix #24 : update russian translation
+
+ * Completed translation support
+
+ * Completed translation: german, french, turkish
+
+ * Partial translation: russian
+
+2014-11-24  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.4.2
+
+ * Fix #16 : current rate was not considered as unavailable when its value was 0
+
+2014-11-08  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.4.1
+
+ * Fix return codes when displaying version, listing power supplies and icon types
+
+2014-08-17  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.4.0
+
+ * Allow building with(out) libnotify support (default: build with libnotify)
+
+ * Allow building with gtk2 or gtk3 (default: build with gtk2)
+
+ * Renamed option --list-batteries into --list-power-supplies to show battery and AC
+
+ * Allow AC only tray icon when there is no battery
+
+ * Allow execution of command when left clicking on the tray icon
+
+ * Added debug option
+
+ * Other improvements in Makefile, comments, whitespace cleaning, ...
+
+2013-07-23  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.3.2
+
+ * Fix compilation with libnotify version older than 0.7.0
+
+2013-05-10  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.3.1
+
+ * Fix version number
+
+2013-05-10  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.3.0
+
+ * Added option to hide notification at runtime
+
+ * Other improvements in Makefile, comments, whitespace cleaning, ...
+
+ * Code cleaning/rework.
+
+2013-045-19  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.2.0
+
+ * Removed dependency on libudev
+
+ * A message is sent to system logger before spawning command when critical level is reached
+
+ * Tooltip and notification messages have been reworked.
+
+ * Added version option
+
+ * Fixed bug triggering the switching from normal calculation to estimated calculation when not needed
+
+ * Lots of code cleaning/rework
+
+2013-04-08  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.1.0
+
+ * Try to determine status even when 'unknown' status is returned (some batteries do it when (dis)charging)
+
+ * Other improvements in Makefile, comments, whitespace cleaning, ...
+
+2013-03-10  Valère Monseur  <valere.monseur@ymail.com>
+
+ * Release 1.0.0

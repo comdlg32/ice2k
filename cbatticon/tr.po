@@ -1,0 +1,235 @@
+# Turkish translation for cbatticon.
+# Copyright (C) 2015-2018 Valère Monseur
+# This file is distributed under the same license as the cbatticon package.
+# Behzat Erte <behzaterte@yandex.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cbatticon 1.6.7\n"
+"Report-Msgid-Bugs-To: valere.monseur@ymail.com\n"
+"POT-Creation-Date: 2015-07-17 20:38+0200\n"
+"PO-Revision-Date: 2018-04-08 23:30+0100\n"
+"Last-Translator: Behzat Erte <behzaterte@yandex.com>\n"
+"Language-Team: TR <behzaterte@yandex.com>\n"
+"Language: Turkish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+
+#: cbatticon.c:154
+msgid "Display the version"
+msgstr "Sürümü göster"
+
+#: cbatticon.c:155
+msgid "Display debug information"
+msgstr "Hata ayıklama bilgisini göster"
+
+#: cbatticon.c:156
+msgid "Set update interval (in seconds)"
+msgstr "Güncelleme sıklığını ayarla (saniye)"
+
+#: cbatticon.c:157
+msgid "Set icon type ('standard', 'notification' or 'symbolic')"
+msgstr "Simge türünü ayarla ('standart', 'bildirim' ya da 'temsili')"
+
+#: cbatticon.c:158
+msgid "Set low battery level (in percent)"
+msgstr "Düşük pil seviyesini ayarla (yüzde)"
+
+#: cbatticon.c:159
+msgid "Set critical battery level (in percent)"
+msgstr "Kritik pil seviyesini ayarla (yüzde)"
+
+#: cbatticon.c:160
+msgid "Command to execute when critical battery level is reached"
+msgstr "Krik seviyeye erişildiğinde komutu çalıştır"
+
+#: cbatticon.c:161
+msgid "Command to execute when left clicking on tray icon"
+msgstr "Simgeye sol tuş ile tıklandığında komutu çalıştır"
+
+#: cbatticon.c:163
+msgid "Hide the notification popups"
+msgstr "Bildirim balonlarını gizle"
+
+#: cbatticon.c:165
+msgid "List available icon types"
+msgstr "Kullanılabilir simge türlerini listele"
+
+#: cbatticon.c:166
+msgid "List available power supplies (battery and AC)"
+msgstr "Kullanılabilir güç kaynaklarını listele (pil ve şebeke)"
+
+#: cbatticon.c:170
+msgid "[BATTERY ID]"
+msgstr "[PİL ID]"
+
+#: cbatticon.c:174
+#, c-format
+msgid "Cannot parse command line arguments: %s\n"
+msgstr "Komut satırı değişkenleri ayrıştırılamıyor: %s\n"
+
+#: cbatticon.c:185
+msgid ""
+"cbatticon: a lightweight and fast battery icon that sits in your system "
+"tray\n"
+msgstr "cbatticon: sistem çekmecesinde görünen küçük ve hızlı pil simgesi\n"
+
+#: cbatticon.c:186
+#, c-format
+msgid "version %s\n"
+msgstr "sürüm %s\n"
+
+#: cbatticon.c:194
+msgid "List of available power supplies:\n"
+msgstr "Uygun güç kaynaklarının listesi:\n"
+
+#: cbatticon.c:209
+msgid "List of available icon types:\n"
+msgstr "Uygun simge türlerinin listesi:\n"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212
+msgid "available"
+msgstr "uygun"
+
+#: cbatticon.c:210 cbatticon.c:211 cbatticon.c:212 cbatticon.c:540
+#: cbatticon.c:548 cbatticon.c:570
+msgid "unavailable"
+msgstr "uygun değil"
+
+#: cbatticon.c:226
+#, c-format
+msgid "Unknown icon type: %s\n"
+msgstr "Bilinmeyen simge türü: %s\n"
+
+#: cbatticon.c:238
+msgid "No icon type found!\n"
+msgstr "Hiç simge türü bulunamadı!\n"
+
+#: cbatticon.c:245
+#, c-format
+msgid "Invalid update interval! It has been reset to default (%d seconds)\n"
+msgstr "Geçersiz güncelleme aralığı! Varsayılan ayarlara dönecek (%d saniye)\n"
+
+#: cbatticon.c:252
+#, c-format
+msgid "Invalid low level! It has been reset to default (%d percent)\n"
+msgstr "Geçersiz alt seviye! Varsayılan ayarlara dönecek (yüzde %d)\n"
+
+#: cbatticon.c:257
+#, c-format
+msgid "Invalid critical level! It has been reset to default (%d percent)\n"
+msgstr "Geçersiz kritik seviye! Varsayılan ayarlara dönecek (yüzde %d)\n"
+
+#: cbatticon.c:263
+msgid ""
+"Critical level is higher than low level! They have been reset to default\n"
+msgstr ""
+"Kritik seviye alt seviyeden yüksek! Varsayılan ayarlarına döndürülecekler\n"
+
+#: cbatticon.c:294 cbatticon.c:326
+#, c-format
+msgid "type: %-*.*s\tid: %-*.*s\tpath: %s\n"
+msgstr "tür: %-*.*s\tid: %-*.*s\tyol: %s\n"
+
+#: cbatticon.c:294
+msgid "Battery"
+msgstr "Pil"
+
+#: cbatticon.c:326
+msgid "AC"
+msgstr "Şebeke"
+
+#: cbatticon.c:348
+#, c-format
+msgid "Cannot open sysfs directory: %s (%s)\n"
+msgstr "sysfs klasörü açılamıyor: %s (%s)\n"
+
+#: cbatticon.c:355
+#, c-format
+msgid "No battery with suffix %s found!\n"
+msgstr "Pil ile eki %s bulunamadı!\n"
+
+#: cbatticon.c:360
+msgid "No battery nor AC power supply found!\n"
+msgstr "Pil ya da şebeke güç ünitesi bulunamadı!\n"
+
+#: cbatticon.c:672 cbatticon.c:675
+msgid "AC only, no battery!"
+msgstr "Sadece şebeke, pil yok!"
+
+#: cbatticon.c:793
+#, c-format
+msgid "Spawning critical battery level command in 30 seconds: %s"
+msgstr "Kritik pil seviyesi komutu 30 saniye içerisinde üretilecek: %s"
+
+#: cbatticon.c:797
+#, c-format
+msgid "Cannot spawn critical battery level command: %s\n"
+msgstr "Kritik seviye komutu üretilemiyor: %s\n"
+
+#: cbatticon.c:800
+msgid "Cannot spawn critical battery level command!"
+msgstr "Kritik pil seviyesi komutu oluşturulamıyor!"
+
+#: cbatticon.c:817
+#, c-format
+msgid "Cannot spawn left click command: %s\n"
+msgstr "Sol tuş komutu üretilemiyor: %s\n"
+
+#: cbatticon.c:820
+msgid "Cannot spawn left click command!"
+msgstr "Sol tuş komutu oluşturulamıyor!"
+
+#: cbatticon.c:884
+msgid "Battery is missing!"
+msgstr "Pil kayıp!"
+
+#: cbatticon.c:888
+msgid "Battery status is unknown!"
+msgstr "Pil durumu bilinmiyor!"
+
+#: cbatticon.c:892
+msgid "Battery is charged!"
+msgstr "Pil dolduruldu!"
+
+#: cbatticon.c:896
+msgid "Battery is discharging (%i%% remaining)"
+msgstr "Pil boşalıyor (%i%% kalan)"
+
+#: cbatticon.c:900
+msgid "Battery is not charging (%i%% remaining)"
+msgstr "Pil doldurulmuyor (%i%% kalan)"
+
+#: cbatticon.c:904
+msgid "Battery level is low! (%i%% remaining)"
+msgstr "Pil durumu düşük! (%i%% kalan)"
+
+#: cbatticon.c:908
+msgid "Battery level is critical! (%i%% remaining)"
+msgstr "Pil kritik seviyede! (%i%% kalan)"
+
+#: cbatticon.c:912
+msgid "Battery is charging (%i%%)"
+msgstr "Pil dolduruluyor (%i%%)"
+
+#: cbatticon.c:941
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d dakika"
+msgstr[1] "%d dakika"
+
+#: cbatticon.c:942
+msgid "%d hour, %s remaining"
+msgid_plural "%d hours, %s remaining"
+msgstr[0] "%d saat, %s kaldı"
+msgstr[1] "%d saat, %s kaldı"
+
+#: cbatticon.c:944
+msgid "%d minute remaining"
+msgid_plural "%d minutes remaining"
+msgstr[0] "%d dakika kaldı"
+msgstr[1] "%d dakika kaldı"
