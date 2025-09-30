@@ -10,7 +10,7 @@ libsm-dev libice-dev libxrandr-dev libxft-dev libxpm-dev libjpeg-dev \
 libpng-dev libfontconfig1-dev libxinerama-dev libfribidi-dev libimlib2-dev xterm \
 x11-utils xinit intltool intltool-debian libxcb-util-dev libx11-xcb-dev \
 build-essential libfox-1.6-dev psmisc libxtst-dev libserialport-dev \
-libpci-dev feh tk imagemagick libgtk2.0-dev \
+libpci-dev feh tk imagemagick libgtk2.0-dev tk-tktray xxkb \
 || exit
 
 
@@ -113,6 +113,11 @@ cp -rf .foxrc ~/
 cp -rf .idesktop ~/
 cp -rf .icons ~/
 cp -rf .themes ~/
+cp .Xresources ~/
+cp .gtkrc-2.0 ~/
+
+sudo mkdir -p /usr/share/fonts/X11/misc
+sudo mkdir -p /usr/share/fonts/truetype
 
 sudo cp winvga-12.pcf /usr/share/fonts/X11/misc
 

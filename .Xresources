@@ -1,0 +1,271 @@
+#include ".Xresources.d/gvim"
+XXkb*type: tray
+xxkb*type: tray
+XTerm*selectToClipboard: true
+UXTerm*selectToClipboard: true
+!XTerm*font: -*-bm437 ibm vga 8x16-*-*-*-*-*-*-*-*-*-*-*-*
+!UXTerm*font: -*-bm437 ibm vga 8x16-*-*-*-*-*-*-*-*-*-*-*-*
+
+XTerm*font:  -*-winvga-*-*-*-*-*-*-*-*-*-*-*-*
+UXTerm*font: -*-winvga-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+! XTerm*renderFont: true
+! XTerm*faceName: Bm437 IBM VGA 8x16
+! XTerm*faceSize: 12
+XTerm*iconHint: /home/tf/.icewm/icons/terminal
+XTerm*VT100*background: black
+XTerm*VT100*foreground: silver
+XTerm*cursorBlink: true
+XTerm*cursorUnderLine: true
+XTerm.vt100.metaSendsEscape: true
+XTerm.vt100.backarrowKey: false
+XTerm.ttyModes: erase ^?
+XTerm*borderColor: #404040
+XTerm*colorInnerBorder: true
+XTerm*internalBorder: 1
+XTerm.*.decTerminalID: vt340
+XTerm*allowBoldFonts: false
+XTerm*forceBoxChars: 1
+UXTerm*forceBoxChars: 1
+!XTerm.*.numColorRegisters: 256
+XTerm.*.numColorRegisters: 1024
+UXTerm.*.decTerminalID: vt340
+!UXTerm.*.numColorRegisters: 256
+UXTerm.*.numColorRegisters: 1024
+! UXTerm*renderFont: true
+!UXTerm*faceName: Noto Sans Mono
+! UXTerm*faceName: Bm437 IBM VGA 8x16
+! UXTerm*faceSize: 12
+UXTerm*iconHint: /home/tf/.icewm/icons/terminal
+UXTerm*VT100*background: black
+UXTerm*VT100*foreground: silver
+UXTerm*cursorBlink: true
+UXTerm*cursorUnderLine: true
+UXTerm.vt100.metaSendsEscape: true
+UXTerm.vt100.backarrowKey: false
+UXTerm.ttyModes: erase ^?
+UXTerm*borderColor: #404040
+UXTerm*colorInnerBorder: true
+UXTerm*internalBorder: 1
+UXTerm*allowBoldFonts: false
+
+
+!Xpdf*shadowThickness: 2
+Xpdf*Text*background: white
+Xpdf*pageNum*background: white
+Xpdf*XmList*background: white
+Xpdf*XmTextField*background: white
+Xpdf*continuousView: 1
+
+! xft
+Xft.antialias: true
+! Xft.dpi: 96
+Xft.hinting: true
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcdnone
+Xft.rgba: none
+
+!Emacs*menubar*font: Helvetica-9
+!Emacs*font: fixed
+!Emacs*fontSet: misc
+!Emacs*font: 6x13
+!Emacs.pane.menubar.shadowThickness: 0
+!Emacs*shadowThickness: 2
+
+Emacs.pane.menubar.background: darkslateGrey
+Emacs.pane.menubar.foreground: navajoWhite
+Emacs*shadowThickness: 1
+
+!Emacs*background: white
+!Emacs.pane.menubar*shadowThickness: 2
+!Emacs.XmMenuShell.shadowThickness: 0
+!Emacs*XmRowColumn*shadowThickness: 0
+
+!Emacs.pane.menubar.popup*shadowThickness: 1
+!Emacs*topShadowColor: #ffffff
+!Emacs*bottomShadowColor: #9a9286
+
+Wine*antialias: false
+
+
+! !xscreensaver font settings
+!!xscreensaver.Dialog.headingFont:        -*-verdana-bold-r-*-*-28-*-*-*-*-*-*-*
+!#!xscreensaver.Dialog.bodyFont:           -*-verdana-medium-r-*-*-20-*-*-*-*-*-*-*
+!#!xscreensaver.Dialog.labelFont:          -*-verdana-medium-r-*-*-20-*-*-*-*-*-*-*
+!#!xscreensaver.Dialog.unameFont:          -*-verdana-medium-r-*-*-26-*-*-*-*-*-*-*
+!#!xscreensaver.Dialog.buttonFont:         -*-verdana-bold-r-*-*-20-*-*-*-*-*-*-*
+!#!xscreensaver.Dialog.dateFont:           -*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*
+!#!xscreensaver.passwd.passwdFont:         -*-verdana-bold-r-*-*-20-*-*-*-*-*-*-*
+
+
+!! == !xscreensaver == !!
+
+! -- font settings -- !
+!xscreensaver.Dialog.headingFont:xft:Tahoma:medium:pixelsize=8
+!xscreensaver.Dialog.bodyFont:xft::Tahoma:medium:pixelsize=8
+!xscreensaver.Dialog.labelFont:xft:Tahoma:medium:pixelsize=8
+!xscreensaver.Dialog.unameFont:xft:Tahoma:medium:pixelsize=8
+!xscreensaver.Dialog.buttonFont:xft:Tahoma:medium:pixelsize=8
+!xscreensaver.Dialog.dateFont:xft:Tahoma:medium:pixelsize=8
+!xscreensaver.passwd.passwdFont::xft:Tahoma:medium:pixelsize=8
+
+! -- general dialog box -- !
+!xscreensaver.Dialog.foreground:         #CCCCCC
+!xscreensaver.Dialog.background:         #191717
+!xscreensaver.Dialog.topShadowColor:     #434343
+!xscreensaver.Dialog.bottomShadowColor:  #424242
+!xscreensaver.Dialog.Button.foreground:  #CCCCCC
+!xscreensaver.Dialog.Button.background:  #191717
+
+! -- username/password input box and date text colour -- !
+!xscreensaver.Dialog.text.foreground:    #333333
+!xscreensaver.Dialog.text.background:    #999999
+!xscreensaver.Dialog.internalBorderWidth:24
+!xscreensaver.Dialog.borderWidth:        20
+!xscreensaver.Dialog.shadowThickness:    2
+
+! -- timeout bar -- !
+!xscreensaver.passwd.thermometer.foreground:  #CCCCCC
+!xscreensaver.passwd.thermometer.background:  #999999
+!xscreensaver.passwd.thermometer.width:       8
+
+! -- datestamp format -- !
+!xscreensaver.dateFormat:    %I:%M%P %a %b %d, %Y
+
+xscreensaver-auth.default.Dialog.bodyFont: tahoma 8
+xscreensaver*newLoginCommand:
+xscreensaver*Dialog.logo.width: 0
+xscreensaver*Dialog.logo.height: 0
+
+Canvas*MenuButton*shadowThickness: 0
+
+Vim*MenuButton.borderWidth: 0
+Vim*SimpleMenu*borderWidth: 1
+Vim*Box.borderWidth: 1
+Vim*Command.borderWidth: 1
+
+
+! XIdle.program: /usr/local/bin/xlock -lockdelay 5
+! XIdle.timeout: 120
+! XIdle.delay: 120
+
+! XLock.mode: maze3d
+! XLock.mode: pipes
+! XLock.mode: maze3d
+XLock.morph3d.count: 2
+XLock.morph3d.timeout: 10
+XLock.morph3d.delay: 10000
+! XLock.font: 				-*-tahoma-medium-*-*-*-11-*-*-*-*-*-*-*
+!XLock.planfont: 			-*-helvetica-medium-r-*-*-11-*-*-*-*-*-*-*
+! XLock.font: -*-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+XLock.font: -*-tahoma-medium-r-*-*-15-*-*-*-*-*-*-*
+XLock.planfont: -*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*
+XLock.info: 
+XLock.timeelapsed: off
+XLock.showdate: on
+XLock.description: off
+XLock.echokeys: on
+XLock.echokey: *
+XLock.erasemode: no_fade
+! XLock.startCmd: xset s off
+XLock.startCmd: killall -9 xidle
+! XLock.endCmd: xset s on
+XLock.endCmd: xidle &
+XLock.resetsaver: on
+XLock.dpmsoff: 0
+XLock.password: Password:
+XLock.username: Username:\040
+XLock.image.count: 1
+XLock.image.bitmap: /home/tf/xlock.xpm
+XLock.pipes.count: 4
+XLock.pipes.factory: 0
+XLock.pipes.fisheye: 1
+XLock.fisheye: 1
+XLock.pipes.delay: 7500
+
+XLock.qix.delay: 17500
+XLock.qix.count: 6
+
+dpmslock*mode: blank
+dpmslock*resetsaver: off
+dpmslock*dpmsoff: 5
+
+
+!*.renderTable: variable
+!*.renderTable.variable.fontName: Tahoma
+!*.renderTable.variable.fontSize: 8
+!*.renderTable.variable.fontType: FONT_IS_XFT
+
+plan*background: #d4cfc7
+plan*foreground: #000000
+!plan*shadowThickness: 0
+
+gv*font: fixed
+
+
+XCalc*fontName: Tahoma:size=10
+!xcalc*font: xft:Tahoma:size=8:antialias=true:style=regular
+
+Xpdf*font: -cronyx-helvetica-medium-r-*-*-11-*-*-*-*-*-*-*
+
+XTerm*bellIsUrgent: true
+XTerm*visualBell: false
+
+mutt*background: white
+mutt*color0: white
+mutt*foreground: black
+mutt*color4: #c7d0d9
+mutt*color10: #323642
+mutt*color6: #424f63
+mutt*color7: black
+mutt*color11: black
+mutt*renderFont: false
+mutt*allowBoldFonts: true
+mutt*internalBorder: 0
+mutt*font: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1
+
+!XTerm*color1: #0000aa
+!XTerm*color2: #00aa00
+!XTerm*color3: #00aaaa
+
+note*Form.displayList: 
+note*Form.background: gray
+note*Command.shapeStyle: rectangle
+note*Scrollbar.width: 1
+note*Scrollbar.borderWidth: 0
+
+!note*Text.internalHeight: 10
+!note*font: -misc-fixed-medium-r-*-*-13-*-*-*-*-*-iso10646-*
+note*font: fixed
+
+note*Command.displayList:\
+foreground      #000000;\
+lines           0,-1,-1,-1,-1,0;\
+foreground      #FFFFFF;\
+lines           -2,0,0,0,0,-2;\
+foreground      #7b7b7b;\
+lines           1,-2,-2,-2,-2,1;\
+foreground       #dedede;\
+lines           -3,1,1,1,1,-3
+
+
+
+note*Text.borderWidth: 1
+note*geometry: -10+10
+
+note*Command.borderWidth: 0
+note*Command.background: gray
+note*Command.internalWidth:  8
+note*Command.internalHeight: 4
+note*Command.font: -cronyx-helvetica-medium-r-*-*-11-*-*-*-*-*-*-*
+
+*customization: 
+*.customization: 
+
+XLock.star.size: 30
+XLock.star.count: 500
+XLock.star.trek: 0
+XLock.star.blake: 0
+XLock.star.rock: off
+XLock.star.straight: on
