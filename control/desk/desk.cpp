@@ -213,8 +213,6 @@ int inihandle(void* udata, const char* section, const char* name, const char* va
 		} else if (!strcmp(name, "Color")) {
 			if (value[0] == '#' && strlen(value) == 7) {
 				wallcfg->color = strdup(value);
-			} else {
-				return 0;
 			}
 		} else if (!strcmp(name, "Image")) {
 			wallcfg->image = strdup(value);
@@ -1063,11 +1061,14 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
 
-  wallcfg.image = NULL;
+  wallcfg.image = "";
+  wallcfg.color = strdup("#000000");
 
   ini_parse(cfgpath, inihandle, &wallcfg);
+  //puts("test");
 
   deskcol = hex2FXColor(wallcfg.color);
+  //puts("test");
 
   // create monitor images
 
@@ -1084,6 +1085,8 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
     monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
     previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
   }
+
+
 
   monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
   //monitorimage->create();
@@ -1263,7 +1266,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   FXImage* img;
 
-  if (wallcfg.image != NULL) {
+  if (wallcfg.image[0] != '\0') {
     char* imgpath = strdup(wallcfg.image);
 
     wallnamecur = strrchr(imgpath, '/');

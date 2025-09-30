@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS = -Wall -c
 PREFIX = /usr/local
 
-OUTPUT = libi2kini.so
+OUTPUT = libinih-i2k.so
 
 #COBJECTS = $(CSOURCES:.c=.o)
 

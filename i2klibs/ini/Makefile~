@@ -9,7 +9,7 @@ OUTPUT = libi2kini.so
 #COBJECTS = $(CSOURCES:.c=.o)
 
 SOURCES = ini.c
-OBJECTS = $(CSOURCES:.c=.o)
+OBJECTS = $(SOURCES:.c=.o)
 
 all: $(OUTPUT)
 
