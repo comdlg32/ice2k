@@ -11,7 +11,7 @@ PREFIX=/usr/local
 ICONS = res/*/*.gif res/*.gif res/*.bmp
 SOURCES = devmgmt.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = devmgmt
+EXECUTABLE = ejtray
 
 CPPFLAGS += `fox-config --cflags`
 

@@ -11,7 +11,7 @@ PREFIX=/usr/local
 ICONS = res/*.gif res/*.bmp
 SOURCES = brdexmpl.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = sysdm
+EXECUTABLE = sysdmcpl
 
 CPPFLAGS += `fox-config --cflags`
 
@@ -31,7 +31,7 @@ clean:
 	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
 
 install:
-	cp brdexmpl $(PREFIX)/bin/brdexmpl
+	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
 
 uninstall:
-	rm -f $(PREFIX)/bin/brdexmpl
+	rm -f $(PREFIX)/bin/$(EXECUTABLE)

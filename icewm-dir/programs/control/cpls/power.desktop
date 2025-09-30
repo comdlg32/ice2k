@@ -2,6 +2,6 @@
 Type=Application
 Name=Power
 Icon=preferences-system-power
-Exec=sh -c "$HOME/.icewm/programs/control/cpls-bin/power/power"
+Exec=batmeter
 StartupNotify=true
 Terminal=false

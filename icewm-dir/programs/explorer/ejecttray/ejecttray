@@ -1,9 +1,7 @@
 #!/bin/sh
-SCRIPTDIR="$(dirname -- "$0")"
-PATH="$SCRIPTDIR:$PATH"
 yad \
 --notification --no-middle \
 --image="$SCRIPTDIR/eject_mini.png" \
 --text="Safely Remove Hardware" \
 --class=saferemovetray --name=saferemovetray --title=saferemovetray \
---command="ejectgui" --menu "Safely Remove Hardware!ejectgui"
+--command="ejectgui" --menu "Safely Remove Hardware!ejtray"

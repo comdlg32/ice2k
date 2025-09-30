@@ -38,6 +38,6 @@ icewm -r
 aplay $ICE2KSYS_SOUND_LOGON &
 ~/.icewm/programs/welcome/welcomewrap &
 
-setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us,nl,de
+setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us
 
 sleep 1
