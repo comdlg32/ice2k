@@ -1,0 +1,63 @@
+#!/bin/sh
+
+for arg
+do
+    case $arg in
+        -C|--copying)
+            cat <<COPYING
+IceWM is licensed under the GNU Library General Public License.
+See the file COPYING in the distribution for full details.
+
+COPYING
+            exit 0
+            ;;
+        -V|--version)
+            echo "$0 version 1.6.x, Copyrighted."
+            exit 0
+            ;;
+        -h|-\?|--help|--\?)
+            echo "Usage: $0 [-h|-V|-C]"
+            echo "Set the Gnome windowmanager to IceWM"
+            exit 0
+            ;;
+        *)
+            : echo "$0: Ignoring argument '$arg'." >&2
+            ;;
+    esac
+done
+
+if test -x /usr/bin/gconftool-2
+then
+    path=/desktop/gnome/session/required_components/windowmanager
+
+    echo "Previous GNOME window manager:"
+    gconftool-2 -g $path
+
+    echo "Setting GNOME window manager to icewm-session"
+    gconftool-2 -s $path --type string icewm-session
+
+    echo "New GNOME window manager:"
+    gconftool-2 -g $path
+fi
+
+if test -x /usr/bin/gsettings
+then
+    schema=org.mate.session.required-components
+
+    if gsettings writable ${schema} windowmanager 2>/dev/null
+    then
+        echo "Setting MATE windowmanager to icewm-session"
+        gsettings set ${schema} windowmanager icewm-session
+    fi
+
+elif text -x /usr/bin/dconf
+then
+    key=/org/mate/desktop/session/required-components/windowmanager
+
+    if dconf read ${key} 2>/dev/null
+    then
+        echo "Setting MATE windowmanager to icewm-session"
+        dconf write ${key} "'icewm-session'"
+    fi
+fi
+

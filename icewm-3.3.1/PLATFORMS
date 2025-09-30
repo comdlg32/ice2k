@@ -1,0 +1,32 @@
+List of successful builds (please send updates):
+
+1.2.14pre5:
+	SunOS sparc-solaris1 5.9 Generic_112233-03 sun4u sparc SUNW,Ultra-60
+	 ./configure --disable-xfreetype --enable-corefonts --disable-xinerama --with-xpm --disable-xrandr
+
+icewm-1.2.10pre4:
+RedHat Linux 9: Linux 2.4.20-10/i586 (custom build), g++ 3.2.2,
+                glibc-2.3.0, XFree86 4.3.0
+
+
+icewm-1.0.9:
+Linux 2.4.4/i686, g++ 2.95.3, glibc-2.1.2, XFree86 4.0.3
+Linux 2.4.4/i686, icc 5.0.1 Beta, glibc-2.1.2, XFree86 4.0.3
+Linux 2.2.5/i586, egcs 2.91.66, glibc-2.1.1, XFree86 3.3.3.1
+SunOS 5.6, g++ 2.95.2, OpenWindows 3.6
+
+icewm-1.0.4:
+Linux-2.2-i386,egcs-1.1,glibc-2.1,X11R6.3,XFree86-3.3
+
+icewm-1.0.3:
+OpenBSD, gcc-2.95.1
+IRIX-6.5
+
+icewm-1.0.0:
+Linux-2.3.34-i386,gcc-2.95.2,glibc-2.1.2,XFree86-3.3.5
+
+
+icewm-0.9.52:
+HP-UX-9.0,g++-2.6.3,,X11R5,
+IRIX-6.5,g++
+Solaris-2.6,g++

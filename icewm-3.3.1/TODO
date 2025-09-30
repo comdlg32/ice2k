@@ -1,0 +1,73 @@
+-- TODO for IceWM.  2020-12-14
+
+* [x] set WM_CLIENT_MACHINE on check window
+
+* [x] set WM_NAME and WM_CLASS on check window
+
+* [x] add support for _NET_DESKTOP_LAYOUT
+
+* [x] add support for WM_ICON_SIZE
+
+* [ ] add support for WM_COLORMAP_WINDOWS and WM_COLORMAP_NOTIFY
+
+* [x] add support for icon_pixmap and icon_window field of WM_HINTS property.
+
+* [x] add support for WindowMaker dock apps (add a dock).
+
+* [x] add support for _NET_REQUEST_FRAME_EXTENTS.
+
+* [ ] add support for application and global modality with _NET_WM_STATE_MODAL.
+
+* [ ] add support for _NET_WM_HANDLED_ICONS.
+
+* [x] add support for _NET_WM_PING.
+
+* [ ] add support for _NET_WM_SYNC_REQUEST and _NET_WM_SYNC_REQUEST_COUNTER.
+
+* [ ] add support for startup notification (_NET_STARTUP_INFO{,_BEGIN}).
+
+* [x] add support for _NET_SYSTEM_TRAY_ORIENTATION.
+
+* [x] add support for _NET_SYSTEM_TRAY_VISUAL.
+
+Old to do items:
+
+	only set background in icewmbg (with it's own config/theme file)
+	lock focus to active window if possible
+	accept url/file DND on taskbar menu/icons (to launch program)
+	show disabled titlebar buttons
+        make generic border code for all widgets
+	multi-column menus
+        fix xsession annoyance somehow (has workaround in winoptions)
+	WM_COLORMAP_WINDOWS property support
+        implement application(group)-modal/transient dialogs (Motif - Adobe Acrobat ?)
+	configuration utility (use GTK or java)
+        true-color icons
+        configurable icon sizes
+	dither icons to small set of colors
+        scale icon pixmaps to necessary sizes if missing
+        configure options on the fly
+	super-hotkey to abort grab would be nice (for C-A-D)
+	combine window list and C+A+D?
+	support .ICO (windows,os2) icons and a.xpm&mini/mini-a.xpm format icons
+	modularize (for 2.0)
+taskbar rewrite:
+	double/dynamic/vertical taskbar
+	modularize taskbar objects (toolbar,workspaces,appicons,applets)
+	taskbar keyboard navigation
+done?
+	echo I$[$(/bin/echo 'internationalization\c' | wc -c)-2]N
+	windows dockable to edge of screen and other windows
+        minimize/restore transient windows when owner is minimized/restored
+general:
+        fix -n option not to use any user/system specific settings?
+        pixmaps need to be defined using translated colors (dark,bright,bg,fg)
+        pointer move/size during keyboard move/size
+	-clickFocus,+pointerColormap,xlock -install -nolock -mode swirl
+	colormap switching for popup windows? (key/mouse differs? in gimp)
+	opaque move/size locks up during xkoules fadein/out (xkoules BUG?)
+        fix motif hints handling (decorations/functions - show disabled buttons)
+	ClickToFocus=0 -> switching workspaces back/forth changes focus win 
+        !other Xdnd implementations have a bug with workspace switching buttons (drag-over switches)
+
+// vim: set ft=asciidoc tw=72 nocin nosi fo+=tcqlorn spell:

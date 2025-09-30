@@ -1,0 +1,328 @@
+icewm -- history of user-visible changes.  2023-01-23
+
+Release icewm-3.3.1 released 2023-01-23
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.3.0...3.3.1
+
+Bert Gijsbers <gijsbers@science.uva.nl> (30):
+      Add support for nanosvg to gdk-pixbuf rendering and to cmake build.
+      Set DoNotCover hint on taskbar when layer is Dock.
+      Report the chosen audio interface in configure for issue #699.
+      Consider that the keyboard may have been changed externally for #698.
+      Free tray gradients when done.
+      Fix compilation of iceclock.
+      Fix tiny memory leak.
+      Delete the manager on exit.
+      Verify that the minimum size hints are positive, before comparing them to
+        maximum.
+      Increase the timeout for the dynamic menu generator to 2.0 seconds.
+      Don't resize the window when a client makes small adjustments to the
+        WM_NORMAL_HINTS property for issue ice-wm/icewm#115.
+      Allow rolled up windows to be moved vertically for issue ice-wm/icewm#77.
+      Compute the adjusted normalized dimensions on the basis of the previous
+        normalized dimensions.
+      Let winoption "ignorePositionHint" also ignore USPosition for issue #701.
+      Adjust normalized dimensions from the outer dimensions, as this avoids
+        accumulating rounding errors.
+      On screen change, update taskbar location before work area, for
+        ice-wm/icewm#116.
+      Make updateLocation public.
+      Don't reactivate a focused window when RaisOnClick is guaranteed.
+      Also spy on RandR events.
+      Also activate a focused rollup.
+      Drop "sync" from examples, because that is now done automatically.
+      Drop "shell", because no shell is used.
+      When the "ignoreOverrideRedirect" winoption is set, then clear the
+        override_redirect flag in the X window attributes in order to receive
+        proper resize events.
+      Cache 3 GCs for rendering XImages to Pixmaps to reduce memory allocations.
+      Prevent a compiler warning for runProgram.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Check the return value of write calls in icesh to avoid warnings.
+      Two pragmas to avoid two irrelevant gcc warnings.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+
+Baurzhan Muftakhidinov <baurthefirst@gmail.com> (4):
+      Added translation using Weblate (Kazakh)
+      Translated using Weblate (Kazakh)
+      Translated using Weblate (Kazakh)
+      Translated using Weblate (Kazakh)
+
+Aleš Kastner <alkas@volny.cz> (1):
+      Translated using Weblate (Czech)
+
+Kukuh Syafaat <syafaatkukuh@gmail.com> (1):
+      Translated using Weblate (Indonesian)
+
+Vincent Legoll <vincent.legoll@gmail.com> (1):
+      Translated using Weblate (French)
+
+dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> (1):
+      Dependabot from 2 to 3 (#686)
+
+
+Release icewm-3.3.0 released 2022-12-20
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.2.3...3.3.0
+
+Bert Gijsbers <gijsbers@science.uva.nl> (21):
+      Prevent a derefence of a null-Pixel in xftColor.
+      Add "getClass" and "setClass" commands to icesh.
+      Support tabs in task grouping.
+      Use spaces instead of dots when printing WM_COMMAND.
+      When a focused window hides or rolls up, focus some other window.
+      When looking for a focusable window, avoid rolled up windows.
+      Fix for setting focus on passive motif dialogs for issue #400 and
+        ice-wm/icewm#110.
+      Fallback to rolled up windows in the second pass of getLastFocus.
+      Use CurrentTime when setting focus to a passive client in the timeout.
+      On icon not found, report dimensions.
+      Don't refocus a focused window in focusLastWindow.
+      Don't activate an active window when receiving an activation message.
+      Ignore duplicate map requests.
+      Let icesh implicitly select windows at most once.
+      Add support for nanosvg for issue #695.
+      Add preference ToolTipIcon=1 for issue #637.
+      Add nanosvg to .gitignore.
+      Remove unneeded logevent from icesh.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.3.0 release
+
+Mehmet Akif 9oglu <madanadam@gmail.com> (1):
+      Translated using Weblate (Turkish)
+
+
+Release icewm-3.2.3 released 2022-12-05
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.2.2...3.2.3
+
+Bert Gijsbers <gijsbers@science.uva.nl> (19):
+      Only freeze task pane layout when a button was removed.
+      Get rid of destroyedClient and simplify handleUnmap.
+      Minimalize ClientData.
+      Tabbing tips.
+      Make winoption forceClose tab dependent.
+      Mention named tabs.
+      Drop windowCount.
+      Let tabs check for winoption settings.
+      Accept pull request by olf and closes ice-wm/icewm#104.
+      Show an icon in the tooltip of a toolbar button for issue #637.
+      Ensure that a task button is updated once it is mapped.
+      Document "workspace" subdirectory.
+      Only link icewm to tooltips and icons, not icewmbg.
+      Add icon to tray tooltip.
+      Delay the creation of frame button tooltips.
+      Add loadicon and saveicon to icesh.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.2.3 release
+
+Yasuhiko Kamata <belphegor@belbel.or.jp> (2):
+      Translated using Weblate (Japanese)
+      Translated using Weblate (Japanese)
+
+David Medina <medipas@gmail.com> (1):
+      Translated using Weblate (Catalan)
+
+Dmitriy Khanzhin <jinn@altlinux.org> (1):
+      Translated using Weblate (Russian)
+
+Ferdinand Galko <galko.ferdinand@gmail.com> (1):
+      Translated using Weblate (Slovak)
+
+Freek de Kruijf <freek@opensuse.org> (1):
+      Translated using Weblate (Dutch)
+
+Hugo Carvalho <hugokarvalho@hotmail.com> (1):
+      Translated using Weblate (Portuguese)
+
+Kristijan Fremen Velkovski <me@krisfremen.com> (1):
+      Translated using Weblate (Macedonian)
+
+Luiz Fernando Ranghetti <elchevive68@gmail.com> (1):
+      Translated using Weblate (Portuguese (Brazil))
+
+
+Release icewm-3.2.2 released 2022-11-14
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.2.1...3.2.2
+
+Bert Gijsbers <gijsbers@science.uva.nl> (22):
+      Freeze the task pane layout while Alt is pressed for #549.
+      Also sort Alt+Tab on 'order' winoption.
+      Faster find.
+      Find item within bounds.
+      Menu add after, haveCommand and removeCommand.
+      Add client actions close, kill and untab.
+      Update window list after an untab. Preserve non-fullscreen geometry across
+        restarts. Try harder to avoid a non-focused situation.
+      Restore winoption named frame tabs when recovering from a crash.
+      Much improved sorting in the window list window. Make the window list more
+        tab-savvy.
+      Adapt absolute paths in .desktop files to install prefix for #684.
+      Only sort Alt+Tab on WM_CLASS when persistent for #685.
+      Move all calls to XKillClient in one place.
+      Adapt absolute paths in .desktop files for CMake build.
+      Add menu entry to rename the window title manually for #644.
+      Let Escape cancel the entire menu chain and closes #677.
+      Fix for GCC 4.8.5.
+      One suffices.
+      Update pot files.
+      Use AM_V_GEN before the sed desktop files.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.2.2 release
+
+Naveen <172697+naveensrinivasan@users.noreply.github.com> (1):
+      Include githubactions in the dependabot config (#655)
+
+Pino Toscano <toscano.pino@tiscali.it> (1):
+      Drop LSM file (#660)
+
+
+Release icewm-3.2.1 released 2022-11-08
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.2.0...3.2.1
+
+Bert Gijsbers <gijsbers@science.uva.nl> (13):
+      Update version to 3.2.0.
+      Close other tabs first.
+      Fix KeySysSwitchClass history for issue #673.
+      Update the quick switch list after changing workspace when
+        QuickSwitchToAllWorkspaces=0 for issue #683.
+      Demarcate workspaces in Alt+Tab for QuickSwitchToAllWorkspaces. Fix the
+        quick switch vertical size calculations.
+      Add QuickSwitchPersistence pref to enable stateful Alt+Tab for issue #683.
+      Don't attempt to focus NoInput windows.
+      Check that active Alt+Tab item is visible. Also sort Alt+Tab items on
+        WM_CLASS. Fix GCC 4.8.5 compile error and closes ice-wm/icewm#99.
+      When moving a tab to a new frame, activate it.
+      Add array moveto to reduce copying.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.2.1 release
+
+Stéphane LASSALVY <stephane.lassalvy@laposte.net> (2):
+      Translated using Weblate (French)
+      Translated using Weblate (French)
+
+Kukuh Syafaat <syafaatkukuh@gmail.com> (1):
+      Translated using Weblate (Indonesian)
+
+Victor hck <correohck@gmail.com> (1):
+      Translated using Weblate (Spanish)
+
+Wallon <franckjl@hotmail.com> (1):
+      Translated using Weblate (French)
+
+
+Release icewm-3.2.0 released 2022-11-02
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.1.0...3.2.0
+
+Bert Gijsbers <gijsbers@science.uva.nl> (26):
+      Update _NET_CLIENT_LIST when adding more tabs.
+      Show the time of day when reporting an unknown window option.
+      Update the title bar shape when switching to a different tab and when
+        removing a tab. Set the desktop, the layer and the state window
+        properties when creating a tab. Always add a new tab to the window list.
+      Add the icesh command "tabto" to move a number of windows as tabs to a new
+        frame.
+      Update a visible quick switch when a frame removes one of its tabs.
+      Only popup the grouping menu on a task button on the first button click
+        without key modifiers. This makes it easier to immediately select or
+        minimize the active application by using the shift or control modifier.
+      Fix maximize and fullscreen for tabs with different normal sizes.
+      When switching to a tab with size limitations, adapt the frame geometry.
+        Prevent the flashing when switching tabs.
+      Support edge switching when dragging a window for issue #681.
+      Add "stacking" and "reverse" commands to icesh for issue ice-wm/icewm#98.
+      Add "stacking" and "reverse" commands to icesh for issue ice-wm/icewm#98.
+      Explain cursors.
+      Let icesh check all atoms in the -Property filter. Improve the window
+        synchronization in icesh.
+      Let the Alt+Tab preserve a history for 30 seconds for issue #673. The next
+        Alt+Tab will then continue where the previous one left off.
+      Fix Alt+Tab prioritization for issue #673.
+      Add "untab" command to icesh to give each client its own frame.
+      Mention Alt+Tab raise candidate in the icewm manpage.
+      Permit a rolled up frame to take focus even if its client has a globally
+        active focus model for issue ice-wm/icewm#98.
+      When activating a rolled up window, set focus to IceTopWin, for issue
+        ice-wm/icewm#98.
+      Ensure KeySysWinNext and KeySysWinPrev work for rolled up windows for
+        issue ice-wm/icewm#98.
+      Force fullscreen windows as focused, even if their input hint is False,
+        for TaskBarFullscreenAutoShow in issue ice-wm/icewm#73.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Add missing override.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.2.0 release
+
+Eduard Bloch <blade@debian.org> (2):
+      DRY, simplify, some flags/folders separation
+      feature: special filtered view and flat rendering
+
+Kristijan Fremen Velkovski <me@krisfremen.com> (1):
+      Translated using Weblate (Macedonian)
+
+
+Release icewm-3.1.0 released 2022-10-24
+---------------------------------------
+
+git shortlog -e -n -w80,6,8 3.0.1...3.1.0
+
+Bert Gijsbers <gijsbers@science.uva.nl> (18):
+      Let the window list support tabs.
+      Add MouseWinTabbing button preference for merging frame tabs for issue
+        ice-wm/icewm#95.
+      Replace last Button2 with isTabbingButton for issue ice-wm/icewm#95.
+      When switching tabs, ensure focus is preserved.
+      Improve Alt+Tab for tabbed frames for issue #673.
+      Check owner pointer for transient windows which have an unmapped owner for
+        issue #675.
+      Preserve tabs across restarts.
+      Fix merging a transient as a tab to its owner.  Preserve tray hint across
+        restarts.  Smaller WindowOption.
+      Move WindowOption from frame to client and cache it.
+      Also context save the internal clients.
+      Show tabs on the title bar. Click on title bar to change tabs.
+      Detail how to use tabbed windows.
+      Revert "Revisiting header files and making them self-sufficient"
+      Add winoption "frame" to group new clients as tabs in a single frame.
+      Fix warning on delete.
+      Merge remote-tracking branch 'upstream/icewm-1-4-BRANCH' into
+        icewm-1-4-BRANCH
+      Merge branch 'icewm-1-4-BRANCH'
+      Prepare 3.1.0 release
+
+Eduard Bloch <blade@debian.org> (2):
+      Revisiting header files and making them self-sufficient
+      [cmake] Various improvements
+
+Stéphane LASSALVY <stephane.lassalvy@laposte.net> (1):
+      Translated using Weblate (French)
+
+Wallon <franckjl@hotmail.com> (1):
+      Translated using Weblate (French)
+
+marcelo cripe <marcelocripe@gmail.com> (1):
+      Translated using Weblate (Portuguese (Brazil))
+

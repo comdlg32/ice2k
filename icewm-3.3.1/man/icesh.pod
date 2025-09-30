@@ -1,0 +1,1046 @@
+=pod
+
+=head2 NAME
+
+ icesh - control window properties and the IceWM window manager
+
+=head2 SYNOPSIS
+
+=over
+
+=item B<icesh> I<OPTIONS|ACTIONS>+
+
+=back
+
+=head2 DESCRIPTION
+
+B<icesh> provides two types of commands:
+
+=over
+
+=item 1. Commands to directly interact with icewm:
+
+These are listed in the section "MANAGER ACTIONS" below.
+They are easy to use, because they don't require to select one
+or more windows. For example, C<icesh restart> will restart
+icewm and C<icesh clients> lists the applications which
+are managed by icewm.
+
+=item 2. Commands which operate on a selection of windows:
+
+See the section C<WINDOW ACTIONS> below. For example, C<icesh close>
+is a request to close a window, but which window? Now icesh
+will turn the mouse pointer into a crosshair. Click on a window
+and a close request will be sent to that application.
+
+The power of icesh lies in its ability to programmatically
+select one or more windows and operate on that selection.
+This can be used in scripts and in L<icewm-keys(5)>
+to define your own window management hotkeys.  For example, to
+immediately close all xterm windows do C<icesh -c xterm close>.
+
+There are a dozen C<SELECT OPTIONS> to select windows.  They start
+with a '-' or a '+'.  The '-' starts a new selection, while the '+'
+adds more windows to an existing selection.
+
+This selection of windows can be reduced by C<FILTER OPTIONS>.
+These remove unwanted windows from the current selection.
+Multiple filter options can be given. For example,
+C<icesh -c xterm -W this close> will close only those xterms
+which are shown on the current workspace. The xterms on other
+workspaces are filtered out by the C<-W this> filter option.
+
+=back
+
+There is no limit to the number of commands, selections, filters
+and actions which you can give to a single icesh command.
+They are processed and evaluated one by one from left to right.
+This makes icesh a small declarative programming language.
+Have a look at some examples near the end of this document.
+
+=head2 OPTIONS
+
+B<icesh> recognizes the following options:
+
+=head2 SELECT OPTIONS
+
+Select options specify the window or windows to which subsequent
+actions apply. If none is given, but an action does require a window,
+then a selection crosshair is shown to select the desired window
+interactively. The manager actions do not require window options.
+
+The following options I<select> one or more client windows.
+If needed, they can be repeated for successive actions.
+
+=over
+
+=item B<-a>, B<-all>
+
+Selects all client windows of the window manager.
+
+=item B<-f>, B<-focus>, B<+f>, B<+focus>
+
+Selects the application window which is currently focused.
+The option with minus sign replaces the existing selection with
+the focused window. With a plus sign the focused window is added to
+an existing selection.
+
+=item B<+g>, B<+group>
+
+Extend the current selection with client windows which
+belong to the same application window group.
+
+=item B<-r>, B<-root>, B<+r>, B<+root>
+
+Selects the root window.
+The option with minus sign replaces the existing selection with
+the root window. With a plus sign the root window is added to
+an existing selection.
+
+=item B<-s>, B<-shown>
+
+Selects all client windows which are on the current workspace.
+
+=item B<-t>, B<-top>
+
+Selects all toplevel windows from the display unconditionally.
+This includes windows which have never been mapped and windows
+with the override redirect bit set to evade management.
+
+=item B<-w>, B<-window>, B<+w>, B<+window> I<WINDOW_ID>
+
+Specifies the identifier of the window, I<WINDOW_ID>, for which the
+action applies.  Special identifiers are B<root> for the root window
+and B<focus> for the currently focused window.
+The option with minus sign replaces the existing selection.
+With a plus sign the window is added to an existing selection.
+
+=item B<-x>, B<-xembed>
+
+Selects all windows which are embedded using the I<XEMBED> protocol.
+
+=item B<+c>, B<+class> I<CLASS>
+
+Extend the current selection with client windows that have a
+I<WM_CLASS> property equal to I<CLASS>. This is the resource
+instance and class name.  If I<CLASS> contains a period, only
+windows with exactly the same I<WM_CLASS> property are matched.
+If there is no period, windows of the same class and windows
+of the same instance are selected.
+
+=item B<+C>, B<+Class>
+
+Extend the current selection with client windows that
+have a I<WM_CLASS> property I<similar> to the already
+selected set of windows.
+
+=item B<-D>, B<-Dockapps>
+
+Selects all Dockapp applications which are managed by icewm.
+
+=item B<+P>, B<+Pid>
+
+Extend the current selection with client windows that have
+the same process identifier as one of the selected windows.
+
+=item B<-T>
+
+Selects the IceWM taskbar.
+
+=back
+
+=head2 FILTER OPTIONS
+
+The following options I<filter> the currently selected set of windows.
+If no previous I<select> option was given then a B<-all> option is
+implicitly assumed to filter all client windows.
+
+=over
+
+=item B<-c>, B<-class> I<CLASS>
+
+Filters the set of windows on their I<WM_CLASS> property.  This is
+the resource instance and class name. If I<CLASS> contains a period,
+only windows with exactly the same I<WM_CLASS> property are matched.
+If there is no period, windows of the same class and windows of the
+same instance (aka. I<-name>) are selected.
+
+=item B<-l>, B<-last>
+
+Filter clients and keep only the most recent client.
+
+=item B<-m>, B<-machine> I<HOST>
+
+Filters clients by host name. Clients with a WM_CLIENT_MACHINE property
+equal to I<HOST> are selected.
+
+=item B<-n>, B<-name> I<NAME>
+
+Filters clients by _NET_WM_NAME or WM_NAME.
+I<NAME> matches any part of the property value.
+To match at the beginning use a C<^> prefix.
+To match at the end use a C<$> suffix.
+
+=item B<-p>, B<-pid> I<PID>
+
+Filters clients by process ID. Clients with a _NET_WM_PID property equal
+to I<PID> are selected.
+
+=item B<-u>, B<-unmapped>
+
+Filter clients and keep those which are currently not viewable.
+These are hidden, minimized, rolled-up, or on another workspace.
+
+=item B<-v>, B<-viewable>
+
+Filter clients and keep only those which are currently viewable.
+These clients are mapped on the current workspace.
+
+=item B<-G>, B<-Gravity> I<GRAVITY>
+
+Filters clients by the window gravity field of the WM_NORMAL_HINTS
+property.  Clients with a gravity equal to I<GRAVITY> are selected.
+If I<GRAVITY> starts with an exclamation mark then the filtering is
+inverted.
+
+=item B<-L>, B<-Layer> I<LAYER>
+
+Filters clients by I<GNOME window layer>, which can either be a layer
+name or a layer number. See EXPRESSIONS below. If I<LAYER> starts with
+an exclamation mark then the filtering is inverted.
+
+=item B<-N>, B<-Netstate> I<STATE>
+
+Filters clients by I<EWMH window state>. Clients which have at
+least an EWMH window state of I<STATE> are selected.  This state
+refers to details like B<MINIZED> or B<MAXIMIZED>. See EXPRESSIONS
+below. If I<STATE> starts with an exclamation mark then the filtering
+is inverted.  A question mark C<?> filters clients with any bit set
+in I<STATE>.
+
+=item B<-P>, B<-Property> I<PROP[=value]>
+
+Filters clients by property. Clients which have a property I<PROP>
+are selected. If the optional I<value> is given, the match succeeds
+only if I<PROP> is a string, window, cardinal, or atom, with a value
+equal to I<value>.  The filtering is inverted if I<PROP> starts with
+an exclamation mark.
+
+=item B<-R>, B<-Role> I<ROLE>
+
+Filters clients by WM_WINDOW_ROLE. Clients which have a WM_WINDOW_ROLE
+property value equal to I<ROLE> are selected.  The filtering is inverted
+if I<ROLE> starts with an exclamation mark.
+
+=item B<-W>, B<-Workspace> I<WORKSPACE>
+
+Filter clients by workspace. Workspace I<WORKSPACE> is either a
+workspace name, or a workspace number counting from zero, or the word
+C<this> for the current workspace, or the word C<All> for all workspaces.
+If I<WORKSPACE> starts with an exclamation mark then the filtering is
+inverted.
+
+=item B<-X>, B<-Xinerama> I<MONITOR>
+
+Limit clients by I<RandR>/I<Xinerama> monitor. Only operate on
+clients which are displayed on I<MONITOR>, where I<MONITOR> can
+be C<All> for all monitors, C<this> for the monitor where the
+active window is displayed, or a monitor number starting from zero.
+See the output of C<randr> or C<xinerama> below.
+
+=back
+
+=head2 GENERAL OPTIONS
+
+The following options are identical for every IceWM command.
+
+=over
+
+=item B<-d>, B<-display> I<DISPLAY>
+
+Specifies the X11 DISPLAY.  If unspecified, defaults to B<$DISPLAY>.
+
+=item B<-h>, B<--help>
+
+Print a brief usage statement to F<stdout> and exit.
+
+=item B<-V>, B<--version>
+
+Print the program version to F<stdout> and exit.
+
+=item B<-C>, B<--copying>
+
+Print copying permissions to F<stdout> for the program and exit.
+
+=item B<-q>, B<--quiet>
+
+Don't complain if no matching windows could be found.
+
+=back
+
+=head2 ACTIONS
+
+B<icesh> expects one or more action arguments.  There are two kinds of
+actions: I<window actions> and I<manager actions>. The first operates on
+the selected windows. The second directly interacts with the B<icewm>
+window manager.
+
+=head2 WINDOW ACTIONS
+
+The following actions affect the selected window or windows.
+
+=over
+
+=item B<activate>
+
+Activate the window, aka. I<to focus>.
+
+=item B<close>
+
+Send a close request to the client that created the window.
+
+=item B<kill>
+
+Force an immediate close down of the client that created the window.
+
+=item B<id>
+
+Print window identifiers for the selected windows.
+
+=item B<pid>
+
+Print process identifiers for the selected windows.
+
+=item B<list>
+
+Show window details, like geometry and names.
+
+=item B<lower>
+
+Lower the window.
+
+=item B<raise>
+
+Raise the window.
+
+=item B<above>
+
+Stack the window above others.
+
+=item B<below>
+
+Stack the window below others.
+
+=item B<rollup>
+
+Rollup the specified window.
+
+=item B<fullscreen>
+
+Set the window to fullscreen.
+
+=item B<maximize>
+
+Maximize the window.
+
+=item B<horizontal>
+
+Maximize the window only horizontally.
+
+=item B<vertical>
+
+Maximize the window only vertically.
+
+=item B<minimize>
+
+Minimize the window.
+
+=item B<restore>
+
+Restore the window to normal.
+
+=item B<hide>
+
+Hide the window.
+
+=item B<unhide>
+
+Reveal the window.
+
+=item B<skip>
+
+Don't show the window on the taskbar.
+
+=item B<unskip>
+
+Do show the window on the taskbar.
+
+=item B<sticky>
+
+Show the window on all workspaces.
+
+=item B<unsticky>
+
+Show the window on just one workspace.
+
+=item B<urgent>
+
+Set the urgent flag to flash the task button.
+
+=item B<resize> I<WIDTH> I<HEIGHT>
+
+Resize window to I<WIDTH> by I<HEIGHT> window units.  For text based
+applications like terminals, a window unit is the size of a single
+character cell.
+
+=item B<sizeto> I<WIDTH> I<HEIGHT>
+
+Resize window to I<WIDTH> by I<HEIGHT> pixels. If I<WIDTH> or I<HEIGHT>
+ends with a percent sign C<%>, then they refer to a percentage of the
+desktop work area. For instance, C<sizeto 50% 100%> resizes to half
+the desktop width and whatever height is available above or below the
+taskbar.
+
+=item B<sizeby> I<WIDTH> I<HEIGHT>
+
+Resize window by I<WIDTH> by I<HEIGHT> pixels. If I<WIDTH> or I<HEIGHT>
+ends with a percent sign C<%>, then they refer to a percentage of the
+current window size. For instance, C<sizeby 50% 200> increases the width
+by 50% and increases the height by 200 pixels.
+
+=item B<move> I<X> I<Y>
+
+Move the selected window or windows to the screen position I<X> I<Y>.
+To specify I<X> or I<Y> values relative to the right side or bottom side
+precede the value with an extra minus sign, like in C<move -+10 --20>.
+
+=item B<moveby> I<X> I<Y>
+
+Displace window by I<X> I<Y> pixels.
+
+=item B<center>
+
+Position the window in the center of the desktop work area.
+
+=item B<left>
+
+Position the window against the left side of the desktop work area.
+
+=item B<right>
+
+Position the window against the right side of the desktop work area.
+
+=item B<top>
+
+Position the window against the top side of the desktop work area.
+
+=item B<bottom>
+
+Position the window against the bottom side of the desktop work area.
+
+=item B<setIconTitle> I<TITLE>
+
+Set the icon title to I<TITLE>.
+
+=item B<getIconTitle>
+
+Print the icon title.
+
+=item B<setWindowTitle> I<TITLE>
+
+Set the window title to I<TITLE>.
+
+=item B<getWindowTitle>
+
+Print the window title.
+
+=item B<setGeometry> I<GEOMETRY>
+
+Set the window geometry to I<GEOMETRY>.  This geometry should be
+specified in a format that can be parsed by L<XParseGeometry(3)>.
+Negative offsets are with respect to the bottom or right side of
+the screen.  Use C<+-> for a truly negative position.
+
+=item B<getGeometry>
+
+Print the window geometry.
+
+=item B<setClass> I<CLASS>
+
+Set the resource name and class to I<CLASS>, which should be a resource
+name and a resource class connected by a dot. To preserve either the
+existing name or class, use a percentage sign for that part.
+
+=item B<getClass>
+
+Print the resource name and class.
+
+=item B<netState> I<[STATE]>
+
+If I<STATE> is omitted then it shows the I<EWMH window state>.
+If I<STATE> starts with a C<+> then flags in I<STATE> are appended to
+the existing I<EWMH window state>.  If I<STATE> starts with a C<->
+then flags in I<STATE> are removed from the existing I<EWMH window
+state>.  If I<STATE> starts with a C<^> then flags in I<STATE> are
+toggled with respect to the existing I<EWMH window state>.
+If I<STATE> starts with a C<=> then the I<EWMH window state>
+is set to I<STATE>. See EXPRESSIONS below. A list of I<EWMH flags>
+can be found in the output of C<icesh symbols>.
+
+=item B<setLayer> I<LAYER>
+
+Move the specified window to another I<window layer>.
+See EXPRESSIONS below for a list of I<LAYER> symbols.
+
+=item B<getLayer>
+
+Print the I<window layer> for the specified window.
+
+=item B<setWorkspace> I<WORKSPACE>
+
+Move the specified window to another workspace.  Select the root
+window to change the current workspace. If I<WORKSPACE> is C<All>
+then the specified window becomes visible on all workspaces.
+Specify C<this> for the current workspace, C<next> for the subsequent
+workspace or C<prev> for the preceding workspace.
+
+=item B<getWorkspace>
+
+Print the workspace for the specified window.
+
+=item B<opacity> [I<OPACITY>]
+
+Print the window opacity if I<OPACITY> is not given,
+otherwise set the window opacity to I<OPACITY>.
+
+=item B<setTrayOption> I<TRAYOPTION>
+
+Set the I<IceWM tray option> for the specified window to I<TRAYOPTION>.
+See I<IceWM tray options>, below, for I<TRAYOPTION> symbols.
+
+=item B<getTrayOption>
+
+Print the I<IceWM tray option> for the specified window.
+
+=item B<setNormalGravity> I<GRAVITY>
+
+Set the window gravity field in the WM_NORMAL_HINTS property for the
+specified window to I<GRAVITY>.  See below for I<GRAVITY> symbols.
+
+=item B<getNormalGravity>
+
+Print the window gravity from the WM_NORMAL_HINTS property for the
+specified window.
+
+=item B<setWindowGravity> I<GRAVITY>
+
+Set the window gravity for the specified window to I<GRAVITY>.
+See below for I<GRAVITY> symbols.
+
+=item B<getWindowGravity>
+
+Print the window gravity for the specified window.
+
+=item B<setBitGravity> I<GRAVITY>
+
+Set the bit gravity> for the specified window to I<GRAVITY>.
+See below for I<GRAVITY> symbols.
+
+=item B<getBitGravity>
+
+Print the bit gravity for the specified window.
+
+=item B<motif> [B<funcs> I<FUNCTIONS> | B<decor> I<DECORATIONS> | B<remove>]
+
+Query, set or modify the C<_MOTIF_WM_HINTS> property for the specified
+window.  Without arguments B<motif> will show the current value, but
+only if the window has such a property. The property can be removed or
+reset with the B<remove> argument. With B<funcs> and B<decor> individual
+fields of this property can be enabled or disabled. If I<FUNCTIONS> or
+I<DECORATIONS> starts with a minus or plus sign then the existing value
+is modified, otherwise it is set to the new value. Note that if C<All>
+is set, other set fields are disabled and cleared fields are enabled.
+
+=item B<borderless>
+
+Hide the frame borders and title.
+
+=item B<bordered>
+
+Show the frame borders and title.
+
+=item B<denormal>
+
+Remove the WM_NORMAL_HINTS property, if it exists.  This lifts
+font-size restrictions on resizing, especially for terminals.
+
+=item B<prop> I<PROPERTY>
+
+Print the value of property I<PROPERTY>, if it is present.
+
+=item B<properties>
+
+Print all properties and their values.
+
+=item B<frame>
+
+Print the identifier of the window frame.
+
+=item B<extents>
+
+Print the window identifier and the frame border sizes: left, right,
+top and bottom.
+
+=item B<focusmodel>
+
+Print the ICCCM focus model as advertised by the client window.
+This is either Locally, Passive, Globally or NoInput.
+
+=item B<override> [I<0|1>]
+
+Print the override redirect status for the window, or if either 0 or 1
+is given, then disable or enable the override redirect status.
+
+=item B<tabto> I<label>
+
+Move the windows as tabs to a frame which has C<frame> label I<label>.
+Such a frame is created if needed.
+
+=item B<untab>
+
+Move each window to its own frame, if it is currently tabbed.
+
+=item B<loadicon> F<image.pam>
+
+Load an icon from file, which must be in the PAM image format,
+with dimensions at most 256, a depth of 4, and type I<RGB_ALPHA>.
+
+=item B<saveicon> F<file000.pam>
+
+Save an icon to a new file in the PAM image format. Digits are
+increased to generate a unique new filename for each window.
+
+=item B<click> I<window-x> I<window-y> I<button>
+
+Send a button press and release event at position (I<window-x>,
+I<window-y>). A negative position is relative to the bottom right
+corner. The mouse pointer is warped to the position before sending
+the events. The button number should be between 1 and 5 inclusive.
+
+=item B<monitors> I<top> I<bottom> I<left> I<right>
+
+This sets the monitors to use for fullscreen.
+Top, bottom, left, and right are indices of the I<icesh xinerama> command.
+
+=item B<spy>
+
+Observe the selected windows and report any changes. This includes
+focus, visibility, position, size and all window properties.
+To monitor all of the protocol request messages that client applications
+may send to icewm, also spy on the root window.
+
+=item B<stacking>
+
+Sort the list of windows from topmost to bottom-most.
+
+=item B<reverse>
+
+Reverse the order of the list of windows.
+
+=back
+
+=head2 MANAGER ACTIONS
+
+The following actions control the IceWM window manager and therefore
+do not require a window I<select> or I<filter> option:
+
+=over
+
+=item B<listWorkspaces>
+
+List the names of all workspaces.
+
+=item B<current>
+
+Show the number and name of the current workspace.
+
+=item B<goto> I<WORKSPACE>
+
+Change the current workspace to I<WORKSPACE>. Specify C<next> for the
+subsequent workspace or C<prev> for the preceding workspace.
+
+=item B<workspaces> [I<COUNT>]
+
+Print the number of workspaces if I<COUNT> is not given,
+otherwise set the number of workspaces to I<COUNT>.
+
+=item B<setWorkspaceName> I<INDEX> I<NAME>
+
+Change the name of the workspace I<INDEX> to I<NAME>, where I<INDEX> is
+a workspace number starting from zero.
+
+=item B<setWorkspaceNames> I<NAME> [I<NAME>]*
+
+Change the workspace names to the list of I<NAME>s.
+
+=item B<addWorkspace> I<NAME>
+
+Create a new workspace with name I<NAME>.
+
+=item B<desktop> [I<SHOWING>]
+
+If I<SHOWING> is C<1> then set C<showing the desktop> mode.
+If I<SHOWING> is C<0> then turn off C<showing the desktop>.
+Print the current mode if I<SHOWING> is not given.
+
+=item B<workarea>
+
+Print the dimensions of the work area for the current workspace.
+This is the desktop, but minus space occupied by dock and panel windows.
+
+=item B<randr>
+
+Summarize the I<RandR> configuration.
+
+=item B<xinerama>
+
+Summarize the I<Xinerama> configuration.
+
+=item B<check>
+
+Print information about the current window manager, like name,
+version, class, locale, command, host name and pid.
+
+=item B<clients>
+
+List all managed client windows, their titles and geometries.
+
+=item B<shown>
+
+List all mapped client windows for the current desktop,
+their titles and geometries.
+
+=item B<windows>
+
+List all toplevel windows, their titles and geometries.
+
+=item B<systray>
+
+List applications which are managed by the IceWM system tray.
+
+=item B<xembed>
+
+List application windows which are embedded using the I<XEMBED> protocol.
+This is another way to discover system tray applications.
+
+=item B<logout>
+
+Let icewm execute the C<LogoutCommand>.
+
+=item B<reboot>
+
+Let icewm execute the C<RebootCommand>.
+
+=item B<shutdown>
+
+Let icewm execute the C<ShutdownCommand>.
+
+=item B<cancel>
+
+Let icewm cancel the logout/reboot/shutdown.
+
+=item B<about>
+
+Let icewm show the about window.
+
+=item B<windowlist>
+
+Let icewm show the window list window.
+
+=item B<restart>
+
+Let icewm restart itself.
+
+=item B<suspend>
+
+Let icewm execute the C<SuspendCommand>.
+
+=item B<winoptions>
+
+Let icewm reload the C<winoptions>.
+
+=item B<keys>
+
+Let icewm reload the C<keys> file.
+
+=item B<guievents>
+
+Monitor the B<ICEWM_GUI_EVENT> property and report all changes.
+
+=item B<delay> [I<time>]
+
+Stop execution for I<time> or 0.1 seconds.
+
+=item B<runonce> I<program> [I<arguments...>]
+
+This action is meant to be used together with the B<-class> option.
+Only if no window is matched by I<WM_CLASS> then
+I<program> [I<arguments...>] is executed.
+
+=item B<sync>
+
+Synchronize with the IceWM window manager. That is, wait for icewm to
+process all previous actions.
+
+=item B<symbols>
+
+List all named symbols.
+
+=back
+
+=head2 CONDITIONALS
+
+Icesh supports C<if-then-else> expressions. The full syntax is:
+
+    if selection
+    then
+        actions
+    elif selection
+    then
+        actions
+    else
+        actions
+    end
+
+Where C<selection> is a sequence of selection and filtering options,
+which evaluates to B<true> when it is non-empty. That is, if one or more
+windows fulfilled the condition. If it is empty, then its C<actions>
+clause is ignored and the subsequent C<elif> or C<else> clause is tried
+or taken. Each clause is optional.
+
+Whenever a selection condition evaluates to B<false>, the window selection
+that existed before the C<if> clause is immediately restored.  This also
+happens after an C<end> clause.
+
+=head2 EXPRESSIONS
+
+Some of the window actions require one or two I<EXPRESSION> arguments.
+
+=over
+
+=item B<EXPRESSION> ::= I<SYMBOL> | I<EXPRESSION> { C<+> | C<|> }
+I<SYMBOL>
+
+=back
+
+Each I<SYMBOL> may be from one of the following applicable domains:
+
+=over
+
+=item I<Window layer>
+
+Named symbols of the domain I<Window layer> (numeric range: 0-15):
+
+    Desktop                (0)
+    Below                  (2)
+    Normal                 (4)
+    OnTop                  (6)
+    Dock                   (8)
+    AboveDock             (10)
+    Menu                  (12)
+
+These symbols are used with the I<LAYER> argument to the C<setLayer>
+action.
+
+=item I<IceWM tray option>
+
+Named symbols of the domain I<IceWM tray option> (numeric range: 0-2):
+
+    Ignore                 (0)
+    Minimized              (1)
+    Exclusive              (2)
+
+These symbols are used with the I<TRAYOPTION> argument to the
+C<setTrayOption> action.
+
+=item I<Gravity symbols>
+
+Named symbols for window and bit gravity (numeric range: 0-10):
+
+    ForgetGravity         (0)
+    NorthWestGravity      (1)
+    NorthGravity          (2)
+    NorthEastGravity      (3)
+    WestGravity           (4)
+    CenterGravity         (5)
+    EastGravity           (6)
+    SouthWestGravity      (7)
+    SouthGravity          (8)
+    SouthEastGravity      (9)
+    StaticGravity         (10)
+
+=item I<Motif functions>
+
+    All                  (1)
+    Resize               (2)
+    Move                 (4)
+    Minimize             (8)
+    Maximize             (16)
+    Close                (32)
+
+=item I<Motif decorations>
+
+    All                  (1)
+    Border               (2)
+    Resize               (4)
+    Title                (8)
+    Menu                 (16)
+    Minimize             (32)
+    Maximize             (64)
+
+=item I<EWMH window state symbols>
+
+Named symbols of the domain I<EWMH state> (numeric range:
+0-8191):
+
+    ABOVE                 (1)
+    BELOW                 (2)
+    DEMANDS_ATTENTION     (4)
+    FOCUSED               (8)
+    FULLSCREEN            (16)
+    HIDDEN                (32)
+    MAXIMIZED_HORZ        (64)
+    MAXIMIZED_VERT        (128)
+    MODAL                 (256)
+    SHADED                (512)
+    SKIP_PAGER            (1024)
+    SKIP_TASKBAR          (2048)
+    STICKY                (4096)
+
+=back
+
+=head2 EXAMPLES
+
+List all workspace names:
+
+    icesh listWorkspaces
+
+Example output:
+
+    workspace #0: `main'
+    workspace #1: `web'
+    workspace #2: `doc'
+    workspace #3: `dev'
+
+Close terminal work and activate terminal fun.
+
+    icesh -c work.XTerm close -a -c fun.XTerm activate
+
+Print opacity for all xterms.
+
+    icesh -c XTerm opacity
+
+Change opacity for all xterms.
+
+    icesh -c XTerm opacity 84
+
+Move all windows on workspace "Top" to the current workspace.
+
+    icesh -W "Top" setWorkspace "this"
+
+Restore all hidden clients, minimize all clients on the current
+workspace and activate Firefox.
+
+    icesh -N HIDDEN restore -a -W "this" minimize -a -c Firefox activate
+
+Resize the focused window to occupy the right half of the desktop area.
+
+    icesh -f sizeto 49% 100% top right raise
+
+Toggle the frame border of the focused window.
+
+    if icesh -f motif | grep -q 'decor:$'; then \
+        icesh -f motif decor All; else icesh -f motif decor ""; fi
+
+Here is a different solution using conditionals.
+
+    icesh -f if -P _NET_FRAME_EXTENTS=0 then bordered else borderless
+
+Here is a conditional to either toggle the visibility of a roxterm,
+which has a WM_ROLE value of C<special>, or start it with B<runonce>.
+
+    icesh if -c roxterm.Roxterm -R special then \
+        if -v then hide \
+        elif -u then setWorkspace this activate end \
+        else runonce roxterm --role=special
+
+Collect all urxvt terminals from the fourth workspace in a single frame
+on the current workspace.
+
+    icesh -W 3 -c urxvt tabto myfunnyname
+
+=head2 ENVIRONMENT
+
+=over
+
+=item B<DISPLAY>
+
+The default display.
+
+=back
+
+=head2 EXIT STATUS
+
+=over
+
+=item B<0>
+
+The last action completed successfully.
+
+=item B<1>
+
+The last action completed unsuccessfully, or no window met the condition.
+
+=item B<2>
+
+A conditional has invalid syntax.
+
+=item B<3>
+
+The display could not be opened.
+
+=item B<4>
+
+The X server reports an error while processing a request.
+
+=back
+
+=head2 COMPLIANCE
+
+B<icesh> is largely compliant with the EWMH and ICCCM specifications.
+Some commands, like manager actions, are specific to IceWM.
+
+=head2 SEE ALSO
+
+L<icewm(1)>, L<wmctrl(1)>, L<xdotool(1)>, L<xprop(1)>,
+L<xwininfo(1)>, L<XParseGeometry(3)>.
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

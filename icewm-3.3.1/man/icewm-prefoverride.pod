@@ -1,0 +1,53 @@
+=pod
+
+=head2 NAME
+
+ icewm-prefoverride - icewm override preferences configuration file
+
+=head2 SYNOPSIS
+
+ $ICEWM_PRIVCFG/prefoverride
+ $XDG_CONFIG_HOME/icewm/prefoverride
+ $HOME/.icewm/prefoverride
+ /etc/icewm/prefoverride
+ /usr/share/icewm/prefoverride
+
+=head2 DESCRIPTION
+
+Settings which override the settings from a theme.  Some of the B<icewm>
+configuration options from the preferences file which control the
+look-and-feel may be overridden by the theme, if the theme designer
+thinks this is desirable.  However, this F<prefoverride> file will again
+override this for a few specific options of your choosing.  It is safe
+to leave this file empty initially.
+
+=head2 FILES
+
+Locations for the F<prefoverride> file are as follows:
+
+ $ICEWM_PRIVCFG/prefoverride
+ $XDG_CONFIG_HOME/icewm/prefoverride
+ $HOME/.icewm/prefoverride
+ /etc/icewm/prefoverride
+ /usr/share/icewm/prefoverride
+
+The locations are searched in the order listed; the first file found is
+read and the remainder ignored.
+
+=head2 SEE ALSO
+
+L<icewm(1)>,
+L<icewm-preferences(5)>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

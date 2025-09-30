@@ -1,0 +1,8 @@
+# This is an example for @PACKAGE_STRING@ toolbar definition file.
+# It will be installed as @LIBDIR@/toolbar.
+# Place your variants in @CFGDIR@ or in $HOME/.icewm since
+# modifications to this file will be overwritten when you reinstall icewm.
+#
+prog "@XTERMCMD@" utilities-terminal @XTERMCMD@
+prog "Web browser" web-browser xdg-open about:blank
+

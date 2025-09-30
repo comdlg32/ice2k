@@ -1,0 +1,3524 @@
+# Dutch messages for IceWM
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# Ton Kersten <TonK@Wanadoo.nl>, 2003-2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: icewm 1.2.23\n"
+"Report-Msgid-Bugs-To: https://github.com/bbidulock/icewm/issues\n"
+"POT-Creation-Date: 2023-01-23 22:04+0100\n"
+"PO-Revision-Date: 2022-11-14 21:13+0000\n"
+"Last-Translator: Freek de Kruijf <freek@opensuse.org>\n"
+"Language-Team: Dutch <https://l10n.opensuse.org/projects/icewm/icewm-1-4-"
+"branch/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9.1\n"
+
+#: src/aapm.cc:66
+#, c-format
+msgid "Can't open the APM device %s"
+msgstr "Kan het APM-apparaat %s niet openen"
+
+#: src/aapm.cc:74 src/aapm.cc:92
+#, c-format
+msgid "Can't ioctl the APM device %s"
+msgstr "Kan geen ioctl uitvoeren op het APM-apparaat %s"
+
+#: src/aapm.cc:122
+#, c-format
+msgid "Unknown format used by APM device %s (%d)."
+msgstr "Onbekend formaat gebruikt door APM-apparaat %s (%d)."
+
+#: src/aapm.cc:154 src/aapm.cc:426 src/aapm.cc:636 src/aapm.cc:762
+msgid " - Power"
+msgstr " - Vermogen"
+
+#: src/aapm.cc:156 src/aapm.cc:429 src/aapm.cc:639
+msgid "P"
+msgstr "E"
+
+#: src/aapm.cc:160 src/aapm.cc:403 src/aapm.cc:619 src/aapm.cc:730
+msgid " - Charging"
+msgstr " - Opladen"
+
+#: src/aapm.cc:162 src/aapm.cc:405 src/aapm.cc:621
+msgid "C"
+msgstr "C"
+
+#: src/aapm.cc:407
+msgid " - Full"
+msgstr " - Volledig"
+
+#: src/aapm.cc:944
+#, c-format
+msgid "power:\t%s"
+msgstr "voeding:\t%s"
+
+#: src/aclock.cc:192
+msgid "CLOCK"
+msgstr "KLOK"
+
+#: src/aclock.cc:198
+msgid "Date"
+msgstr "Datum"
+
+#: src/aclock.cc:199 src/themes.cc:82
+msgid "Default"
+msgstr "Standaard"
+
+#: src/aclock.cc:200 src/acpustatus.cc:912 src/amailbox.cc:964
+#: src/amemstatus.cc:264
+msgid "_Disable"
+msgstr "_Uitschakelen"
+
+#: src/aclock.cc:201
+msgid "_UTC"
+msgstr "_UTC"
+
+#. TRANSLATORS: Please translate the string "C" into "Celsius Temperature" in your language.
+#. TRANSLATORS: Please make sure the translated string could be shown in your non-utf8 locale.
+#: src/acpustatus.cc:348
+msgid "°C"
+msgstr "°C"
+
+#: src/acpustatus.cc:552
+#, c-format
+msgid "CPU %s Load: %3.2f %3.2f %3.2f, %u"
+msgstr "CPU-belasting %s: %3.2f %3.2f %3.2f, %u"
+
+#: src/acpustatus.cc:558
+#, c-format
+msgid ""
+"\n"
+"Ram (free): %5.3f (%.3f) G"
+msgstr ""
+"\n"
+"RAM (vrij): %5.3f (%.3f) G"
+
+#: src/acpustatus.cc:563
+#, c-format
+msgid ""
+"\n"
+"Swap (free): %.3f (%.3f) G"
+msgstr ""
+"\n"
+"Swap (vrij): %.3f (%.3f) G"
+
+#: src/acpustatus.cc:571
+#, c-format
+msgid ""
+"\n"
+"ACPI Temp: "
+msgstr ""
+"\n"
+"ACPI-temp: "
+
+#: src/acpustatus.cc:592 src/acpustatus.cc:630
+#, c-format
+msgid ""
+"\n"
+"CPU Freq: %.3fGHz"
+msgstr ""
+"\n"
+"CPU-freq: %.3fGHz"
+
+#: src/acpustatus.cc:607 src/acpustatus.cc:907
+msgid "CPU"
+msgstr "CPU"
+
+#: src/acpustatus.cc:607
+msgid "Load: "
+msgstr "Belasting: "
+
+#: src/acpustatus.cc:622
+#, c-format
+msgid ""
+"\n"
+"Ram (user): %5.3f (%.3f) G"
+msgstr ""
+"\n"
+"Ram (gebruiker): %5.3f (%.3f) G"
+
+#: src/acpustatus.cc:908
+#, c-format
+msgid "CPU%d"
+msgstr "CPU%d"
+
+#: src/acpustatus.cc:914
+msgid "_Combine"
+msgstr "_Combineren"
+
+#: src/acpustatus.cc:916
+msgid "_Separate"
+msgstr "Ge_scheiden"
+
+#: src/akeyboard.cc:83 src/icesm.cc:467 src/wmmenu.cc:503
+#, c-format
+msgid "%s exited with status %d."
+msgstr "%s afgesloten met status %d."
+
+#: src/akeyboard.cc:86 src/icesm.cc:473 src/icesm.cc:627
+#, c-format
+msgid "%s was killed by signal %d."
+msgstr "%s afgesloten door signaal %d."
+
+#: src/akeyboard.cc:98
+msgid "rules:"
+msgstr "regels:"
+
+#: src/akeyboard.cc:99
+msgid "model:"
+msgstr "model:"
+
+#: src/akeyboard.cc:100
+msgid "layout:"
+msgstr "indeling:"
+
+#: src/akeyboard.cc:101
+msgid "options:"
+msgstr "opties:"
+
+#: src/akeyboard.cc:157
+msgid "Keyboard"
+msgstr "Toetsenbord"
+
+#: src/amailbox.cc:64
+#, c-format
+msgid "Invalid mailbox protocol: \"%s\""
+msgstr "Ongeldig postvakprotocol: »%s«"
+
+#: src/amailbox.cc:66
+#, c-format
+msgid "Invalid mailbox path: \"%s\""
+msgstr "Ongeldig postvakpad: »%s«"
+
+#: src/amailbox.cc:140
+#, c-format
+msgid "DNS name lookup failed for %s"
+msgstr "Naam opzoeken in DNS is mislukt voor %s"
+
+#: src/amailbox.cc:156
+#, c-format
+msgid "Invalid mailbox port: \"%s\""
+msgstr "Ongeldige e-mailpoort: \"%s\""
+
+#: src/amailbox.cc:314
+#, c-format
+msgid "Could not connect to %s: %s"
+msgstr "Kon geen verbinding maken met %s: %s"
+
+#: src/amailbox.cc:334
+#, c-format
+msgid "Failed to find %s command"
+msgstr "Zoeken naar commando %s is mislukt"
+
+#: src/amailbox.cc:363 src/wmmenu.cc:471 src/wmmenu.cc:488 src/yapp.cc:433
+#, c-format
+msgid "Failed to execute %s"
+msgstr "Uitvoeren van %s is mislukt"
+
+#: src/amailbox.cc:447
+#, c-format
+msgid "Write to socket failed: %s"
+msgstr "Naar socket schrijven is mislukt: %s"
+
+#: src/amailbox.cc:694
+#, c-format
+msgid "Using MailBox \"%s\"\n"
+msgstr "Gebruikt postvak: »%s«\n"
+
+#: src/amailbox.cc:801
+msgid "Suspended"
+msgstr "Onderbroken"
+
+#: src/amailbox.cc:805
+msgid "Error checking mailbox."
+msgstr "Probleem bij het controleren van het postvak."
+
+#: src/amailbox.cc:812
+#, c-format
+msgid "%ld mail message, %ld unread."
+msgstr "%ld e-mailbericht, %ld onelezen."
+
+#: src/amailbox.cc:813
+#, c-format
+msgid "%ld mail messages, %ld unread."
+msgstr "%ld e-mailberichten, %ld ongelezen."
+
+#: src/amailbox.cc:819
+#, c-format
+msgid "%ld mail message."
+msgstr "%ld bericht."
+
+#: src/amailbox.cc:820
+#, c-format
+msgid "%ld mail messages."
+msgstr "%ld berichten."
+
+#: src/amailbox.cc:961
+msgid "MAIL"
+msgstr "E-MAIL"
+
+#: src/amailbox.cc:963
+msgid "_Check"
+msgstr "_Controleren"
+
+#: src/amailbox.cc:965
+msgid "_Suspend"
+msgstr "_Onderbreken"
+
+#: src/amemstatus.cc:144
+msgid "GB"
+msgstr "GB"
+
+#: src/amemstatus.cc:148
+msgid "MB"
+msgstr "MB"
+
+#: src/amemstatus.cc:152
+msgid "kB"
+msgstr "kB"
+
+#: src/amemstatus.cc:156
+msgid "bytes"
+msgstr "bytes"
+
+#: src/amemstatus.cc:176
+msgid "Memory Total: "
+msgstr "Totaal geheugen: "
+
+#: src/amemstatus.cc:177
+msgid "Free: "
+msgstr "Vrij: "
+
+#: src/amemstatus.cc:178
+msgid "Cached: "
+msgstr "Cache: "
+
+#: src/amemstatus.cc:179
+msgid "Buffers: "
+msgstr "Buffers: "
+
+#: src/amemstatus.cc:180
+msgid "User: "
+msgstr "Gebruiker: "
+
+#: src/amemstatus.cc:262
+msgid "MEM"
+msgstr "GEH"
+
+#: src/apppstatus.cc:268
+#, c-format
+msgid ""
+"Interface %s:\n"
+"  Current rate (in/out):\t%li %s/%li %s\n"
+"  Current average (in/out):\t%lli %s/%lli %s\n"
+"  Transferred (in/out):\t%lli %s/%lli %s\n"
+"  Online time:\t%ld:%02ld:%02ld%s%s"
+msgstr ""
+"Interface %s:\n"
+"  Huidige   (in/uit):\t%li %s/%li %s\n"
+"  Gemiddeld (in/uit):\t%lli %s/%lli %s\n"
+"  Totaal    (in/uit):\t%lli %s/%lli %s\n"
+"  Online-tijd:\t%ld:%02ld:%02ld%s%s"
+
+#: src/apppstatus.cc:284
+msgid "disconnected"
+msgstr "verbinding verbroken"
+
+#: src/apppstatus.cc:284
+msgid "down"
+msgstr "niet actief"
+
+#: src/apppstatus.cc:705
+msgid "NET"
+msgstr "NET"
+
+#: src/aworkspaces.cc:612 src/wmstatus.cc:208
+msgid "Workspace: "
+msgstr "Werkruimte: "
+
+#: src/decorate.cc:132
+msgid "Tabs"
+msgstr "Tabbladen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics
+#: src/fdospecgen.h:43
+msgid "2DGraphics"
+msgstr "2D grafische elementen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics
+#: src/fdospecgen.h:45
+msgid "3DGraphics"
+msgstr "3D grafische elementen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings or Utility
+#: src/fdospecgen.h:47 src/fdospecgen.h:49
+msgid "Accessibility"
+msgstr "Toegankelijkheid"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:51
+msgid "Accessories"
+msgstr "Accessoires"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:53
+msgid "ActionGame"
+msgstr "Actiespel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:55
+msgid "Adult"
+msgstr "Volwassene"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:57
+msgid "AdventureGame"
+msgstr "Avonturenspel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:59
+msgid "Amusement"
+msgstr "Amusement"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:61
+msgid "ArcadeGame"
+msgstr "Spel uit Arcade"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:63
+msgid "Archiving"
+msgstr "Archivering"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:65
+msgid "Art"
+msgstr "Kunst"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:67
+msgid "ArtificialIntelligence"
+msgstr "Kunstmatige intelligentie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:69
+msgid "Astronomy"
+msgstr "Astronomie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:71
+msgid "Audio"
+msgstr "Audio"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:73
+msgid "AudioVideo"
+msgstr "AudioVideo"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Audio or Video or AudioVideo
+#: src/fdospecgen.h:75
+msgid "AudioVideoEditing"
+msgstr "Audio-video-bewerking"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:77
+msgid "Biology"
+msgstr "Biologie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:79
+msgid "BlocksGame"
+msgstr "Spel met blokken"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:81
+msgid "BoardGame"
+msgstr "Bordspel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:83
+msgid "Building"
+msgstr "Gebouw"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:85
+msgid "Calculator"
+msgstr "Rekenmachine"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:87
+msgid "Calendar"
+msgstr "Agenda"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:89
+msgid "CardGame"
+msgstr "Kaartspel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:91
+msgid "Chart"
+msgstr "Grafiek"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:93
+msgid "Chat"
+msgstr "Chat"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:95
+msgid "Chemistry"
+msgstr "Scheikunde"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:97
+msgid "Clock"
+msgstr "Klok"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility;Archiving
+#: src/fdospecgen.h:99
+msgid "Compression"
+msgstr "Compressie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:101
+msgid "ComputerScience"
+msgstr "Computerwetenschap"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:103
+msgid "Construction"
+msgstr "Constructie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:105
+msgid "ContactManagement"
+msgstr "Beheer van contacten"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:107
+msgid "Core"
+msgstr "Kern"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:109
+msgid "DataVisualization"
+msgstr "Gegevensvisualisatie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office or Development or AudioVideo
+#: src/fdospecgen.h:111
+msgid "Database"
+msgstr "Database"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:113
+msgid "Debugger"
+msgstr "Debugger"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings
+#: src/fdospecgen.h:115
+msgid "DesktopSettings"
+msgstr "Bureaubladinstellingen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:117
+msgid "Development"
+msgstr "Ontwikkeling"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:119
+msgid "Dialup"
+msgstr "Dialup"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office or TextTools
+#: src/fdospecgen.h:121
+msgid "Dictionary"
+msgstr "Woordenboek"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo
+#: src/fdospecgen.h:123
+msgid "DiscBurning"
+msgstr "Branden van een schijf"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:125
+msgid "Documentation"
+msgstr "Documentatie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:127
+msgid "Economy"
+msgstr "Economie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:129
+msgid "Editors"
+msgstr "Verwerkers"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:131
+msgid "Education"
+msgstr "Onderwijs"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:133
+msgid "Electricity"
+msgstr "Elektriciteit"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:135
+msgid "Electronics"
+msgstr "Elektronica"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office or Network
+#: src/fdospecgen.h:137
+msgid "Email"
+msgstr "E-mail"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: System or Game
+#: src/fdospecgen.h:139
+msgid "Emulator"
+msgstr "Emulator"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:141
+msgid "Engineering"
+msgstr "Werktuigbouwkunde"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:143
+msgid "Feed"
+msgstr "Feed"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: System;FileTools
+#: src/fdospecgen.h:145
+msgid "FileManager"
+msgstr "Bestandsbeheerder"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility or System
+#: src/fdospecgen.h:147
+msgid "FileTools"
+msgstr "Hulpmiddelen voor bestanden"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:149
+msgid "FileTransfer"
+msgstr "Bestandsoverdracht"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: System
+#: src/fdospecgen.h:151
+msgid "Filesystem"
+msgstr "Bestandssysteem"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:153
+msgid "Finance"
+msgstr "Financiën"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:155
+msgid "FlowChart"
+msgstr "Flowchart"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:157
+msgid "GUIDesigner"
+msgstr "Ontwerper van GUI"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:159
+msgid "Game"
+msgstr "Spel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:161
+msgid "Geography"
+msgstr "Geografie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:163
+msgid "Geology"
+msgstr "Geologie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:165
+msgid "Geoscience"
+msgstr "Geowetenschap"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:167
+msgid "Graphics"
+msgstr "Grafische elementen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network or Audio
+#: src/fdospecgen.h:169
+msgid "HamRadio"
+msgstr "HamRadio"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings
+#: src/fdospecgen.h:171
+msgid "HardwareSettings"
+msgstr "Hardware instellingen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:173
+msgid "History"
+msgstr "Geschiedenis"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:175
+msgid "Humanities"
+msgstr "Menswetenschappen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:177
+msgid "IDE"
+msgstr "IDE"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:179
+msgid "IRCClient"
+msgstr "IRC-client"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:181
+msgid "ImageProcessing"
+msgstr "Bewerken van afbeeldingen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:183
+msgid "InstantMessaging"
+msgstr "InstantMessaging"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:185
+msgid "KidsGame"
+msgstr "Spel voor kinderen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:187
+msgid "Languages"
+msgstr "Talen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:189
+msgid "Literature"
+msgstr "Literatuur"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:191
+msgid "LogicGame"
+msgstr "Logisch spel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science or Utility
+#: src/fdospecgen.h:193
+msgid "Maps"
+msgstr "Kaarten"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:195
+msgid "Math"
+msgstr "Wiskunde"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:197
+msgid "MedicalSoftware"
+msgstr "Medische software"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo;Audio
+#: src/fdospecgen.h:199
+msgid "Midi"
+msgstr "Midi"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo;Audio
+#: src/fdospecgen.h:201
+msgid "Mixer"
+msgstr "Mixer"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: System or Network
+#: src/fdospecgen.h:203
+msgid "Monitor"
+msgstr "Monitor"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:205
+msgid "Motif"
+msgstr "Motif"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:207
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo or Education
+#: src/fdospecgen.h:209
+msgid "Music"
+msgstr "Muziek"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:211
+msgid "Network"
+msgstr "Netwerk"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:213
+msgid "News"
+msgstr "Nieuws"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education;Math or Science;Math
+#: src/fdospecgen.h:215
+msgid "NumericalAnalysis"
+msgstr "Numerieke analyse"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics;Scanning
+#: src/fdospecgen.h:217
+msgid "OCR"
+msgstr "OCR"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:219
+msgid "Office"
+msgstr "Kantoor"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:221
+msgid "Other"
+msgstr "Overige"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:223
+msgid "P2P"
+msgstr "P2P"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:225
+msgid "PDA"
+msgstr "PDA"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings
+#: src/fdospecgen.h:227
+msgid "PackageManager"
+msgstr "Pakketbeheerder"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education;ComputerScience or Science;ComputerScience
+#: src/fdospecgen.h:229
+msgid "ParallelComputing"
+msgstr "Parallelle computing"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics or Office
+#: src/fdospecgen.h:231
+msgid "Photography"
+msgstr "Fotografie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:233
+msgid "Physics"
+msgstr "Natuurkunde"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Audio or Video or AudioVideo
+#: src/fdospecgen.h:235
+msgid "Player"
+msgstr "Speler"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:237
+msgid "Presentation"
+msgstr "Presentatie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings;HardwareSettings
+#: src/fdospecgen.h:239
+msgid "Printing"
+msgstr "Afdrukken"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:241
+msgid "Profiling"
+msgstr "Profilering"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office or Development
+#: src/fdospecgen.h:243
+msgid "ProjectManagement"
+msgstr "Projectbeheer"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics or Office
+#: src/fdospecgen.h:245
+msgid "Publishing"
+msgstr "Uitgeven"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics;2DGraphics
+#: src/fdospecgen.h:247
+msgid "RasterGraphics"
+msgstr "Grafische elementen met raster"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Audio or Video or AudioVideo
+#: src/fdospecgen.h:249
+msgid "Recorder"
+msgstr "Recorder"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:251
+msgid "RemoteAccess"
+msgstr "Toegang vanaf afstand"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:253
+msgid "RevisionControl"
+msgstr "Beheer van revisies"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:255
+msgid "Robotics"
+msgstr "Robotica"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:257
+msgid "RolePlaying"
+msgstr "Spelen van een rol"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics
+#: src/fdospecgen.h:259
+msgid "Scanning"
+msgstr "Scannen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:261
+msgid "Science"
+msgstr "Wetenschap"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:263
+msgid "Screensavers"
+msgstr "Schermbeveiligers"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Settings or System
+#: src/fdospecgen.h:265
+msgid "Security"
+msgstr "Beveiliging"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo;Audio
+#: src/fdospecgen.h:267
+msgid "Sequencer"
+msgstr "Sequencer"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:269
+msgid "Settings"
+msgstr "Instellingen"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:271
+msgid "Shooter"
+msgstr "Schietprogramma"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:273
+msgid "Simulation"
+msgstr "Simulatie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science or Utility
+#: src/fdospecgen.h:275
+msgid "Spirituality"
+msgstr "Spiritualiteit"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Education or Science
+#: src/fdospecgen.h:277
+msgid "Sports"
+msgstr "Sport"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:279
+msgid "SportsGame"
+msgstr "Sportspel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:281
+msgid "Spreadsheet"
+msgstr "Rekenblad"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Game
+#: src/fdospecgen.h:283
+msgid "StrategyGame"
+msgstr "Strategie spel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:285
+msgid "System"
+msgstr "Systeem"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo;Video
+#: src/fdospecgen.h:287
+msgid "TV"
+msgstr "TV"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:289
+msgid "Telephony"
+msgstr "Telefonie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:291
+msgid "TelephonyTools"
+msgstr "Hulpmiddelen voor telefonie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: System
+#: src/fdospecgen.h:293
+msgid "TerminalEmulator"
+msgstr "Terminal-emulator"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:295
+msgid "TextEditor"
+msgstr "Tekstverwerker"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Utility
+#: src/fdospecgen.h:297
+msgid "TextTools"
+msgstr "Hulpmiddelen voor teksten"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Development
+#: src/fdospecgen.h:299
+msgid "Translation"
+msgstr "Vertaling"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: AudioVideo;Audio
+#: src/fdospecgen.h:301
+msgid "Tuner"
+msgstr "Tuner"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:303
+msgid "Utility"
+msgstr "Hulpmiddel"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics;2DGraphics
+#: src/fdospecgen.h:305
+msgid "VectorGraphics"
+msgstr "Grafische elementen met vectoren"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:307
+msgid "Video"
+msgstr "Video"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:309
+msgid "VideoConference"
+msgstr "Videoconferentie"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Graphics or Office
+#: src/fdospecgen.h:311
+msgid "Viewer"
+msgstr "Viewer"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes.
+#: src/fdospecgen.h:313
+msgid "WINE"
+msgstr "WINE"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network
+#: src/fdospecgen.h:315
+msgid "WebBrowser"
+msgstr "Webbrowser"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Network or Development
+#: src/fdospecgen.h:317
+msgid "WebDevelopment"
+msgstr "Webontwikkeling"
+
+#. TRANSLATORS: This is a menu category name from freedesktop.org. Please add spaces as needed but no double-quotes. Context: Office
+#: src/fdospecgen.h:319
+msgid "WordProcessor"
+msgstr "Wordprocessor"
+
+#: src/icehelp.cc:1348
+msgid "Back"
+msgstr "Terug"
+
+#: src/icehelp.cc:1348
+msgid "Alt+Left"
+msgstr "Alt+Links"
+
+#: src/icehelp.cc:1350
+msgid "Forward"
+msgstr "Verder"
+
+#: src/icehelp.cc:1350
+msgid "Alt+Right"
+msgstr "Alt+Rechts"
+
+#: src/icehelp.cc:1353
+msgid "Previous"
+msgstr "Terug"
+
+#: src/icehelp.cc:1354
+msgid "Next"
+msgstr "Volgende"
+
+#: src/icehelp.cc:1356
+msgid "Contents"
+msgstr "Inhoudsopgave"
+
+#: src/icehelp.cc:1357
+msgid "Index"
+msgstr "Index"
+
+#: src/icehelp.cc:1359
+msgid "Find..."
+msgstr "Zoeken..."
+
+#: src/icehelp.cc:1359
+msgid "Ctrl+F"
+msgstr "Ctrl+F"
+
+#: src/icehelp.cc:1360
+msgid "Find next"
+msgstr "Volgende zoeken"
+
+#: src/icehelp.cc:1360
+msgid "F3"
+msgstr "F3"
+
+#: src/icehelp.cc:1362
+msgid "Open in Browser"
+msgstr "In browser openen"
+
+#: src/icehelp.cc:1362
+msgid "Ctrl+B"
+msgstr "Ctrl+B"
+
+#: src/icehelp.cc:1364
+msgid "Reload"
+msgstr "Opnieuw laden"
+
+#: src/icehelp.cc:1364 src/icesame.cc:60
+msgid "Ctrl+R"
+msgstr "Ctrl+R"
+
+#: src/icehelp.cc:1365 src/icesame.cc:62 src/iceview.cc:63 src/wmbutton.cc:147
+msgid "Close"
+msgstr "Sluiten"
+
+#: src/icehelp.cc:1365 src/icesame.cc:62 src/iceview.cc:63
+msgid "Ctrl+Q"
+msgstr "Ctrl+Q"
+
+#: src/icehelp.cc:1370
+msgid "Icewm(1)"
+msgstr "Icewm(1)"
+
+#: src/icehelp.cc:1370
+msgid "Ctrl+I"
+msgstr "Ctrl+I"
+
+#: src/icehelp.cc:1372
+msgid "Icewmbg(1)"
+msgstr "Icewmbg(1)"
+
+#: src/icehelp.cc:1374
+msgid "Icesound(1)"
+msgstr "Icesound(1)"
+
+#: src/icehelp.cc:1376
+msgid "FAQ"
+msgstr "VGV"
+
+#: src/icehelp.cc:1378
+msgid "Manual"
+msgstr "Handleiding"
+
+#: src/icehelp.cc:1378
+msgid "Ctrl+M"
+msgstr "Ctrl+M"
+
+#: src/icehelp.cc:1380
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: src/icehelp.cc:1382
+msgid "Theme Howto"
+msgstr "Thema HOWTO"
+
+#: src/icehelp.cc:1382 src/iceview.cc:60
+msgid "Ctrl+T"
+msgstr "Ctrl+T"
+
+#: src/icehelp.cc:1384
+msgid "Website"
+msgstr "Website"
+
+#: src/icehelp.cc:1384 src/iceview.cc:61
+msgid "Ctrl+W"
+msgstr "Ctrl+W"
+
+#: src/icehelp.cc:1386
+msgid "Github"
+msgstr "GitHub"
+
+#: src/icehelp.cc:1390 src/yinputline.cc:19
+msgid "Ctrl+X"
+msgstr "Ctrl+X"
+
+#: src/icehelp.cc:1395 src/yinputline.cc:20
+msgid "Ctrl+V"
+msgstr "Ctrl+V"
+
+#: src/icehelp.cc:2204
+msgid "Unsupported protocol."
+msgstr "Niet-ondersteund protocol."
+
+#: src/icehelp.cc:2283
+#, c-format
+msgid "Invalid path: %s\n"
+msgstr "Ongeldig pad: %s\n"
+
+#: src/icehelp.cc:2307
+msgid "Path does not refer to a file."
+msgstr "Pad wijst niet naar een bestand."
+
+#: src/icehelp.cc:2312
+msgid "Failed to open file for reading."
+msgstr "Bestand openen is mislukt."
+
+#: src/icehelp.cc:2341
+msgid "Failed to create a temporary file"
+msgstr "Aanmaken van een tijdelijk bestand is mislukt"
+
+#: src/icehelp.cc:2434
+#, c-format
+msgid "Failed to execute system(%s) (%d)"
+msgstr "Systeem (%s) (%d) uitvoeren is mislukt"
+
+#: src/icehelp.cc:2457
+#, c-format
+msgid "Failed to decompress %s"
+msgstr "Decomprimeren van %s is mislukt"
+
+#: src/icehelp.cc:2465
+msgid "Could not locate curl or wget in PATH"
+msgstr "Kon curl of wget niet vinden in PATH"
+
+#: src/icehelp.cc:2469
+msgid "Unsafe characters in URL"
+msgstr "Onveilige tekens in URL"
+
+#: src/icehelp.cc:2506
+#, c-format
+msgid ""
+"Usage: %s [OPTIONS] [ FILENAME | URL ]\n"
+"\n"
+"IceHelp is a very simple HTML browser for the IceWM window manager.\n"
+"It can display a HTML document from file, or browse a website.\n"
+"It remembers visited pages in a history, which is navigable\n"
+"by key bindings and a context menu (right mouse click).\n"
+"It neither supports rendering of images nor JavaScript.\n"
+"If no file or URL is given it will display the IceWM Manual\n"
+"from %s.\n"
+"\n"
+"Options:\n"
+"  -d, --display=NAME  NAME of the X server to use.\n"
+"  --sync              Synchronize X11 commands.\n"
+"\n"
+"  -B                  Display the IceWM icewmbg manpage.\n"
+"  -b, --bugs          Display the IceWM bug reports (primitively).\n"
+"  -f, --faq           Display the IceWM FAQ and Howto.\n"
+"  -g                  Display the IceWM Github website.\n"
+"  -i, --icewm         Display the IceWM icewm manpage.\n"
+"  -m, --manual        Display the IceWM Manual (default).\n"
+"  -s                  Display the IceWM icesound manpage.\n"
+"  -t, --theme         Display the IceWM themes Howto.\n"
+"  -w, --website       Display the IceWM website.\n"
+"\n"
+"  -V, --version       Prints version information and exits.\n"
+"  -h, --help          Prints this usage screen and exits.\n"
+"\n"
+"Environment variables:\n"
+"  DISPLAY=NAME        Name of the X server to use.\n"
+"\n"
+"To report bugs, support requests, comments please visit:\n"
+"%s\n"
+"\n"
+msgstr ""
+"Gebruik: %s [OPTIES] [ BESTANDSNAAM | URL ]\n"
+"\n"
+"IceHelp is een simpele HTML-browser voor de IceWM Window Manager.\n"
+"Deze kan een HTML-document van een bestand weergeven of door een website "
+"bladeren.\n"
+"De browser onthoudt bezochte pagina's in de geschiedenis. U kunt door deze "
+"pagina's\n"
+"navigeren met sleutelbindingen en een contextmenu (klik met de "
+"rechtermuisknop).\n"
+"Het renderen van afbeeldingen of JavaScript wordt niet door deze browser "
+"ondersteund.\n"
+"Als er geen bestand of URL is opgegeven, dan wordt de IceWM handleiding "
+"weergegeven\n"
+"vanaf %s.\n"
+"\n"
+"Opties:\n"
+"  -d, --display=NAME  NAAM van de X-serverdie wordt.\n"
+"  --sync              Synchroniseer X11-opdrachten.\n"
+"\n"
+"  -B                  Weergeeft de manual page van IceWM icewmbg.\n"
+"  -b, --bugs          Weergeeft de IceWM-bugreports (op primitieve wijze).\n"
+"  -f, --faq           Weergeeft de IceWM FAQ (veelgestelde vragen) en "
+"HOWTO.\n"
+"  -g                  Weergeeft de IceWM Github-website.\n"
+"  -i, --icewm         Weergeeft de man-pagina van IceWM icewm.\n"
+"  -m, --manual        Weergeeft de IceWM Manual (standaard).\n"
+"  -s                  Weergeeft de man-pagina van IceWM icesound.\n"
+"  -t, --thema         Weergeeft de HOWTO IceWM-thema's.\n"
+"  -w, --website       Weergeeft de IceWM-website.\n"
+"\n"
+"  -V, --versie       Print versie-informatie sluit af.\n"
+"  -h, --help          Print het gebruiksscherm en sluit af.\n"
+"\n"
+"Omgevingsvariabelen:\n"
+"  DISPLAY=NAME        Naam van de X-server die gebruikt wordt.\n"
+"Om bugs te vermelden, verzoeken te ondersteunen of opmerkingen te maken, "
+"bezoek:\n"
+"%s\n"
+"\n"
+
+#: src/icehelp.cc:2596
+#, c-format
+msgid "Ignoring option '%s'"
+msgstr "Optie ‘%s’ wordt genegeerd"
+
+#: src/icelist.cc:60
+msgid "List View"
+msgstr "Lijst"
+
+#: src/icelist.cc:61
+msgid "Icon View"
+msgstr "Pictogrammen"
+
+#: src/icelist.cc:65
+msgid "Open"
+msgstr "Openen"
+
+#: src/icesame.cc:57
+msgid "Undo"
+msgstr "Ongedaan maken"
+
+#: src/icesame.cc:57
+msgid "Ctrl+Z"
+msgstr "Ctrl+Z"
+
+#: src/icesame.cc:59
+msgid "New"
+msgstr "Nieuw"
+
+#: src/icesame.cc:59
+msgid "Ctrl+N"
+msgstr "Ctrl+N"
+
+#: src/icesame.cc:60
+msgid "Restart"
+msgstr "Herstart"
+
+#: src/icesame.cc:65
+msgid "Same Game"
+msgstr "Hetzelfde spel"
+
+#: src/icesh.cc:75
+msgid "For help please consult the man page icesh(1).\n"
+msgstr "Voor hulp bekijk de manpagina icesh(1).\n"
+
+#: src/icesh.cc:1642
+#, c-format
+msgid "Named symbols of the domain `%s' (numeric range: %ld-%ld):\n"
+msgstr "Genoemde symbolen van het domein »%s« (Bereik: %ld-%ld):\n"
+
+#: src/icesh.cc:1711
+#, c-format
+msgid "Workspace out of range: %ld"
+msgstr "Werkruimte buiten bereik: %ld"
+
+#: src/icesh.cc:1732
+#, c-format
+msgid "Invalid workspace name: `%s'"
+msgstr "Ongeldig werkruimtenummer: »%s«"
+
+#: src/icesh.cc:2145
+msgid "GNOME window layer"
+msgstr "GNOME venster laag"
+
+#: src/icesh.cc:2146
+msgid "IceWM tray option"
+msgstr "IceWM tray optie"
+
+#: src/icesh.cc:2147
+msgid "Gravity symbols"
+msgstr "Gravitatiesymbolen"
+
+#: src/icesh.cc:2148
+msgid "Motif functions"
+msgstr "Motif-functies"
+
+#: src/icesh.cc:2149
+msgid "Motif decorations"
+msgstr "Motif-decoraties"
+
+#: src/icesh.cc:2150
+msgid "EWMH window state"
+msgstr "EWMH-vensterstatus"
+
+#: src/icesh.cc:2232 src/icesh.cc:2305
+#, c-format
+msgid "workspace #%d: `%s'\n"
+msgstr "Werkruimte #%d: »%s«\n"
+
+#: src/icesh.cc:2556 src/icesh.cc:4261 src/icesh.cc:4873
+#, c-format
+msgid "Invalid state: `%s'."
+msgstr "Ongeldige status: `%s'."
+
+#: src/icesh.cc:3477
+#, c-format
+msgid "Cannot get geometry of window 0x%lx"
+msgstr "Kan geometrie van venster 0x%lx niet ophalen"
+
+#: src/icesh.cc:3502
+#, c-format
+msgid "Invalid Xinerama: `%s'."
+msgstr "Ongeldig Xinerama: `%s'."
+
+#: src/icesh.cc:3624 src/icesh.cc:3632 src/wmconfig.cc:148 src/wmsave.cc:65
+#: src/wmsave.cc:298 src/wmsave.cc:301
+#, c-format
+msgid "Unable to write to %s"
+msgstr "Schrijven naar %s lukt niet"
+
+#: src/icesh.cc:3847 src/icesh.cc:3897 src/icesh.cc:5187
+#, c-format
+msgid "Invalid argument: `%s'"
+msgstr "Ongeldig argument: '%s'"
+
+#: src/icesh.cc:3863
+#, c-format
+msgid "Action `%s' requires at least %d arguments."
+msgstr "Actie `%s' heeft minimaal %d argumenten nodig."
+
+#: src/icesh.cc:3872
+#, c-format
+msgid "Invalid expression: `%s'"
+msgstr "Ongeldige expressie: »%s«"
+
+#: src/icesh.cc:3883 src/icesound.cc:794 src/icewmbg.cc:978 src/icewmhint.cc:37
+#: src/wmapp.cc:1238 src/yxapp.cc:1039
+#, c-format
+msgid "Can't open display: %s. X must be running and $DISPLAY set."
+msgstr ""
+"Kan het display %s niet openen. De X-Server moet werken en de "
+"omgevingsvariabele $DISPLAY moet hiernaar verwijzen."
+
+#: src/icesh.cc:3999
+#, c-format
+msgid "Unexpected: `%s'."
+msgstr "Onverwacht: '%s'."
+
+#: src/icesh.cc:4028
+msgid "No windows found."
+msgstr "Geen vensters gevonden."
+
+#: src/icesh.cc:4044
+msgid "No actions specified."
+msgstr "Geen aktie aangegeven."
+
+#: src/icesh.cc:4185
+#, c-format
+msgid "Invalid window identifier: `%s'"
+msgstr "Ongeldige venster identificatie: »%s«"
+
+#: src/icesh.cc:4201
+#, c-format
+msgid "Invalid PID: `%s'"
+msgstr "Ongeldige PID: `%s'"
+
+#: src/icesh.cc:4234
+#, c-format
+msgid "Invalid layer: `%s'."
+msgstr "Ongeldige laag: `%s'."
+
+#: src/icesh.cc:5315
+#, c-format
+msgid "Unknown action: `%s'"
+msgstr "Onbekende actie: »%s«"
+
+#: src/iceskt.cc:41
+#, c-format
+msgid "Socket error: %d"
+msgstr "Sokjes fout ;-): %d"
+
+#: src/icesm.cc:69
+msgid ""
+"  -c, --config=FILE   Let IceWM load preferences from FILE.\n"
+"  -t, --theme=FILE    Let IceWM load the theme from FILE.\n"
+"\n"
+"  -d, --display=NAME  Use NAME to connect to the X server.\n"
+"  -a, --alpha         Use a 32-bit visual for translucency.\n"
+"  --sync              Synchronize communication with X11 server.\n"
+"\n"
+"  -i, --icewm=FILE    Use FILE as the IceWM window manager.\n"
+"  -o, --output=FILE   Redirect all output to FILE.\n"
+"\n"
+"  -b, --nobg          Do not start icewmbg.\n"
+"  -n, --notray        Do not start icewmtray.\n"
+"  -s, --sound         Also start icesound.\n"
+msgstr ""
+"  -c, --config=FILE   Laat IceWM voorkeuren laden uit BESTAND.\n"
+"  -t, --theme=FILE    Laat IceWM het thema laden uit BESTAND.\n"
+"\n"
+"  -d, --display=NAAM      NAAM gebruiken om te verbinden met de X-server.\n"
+"  -a, --alpha         Een 32-bit visueel gebruiken voor doorzichtigheid.\n"
+"  --sync              Synchroniseer communicatie met de X11-server.\n"
+"\n"
+"  -i, --icewm=FILE    Gebruik FILE als de IceWM windowmanager.\n"
+"  -o, --output=FILE   Alle uitvoer naar FILE sturen.\n"
+"\n"
+"  -b, --nobg          icewmbg niet starten.\n"
+"  -n, --notray        Start icewmtray niet op.\n"
+"  -s, --sound         Start ook icesound.\n"
+
+#: src/icesm.cc:85
+msgid ""
+"\n"
+"Debugging options:\n"
+"  -v, --valgrind      Let \"/usr/bin/valgrind\" run icewm.\n"
+"                      Thoroughly examines the execution of icewm.\n"
+"  -g, --catchsegv     Let \"/usr/bin/catchsegv\" run icewm.\n"
+"                      Gives a backtrace if icewm segfaults.\n"
+msgstr ""
+"\n"
+"Debugopties:\n"
+"  -v, --valgrind      \"/usr/bin/valgrind\" icewm laten uitvoeren.\n"
+"                      Het uitvoeren van icewm grondig bekijken.\n"
+"  -g, --catchsegv     \"/usr/bin/catchsegv\" icewm laten uitvoeren.\n"
+"                      Een backtrace geven als icewm segfault geeft.\n"
+
+#: src/icesm.cc:188
+#, c-format
+msgid "Unknown option '%s'"
+msgstr "Onbekende optie: '%s'"
+
+#: src/icesm.cc:461 src/icesm.cc:621
+#, c-format
+msgid "restart %s."
+msgstr "herstart %s."
+
+#: src/icesm.cc:512
+msgid ""
+" IceWM crashed for the second time in 10 seconds. \n"
+" Do you wish to:\n"
+"\n"
+"\t1: Restart IceWM?\n"
+"\t2: Abort this session?\n"
+"\t3: Run a terminal?\n"
+msgstr ""
+" IceWM is voor de tweede keer in 10 seconden gecrasht. \n"
+" Wilt u:\n"
+"\n"
+"\t1: IceWM opnieuw starten?\n"
+"\t2: Deze sessie afbreken?\n"
+"\t3: Een terminal starten?\n"
+
+#: src/icesm.cc:518
+msgid "IceWM crash response"
+msgstr "Reactie van IceWM op crash"
+
+#: src/icesound.cc:211 src/icesound.cc:319 src/icesound.cc:479
+#, c-format
+msgid "Playing sample #%d (%s)"
+msgstr "Speel sample #%d (%s)"
+
+#: src/icesound.cc:329
+#, c-format
+msgid "%s: Invalid number of channels"
+msgstr "%s: Ongeldig(e) nummer of kanalen"
+
+#: src/icesound.cc:335 src/icesound.cc:340
+msgid "Could not set OSS channels"
+msgstr "Kan OSS-kanalen niet instellen"
+
+#: src/icesound.cc:345 src/icesound.cc:373
+msgid "Could not sync OSS"
+msgstr "Kon OSS niet synchroniseren"
+
+#: src/icesound.cc:357
+msgid "OSS write failed"
+msgstr "OSS opslaan mislukt"
+
+#: src/icesound.cc:361
+#, c-format
+msgid "OSS incomplete write (%d/%d)"
+msgstr "OSS onvolledig opgeslagen (%d/%d)"
+
+#: src/icesound.cc:368
+msgid "Could not post OSS"
+msgstr "Kon OSS niet posten"
+
+#: src/icesound.cc:397
+#, c-format
+msgid "Could not open OSS device %s"
+msgstr "Kon OSS-apparaat %s niet openen"
+
+#: src/icesound.cc:402
+msgid "Could not set OSS stereo"
+msgstr "Kon OSS-stereo niet instellen"
+
+#: src/icesound.cc:407
+msgid "Could not reset OSS DSP"
+msgstr "Kon OSS DSP niet opnieuw instellen"
+
+#: src/icesound.cc:412
+msgid "Could not set OSS format"
+msgstr "Kon OSS-indeling niet instellen"
+
+#: src/icesound.cc:499
+#, c-format
+msgid "ao_open_live failed with %d"
+msgstr "ao_open_live mislukt met %d"
+
+#: src/icesound.cc:510
+msgid "ao_play failed"
+msgstr "ao_play mislukt"
+
+#: src/icesound.cc:676
+#, c-format
+msgid "Unrecognized option: %s\n"
+msgstr "Onbekende optie: %s\n"
+
+#: src/icesound.cc:679 src/icesound.cc:972
+#, c-format
+msgid "Unrecognized argument: %s\n"
+msgstr "Onbekend argument: %s\n"
+
+#: src/icesound.cc:688
+#, c-format
+msgid ""
+"Usage: %s [OPTION]...\n"
+"\n"
+"Plays audio files on GUI events raised by IceWM.\n"
+"The currently configured sound interfaces are: %s.\n"
+"Icesound will choose the first of these which is usable.\n"
+"\n"
+"Options:\n"
+"\n"
+" -d, --display=DISPLAY   X11 display used by IceWM (default: $DISPLAY).\n"
+"\n"
+" -s, --sample-dir=DIR    Specifies a directory with sound files.\n"
+"                         Default is $HOME/.config/icewm/sounds.\n"
+"\n"
+" -i, --interface=LIST    Specifies audio output interfaces. One or more of:\n"
+"                         %s separated by commas.\n"
+"\n"
+" -D, --device=DEVICE     Backwards compatibility only: the default device. \n"
+"                         Please prefer one of the -A/-O/-S options.\n"
+"\n"
+" -O, --oss=DEVICE        Specifies the OSS device (default: \"%s\").\n"
+"\n"
+" -A, --alsa=DEVICE       Specifies the ALSA device (default: \"%s\").\n"
+"\n"
+" -z, --snooze=millisecs  Specifies the snooze interval between sound events\n"
+"                         in milliseconds. Default is 500 milliseconds.\n"
+"\n"
+" -p, --play=sound        Plays the given sound (name or number) and exits.\n"
+"\n"
+" -l, --list-files        Lists the available sound file paths and exits.\n"
+"\n"
+"     --list-sounds       Lists the supported sound filenames and exits.\n"
+"\n"
+"     --list-interfaces   Lists the supported audio interfaces and exits.\n"
+"\n"
+" -v, --verbose           Be verbose and print out each sound event.\n"
+"\n"
+" -V, --version           Prints version information and exits.\n"
+"\n"
+" -h, --help              Prints this help screen and exits.\n"
+"\n"
+"Return values:\n"
+"\n"
+"  0    Success.\n"
+"  1    General error.\n"
+"  2    Command line error.\n"
+"  3    Subsystems error (ie cannot connect to server).\n"
+"\n"
+msgstr ""
+"Gebruik: %s [OPTIE]...\n"
+"\n"
+"Speelt bij IceWM voorkomende GUI-acties passende geluidsbestanden af.\n"
+"De huidige geluidsinterfaces zijn: %s.\n"
+"Icesound zal de eerste van deze kiezen die nuttig is.\n"
+"\n"
+"Opties:\n"
+"\n"
+"-d, --display=DISPLAY   X11-display gebruikt door IceWM (standaard: "
+"$DISPLAY).\n"
+"\n"
+"-s, --sample-dir=DIR    Specificeert de map die de geluidsbestanden bevat \n"
+"                         Standaard is $HOME/.config/icewm/sounds.\n"
+"\n"
+" -i, --interface=LIST    Specificeert interfaces van audio-uitvoer. Een of "
+"meer:\n"
+"                         %s door komma's gescheiden.\n"
+"\n"
+" -D, --device=DEVICE   Alleen achterwaartse compatibiliteit: het "
+"standaardapparaat. \n"
+"                         Kies een van de -A/-O/-S-opties.\n"
+"\n"
+" -O, --oss=DEVICE        Specifieert het OSS-apparaat (standaard: \"%s\").\n"
+"\n"
+" -A, --alsa=DEVICE       Specifieert het ALSA-apparaat (standaard: \"%s\").\n"
+"\n"
+" -z, --snooze=millisecs  Specifieert het snooze-interval tussen "
+"geluidsgebeurtenissen\n"
+"                         in milliseconden. Standaard is 500 milliseconden.\n"
+"\n"
+" -p, --play=sound        Speelt het specifieke geluid af (naam of nummer) en "
+"sluit af.\n"
+"\n"
+" -l, --list-files        Geeft een overzicht van de geluidsbestandspaden en "
+"sluit af.\n"
+"\n"
+"     --list-sounds       Geeft een overzicht van de ondersteunde "
+"geluidsbestandsnamen en sluit af.\n"
+"\n"
+"     --list-interfaces   Geeft een overzicht van de ondersteunde audio-"
+"interfaces en sluit af.\n"
+"\n"
+" -v, --verbose           Wees praatgraag en print elke geluidsgebeurtenis.\n"
+"\n"
+" -V, --version           Print de versie-informatie en sluit af.\n"
+"\n"
+" -h, --help              Print dit hulpscherm en sluit af.\n"
+"\n"
+"Retourwaarden:\n"
+"\n"
+"  0     Succes.\n"
+"  1     Algemene fout.\n"
+"  2     Commandoregelfout.\n"
+"  3     Fout in een subsysteem (dwz. geen verbinding met de server).\n"
+"\n"
+
+#: src/icesound.cc:779
+#, c-format
+msgid "No audio for %s"
+msgstr "Geen audio voor %s"
+
+#: src/icesound.cc:856
+msgid "Could not get GUI event property"
+msgstr "Kon eigenschap van gebeurtenis van GUI niet ophalen"
+
+#: src/icesound.cc:860
+#, c-format
+msgid "Received invalid GUI event %d"
+msgstr "Ongeldige GUI-gebeurtenis %d ontvangen"
+
+#: src/icesound.cc:864
+#, c-format
+msgid "Received GUI event %s"
+msgstr "GUI-gebeurtenis %s ontvangen"
+
+#: src/icesound.cc:878
+#, c-format
+msgid "Too quick; ignoring %s."
+msgstr "Te snel; %s genegeerd."
+
+#: src/icesound.cc:882
+#, c-format
+msgid "Support for the %s interface not compiled."
+msgstr "De ondersteuning voor de %s-interface werd niet meegecompileerd."
+
+#: src/icesound.cc:915
+#, c-format
+msgid "Unsupported interface: %s."
+msgstr "Niet ondersteunde audiointerface: %s."
+
+#: src/icesound.cc:924
+#, c-format
+msgid "Using %s audio."
+msgstr "%s audio gebruiken."
+
+#: src/icesound.cc:928
+#, c-format
+msgid "Failed to connect to audio interfaces %s."
+msgstr "Het verbinden met audio-interfaces %s is mislukt."
+
+#: src/icesound.cc:940
+#, c-format
+msgid "Received signal %s: Terminating..."
+msgstr "Signaal %s ontvangen: beëindigen..."
+
+#: src/icetray.cc:220
+msgid ""
+"  -n, --notify        Notify parent process by sending signal USR1.\n"
+"  --display=NAME      Use NAME to connect to the X server.\n"
+"  --sync              Synchronize communication with X11 server.\n"
+"\n"
+"  -c, --config=FILE   Load preferences from FILE.\n"
+"  -t, --theme=FILE    Load the theme from FILE.\n"
+msgstr ""
+"  -n, --notify        Aan ouderproces melden door signaal USR1 te "
+"verzenden.\n"
+"  --display=NAME      NAAM gebruiken om te verbinden met de X-server.\n"
+"  --sync              Communicatie met X11-server synchroniseren.\n"
+"\n"
+"  -c, --config=FILE   Voorkeuren uit BESTAND laden.\n"
+"  -t, --theme=FILE    Het thema laden uit BESTAND.\n"
+
+#: src/iceview.cc:59
+msgid "Hex View"
+msgstr "Hexadecimal"
+
+#: src/iceview.cc:59
+msgid "Ctrl+H"
+msgstr "Ctrl+H"
+
+#: src/iceview.cc:60
+msgid "Expand Tabs"
+msgstr "Tabbladen uitbreiden"
+
+#: src/iceview.cc:61
+msgid "Wrap Lines"
+msgstr "Lange regels afbreken"
+
+#: src/icewmbg.cc:34 src/icewmbg.cc:345
+#, c-format
+msgid "Failed to load image '%s'."
+msgstr "Het laden van afbeelding '%s' is mislukt."
+
+#: src/icewmbg.cc:873
+msgid ""
+"Usage: icewmbg [OPTIONS]\n"
+"Where multiple values can be given they are separated by commas.\n"
+"When image is a directory then all images from that directory are used.\n"
+"\n"
+"Options:\n"
+"  -p, --replace        Replace an existing icewmbg.\n"
+"  -q, --quit           Tell the running icewmbg to quit.\n"
+"  -r, --restart        Tell the running icewmbg to restart itself.\n"
+"  -u, --shuffle        Shuffle/reshuffle the list of background images.\n"
+"\n"
+"  -c, --config=FILE    Load preferences from FILE.\n"
+"  -t, --theme=NAME     Load the theme with name NAME.\n"
+"\n"
+"  -i, --image=FILE(S)  Load background image(s) from FILE(S).\n"
+"  -k, --color=NAME(S)  Use background color(s) from NAME(S).\n"
+"\n"
+"  -s, --semis=FILE(S)  Load transparency image(s) from FILE(S).\n"
+"  -x, --trans=NAME(S)  Use transparency color(s) from NAME(S).\n"
+"\n"
+"  -e, --center=0/1     Disable/Enable centering background.\n"
+"  -a, --scaled=0/1     Disable/Enable scaling background.\n"
+"  -m, --multi=0/1      Disable/Enable multihead background.\n"
+"  -y, --cycle=SECONDS  Cycle backgrounds every SECONDS.\n"
+"\n"
+"  --display=NAME       Use NAME to connect to the X server.\n"
+"  --sync               Synchronize communication with X11 server.\n"
+"\n"
+"  -h, --help           Print this usage screen and exit.\n"
+"  -V, --version        Prints version information and exits.\n"
+"\n"
+"Loads desktop background according to preferences file:\n"
+" DesktopBackgroundCenter  - Display desktop background centered\n"
+" DesktopBackgroundScaled  - Display desktop background scaled\n"
+" DesktopBackgroundColor   - Desktop background color(s)\n"
+" DesktopBackgroundImage   - Desktop background image(s)\n"
+" ShuffleBackgroundImages  - Shuffle the list of background images\n"
+" SupportSemitransparency  - Support for semitransparent terminals\n"
+" DesktopTransparencyColor - Semitransparency background color(s)\n"
+" DesktopTransparencyImage - Semitransparency background image(s)\n"
+" DesktopBackgroundMultihead - One background over all monitors\n"
+" CycleBackgroundsPeriod   - Seconds between cycling over backgrounds\n"
+"\n"
+" center:0 scaled:0 = tiled\n"
+" center:1 scaled:0 = centered\n"
+" center:1 scaled:1 = fill one dimension and keep aspect ratio\n"
+" center:0 scaled:1 = fill both dimensions and keep aspect ratio\n"
+"\n"
+msgstr ""
+"Gebruik: icewmbg [OPTIES]\n"
+"Waar meerdere waarden kunnen worden opgegeven, worden deze gescheiden door "
+"komma's.\n"
+"Wanneer een afbeelding een map is, dan worden all afbeeldingen van die map "
+"gebruikt.\n"
+"\n"
+"Options:\n"
+"  -p, --replace        Vervang een bestaande icewmbg.\n"
+"  -q, --quit           Stop icewmbg.\n"
+"  -r, --restart        Herstart icewmbg.\n"
+"  -u, --shuffle       De lijst met achtergrondafbeeldingen schudden.\n"
+"\n"
+"  -c, --config=FILE    Laadt voorkeuren uit BESTAND.\n"
+"  -t, --theme=NAME     Laad het thema met naam NAAM.\n"
+"\n"
+"  -i, --image=FILE(S)  Laad achtergrondafbeelding(en) uit BESTAND(EN).\n"
+"  -k, --color=NAME(S)  Gebruik achtergrondkleur(en) uit NA(A)M(EN).\n"
+"\n"
+"  -s, --semis=FILE(S)  Laad transparante afbeelding(en) uit BESTAND(EN).\n"
+"  -x, --trans=NAME(S)  Gebruik transparante kleuren uit NA(A)M(EN).\n"
+"\n"
+"  -e, --center=0/1     Gecentreerde achtergrond in-/uitschakelen.\n"
+"  -a, --scaled=0/1     Geschaalde achtergrond in-/uitschakelen.\n"
+"  -m, --multi=0/1      Multi-head achtergrond in-/uitschakelen.\n"
+"  -y, --cycle=SECONDEN  Laat achtergronden elke SECONDEN rondlopen.\n"
+"\n"
+"  --display=NAME       NAAM gebruiken om te verbinden met de X-server.\n"
+"  --sync               Communicatie synchroniseren met X11-server.\n"
+"\n"
+"  -h, --help          dit scherm over gebruik tonen en beëindigen.\n"
+"  -V, --version       versie-informatie tonen en beëindigen.\n"
+"\n"
+"Laad achtergrond van bureaublad volgens voorkeursbestand: \n"
+" DesktopBackgroundCenter  -  Toon achtergrond gecentreerd\n"
+" DesktopBackgroundScaled  - Toon achtergrond geschaald\n"
+" DesktopBackgroundColor   - Achtergrondkleur(en) voor bureaublad\n"
+" DesktopBackgroundImage   - Achtergrondafbeelding(en) voor bureaublad\n"
+" ShuffleBackgroundImages  - De lijst met achtergrondafbeeldingen schudden\n"
+" SupportSemitransparency  - Ondersteun semi-transparante achtergrond\n"
+" DesktopTransparencyColor - Semi-transparante achtergrondkleur(en) voor "
+"bureaublad\n"
+" DesktopTransparencyImage - Semi-transparante achtergrondafbeelding(en) voor "
+"bureaublad\n"
+" DesktopBackgroundMultihead - Eén achtergrond voor alle monitors\n"
+" CycleBackgroundsPeriod   - Seconden tussen rondlopen over achtergronden\n"
+"\n"
+" center:0 scaled:0 = naast elkaar\n"
+" center:1 scaled:0 = gecentreerd\n"
+" center:1 scaled:1 = één dimensie vullen en beeldverhouding behouden\n"
+" center:0 scaled:1 = beide dimensies vullen en beeldverhouding behouden\n"
+"\n"
+
+#: src/icewmbg.cc:1109 src/wmapp.cc:1823
+#, c-format
+msgid "Unrecognized option '%s'."
+msgstr "Onbekende optie: '%s'."
+
+#: src/icewmbg.cc:1139
+msgid "Cannot start, because another icewmbg is still running."
+msgstr "Kan niet worden gestart, omdat een andere icewmbg wordt uitgevoerd."
+
+#: src/icewmhint.cc:20
+msgid "Usage: icewmhint class.instance option arg\n"
+msgstr "Gebruik: icewmhint klasse.instantie optie argument\n"
+
+#: src/icewmhint.cc:57
+#, c-format
+msgid "Out of memory (len=%d)."
+msgstr "Onvoldoende geheugen (len=%d)."
+
+#: src/misc.cc:70 src/misc.cc:82
+msgid "Warning: "
+msgstr "Waarschuwing: "
+
+#: src/misc.cc:387
+#, c-format
+msgid ""
+"Usage: %s [OPTIONS]\n"
+"Options:\n"
+"%s\n"
+"  -C, --copying       Prints license information and exits.\n"
+"  -V, --version       Prints version information and exits.\n"
+"  -h, --help          Prints this usage screen and exits.\n"
+"\n"
+msgstr ""
+"Gebruik: %s [OPTIES]\n"
+"Opties:\n"
+"%s\n"
+"  -C, --copying       Print licentie-informatie en sluit af.\n"
+"  -V, --version       Print versie-informatie en sluit af.\n"
+"  -h, --help          Print dit gebruiksscherm en sluit af.\n"
+"\n"
+
+#: src/movesize.cc:904
+#, c-format
+msgid "Unknown direction in move/resize request: %d"
+msgstr "Onbekende richting in verplaats/schaal verzoek: %d"
+
+#: src/wmabout.cc:29 src/wmabout.cc:30
+msgid "(C)"
+msgstr "©"
+
+#: src/wmabout.cc:40
+msgid "Theme:"
+msgstr "Thema:"
+
+#: src/wmabout.cc:41
+msgid "Theme Description:"
+msgstr "Thema omschrijving:"
+
+#: src/wmabout.cc:42
+msgid "Theme Author:"
+msgstr "Thema auteur:"
+
+#: src/wmabout.cc:51
+msgid "CodeSet:"
+msgstr "CodeSet:"
+
+#: src/wmabout.cc:52
+msgid "Language:"
+msgstr "Taal:"
+
+#: src/wmabout.cc:56
+msgid "DoubleBuffer"
+msgstr "DubbeleBuffer"
+
+#: src/wmabout.cc:57
+msgid "AlphaBlending"
+msgstr "AlphaBlending"
+
+#: src/wmabout.cc:58
+msgid "Renderer:"
+msgstr "Renderer:"
+
+#: src/wmabout.cc:66
+msgid "icewm - About"
+msgstr "IceWM - Over"
+
+#
+#: src/wmapp.cc:90
+msgid "A window manager is already running, use --replace to replace it"
+msgstr "Een andere window manager is al actief, gebruik --om deze te vervangen"
+
+#: src/wmapp.cc:106
+#, c-format
+msgid "Failed to become the owner of the %s selection"
+msgstr "Kan de eigenaar van selectie %s niet worden"
+
+#: src/wmapp.cc:110
+msgid "Waiting to replace the old window manager"
+msgstr "Wachten op de vervanging van de oude window manager"
+
+#: src/wmapp.cc:115
+msgid "done."
+msgstr "gereed."
+
+# OS/2 is dead, but... ;-)
+#: src/wmapp.cc:503
+msgid "_Logout"
+msgstr "_Afmelden"
+
+#: src/wmapp.cc:504
+msgid "_Cancel logout"
+msgstr "_Afmelden afbreken"
+
+#: src/wmapp.cc:510
+msgid "Lock _Workstation"
+msgstr "Werkstation _blokkeren"
+
+#: src/wmapp.cc:512 src/wmdialog.cc:70
+msgid "Re_boot"
+msgstr "_Re_boot"
+
+#: src/wmapp.cc:514 src/wmdialog.cc:71
+msgid "Shut_down"
+msgstr "Af_sluiten"
+
+#. TRANSLATORS: This means "energy saving mode" or "suspended system". Not "interrupt". Not "hibernate".
+#: src/wmapp.cc:516 src/wmdialog.cc:67
+msgid "_Sleep mode"
+msgstr "_Slaapmodus"
+
+#: src/wmapp.cc:521
+msgid "Restart _Icewm"
+msgstr "_Icewm Opnieuw starten"
+
+#: src/wmapp.cc:523
+msgid "Restart _Xterm"
+msgstr "_Xterm opnieuw starten"
+
+#: src/wmapp.cc:533
+msgid "_Menu"
+msgstr "_Menu"
+
+#: src/wmapp.cc:534
+msgid "_Above Dock"
+msgstr "_Over de Dock"
+
+#: src/wmapp.cc:535
+msgid "_Dock"
+msgstr "_Dock"
+
+#: src/wmapp.cc:536
+msgid "_OnTop"
+msgstr "_BovenIn"
+
+#: src/wmapp.cc:537
+msgid "_Normal"
+msgstr "_Normaal"
+
+#: src/wmapp.cc:538
+msgid "_Below"
+msgstr "_Onder"
+
+#: src/wmapp.cc:539
+msgid "D_esktop"
+msgstr "Bur_eaublad"
+
+#: src/wmapp.cc:583 src/wmwinlist.cc:374
+msgid "Move to New _Window"
+msgstr "Naar nieuw _venster verplaatsen"
+
+#: src/wmapp.cc:593
+msgid "Left Half"
+msgstr "Linker helft"
+
+#: src/wmapp.cc:594
+msgid "Right Half"
+msgstr "Rechter helft"
+
+#: src/wmapp.cc:595
+msgid "Top Half"
+msgstr "Bovenste helft"
+
+#: src/wmapp.cc:596
+msgid "Bottom Half"
+msgstr "Onderste helft"
+
+#: src/wmapp.cc:598
+msgid "Top Left"
+msgstr "Linksboven"
+
+#: src/wmapp.cc:599
+msgid "Top Right"
+msgstr "Rechtsboven"
+
+#: src/wmapp.cc:600
+msgid "Bottom Left"
+msgstr "Linksonder"
+
+#: src/wmapp.cc:601
+msgid "Bottom Right"
+msgstr "Rechtsonder"
+
+#: src/wmapp.cc:602
+msgid "Center"
+msgstr "Centrum"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmapp.cc:604 src/wmtaskbar.cc:217 src/wmwinlist.cc:461
+#: src/wmwinlist.cc:494
+msgid "T_ile Horizontally"
+msgstr "_Horizontaal uitlijnen"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmapp.cc:606 src/wmtaskbar.cc:215 src/wmwinlist.cc:460
+#: src/wmwinlist.cc:493
+msgid "Tile _Vertically"
+msgstr "_Vertikaal uitlijnen"
+
+#: src/wmapp.cc:618 src/wmwinlist.cc:441
+msgid "_Restore"
+msgstr "_Herstellen"
+
+#: src/wmapp.cc:620
+msgid "_Move"
+msgstr "_Verplaatsen"
+
+#: src/wmapp.cc:622
+msgid "_Size"
+msgstr "_Grootte veranderen"
+
+#: src/wmapp.cc:624 src/wmwinlist.cc:442
+msgid "Mi_nimize"
+msgstr "Mi_nimaliseren"
+
+#: src/wmapp.cc:626 src/wmwinlist.cc:443
+msgid "Ma_ximize"
+msgstr "Ma_ximaliseren"
+
+#: src/wmapp.cc:627 src/wmwinlist.cc:444
+msgid "Maximize_Vert"
+msgstr "_VertMmaximaliseren"
+
+#: src/wmapp.cc:628 src/wmwinlist.cc:445
+msgid "MaximizeHori_z"
+msgstr "Hori_zMaximaliseren"
+
+#: src/wmapp.cc:631 src/wmwinlist.cc:446
+msgid "_Fullscreen"
+msgstr "_Volledig scherm"
+
+#: src/wmapp.cc:634 src/wmwinlist.cc:448
+msgid "_Hide"
+msgstr "Verb_ergen"
+
+#: src/wmapp.cc:636 src/wmwinlist.cc:449
+msgid "Roll_up"
+msgstr "Op_rollen"
+
+#: src/wmapp.cc:643
+msgid "R_aise"
+msgstr "St_ijgen"
+
+#: src/wmapp.cc:645 src/wmwinlist.cc:451
+msgid "_Lower"
+msgstr "Da_len"
+
+#: src/wmapp.cc:647 src/wmwinlist.cc:452
+msgid "La_yer"
+msgstr "_Laag"
+
+#: src/wmapp.cc:650 src/wmwinlist.cc:453
+msgid "Tile"
+msgstr "Ordenen"
+
+#: src/wmapp.cc:654 src/wmwinlist.cc:455
+msgid "Move _To"
+msgstr "Verschuiven naa_r"
+
+#: src/wmapp.cc:655 src/wmwinlist.cc:456
+msgid "Occupy _All"
+msgstr "In _alle werkruimten"
+
+#: src/wmapp.cc:661
+msgid "Limit _Workarea"
+msgstr "_Beperk werkruimte"
+
+#: src/wmapp.cc:665 src/wmwinlist.cc:457
+msgid "Tray _icon"
+msgstr "Tray_icon"
+
+#: src/wmapp.cc:667 src/wmwinlist.cc:458
+msgid "R_ename title"
+msgstr "Tit_el hernoemen"
+
+#: src/wmapp.cc:672 src/wmwinlist.cc:473 src/wmwinlist.cc:481
+msgid "_Close"
+msgstr "_Sluiten"
+
+#: src/wmapp.cc:674 src/wmwinlist.cc:475
+msgid "_Kill Client"
+msgstr "Programma stoppen"
+
+#: src/wmapp.cc:677 src/wmdialog.cc:72 src/wmwinmenu.cc:134
+msgid "_Window list"
+msgstr "_Window lijst"
+
+#
+#: src/wmapp.cc:716
+msgid "Another window manager already running, exiting..."
+msgstr "Een andere window manager is al aktief. Icewm wordt gestopt...."
+
+#: src/wmapp.cc:791
+#, c-format
+msgid ""
+"Could not restart: %s\n"
+"Does $PATH lead to %s?"
+msgstr ""
+"De herstart is mislukt: %s\n"
+"Verwijst de »PATH« variable naar de programma directory »%s«?"
+
+#: src/wmapp.cc:952
+msgid "Confirm Restart as Terminal"
+msgstr "Herstart als terminal bevestigen"
+
+#: src/wmapp.cc:953
+msgid ""
+"Unmanage all applications and restart\n"
+"as a terminal. Proceed?"
+msgstr ""
+"Hef beheer van alle toepassing op en herstart\n"
+"als een terminal. Doorgaan?"
+
+#: src/wmapp.cc:1239 src/yxapp.cc:1040
+msgid "<none>"
+msgstr "<geen>"
+
+#: src/wmapp.cc:1564
+msgid ""
+"  --client-id=ID      Client id to use when contacting session manager.\n"
+msgstr ""
+"  --client-id=ID      Te gebruiken client-id bij contact maken met de "
+"sessiemanager.\n"
+
+#: src/wmapp.cc:1570
+msgid ""
+"\n"
+"  --debug             Print generic debug messages.\n"
+"  --debug-z           Print debug messages regarding window stacking.\n"
+msgstr ""
+"\n"
+"  --debug             Algemene debugberichten afdrukken.\n"
+"  --debug-z           Debugberichten over stapelen van vensters afdrukken.\n"
+
+#: src/wmapp.cc:1578
+msgid ""
+"\n"
+"  -a, --alpha         Use a 32-bit visual for translucency.\n"
+"  -c, --config=FILE   Load preferences from FILE.\n"
+"  -t, --theme=FILE    Load theme from FILE.\n"
+"  -s, --splash=IMAGE  Briefly show IMAGE on startup.\n"
+"  -p, --postpreferences  Print preferences after all processing.\n"
+"  --rewrite-preferences  Update an existing preferences file.\n"
+"  --trace=conf,icon   Trace paths used to load configuration.\n"
+msgstr ""
+"\n"
+"  -a, --alpha         een 32-bit visueel gebruiken voor doorzichtigheid.\n"
+"  -c, --config=FILE   Voorkeuren laden uit BESTAND.\n"
+"  -t, --theme=FILE    Thema laden uit BESTAND.\n"
+"  -s, --splash=IMAGE  IMAGE kort tonen bij opstarten.\n"
+"  -p, --postpreferences   Voorkeuren printen nadat alles is verwerkt.\n"
+"--rewrite-preferences  Een bestaand bestand met voorkeuren bijwerken.\n"
+"  --trace=conf,icon   Paden volgen gebruiken om configuratie te laden.\n"
+
+#: src/wmapp.cc:1588
+#, c-format
+msgid ""
+"Usage: %s [OPTIONS]\n"
+"Starts the IceWM window manager.\n"
+"\n"
+"Options:\n"
+"  -d, --display=NAME  NAME of the X server to use.\n"
+"%s  --sync              Synchronize X11 commands.\n"
+"%s\n"
+"  -V, --version       Prints version information and exits.\n"
+"  -h, --help          Prints this usage screen and exits.\n"
+"%s\n"
+"  --replace           Replace an existing window manager.\n"
+"  -r, --restart       Tell the running icewm to restart itself.\n"
+"\n"
+"  --configured        Print the compile time configuration.\n"
+"  --directories       Print the configuration directories.\n"
+"  -l, --list-themes   Print a list of all available themes.\n"
+"\n"
+"Environment variables:\n"
+"  ICEWM_PRIVCFG=PATH  Directory for user configuration files,\n"
+"                      \"$XDG_CONFIG_HOME/icewm\" if exists or\n"
+"                      \"$HOME/.icewm\" by default.\n"
+"  DISPLAY=NAME        Name of the X server to use.\n"
+"  MAIL=URL            Location of your mailbox.\n"
+"\n"
+"To report bugs, support requests, comments please visit:\n"
+"%s\n"
+"\n"
+msgstr ""
+"Gebruik: %s [OPTIES]\n"
+"Start de IceWM Window Manager.\n"
+"\n"
+"Opties:\n"
+"  --display=NAME  NAAM van de te gebruiken X-server.\n"
+"%s  --sync              Synchroniseer X11-opdrachten.\n"
+"%s\n"
+"  -V, --version       Toon versie-informatie en sluit af.\n"
+"  -h, --help          Toon dit gebruiksscherm en sluit af.\n"
+"%s\n"
+"  --replace           Toon een bestaande window manager.\n"
+"  -r, --restart       Herstart icewm.\n"
+"\n"
+"  --configured        Toon de configuratie tijdens compileren.\n"
+"  --directories       Toon de configuratiemappen.\n"
+"  -l, --list-themes   Toon een lijst met alle beschikbare thema's.\n"
+"\n"
+"Omgevingsvariabelen:\n"
+"  ICEWM_PRIVCFG=PATH  Map voor configuratiebestanden voor gebruikers,\n"
+"                      '$XDG_CONFIG_HOME/icewm' als deze bestaat of\n"
+"                      standaard '$HOME/.icewm'.\n"
+"  DISPLAY=NAME        Naam van de te gebruiker X server.\n"
+"  MAIL=URL            Locatie van uw postbus.\n"
+"\n"
+"Voor foutmeldingen, ondersteuningsverzoeken of commentaar, bezoekt u:\n"
+"%s\n"
+"\n"
+
+#: src/wmapp.cc:1654
+#, c-format
+msgid "%s configuration directories:\n"
+msgstr "%s configuratiemappen:\n"
+
+#: src/wmapp.cc:1739
+#, c-format
+msgid "%s configured options:%s\n"
+msgstr "%s geconfigureerde opties:%s\n"
+
+#: src/wmapp.cc:1873
+msgid "Confirm Logout"
+msgstr "Afmelden bevestigen"
+
+#: src/wmapp.cc:1874
+msgid ""
+"Logout will close all active applications.\n"
+"Proceed?"
+msgstr ""
+"Bij het afmelden worden alle actieve programma's afgesloten.\n"
+"Afmelden?"
+
+#
+#: src/wmbutton.cc:124
+msgid "Raise/Lower"
+msgstr "Stijgen/Dalen"
+
+#: src/wmbutton.cc:127
+msgid "Hide"
+msgstr "Verbergen"
+
+#: src/wmbutton.cc:131
+msgid "Restore"
+msgstr "Herstellen"
+
+#: src/wmbutton.cc:133
+msgid "Maximize"
+msgstr "Maximaliseren"
+
+#: src/wmbutton.cc:137
+msgid "Minimize"
+msgstr "Minimaliseren"
+
+#: src/wmbutton.cc:141
+msgid "Rolldown"
+msgstr "Afrollen"
+
+#: src/wmbutton.cc:143
+msgid "Rollup"
+msgstr "Oprollen"
+
+#: src/wmclient.cc:462
+#, c-format
+msgid ""
+"Client %s with PID %ld fails to respond.\n"
+"Do you wish to terminate this client?\n"
+msgstr ""
+"Client %s met PID %ld antwoordt niet.\n"
+"Wilt u deze client beëindigen?\n"
+
+#: src/wmconfig.cc:35 src/wmconfig.cc:40 src/wmconfig.cc:46
+#, c-format
+msgid "Failed to load theme %s"
+msgstr "Laden van thema %s is mislukt"
+
+#: src/wmconfig.cc:113
+#, c-format
+msgid "Unknown value '%s' for option '%s'."
+msgstr "Onbekende waarde '%s' voor optie: '%s'."
+
+#: src/wmconfig.cc:121
+#, c-format
+msgid "Unable to create directory %s"
+msgstr "Aanmaken van map %s lukte niet"
+
+#: src/wmconfig.cc:184 src/wmsave.cc:306
+#, c-format
+msgid "Unable to rename %s to %s"
+msgstr "Hernoemen van %s naar %s lukt niet"
+
+#: src/wmdialog.cc:65
+msgid "Loc_k Workstation"
+msgstr "Werkstation blo_kkeren"
+
+#: src/wmdialog.cc:68 src/ymsgbox.cc:51
+msgid "_Cancel"
+msgstr "Af_breken"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmdialog.cc:69 src/wmprog.cc:460 src/wmprog.cc:462 src/wmtaskbar.cc:243
+#: src/wmtaskbar.cc:245
+msgid "_Logout..."
+msgstr "_Afmelden..."
+
+#: src/wmdialog.cc:73
+msgid "_Restart icewm"
+msgstr "IceWM _herstarten"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmdialog.cc:74 src/wmprog.cc:428 src/wmtaskbar.cc:238
+msgid "_About"
+msgstr "_Over"
+
+#: src/wmframe.cc:1377
+msgid "Rename"
+msgstr "Hernoemen"
+
+#: src/wmframe.cc:1378
+msgid "Rename the window title"
+msgstr "De venstertitel hernoemen"
+
+#: src/wmframe.cc:1846
+msgid ""
+"WARNING! All unsaved changes will be lost when\n"
+"this client is killed. Do you wish to proceed?"
+msgstr ""
+"PAS OP! Alle niet opgeslagen veranderingen gaan verloren\n"
+"als u dit programma stopt! Wilt u doorgaan?"
+
+#
+#: src/wmframe.cc:1851
+msgid "Kill Client: "
+msgstr "Stoppen van: "
+
+#: src/wmmenu.cc:37
+msgid "Missing command argument"
+msgstr "Onvoldoende argumenten"
+
+#: src/wmmenu.cc:55
+#, c-format
+msgid "Bad argument %d to command '%s'"
+msgstr "Ongeldig argument %d naar opdracht '%s'"
+
+#: src/wmmenu.cc:110
+#, c-format
+msgid "Error at keyword '%s' for %s"
+msgstr "Fout bij sleutelwoord '%s' voor %s"
+
+#: src/wmmenu.cc:156
+#, c-format
+msgid "Error at %s '%s'"
+msgstr "Fout bij %s '%s'"
+
+#: src/wmmenu.cc:222
+#, c-format
+msgid "Unexepected menu keyword: '%s'"
+msgstr "Onverwacht sleutelwoord in menu: '%s'"
+
+#: src/wmmenu.cc:276
+#, c-format
+msgid "Error at menuprog '%s'"
+msgstr "Fout bij menuprogramma '%s'"
+
+#: src/wmmenu.cc:320
+#, c-format
+msgid "Error at menuprogreload: '%s'"
+msgstr "Fout bij herladen menuprogramma: '%s'"
+
+#: src/wmmenu.cc:347
+msgid "Missing filename argument to include statement"
+msgstr "Argument met bestandsnaam in include-statement ontbreekt"
+
+#: src/wmmenu.cc:365
+#, c-format
+msgid "Error at includeprog '%s'"
+msgstr "Fout bij invoegprogramma '%s'"
+
+#: src/wmmenu.cc:408
+#, c-format
+msgid "Unknown keyword '%s'"
+msgstr "Onbekend sleutelwoord '%s'"
+
+#: src/wmmenu.cc:419
+#, c-format
+msgid ""
+"Unknown keyword for a non-container: '%s'.\n"
+"Expected either 'key' or 'runonce' here.\n"
+msgstr ""
+"Onbekend sleutelwoord voor een niet-container: '%s'.\n"
+"Verwacht hier ofwel 'key' of 'runonce'.\n"
+
+#: src/wmmenu.cc:498
+#, c-format
+msgid "'%s' timed out!"
+msgstr "Tijdoverschrijding met '%s'!"
+
+#: src/wmmenu.cc:509
+#, c-format
+msgid "'%s' produces no output"
+msgstr "'%s' produceert geen uitvoer"
+
+#: src/wmmgr.cc:3631
+msgid "Missing program setxkbmap"
+msgstr "Programma setxkbmap ontbreekt"
+
+#: src/wmmgr.cc:3632
+msgid "For keyboard switching, please install setxkbmap."
+msgstr "Om van toetsenbord te wisselen, installeer setxkbmap."
+
+#: src/wmoption.cc:284
+#, c-format
+msgid "Unknown window option: %s"
+msgstr "Onbekende window optie: %s"
+
+#: src/wmoption.cc:356
+#, c-format
+msgid "Syntax error in window options on line %d of %s"
+msgstr "Syntaxisfout in windowopties op lijn %d van %s"
+
+#: src/wmpref.cc:101
+msgid "Save Modifications"
+msgstr "Wijzigingen opslaan"
+
+#: src/wmpref.cc:179
+#, c-format
+msgid "Enter a new value for %s: "
+msgstr "Een nieuwe waarde invoeren voor %s: "
+
+#: src/wmprog.cc:335
+msgid "_Click to focus"
+msgstr "_Klik voor focus"
+
+#: src/wmprog.cc:336
+msgid "_Explicit focus"
+msgstr "_Expliciete focus"
+
+#: src/wmprog.cc:337
+msgid "_Sloppy mouse focus"
+msgstr "_Slordige muisfocus"
+
+#: src/wmprog.cc:338
+msgid "S_trict mouse focus"
+msgstr "_Strenge muisfocus"
+
+#: src/wmprog.cc:339
+msgid "_Quiet sloppy focus"
+msgstr "_Stille slordige muisfocus"
+
+#: src/wmprog.cc:340
+msgid "Custo_m"
+msgstr "Aa_ngepast"
+
+#: src/wmprog.cc:362
+msgid "_Manual"
+msgstr "_Handmatig"
+
+#: src/wmprog.cc:363
+msgid "_Icewm(1)"
+msgstr "_Icewm(1)"
+
+#: src/wmprog.cc:364
+msgid "Icewm_Bg(1)"
+msgstr "Icewm_Bg(1)"
+
+#: src/wmprog.cc:365
+msgid "Ice_Sound(1)"
+msgstr "Ice_Geluid(1)"
+
+#: src/wmprog.cc:414
+msgid "Programs"
+msgstr "Programma's"
+
+#: src/wmprog.cc:418
+msgid "_Run..."
+msgstr "Uit_voeren..."
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmprog.cc:422 src/wmtaskbar.cc:233
+msgid "_Windows"
+msgstr "_Windows"
+
+#: src/wmprog.cc:433
+msgid "_Help"
+msgstr "_Help"
+
+#: src/wmprog.cc:438
+msgid "_Focus"
+msgstr "_Focus"
+
+#: src/wmprog.cc:443
+msgid "_Preferences"
+msgstr "_Voorkeuren"
+
+#: src/wmprog.cc:448
+msgid "_Themes"
+msgstr "_Thema's"
+
+#: src/wmprog.cc:452
+msgid "Se_ttings"
+msgstr "Ins_tellingen"
+
+#: src/wmsession.cc:214 src/wmsession.cc:230 src/wmsession.cc:240
+#, c-format
+msgid "Session Manager: Unknown line %s"
+msgstr "Sessie manager: Onbekende regel %s"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:219 src/wmwinlist.cc:462 src/wmwinlist.cc:495
+msgid "Ca_scade"
+msgstr "_Overlappend uitlijnen"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:221 src/wmwinlist.cc:463 src/wmwinlist.cc:496
+msgid "_Arrange"
+msgstr "_Optimaliseren"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:223 src/wmwinlist.cc:465 src/wmwinlist.cc:497
+msgid "_Minimize All"
+msgstr "Alles _minimaliseren"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:225 src/wmwinlist.cc:466 src/wmwinlist.cc:498
+msgid "_Hide All"
+msgstr "Alles _verstoppen"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:227 src/wmwinlist.cc:467 src/wmwinlist.cc:499
+msgid "_Undo"
+msgstr "_Ongedaan"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:230
+msgid "Arrange _Icons"
+msgstr "_Pictogrammen opruimen"
+
+#. TRANSLATORS: This appears in a group with others items, so please make the hotkeys unique in the set: # T_ile Horizontally, Ca_scade, _Arrange, _Minimize All, _Hide All, _Undo, Arrange _Icons, _Windows, _Refresh, _About, _Logout
+#: src/wmtaskbar.cc:236
+msgid "_Refresh"
+msgstr "_Verversen"
+
+#: src/wmtaskbar.cc:314 src/wmtaskbar.cc:1009
+msgid "Hide Taskbar"
+msgstr "Taakbalk verbergen"
+
+#: src/wmtaskbar.cc:337
+msgid "Favorite Applications"
+msgstr "Favoriete toepassingen"
+
+#: src/wmtaskbar.cc:362
+msgid "Window List Menu"
+msgstr "Llijstmenu van venster"
+
+#: src/wmtaskbar.cc:371
+msgid "Show Desktop"
+msgstr "Bureaublad tonen"
+
+#: src/wmtaskbar.cc:1009
+msgid "Show Taskbar"
+msgstr "Taakbalk tonen"
+
+#: src/wmwinlist.cc:83
+msgid "All Workspaces"
+msgstr "Alle werkruimten"
+
+#: src/wmwinlist.cc:447
+msgid "_Show"
+msgstr "_Tonen"
+
+#: src/wmwinlist.cc:450
+msgid "_Raise"
+msgstr "Om_hoog"
+
+#: src/wmwinlist.cc:473
+msgid "Del"
+msgstr "Verwijderen"
+
+#: src/wmwinlist.cc:477
+msgid "_Terminate Process"
+msgstr "Programma stoppen"
+
+#: src/wmwinlist.cc:478
+msgid "Kill _Process"
+msgstr "Programma stoppen"
+
+#: src/wmwinlist.cc:513 src/wmwinlist.cc:514
+msgid "Window list"
+msgstr "Window lijst"
+
+#: src/wmwinmenu.cc:96
+#, c-format
+msgid "%lu. Workspace %-.32s"
+msgstr "%lu. Werkruimte %-.32s"
+
+#: src/wpixres.cc:93 src/wpixres.cc:100
+#, c-format
+msgid "Image not readable: %s"
+msgstr "Afbeelding niet leesbaar: %s"
+
+#: src/yapp.cc:296
+#, c-format
+msgid "%s: select failed"
+msgstr "%s: selecteren mislukt"
+
+#: src/ycolor.cc:229 src/ycolor.cc:240
+#, c-format
+msgid "Could not parse color \"%s\""
+msgstr "Kleur \"%s\" ontleden lukt niet"
+
+#: src/yconfig.cc:113
+#, c-format
+msgid "Unknown key name %s in %s"
+msgstr "Onbekende toets %s in %s"
+
+#: src/yconfig.cc:128 src/yconfig.cc:139 src/yconfig.cc:151
+#, c-format
+msgid "Bad argument: %s for %s [%d,%d]"
+msgstr "Ongeldig argument: %s voor %s [%d,%d]"
+
+#: src/ycursor.cc:110
+#, c-format
+msgid "Loading of pixmap \"%s\" failed: %s"
+msgstr "Fout bij het laden van plaatje »%s«: %s"
+
+#: src/ycursor.cc:135
+#, c-format
+msgid "Loading of pixmap \"%s\" failed"
+msgstr "Laden van afbeelding »%s« mislukt"
+
+#: src/ycursor.cc:179
+#, c-format
+msgid "BUG? Imlib was able to read \"%s\""
+msgstr "FOUT? Imlib was in staat »%s« te lezen"
+
+#: src/ycursor.cc:204
+#, c-format
+msgid "BUG? Malformed XPM header but Imlib was able to parse \"%s\""
+msgstr "BUG? Ongeldige XPM-Header (Imlib heeft het bestand »%s« toch gelezen)"
+
+#: src/ycursor.cc:212
+#, c-format
+msgid "BUG? Unexpected end of XPM file but Imlib was able to parse \"%s\""
+msgstr ""
+"BUG? Onverwacht einde van het XPM-bestand (Imlib heeft het bestand »%s« toch "
+"gelezen)"
+
+#: src/ycursor.cc:215
+#, c-format
+msgid "BUG? Unexpected character but Imlib was able to parse \"%s\""
+msgstr "BUG? Onverwacht teken maar Imlib heeft \"%s\" toch kunnen ontleden"
+
+#: src/yfontcore.cc:121 src/yfontxft.cc:117
+#, c-format
+msgid "Could not load font \"%s\"."
+msgstr "Het lettertype »%s« kon niet geladen worden."
+
+#: src/yfontcore.cc:233
+#, c-format
+msgid "Missing codesets for fontset \"%s\":"
+msgstr "Missende codeset in de lettertpeset »%s«:"
+
+#: src/yfontcore.cc:261
+#, c-format
+msgid "Could not load fontset \"%s\"."
+msgstr "Lettertypeset »%s« kon niet geladen worden."
+
+#: src/yinputline.cc:18
+msgid "_Copy"
+msgstr "_Kopieren"
+
+#: src/yinputline.cc:18
+msgid "Ctrl+C"
+msgstr "Ctrl+C"
+
+#: src/yinputline.cc:19
+msgid "Cu_t"
+msgstr "Kn_ippen"
+
+#: src/yinputline.cc:20
+msgid "_Paste"
+msgstr "_Plakken"
+
+#: src/yinputline.cc:21
+msgid "Paste _Selection"
+msgstr "Selectie _plakken"
+
+#: src/yinputline.cc:21
+msgid "Ctrl+P"
+msgstr "Ctrl+P"
+
+#: src/yinputline.cc:23
+msgid "Select _All"
+msgstr "_Alles selecteren"
+
+#: src/yinputline.cc:23
+msgid "Ctrl+A"
+msgstr "Ctrl+A"
+
+#: src/ylocale.cc:60
+msgid "Locale not supported by C library or Xlib. Falling back to 'C' locale'."
+msgstr ""
+"Taalregio wordt niet ondersteund door C-bibliotheek of Xlib. Er wordt "
+"teruggevallen op de algemene taalregio 'C'."
+
+#: src/ylocale.cc:95
+msgid ""
+"Failed to determinate the current locale's codeset. Assuming ISO-8859-1.\n"
+msgstr "Kom huidige lokaliteit niet bepalen. Ga uit van ISO-8859-1.\n"
+
+#: src/ylocale.cc:128 src/ylocale.cc:136
+#, c-format
+msgid "iconv doesn't supply (sufficient) %s to %s converters."
+msgstr "iconv heeft (onvoldoende) %s naar %s-vertalers."
+
+#: src/ylocale.cc:247
+#, c-format
+msgid "Invalid multibyte string \"%s\": %s"
+msgstr "Ongeldige Multibyte-string »%s«: %s"
+
+#: src/ymsgbox.cc:48
+msgid "_OK"
+msgstr "_OK"
+
+#: src/ysmapp.cc:98
+msgid "$USER or $LOGNAME not set?"
+msgstr "Zijn de variabelen $USER of $LOGNAME gezet?"
+
+#: src/yurl.cc:145
+#, c-format
+msgid "Failed to parse URL \"%s\"."
+msgstr "Analyseren van URL \"%s\" is mislukt."
+
+#: src/yurl.cc:161
+#, c-format
+msgid "Incomplete hex escape in URL at position %d."
+msgstr "Onvolledige hex-escape in URL op positie %d."
+
+#: src/yurl.cc:168
+#, c-format
+msgid "Invalid hex escape in URL at position %d."
+msgstr "Onvolledige hex-escape in URL op positie %d."
+
+#: src/yxapp.cc:998
+msgid ""
+"  -d, --display=NAME  NAME of the X server to use.\n"
+"  --sync              Synchronize X11 commands.\n"
+msgstr ""
+"  -d, --display=NAME  NAAM van de te gebruiken X-server.\n"
+"  --sync              X11-opdrachten synchroniseren.\n"
+
+#: src/yximage.cc:157
+msgid "Support for PNG images was not enabled"
+msgstr "Ondersteuning voor PNG-afbeeldingen was niet ingeschakeld"
+
+#: src/yximage.cc:165
+msgid "Support for JPEG images was not enabled"
+msgstr "Ondersteuning voor JPEG-afbeeldingen was niet ingeschakeld"
+
+#: src/yximage.cc:171
+#, c-format
+msgid "Unsupported file format: %s"
+msgstr "Niet ondersteund bestandsformaat: %s"
+
+#: src/yximage.cc:175 src/yximage.cc:198
+#, c-format
+msgid "Could not load image \"%s\""
+msgstr "Afbeelding \"%s\" laden lukt niet"
+
+#~ msgid "Loading of fallback font \"%s\" failed."
+#~ msgstr "Terugval op lettertype »%s« is mislukt."
+
+#~ msgid ""
+#~ "\n"
+#~ "  Caller id:\t"
+#~ msgstr ""
+#~ "\n"
+#~ "  Beller-ID:\t"
+
+#~ msgid "Kill IceWM, replace with Xterm"
+#~ msgstr "IceWM beëindigen, vervangen met Xterm"
+
+#~ msgid "GNOME window state"
+#~ msgstr "GNOME-Venster status"
+
+#~ msgid "GNOME window hint"
+#~ msgstr "GNOME-Venster omschrijving"
+
+#~ msgid "Invalid cursor pixmap: \"%s\" contains too much unique colors"
+#~ msgstr "Ongeldige cursorpixmap: »%s« bevat te veel unieke kleuren"
+
+#~ msgid ""
+#~ "stat:\tuser = %llu, nice = %llu, sys = %llu, idle = %llu, iowait = %llu, "
+#~ "intr = %llu, softirq = %llu, steal = %llu\n"
+#~ msgstr ""
+#~ "stat:\tuser = %llu, nice = %llu, sys = %llu, idle = %llu, iowait = %llu, "
+#~ "intr = %llu, softirq = %llu, steal = %llu\n"
+
+#~ msgid ""
+#~ "bars:\tuser = %llu, nice = %llu, sys = %llu, iowait = %llu, intr = %llu, "
+#~ "softirq = %llu, steal = %llu (h = %i)\n"
+#~ msgstr ""
+#~ "bars:\tuser = %llu, nice = %llu, sys = %llu, iowait = %llu, intr = %llu, "
+#~ "softirq = %llu, steal = %llu (h = %i)\n"
+
+#~ msgid "CPU: %llu %llu %llu %llu %llu %llu %llu %llu"
+#~ msgstr "CPU: %llu %llu %llu %llu %llu %llu %llu %llu"
+
+#~ msgid "Unable to get current font path."
+#~ msgstr "Kan het huidige pad voor lettertype niet ophalen."
+
+#~ msgid "Unexpected format of ICEWM_FONT_PATH property"
+#~ msgstr "Onverwacht formaat van de eigenschap ICEWM_FONT_PATH"
+
+#~ msgid "Task Bar"
+#~ msgstr "Taak lijst"
+
+#~ msgid "_License"
+#~ msgstr "_Licentie"
+
+#~ msgid "0x%-8lx %-14s: %-20s %dx%d%+d%+d\n"
+#~ msgstr "0x%-8lx %-14s: %-20s %dx%d%+d%+d\n"
+
+#~ msgid ""
+#~ "Usage: %s [OPTIONS] ACTIONS\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "  -d, -display DISPLAY        Connects to the X server specified by "
+#~ "DISPLAY.\n"
+#~ "                              Default: $DISPLAY or :0.0 when not set.\n"
+#~ "  -w, -window WINDOW_ID       Specifies the window to manipulate. "
+#~ "Special\n"
+#~ "                              identifiers are `root' for the root window "
+#~ "and\n"
+#~ "                              `focus' for the currently focused window.\n"
+#~ "  -c, -class WM_CLASS         Window management class of the window(s) "
+#~ "to\n"
+#~ "                              manipulate. If WM_CLASS contains a period, "
+#~ "only\n"
+#~ "                              windows with exactly the same WM_CLASS "
+#~ "property\n"
+#~ "                              are matched. If there is no period, windows "
+#~ "of\n"
+#~ "                              the same class and windows of the same "
+#~ "instance\n"
+#~ "                              (aka. `-name') are selected.\n"
+#~ "\n"
+#~ "Actions:\n"
+#~ "  setIconTitle   TITLE        Set the icon title.\n"
+#~ "  setWindowTitle TITLE        Set the window title.\n"
+#~ "  setGeometry    geometry     Set the window geometry\n"
+#~ "  setState       MASK STATE   Set the GNOME window state to STATE.\n"
+#~ "                              Only the bits selected by MASK are "
+#~ "affected.\n"
+#~ "                              STATE and MASK are expressions of the "
+#~ "domain\n"
+#~ "                              `GNOME window state'.\n"
+#~ "  toggleState    STATE        Toggle the GNOME window state bits "
+#~ "specified by\n"
+#~ "                              the STATE expression.\n"
+#~ "  setHints       HINTS        Set the GNOME window hints to HINTS.\n"
+#~ "  setLayer       LAYER        Moves the window to another GNOME window "
+#~ "layer.\n"
+#~ "  setWorkspace   WORKSPACE    Moves the window to another workspace. "
+#~ "Select\n"
+#~ "                              the root window to change the current "
+#~ "workspace.\n"
+#~ "                              Select 0xFFFFFFFF or \"All\" for all "
+#~ "workspaces.\n"
+#~ "  listWorkspaces              Lists the names of all workspaces.\n"
+#~ "  setTrayOption  TRAYOPTION   Set the IceWM tray option hint.\n"
+#~ "  logout                      Tell IceWM to logout.\n"
+#~ "  reboot                      Tell IceWM to reboot.\n"
+#~ "  shutdown                    Tell IceWM to shutdown.\n"
+#~ "  cancel                      Tell IceWM to cancel the logout/reboot/"
+#~ "shutdown.\n"
+#~ "  about                       Tell IceWM to show the about window.\n"
+#~ "  windowlist                  Tell IceWM to show the window list.\n"
+#~ "  restart                     Tell IceWM to restart.\n"
+#~ "  suspend                     Tell IceWM to suspend.\n"
+#~ "\n"
+#~ "Expressions:\n"
+#~ "  Expressions are list of symbols of one domain concatenated by `+' or "
+#~ "`|':\n"
+#~ "\n"
+#~ "  EXPRESSION ::= SYMBOL | EXPRESSION ( `+' | `|' ) SYMBOL\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Syntaxis: %s [OPTIES] ACTIES\n"
+#~ "\n"
+#~ "Opties:\n"
+#~ "  -d -display DISPLAY         Met de door DISPLAY gedefinieerde X-Server\n"
+#~ "                              verbinden.\n"
+#~ "                              Standaard: $DISPLAY of :0.0 als DISPLAY "
+#~ "niet gezet is.\n"
+#~ "  -w -window VENSTER_ID       Het te manipuleren venster. Bijzondere\n"
+#~ "                              ID's zijn »root« voor het hoofdvenster en "
+#~ "»focus«\n"
+#~ "                              voor het venster dat nu de focus heeft.\n"
+#~ "  -c -class WM_CLASS          Klasse van vensterbeheer van het/de "
+#~ "venster(s) om↵\n"
+#~ "                              te manipuleren. Als WM_CLASS een punt "
+#~ "bevat, dan alleen↵\n"
+#~ "                              vensters met exact dezelfde eigenschap "
+#~ "WM_CLASS↵\n"
+#~ "                              worden meegenomen. Als er geen punt is "
+#~ "worden vensters↵\n"
+#~ "                              met dezelfde klasse en vensters van "
+#~ "hetzelfde exemplaar↵\n"
+#~ "                              (met `-name') geselecteerd.↵\n"
+#~ "\n"
+#~ "Acties:\n"
+#~ "  setIconTitle TITEL          Zet de titel van het pictogram.\n"
+#~ "  setWindowTitle TITEL        Zet de titel van het venster.\n"
+#~ "  setGeometry    geometrie     Zet de geometrie van het venster\n"
+#~ "  setState MASKER TOESTAND    Zet de Gnome vensterinstelling naar "
+#~ "TOESTAND\n"
+#~ "                              Alleen de door MASKER gekozen bits worden\n"
+#~ "                              veranderd. TOESTAND en MASKER zijn "
+#~ "uitdrukkingen\n"
+#~ "\t                       uit het »GNOME-Venstertoestand« domein.\n"
+#~ "  toggleState TOESTAND        Zet de Gnome venster instelling naar "
+#~ "TOESTAND\n"
+#~ "  setHints OMSCHRIJVING       Zet de Gnome vensteromschrijving.\n"
+#~ "  setLayer DESK               Plaatst het venster op een andere desktop.\n"
+#~ "  setWorkspace WERKRUIMTE    Plaatst het venster op een andere "
+#~ "werkruimte.\n"
+#~ "                              Bij de keuze voor een andere werkruimte "
+#~ "wordt de\n"
+#~ "                              huidige werkruimte gewisseld.\n"
+#~ "                              Selecteer 0xFFFFFFFF of \"All\" voor alle "
+#~ "werkruimten.\n"
+#~ "  listWorkspaces              Toont een lijst van alle werkruimten.\n"
+#~ "  setTrayOption TRAYOPTIE     Stelt de IceWM-trayoptie in.\n"
+#~ "  logout                      Vertel IceWM om af te melden.\n"
+#~ "  reboot                      Vertel IceWM om opnieuw op te starten.\n"
+#~ "  shutdown                    Vertel IceWM om af te sluiten.\n"
+#~ "  cancel                      Vertel IceWM om het afmelden/het opnieuw "
+#~ "opstarten/het afsluiten\n"
+#~ "                              te annuleren.\n"
+#~ "  about                       Vertel IceWM om het venster Informatie over "
+#~ "te tonen.\n"
+#~ "  windowlist                  Vertel IceWM om de vensterlijst te tonen.\n"
+#~ "  restart                     Vertel IceWM om opnieuw op te starten.\n"
+#~ "  suspend                     Vertel IceWM om te onderbreken.\n"
+#~ "\n"
+#~ "Expressies:\n"
+#~ "  Expressies zijn reeksen symbolen uit hetzelfde domein, die door het  "
+#~ "plusteken »+« of een verticale streep »|« verbonden zijn:\n"
+#~ "\n"
+#~ "  EXPRESSIE ::= SYMBOOL | EXPRESSIE ( `+' | `|' ) SYMBOOL\n"
+#~ "\n"
+
+#~ msgid "Can't connect to ESound daemon: %s"
+#~ msgstr "Kan geen verbinding met de ESound-Daemon maken: %s"
+
+#~ msgid "Error <%d> while uploading `%s:%s'"
+#~ msgstr "Fout <%d> bij het uploaden van »%s:%s«"
+
+#~ msgid "Sample <%d> uploaded as `%s:%s'"
+#~ msgstr "Sample <%d> werd als »%s:%s« geladen"
+
+#~ msgid "Playing sample #%d: %d"
+#~ msgstr "Speel sample #%d: %d"
+
+#~ msgid "Usage error: "
+#~ msgstr "Syntaxisfout: "
+
+#~ msgid "Out of memory for image %s"
+#~ msgstr "Onvoldoende geheugen voor afbeelding %s"
+
+#~ msgid "_Minimize"
+#~ msgstr "Mi_nimaliseren"
+
+#~ msgid "Error at %s: '%s'"
+#~ msgstr "Fout bij %s: '%s'"
+
+#~ msgid "\"%s\" contains no scheme description"
+#~ msgstr "»%s« bevat geen schema beschrijving"
+
+#~ msgid "Please note that not all options are currently configured.\n"
+#~ msgstr ""
+#~ "Houd er rekening mee dat momenteel niet alle opties geconfigureerd zijn.\n"
+
+#~ msgid "\"%s\" doesn't describe a common internet scheme"
+#~ msgstr "»%s« voldoet niet aan de Common Internet Scheme Syntax"
+
+#~ msgid "Out of memory for pixmap \"%s\""
+#~ msgstr "Onvoldoende geheugen voor afbeelding »%s«"
+
+#~ msgid "Out of memory for window options"
+#~ msgstr "Onvoldoende geheugen voor de window opties"
+
+#~ msgid "Error in window option: %s"
+#~ msgstr "Foutieve window optie: %s"
+
+#~ msgid ""
+#~ "Usage: %s FILENAME\n"
+#~ "\n"
+#~ "A very simple HTML browser displaying the document specified by "
+#~ "FILENAME.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Syntax: %s BESTANDSNAAM\n"
+#~ "\n"
+#~ "Een eenvoudige HTML-Browser om BESTANDSNAAM te bekijken.\n"
+#~ "\n"
+
+#~ msgid "No such device: %s"
+#~ msgstr "Onbekend apparaat: %s"
+
+#~ msgid "Can't change to audio mode `%s'."
+#~ msgstr "Kan niet naar audiomode »%s« wisselen."
+
+#~ msgid ""
+#~ "Audio mode switch detected, initial audio mode `%s' no longer in effect."
+#~ msgstr ""
+#~ "Wisseling van audiomodus gedetecteerd, de oorspronkelijke audiomodus »%s« "
+#~ "wordt niet verder gebruikt."
+
+#~ msgid "Audio mode switch detected, automatic audio mode changing disabled."
+#~ msgstr "Audiomode wissel gedetecteerd. Automatische wissel uitgeschakeld."
+
+#~ msgid "Overriding previous audio mode `%s'."
+#~ msgstr "Vorige audiomode overruled »%s«."
+
+#~ msgid "Multiple sound interfaces given."
+#~ msgstr "Er werden meerdere audiointerfaces aangegeven."
+
+#~ msgid "Received signal %d: Reloading samples..."
+#~ msgstr "Signaal %d ontvangen: Samples worden geactualiseerd..."
+
+#~ msgid "Message Loop: select failed (errno=%d)"
+#~ msgstr "Boodschaplus: select mislukt (errno=%d)"
+
+#~ msgid "Argument required for %s switch"
+#~ msgstr "De %s-optie heeft een argument nodig"
+
+#~ msgid "Loading of image \"%s\" failed"
+#~ msgstr "Laden van de afbeelding »%s« mislukt"
+
+#~ msgid "Imlib: Acquisition of X pixmap failed"
+#~ msgstr "Imlib: Overname van de X Pixmap is mislukt"
+
+#~ msgid "Imlib: Imlib image to X pixmap mapping failed"
+#~ msgstr "Imlib: Afbeelding van het Imlib-beeld op een X-Pixmap is mislukt"
+
+#~ msgid ""
+#~ "Using fallback mechanism to convert pixels (depth: %d; masks (red/green/"
+#~ "blue): %0*x/%0*x/%0*x)"
+#~ msgstr ""
+#~ "Gebruik terugval mechanisme om pixels te converteren.(Kleurdiepte: %d, "
+#~ "Masker (Rood/Groen/Blauw): %0*x/%0*x/%0*x)"
+
+#~ msgid "%s:%d: %d bit visuals are not supported (yet)"
+#~ msgstr "%s:%d: %d-Bit-Visuals worden (momenteel) niet ondersteunt"
+
+#~ msgid "Multiple references for gradient '%s' in theme '%s'."
+#~ msgstr "Meerdere verwijzingen naar het kleurverloop '%s' in thema '%s'."
+
+#~ msgid "Unknown gradient name '%s' in theme '%s'."
+#~ msgstr "Onbekende naam van kleurverloop: '%s' in thema '%s'."
+
+#
+#~ msgid "Bad Look name"
+#~ msgstr "Ongeldige 'Kijk-naam' (look-Option)"
+
+#~ msgid ""
+#~ "%s: unrecognized option `%s'\n"
+#~ "Try `%s --help' for more information.\n"
+#~ msgstr ""
+#~ "%s: Onbekende optie: »%s«\n"
+#~ "Probeer »%s --help« voor meer informatie.\n"
+
+#~ msgid "Loading image %s failed"
+#~ msgstr "Fout bij het laden van plaatje %s"
+
+#~ msgid "Bad argument %d"
+#~ msgstr "Ongeldig argument: %d"
+
+#~ msgid "Out of memory for image: %s"
+#~ msgstr "Onvoldoende geheugen voor afbeelding: %s"
+
+#~ msgid "Could not find image: %s"
+#~ msgstr "Afbeelding niet gevonden: %s"
+
+#~ msgid "Invalid path: "
+#~ msgstr "Ongeldig pad: "
+
+#, fuzzy
+#~ msgid ""
+#~ "Interface %s:\n"
+#~ "  Current rate (in/out):\t%li %s/%li %s\n"
+#~ "  Current average (in/out):\t%lli %s/%lli %s\n"
+#~ "  Total average (in/out):\t%li %s/%li %s\n"
+#~ "  Transferred (in/out):\t%lli %s/%lli %s\n"
+#~ "  Online time:\t%ld:%02ld:%02ld%s%s"
+#~ msgstr ""
+#~ "Interface %s:\n"
+#~ "  Huidige   (in/uit):\t%d %s/%d %s\n"
+#~ "  Gemiddeld (in/uit):\t%d %s/%d %s\n"
+#~ "  Totaal    (in/uit):\t%d %s/%d %s\n"
+#~ "  Online-tijd:\t%d:%02d:%02d%s%s"
+
+#, fuzzy
+#~ msgid ""
+#~ "             Usage: %s [OPTION]...\n"
+#~ "             \n"
+#~ "             Plays audio files on GUI events raised by IceWM.\n"
+#~ "             \n"
+#~ "             Options:\n"
+#~ "             \n"
+#~ "             -d, --display=DISPLAY         Display used by IceWM "
+#~ "(default: $DISPLAY).\n"
+#~ "             -s, --sample-dir=DIR          Specifies the directory which "
+#~ "contains\n"
+#~ "             the sound files (ie ~/.icewm/sounds).\n"
+#~ "             -i, --interface=TARGET        Specifies the sound output "
+#~ "target\n"
+#~ "             interface, one of OSS, YIFF, ESD\n"
+#~ "             -D, --device=DEVICE           (OSS only) specifies the "
+#~ "digital signal\n"
+#~ "             processor (default /dev/dsp).\n"
+#~ "             -S, --server=ADDR:PORT     (ESD and YIFF) specifies server "
+#~ "address and\n"
+#~ "             port number (default localhost:16001 for ESD\n"
+#~ "             and localhost:9433 for YIFF).\n"
+#~ "             -m, --audio-mode[=MODE]       (YIFF only) specifies the "
+#~ "Audio mode (leave\n"
+#~ "             blank to get a list).\n"
+#~ "             --audio-mode-auto          (YIFF only) change Audio mode on "
+#~ "the fly to\n"
+#~ "             best match sample's Audio (can cause\n"
+#~ "             problems with other Y clients, overrides\n"
+#~ "             --audio-mode).\n"
+#~ "             \n"
+#~ "             -v, --verbose                 Be verbose (prints out each "
+#~ "sound event to\n"
+#~ "             stdout).\n"
+#~ "             -V, --version                 Prints version information and "
+#~ "exits.\n"
+#~ "             -h, --help                    Prints (this) help screen and "
+#~ "exits.\n"
+#~ "             \n"
+#~ "             Return values:\n"
+#~ "             \n"
+#~ "             0     Success.\n"
+#~ "             1     General error.\n"
+#~ "             2     Command line error.\n"
+#~ "             3     Subsystems error (ie cannot connect to server).\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Syntax: %s [OPTION]...\n"
+#~ "\n"
+#~ "Speelt de bij IceWM voorkomende GUI-acties passende geluidsbestanden.\n"
+#~ "\n"
+#~ "Opties:\n"
+#~ "\n"
+#~ "  -d, --display=DISPLAY         Het door IceWM gebruikte display\n"
+#~ "                                (Standaard: $DISPLAY).\n"
+#~ "  -s, --sample-dir=BESTAND      Een audio bestand   -i, --"
+#~ "interface=DOEL          Het gebruikte audiointerface,\n"
+#~ "                                zoals OSS, YIFF of ESD\n"
+#~ "  -D, --device=GERÄT            Alleen OSS: De digitale signalprocessor\n"
+#~ "                                (Standaard: /dev/dsp).\n"
+#~ "  -S, --server=ADRESE:POORT     ESD en YIFF: Serveradres en -poortnummer\n"
+#~ "                                (Standard: localhost:16001 für ESD\n"
+#~ "                                und localhost:9433 für YIFF).\n"
+#~ "  -m, --audio-mode[=MODE]       Alleen YIFF: Audiomode (leeg laten, om "
+#~ "een\n"
+#~ "                                overzicht te krijgen).\n"
+#~ "  --audio-mode-auto             Alleen YIFF: Wisselen van de audiomode "
+#~ "naar behoefte\n"
+#~ "                                (Kan problemen met andere Y-clients\n"
+#~ "                                veroorzaken, overschrijft --audio-mode).\n"
+#~ "  -v, --verbose                 Wees praatgraag. (Toont alle GUI-"
+#~ "interacties op\n"
+#~ "                                stdout).\n"
+#~ "  -V, --version                 Toont de programma versie.\n"
+#~ "  -h, --help                    Toont deze hulp.\n"
+#~ "\n"
+#~ "Resultaat:\n"
+#~ "\n"
+#~ "  0     Succes.\n"
+#~ "  1     Algemene fout.\n"
+#~ "  2     Commando regel fout.\n"
+#~ "  3     Fout in een subsysteem (In het algemeen geen verbinding met de "
+#~ "server)\n"
+#~ " \n"
+
+#~ msgid ""
+#~ "Usage: icewmbg [ -r | -q ]\n"
+#~ " -r  Restart icewmbg\n"
+#~ " -q  Quit icewmbg\n"
+#~ "Loads desktop background according to preferences file\n"
+#~ " DesktopBackgroundCenter  - Display desktop background centered, not "
+#~ "tiled\n"
+#~ " SupportSemitransparency  - Support for semitransparent terminals\n"
+#~ " DesktopBackgroundColor   - Desktop background color\n"
+#~ " DesktopBackgroundImage   - Desktop background image\n"
+#~ " DesktopTransparencyColor - Color to announce for semi-transparent "
+#~ "windows\n"
+#~ " DesktopTransparencyImage - Image to announce for semi-transparent "
+#~ "windows\n"
+#~ msgstr ""
+#~ "Gebruik: icewmbg [ -r | -q ]\n"
+#~ " -r  Herstart icewmbg\n"
+#~ " -q  Stop icewmbg\n"
+#~ "Laad bureaublad achtergrond zoals gedefinieerd in voorkeur bestand\n"
+#~ " DesktopBackgroundCenter  - Toon achtergrond gecentreerd\n"
+#~ " SupportSemitransparency  - Ondersteun semi-transparante achtergrond\n"
+#~ " DesktopBackgroundColor   - Bureaublad achtergrond kleur\n"
+#~ " DesktopBackgroundImage   - Bureaublad achtergrond afbeelding\n"
+#~ " DesktopTransparencyColor - Kleur voor semi-transparente achtergrond\n"
+#~ " DesktopTransparencyImage - Afbeelding voor semi-transparente "
+#~ "achtergrond\n"
+
+#~ msgid "Could not find pixel map %s"
+#~ msgstr "Pixmap %s niet gevonden"
+
+#~ msgid "Out of memory for pixel map %s"
+#~ msgstr "Onvoldoende geheugen voor pixmap %s"
+
+#~ msgid "Out of memory for RGB pixel buffer %s"
+#~ msgstr "Onvoldoende geheugen voor RGB pixel buffer »%s«"
+
+#~ msgid "Could not find RGB pixel buffer %s"
+#~ msgstr "RGB pixel buffer »%s« niet gevonden"
+
+#~ msgid " processes."
+#~ msgstr " processen"
+
+#, fuzzy
+#~ msgid "program label expected"
+#~ msgstr "Scheidingsteken verwacht"
+
+#~ msgid "window management class expected"
+#~ msgstr "venster beheer klasse verwacht"
+
+#, fuzzy
+#~ msgid "menu caption expected"
+#~ msgstr "Scheidingsteken verwacht"
+
+#, fuzzy
+#~ msgid "opening curly expected"
+#~ msgstr "Sleutelwoord verwacht"
+
+#, fuzzy
+#~ msgid "action name expected"
+#~ msgstr "Scheidingsteken verwacht"
+
+#, fuzzy
+#~ msgid "unknown action"
+#~ msgstr "Onbekende actie: »%s«"
+
+#~ msgid "Not a regular file: %s"
+#~ msgstr "Is geen standaard bestand: %s"
+
+#~ msgid "Pair of hexadecimal digits expected"
+#~ msgstr "Paar van hexadecimalen tekens verwacht"
+
+#~ msgid "Unexpected identifier"
+#~ msgstr "Onverwacht sleutelwoord"
+
+#~ msgid "Identifier expected"
+#~ msgstr "Sleutelwoord verwacht"
+
+#~ msgid "Separator expected"
+#~ msgstr "Scheidingsteken verwacht"
+
+#, fuzzy
+#~ msgid "Invalid token"
+#~ msgstr "Ongeldig pad: "
+
+#~ msgid "Not a hexadecimal number: %c%c (in \"%s\")"
+#~ msgstr "Geen hexadecimaal cijfer: %c%c (in »%s«)"
+
+#~ msgid "/proc/apm - unknown format (%d)"
+#~ msgstr "/proc/apm - Onbekend formaat (%d)"
+
+#~ msgid "stat:\tuser = %i, nice = %i, sys = %i, idle = %i"
+#~ msgstr "status:\tuser = %i, nice = %i, sys = %i, idle = %i "
+
+#~ msgid "bars:\tuser = %i, nice = %i, sys = %i (h = %i)\n"
+#~ msgstr "balken:\tuser = %i, nice = %i, sys = %i (h = %i)\n"
+
+#, fuzzy
+#~ msgid "cpu: %d %d %d %d %d %d %d"
+#~ msgstr "CPU: %d %d %d %d"
+
+#~ msgid "kstat finds too many cpus: should be %d"
+#~ msgstr "kstat meldt te veel CPUs: Het moeten er %d zijn"
+
+#~ msgid "%s@%d: %s\n"
+#~ msgstr "%s@%d: %s\n"
+
+#~ msgid "XQueryTree failed for window 0x%x"
+#~ msgstr "XQueryTree is mislukt voor venster 0x%x"
+
+#~ msgid "Compiled with DEBUG flag. Debugging messages will be printed."
+#~ msgstr "Met DEBUG-vlag gecompileert. Debugging boodschappen worden getoont."
+
+#~ msgid "_No icon"
+#~ msgstr "_Geen icon"
+
+#~ msgid "_Minimized"
+#~ msgstr "_Geminimaliseert"
+
+#~ msgid "_Exclusive"
+#~ msgstr "_Exclusief"
+
+#~ msgid "X error %s(0x%lX): %s"
+#~ msgstr "X-Protocol fout in %s(0x%lX): %s"
+
+#, fuzzy
+#~ msgid "Forking failed (errno=%d)"
+#~ msgstr "Pipe creatie fout (errno=%d)."
+
+#, fuzzy
+#~ msgid "Failed to create anonymous pipe (errno=%d)."
+#~ msgstr "Pipe creatie fout (errno=%d)."
+
+#, fuzzy
+#~ msgid "Invalid cursor pixmap: \"%s\" contains too many unique colors"
+#~ msgstr "Ongeldige cursorpixmap: »%s« bevat te veel unieke kleuren"
+
+#~ msgid "Failed to duplicate file descriptor: %s"
+#~ msgstr "Kan bestandshendel niet dupliceren: %s"
+
+#~ msgid "%s:%d: Failed to copy drawable 0x%x to pixel buffer"
+#~ msgstr "%s:%d: Kopieren van 0x%x tekenbuffer mislukt"
+
+#, fuzzy
+#~ msgid "%s:%d: Failed to copy drawable 0x%x to pixel buffer (%d:%d-%dx%d"
+#~ msgstr "%s:%d: Kopieren van 0x%x tekenbuffer mislukt"
+
+#~ msgid "TOO MANY ICE CONNECTIONS -- not supported"
+#~ msgstr "TE VEEL ICE VERBINDINGEN -- niet ondersteund"
+
+#~ msgid "Session Manager: IceAddConnectionWatch failed."
+#~ msgstr "Sessie manager: IceAddConnectionWatch mislukt."
+
+#~ msgid "Session Manager: Init error: %s"
+#~ msgstr "Sessie manager: Initialisatie fout: %s"
+
+#~ msgid ""
+#~ "# preferences(%s) - generated by genpref\n"
+#~ "\n"
+#~ msgstr ""
+#~ "# Instellingen(%s) - Gegenereerd door genpref\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "# NOTE: All settings are commented out by default, be sure to\n"
+#~ "#       uncomment them if you change them!\n"
+#~ "\n"
+#~ msgstr ""
+#~ "# Opmerking: Alle instellingen zijn standaard uit-gecommentarieerd\n"
+#~ "#            Verwijder het commentaarteken (#) als u iets wilt "
+#~ "veranderden\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Usage: icewmbg [OPTION]... pixmap1 [pixmap2]...\n"
+#~ "Changes desktop background on workspace switches.\n"
+#~ "The first pixmap is used as a default one.\n"
+#~ "\n"
+#~ "-s, --semitransparency    Enable support for semi-transparent terminals\n"
+#~ msgstr ""
+#~ "Syntax: icewmbg [OPTIE]... pixmap1 [pixmap2]...\n"
+#~ "Veranderd de werkplaats achtergrond bij werkplaats wissel.\n"
+#~ "Het eerste bestand dient als staandard-Pixmap.\n"
+#~ "\n"
+#~ "-s, --semitransparency    Activeert de ondersteuning voor "
+#~ "semitransparente terminals\n"
+
+#~ msgid ""
+#~ "Window %p has no XA_ICEWM_PID property. Export the LD_PRELOAD variable to "
+#~ "preload the preice library."
+#~ msgstr ""
+#~ "Het window %p heeft geen XA_ICEWM_PID eigenschap. Exporteer de variable "
+#~ "»LD_PRELOAD«, om de preice-programmabibliothek te activeren."
+
+#~ msgid "Obsolete option: %s"
+#~ msgstr "Verouderde Option: %s"
+
+#~ msgid "Gnome"
+#~ msgstr "Gnome"
+
+#~ msgid "Gnome User Apps"
+#~ msgstr "Gnome-Gebruikers menu"
+
+#~ msgid "Resource allocation for rotated string \"%s\" (%dx%d px) failed"
+#~ msgstr ""
+#~ "Geen resources voor de roterende tekenreeks »%s« (%dx%d px) beschikbaar"
+
+#~ msgid "_Ignore"
+#~ msgstr "_Negeren"
+
+#~ msgid "Out of memory: Unable to allocated %d bytes."
+#~ msgstr "Gebrek aan geheugen: Onmogelijk om %d bytes te reserveren."
+
+#~ msgid "Invalid fonts in fontset definition \"%s\":"
+#~ msgstr "Ongeldig lettertype in de lettertype familie »%s«:"
+
+#~ msgid "CPU Load: %3.2f %3.2f %3.2f, %d processes."
+#~ msgstr "CPU Belasting: %3.2f %3.2f %3.2f, %d processen"

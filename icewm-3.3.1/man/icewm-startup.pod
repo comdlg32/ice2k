@@ -1,0 +1,63 @@
+
+=pod
+
+=head2 NAME
+
+ icewm-startup - icewm startup configuration file
+
+=head2 SYNOPSIS
+
+ $ICEWM_PRIVCFG/startup
+ $XDG_CONFIG_HOME/icewm/startup
+ $HOME/.icewm/startup
+ /etc/icewm/startup
+ /usr/share/icewm/startup
+
+=head2 DESCRIPTION
+
+The F<startup> file contains commands to be executed on B<icewm> startup.
+This is an executable script. Typically the commands tweak X11 settings
+and launch some applications which always need to be active.
+It is run by L<icewm-session(1)> when B<icewm> starts.
+
+=head2 EXAMPLES
+
+ #!/bin/bash
+ xset r rate 250 32
+ flameshot &
+ volumeicon &
+ redshift-gtk &
+ picom -b
+
+Remember to C<chmod +x ~/.icewm/startup>.
+
+=head2 FILES
+
+Locations for the F<startup> file are as follows:
+
+ $ICEWM_PRIVCFG/startup
+ $XDG_CONFIG_HOME/icewm/startup
+ $HOME/.icewm/startup
+ /etc/icewm/startup
+ /usr/share/icewm/startup
+
+The locations are searched in the order listed; the first file found is
+executed and the remainder ignored.
+
+=head2 SEE ALSO
+
+L<icewm-session(1)>,
+L<icewm-shutdown(5)>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

@@ -1,0 +1,50 @@
+=pod
+
+=head2 NAME
+
+ icewm-set-gnomewm - modify GNOME settings to use IceWM
+
+=head2 SYNOPSIS
+
+B<icewm-set-gnomewm> [I<OPTIONS>]
+
+=head2 DESCRIPTION
+
+B<icewm-set-gnomewm> is a helper script which instruments GNOME to
+replace its own WM with icewm.
+
+=head2 OPTIONS
+
+=head2 GENERAL OPTIONS
+
+=over
+
+=item B<-h>, B<--help>
+
+Print a brief usage statement to F<stdout> and exit.
+
+=item B<-V>, B<--version>
+
+Print the program version to F<stdout> and exit.
+
+=back
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

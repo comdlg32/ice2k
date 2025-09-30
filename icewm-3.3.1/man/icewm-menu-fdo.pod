@@ -1,0 +1,159 @@
+=pod
+
+=head2 NAME
+
+ icewm-menu-fdo - menu generator for .desktop files
+
+=head2 SYNOPSIS
+
+B<icewm-menu-fdo> [I<OPTIONS>] [I<FILENAME>]
+
+=head2 DESCRIPTION
+
+B<icewm-menu-fdo> generates a menu for the B<IceWM> window manager
+from XDG menu descriptors (aka FreeDesktop.Org F<.desktop> files).
+By including this in the L<icewm-menu(1)>, the system applications
+become available in the icewm start menu.
+
+=head2 ARGUMENTS
+
+=over
+
+=item [I<FILENAME>]
+
+The optional I<FILENAME> argument is the location of a F<.desktop> file.
+When given, B<icewm-menu-fdo> launches the application using the C<Exec>
+line from the desktop file.
+
+=back
+
+=head2 OPTIONS
+
+=over
+
+=item B<-g>, B<--generic>
+
+Include the generic name in parentheses in the title of B<prog> entries.
+
+=item B<--seps>
+
+Print a leading and a trailing separator.
+
+=item B<--sep-before>
+
+Print a leading separator.
+
+=item B<--sep-after>
+
+Print a trailing separator.
+
+=item B<--no-sep-others>
+
+Don't print the C<Other> category last.
+
+=item B<--no-sub-cats>
+
+Don't nest subcategories in submenus.
+
+=item B<-o>, B<--output=FILE>
+
+Write the output to I<FILE>.
+
+=item B<--flat>
+
+Display apps from all categories in one level with the title containing
+the category information as prefix.
+
+=item B<-F sep>, B<--flat-sep=sep>
+
+When used with C<--flat>, the specified character sequence is used as
+separator between the section titles.
+
+=item B<-m filter>, B<--match=filter>
+
+Specifies a filter to show only apps which contain this as substring
+within their title.
+
+=item B<-M filter>, B<--imatch=filter>
+
+Like C<--match> but applied with any letter case.
+
+=item B<--match-sec>
+
+Apply the filter from C<--match> or C<--imatch> to both, apps and
+section titles.
+
+=item B<--match-osec>
+
+Apply the filter from C<--match> or C<--imatch> to only to section titles.
+
+=item B<-h>, B<--help>
+
+Print a brief usage statement to F<stdout> and exit.
+
+=item B<-V>, B<--version>
+
+Print the program version to F<stdout> and exit.
+
+=item B<-C>, B<--copying>
+
+Print copying permissions to F<stdout> for the program and exit.
+
+=head2 USAGE
+
+This utility is not normally used directly. It is used as the
+executable in a B<menuprog> entry in a L<icewm-menu(5)>.
+
+=head2 EXAMPLES
+
+The following line in a L<icewm-menu(5)> file will dynamically generate
+a comprehensive set of menus for easy access to F<.desktop> files.
+
+    menuprog "Desktop Apps" folder icewm-menu-fdo
+
+=head2 ENVIRONMENT
+
+B<XDG_DATA_HOME> or B<XDG_DATA_DIRS> are considered as suggested by XDG
+Base Directory Specification.
+
+=head2 CONFORMING TO
+
+B<icewm-menu-fdo> complies roughly to the XDG F<.desktop> file and menu
+specification, see L<Desktop Entry Specification>, Version 1.2alpha,
+2015-03-06 and L<Desktop Menu Specification>, Version 1.1-draft, 31
+March 2011.
+
+=head2 CAVEATS
+
+The B<icewm-menu-fdo> program is only built when the L<icewm(1)> package
+is configured with the B<--enable-menus-fdo> option, which requires the
+B<glib2-dev> package dependency.
+
+=head2 SEE ALSO
+
+L<Desktop Entry Specification>,
+L<Desktop Menu Specification>,
+L<icewm(1)>,
+L<icewm-menu(5)>,
+L<icewm-preferences(5)>,
+L<icewm-programs(5)>.
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Eduard Bloch L<mailto:edi@gmx.de>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

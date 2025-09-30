@@ -1,0 +1,123 @@
+=pod
+
+=head2 NAME
+
+ icehelp - a very simple HTML browser
+
+=head2 SYNOPSIS
+
+B<icehelp> [I<OPTIONS>] I<FILENAME>
+
+=head2 DESCRIPTION
+
+B<icehelp> is a very simple HTML browser, which is used by L<icewm(1)>
+to display the L<IceWM Manual|https://ice-wm.org/manual> and the manpages.
+
+The document can be navigated by cursor keys, navigation keys and
+a scrollbar. To find text, hit C<Ctrl+F> for a search window.
+Hit the C<F3> function key to repeat a search.
+
+The top right corner shows a button, which opens a menu. This menu
+can also be opened by a right mouse button click.
+
+=head2 ARGUMENTS
+
+=over
+
+=item I<FILENAME>
+
+Specifies the file to browse.  It can also be the URL of a website.
+
+=back
+
+=head2 OPTIONS
+
+=head2 SPECIFIC OPTIONS
+
+=over
+
+=item B<-B>
+
+Display the IceWM icewmbg manpage.
+
+=item B<-b>, B<--bugs>
+
+Display the IceWM bug reports (primitively).
+
+=item B<-f>, B<--faq>
+
+Display the IceWM FAQ and Howto.
+
+=item B<-g>
+
+Display the IceWM Github website.
+
+=item B<-i>, B<--icewm>
+
+Display the IceWM icewm manpage.
+
+=item B<-m>, B<--manual>
+
+Display the IceWM Manual (default).
+
+=item B<-s>
+
+Display the IceWM icesound manpage.
+
+=item B<-t>, B<--theme>
+
+Display the IceWM themes Howto.
+
+=item B<-w>, B<--website>
+
+Display the IceWM website.
+
+=back
+
+=head2 GENERAL OPTIONS
+
+=over
+
+=item B<-d>, B<--display>=I<DISPLAY>
+
+Use I<DISPLAY> to connect to the X server.
+If this option is missing then I<DISPLAY>
+is read from the environment variable C<DISPLAY>.
+
+=item B<--sync>
+
+Use a slower synchronous mode communication with I<X11> server.
+
+=item B<-h>, B<--help>
+
+Print a brief usage statement to F<stdout> and exit.
+
+=item B<-V>, B<--version>
+
+Print the program version to F<stdout> and exit.
+
+=item B<-C>, B<--copying>
+
+Print copying permissions to F<stdout> for the program and exit.
+
+=back
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

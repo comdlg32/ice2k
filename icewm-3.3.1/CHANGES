@@ -1,0 +1,1789 @@
+stable:
+
+
+1.3.8pre1: 2011-11-19
+	- fix focus issues with JDK7
+	- compile fix with deprecated
+	- Qt5 compatibility
+	- partial support for _NET_WM_STRUT_PARTIAL
+
+1.3.7: 2010-10-31
+	- fix crash with "Cascade"
+	- fix crash when dragging Task bar app icons
+
+1.3.7pre2: 2010-04-28
+	- winoption: appTakesFocus - for apps that actually use globally active input
+
+1.3.7pre1: 2010-04-27
+	- battery status as graphics not text (Alexander Drozdov)
+	- 'icewm-set-gnomewm' script to set GNOME window manager to icewm
+
+1.3.6:
+	- build fixes
+
+1.3.6pre3: 2010-01-05
+	- bug fixes (task bar auto hide)
+	
+1.3.6pre2: 2010-01-04
+	- bug fixes
+
+1.3.6pre1: 2010-01-03
+	- new setting: HideTitleBarWhenMaximized
+	- bug fixes
+
+1.3.5
+	- merged changes up to 1.2.38pre2
+	- fix possible crash when loading application icons (Eduard Bloch)
+	- rpm .spec file updates
+        
+1.3.4pre2: 2009-04-13:
+	- option XRRPrimaryScreenName - xrandr output name for primary screen (with taskbar)
+	- XRRDisable - option to disable use of XRANDR
+
+1.3.4pre1: 2009-01-25
+	- xrandr screen configuration support (replaces xinerama)
+	- per-screen work area
+	- merged changes up to 1.2.37
+
+1.3.3:
+	- merged changes up to 1.2.36
+	- add FocusRequestFlashInterval (0 = disable)
+
+1.3.2:
+	- merged changes up to 1.2.34
+
+1.3.1:
+	- merged changes up to 1.2.32
+	- handle all NET_WM_ICON app properties (Thomas Holder)
+	- display memory/swap/temperature/frequency information in the
+          CPU applet (Eugeny Vdovin)
+	- warp the mouse pointer on mouse triggered workspace 
+          switch (Owen Marshall)
+	- show window preview for workspaces in taskbar (Thomas Holder)
+
+1.3.0:
+	- merged changes up to 1.2.30
+	- NET_WM_ICON support
+	- gdk_pixbuf_xlib now used as image library
+
+old:
+
+1.2.38pre2:
+	- various bug fixes
+
+1.2.38pre1: 
+	- xinerama fixes
+        - app-group transient window implementation 
+	- FreeBSD ACPI support - Alexander Motin (amotin)
+
+1.2.37:
+	- fix centering of transient windows over parents (Bert Wesarg)
+	- check if window is allowed to be moved, before starting movement (Bert Wesarg)
+	- fix key handling on buttons
+
+1.2.36:
+	- add option TaskBarFullscreenAutoShow (default = 1)
+
+1.2.36pre2: 2008-08-17
+	- regrab keyboard bindings when keyboard mapping changes
+
+1.2.36pre1: 2008-08-07
+	- fix unresponsive taskbar when PassFirstClickToClient=0
+	- add support for sysfs interface (instead of proc) for battery 
+          status (initial code by Santiago Garcia Mantinan)
+	- fix maximized window repositioning on fullscreen toggle
+	- bug 1852567 - make searching for icons more consistent (iconPath first, 
+          search each directory first for all possible types - xpm, png)
+	- Italian translation update
+	- Korean translation update
+	- translation cleanup: converted .po files to UTF-8
+
+1.2.35: 2008-01-05
+	- Application tray bug fixes
+        - Add encoding/language to about dialog
+
+1.2.34: 2007-12-27
+	- fix gmplayer switching to fullscreen
+	- popup dialog focus fixes
+	- fix screen change with xrandr 1.2
+
+1.2.33: 2007-11-04
+	- build fixes (Bert Wesarg)
+	- fix FocusOnRaise
+	- tray fixes
+	- fix taskbar popup in fullscreen mode
+
+1.2.32: 2007-08-07
+	- fix session shutdown when logging out (Stanislav Maslovski)
+	- tweaks to taskbar auto-hide in fullscreen mode
+
+1.2.31: 2007-07-27
+	- auto-hide like taskbar activation in full screen mode
+	- fix raise/lower of windows of java6 apps
+	- fix iconic app startup
+
+1.2.31pre1: 2007-05-20
+	- fix crash when using battery status applet without ACPI (flitsch)
+	- fix CPU status applet with long uptime
+	- zh_CN translation update (LI Daobing)
+	- zh_TW translation update (Wei-Lun Chao)
+	- added missing ShowSettingsMenu and ShowFocusModeMenu 
+          settings (Evgenii Terechkov)
+	- Czech translation update
+	- cross compilation fix (Lucas Correia Villa Real)
+	- fix --enable-lite + --enable-gradients (Lucas Correia Villa Real)
+	- binding to raise window with mouse (MouseWinRaise=Ctrl+Alt+Mouse1)  (Thomas Holder)
+        - Russian translation update (Evgenii Terechkov)
+
+1.2.30: 2006-12-24
+	- battery status cleanups
+	- new option BatteryPollingPeriod (default 10 seconds)
+
+1.2.30pre1: 2006-12-17
+	- fix focus after minimizing all windows
+        - moved Themes selection to Settings menu
+	- added Settings -> Focus menu (config saved to ~/.icewm/focus_mode 
+          as FocusMode=1,2 or 0)
+	- startMinimized window option fixed
+	- new setting MapInactiveOnTop (default 1)
+	- new setting RequestFocusOnAppRaise (when FocusOnAppRaise=0)
+
+1.2.29: 2006-12-03
+	- Spanish translation updated (Eulogio Serradilla)
+
+1.2.29pre1: 2006-11-12
+	- reduce slow down when drawing in GIMP (repeated titlebar update)
+	- fix relayout when screen rotates
+	- fix crash with qt4 apps
+	- German translation fixes
+	- altgr_binding_support by Jörg Sommer
+	- Apple PMU support by Jörg Sommer
+
+1.2.28: 2006-09-10
+	- fix potential crash with layer/z-order changes
+	- Spanish translation update (Eulogio Serradilla)
+
+1.2.28pre2: 2006-08-31
+	- fix smart placement
+	- warning fixes
+
+1.2.28pre1: 2006-08-24
+	- start menu pixmap now named: taskbar/start.xpm
+	- fix zOrder in ShowDesktop action
+	- fix occasional keyboard navigation malfunction in the start menu
+	- try to mouse focus only when mouse actually moves to another window
+	- prevent focusing taskbar with mouse focus
+	- use locale strings in 'icewm-menu-gnome2'
+	- also search for .png icons when only basename is specified
+	  (Manuel Carrasco)
+	- change mouse cursor when dragging the taskbar (Manuel Carrasco)
+        - major focus cleanups and improvements
+        - icewmtray: catch HUP signal to reload theme and other fixes 
+          (Manuel Carrasco)
+        - new preferences option: WinMenuItems (default=rmsnxfhualyticw) 
+          (Manuel Carrasco/Marko Macek)
+
+1.2.27: 2006-08-06
+	- Danish translation (by Ole Carlsen)
+	- added 'Look=flat' (oscarello)
+	- added TaskbarButtonWidthDivisor (lysanderslair)
+	- minor workspace switching optimization -
+	  Ramunas Lukosevicius <lukoramu@parok.lt>
+	- new FSF address added in COPYING
+
+1.2.26: 2006-04-16
+	- fix icesh workspace switching (Thomas Holder)
+	- Polish translation fix (Pawel Chwalowski)
+	- fix focus after closing fullscreen window
+	- new option: TaskBarShowTransientWindows (default = 1, for now)
+
+1.2.25: 2006-02-03
+	- fix resize of maximized windows when taskbar set to AutoHide
+	- fix support for screens 0.1 and up
+
+1.2.25pre1: 2006-01-31
+	- fix format in window size/position display (Bert Wesarg)
+	- fix configure to use pkg-config for xft (Marius Feraru)
+	- fix build with Sun Forte C++ (Grant McDorman)
+	- icewmtray crash fixes (Grant McDorman)
+
+1.2.24: 2006-01-22
+	- option to --replace an extisting window manager
+        - change menu scroll wheel direction (Thomas Holder)
+        - paint desktop tray background (Thomas Holder)
+        - gcc 4.1 build fixes (Hanno Boeck)
+	- fix gcc strict aliasing errors (Pavel Nemec)
+        
+1.2.24pre1: 2005-12-04
+	- restore Dutch translation from Ton Kersten
+	- zh_TW translation from Wei-Lun Chao
+	- fix TaskBarKeepBelow=1 preference
+	- fix problems in horizontal maximization
+	- implemented support for --replace option
+	- Make shaped decorations work in 21 bit graphics cards 
+          (like those common in sparcs) -- Bernhard R. Link
+
+1.2.23: 2005-08-14
+	- make taskbar pop out even when collaped
+	- Slovak translation update (Zdenko Podobny)
+
+1.2.23pre1: 2005-07-31
+	- fix crash when hiding the taskbar and "collapse" button is hidden
+	- fix repeated drag over taskbar icon not working
+	- fix problems with Unmap events being handled incorrectly
+	- customizable placement order options for minimized window icons
+          (MiniIconsPlaceHorizontal, MiniIconsRightToLeft, 
+          MiniIconsBottomToTop) - (Konstantin Korikov - lostclus)
+
+1.2.22: 2005-07-17
+	- AutoShowDelay setting (opposite of AutoHideDelay)
+	- use Workspace status window instead of showing the taskbar
+	  when workspace changes if taskbar autohide is enabled
+
+1.2.22pre3: 2005-07-15
+	- fix focusing after window minimized or hidden
+
+1.2.22pre2: 2005-07-10
+	- Remember last focused window per-workspace
+	- Enable the LockCommand functionality only if command 
+          found (Eduard Bloch)
+	- new Korean translation (Ken Yeo)
+
+1.2.22pre1: 2005-06-28
+	- Latvian translation (Kristaps Kaupe)
+	- Double click activates workspace in window list
+	- Fixes to taskbar layout when only tasks visible
+	- Made network status applets show/hide dynamically again
+	- Add image to taskbar collapse button
+        - Fix MinimizeToDesktop windows getting out of desktop area
+	- Added key binding: KeySysCollapseTaskBar
+	- Fixed UTF-8 input support in AddressBar
+
+1.2.21: 2005-05-31
+
+1.2.21pre2: 2005-05-16
+	- translation: Vietnamese (Phan Vinh Thinh)
+	- translation: Indonesian (Arif E. Nugroho)
+	- translation update: Simplified Chinese (Hiweed Leng)
+	- translation update: French (Frederic Bothamy)
+	- APM applet support for NetBSD (Iain Hibbert (plunky))
+	- add new winoption: noFocusOnMap
+	- fix ClientWindowMouseActions for Window-Drag combination
+
+1.2.21pre1: 2005-03-20
+	- improve selection of "urgent" windows with alt+tab
+	- fix possible crash (Grant McDorman)
+	- fix 64bit usage of Xft (Marcus Meissner)
+	- cleanup warning on still-open file descriptors
+        - disabled some Ctrl+Alt+Del commands by default since
+          they need some configuring to work on all systems
+        - fix desktop layer setting for nautilus
+
+1.2.20: 2005-01-09
+	- fix+revert default binding for MouseWinMove an MouseWinSize
+	- fix 1 pixel border when taskbar at top of screen
+	- fix themes not loading from user directory
+
+1.2.19: 2004-12-26
+	- fix crash/build failure when taskbar disabled
+	- fix build/link with some gcc/g++ versions
+
+1.2.18: 2004-12-18
+	- changed icedesert colors (Hanspeter Roth)
+
+1.2.18pre1: 2004-12-05
+	- disable SupportsSemitransparency by default, this makes
+	icewmbg exit after setting the image and reduces memory usage
+	- fix Meta key handling typo
+	- fix CPU waste in icewm-session and icewmtray
+	- fix some Win+x key combinations
+        - new settings MouseWinMove (=Alt+Ctrl+Pointer_Button1) and 
+          MouseWinSize (=Alt+Ctrl+PointerButton3). The default bindings
+          have changed from Alt+button drag to Ctrl+Alt (or Super).
+
+1.2.17: 2004-11-07
+	- fix: windows were not expanding when taskbar was hidden
+	- fix: reused (hidden) application windows popped up on original
+	  workspace	
+	- fix: build with --disable-taskbar
+	- fix: maximize/restore for rxvt
+	- fix: reboot/shutdown functionality (default configuration 
+	  changed to use 'sudo')
+
+1.2.17pre2: 2004-10-31
+	- fix crash on startup when mailbox or net status disabled
+	- fix build with gcc > 3.3
+	- fix gray lines on taskbar bottom
+	- major changes in window geometry/layout handling
+	- fix "tray icon"
+
+1.2.17pre1: 2004-10-24
+	- fix \ quoting in configuration files  (Eduard Bloch)
+	- fix "win" key when NumLock active
+	- more weird modifier map fixesa
+	- updated Slovenian translation (Jernej Kovacic)
+	- add the button to collapse the task bar
+	- rewrite of taskbar layout code
+        - force Imlib to use default visual (fix xorg visual mess)
+        - vertical layout for Alt+Tab (Eduard Bloch)
+	
+1.2.16: 2004-08-16
+	- fullscreen fix for _NET_WM_STATE_FULLSCREEN (affects mplayer)
+	- use our own replacement for basename
+	- ACPI battery status fix (gicco)
+	- fix bug 984427 (addressbar ignores backspace when numlock pressed)
+	- Polish translation update
+
+1.2.15: 2004-08-09
+	- enable locale for icesh
+
+1.2.15pre4: 2004-08-05
+	- fix crash/lockup at startup in ACPI status applet when ac module
+          not loaded
+	- tray icon sizing cleanups
+	- fix bug 883518: keyboard gets locked until icewm menu is activated
+	- double buffering fixes
+	- French translation update
+	- Finnish translation update (Taisto Kuikka)
+	- menuprogreload menu keyword added (Konstantin Korikov)
+	  syntax: menuprogreload title icon timeout command ...
+	- battery status display for FreeBSD (Hanspeter Roth)
+	- smart snap window positioning triggered by C+S+A+numpad (Bert Wesarg)
+	- key to show desktop (Super+D)
+
+1.2.15pre3: 2004-08-01
+	- icesound gcc 2.95.3 compile fix (Thomas Zajic)
+	- net status support for OpenBSD (Hanspeter Roth)
+	- FreeBSD build fix (Hanspeter Roth)
+	- basename cleanups for FreeBSD
+	- systray cleanups for wine, ...
+	- battery status uses design capacity (Hanspeter Roth)
+
+1.2.15pre2: 2004-07-18
+	- Slovak translation (Radovan Stas)
+	- fix activation from gnome-2.6 panel to properly raise window
+	- fix transparency support (caused crashes in xchat...)
+        - NetBSD support for NetStatus (Iain Hibbert)
+	- net modifier setup code to cope with weird xorg modifier setup
+
+1.2.15pre1: 2004-06-27
+	- fix ppp applet isdn online status
+	- fix focusing new+maximized windows
+	- fix some alt+tab pref combinations (hidden + all/group workspaces)
+	- some more gcc 3.4 fixes (morfic)
+
+1.2.14: 2004-05-22
+	- minor tweak to alt+tab behavior when selecting from all 
+	  workspaces
+
+1.2.14pre16: 2004-05-09
+	- netwm modal state broken, disabled
+	- make menu/config file parsing behave more like sh (handle both
+          single and double quotes) -- Eduard Bloch
+	- Italian translation update
+	- Czech translation update
+	- fix build with gcc-3.4
+
+1.2.14pre15: 2004-05-02
+	- add new theme yellowmotif (Andreas Leitgeb (avl42))
+	- fix in window mapping code for Citrix client
+	- bug fixes in xft clipping
+
+1.2.14pre14: 2004-04-20
+	- Solaris fixes to configure.in (Damjan Perenic)
+	- implement EWMH "modal" state
+	- show themable preferences in ~/.icewm/preferences
+	- fix order in CPU Status (Hanspeter Roth)
+
+1.2.14pre13: 2004-04-12
+	- fix antialiasing of menu icons
+	- fix raising of new window when in fullscreen
+	- Linux Kernel 2.6 iowait,irq,softirq cpu status 
+          support (Hanspeter Roth)
+	- improved support for NetWM hints (state: above, below, ...)
+	- fix delayed mouse focus with fast keyboard desktop switches
+
+1.2.14pre12: 2004-03-21
+	- fixed icon antialiasing with IMLIB
+	- fix crash with XPM icon loading
+	- Solaris fixes (Damjan Perenic)
+	
+1.2.14pre11: 2004-03-16
+	- minor bug fixes and build fixes
+
+1.2.14pre10: 2004-02-29
+	- fix comile with --enable-lite
+	- CPUStatus fix for FreeBSD 5.2 / gcc 3.3.3  (Hanspeter Roth)
+	- fix crash in CPU status (L10N related, translations need 
+          to be updated)
+	- made ShowMenuButtonIcon setting themable again
+	- KeyWinMaximizeHoriz binding (no default key yet)
+	- Italian translation update (Yuri Bongiorno)
+	- Finnish translation update (Taisto Kuikka)
+	- Turkish translation (CoÅku Erdem)
+
+1.2.14pre9: 2004-01-19
+	- improve maximized window position handling on workspace switches
+
+1.2.14pre8: 2004-01-11
+	- add Xft font specification for Infadel2 theme
+	- image support for the "show desktop" icon
+	- change startup order in icewm-session (icewm now first, startup last)
+	- minimize all / show desktop should not minimize unminimizable windows
+	- improvements to icehelp
+	- fix winoptions icon override behavior
+	- keep theme history in ~/.icewm/themes (Eduard Bloch)
+
+1.2.14pre7: 2004-01-03
+	- fix reaping of children in icewm-session
+	- initial mapping code cleanup
+
+1.2.14pre6: 2003-12-30
+	- fix "lost focus when maximizing" in mouse-focus mode
+	- fix "Super+key" bindings again
+	- remove line/string length limits for preferences file
+
+1.2.14pre5: 2003-12-25
+	- fix problem with replaying Super+X when not activating menu
+	- build fixes for FreeBSD
+	- build fix for Xrandr < 1.0 (not tested)
+	- *bsd cpu status support (Hanspeter Roth)
+
+1.2.14pre4: 2003-12-23
+	- movesize-fx obsoleted
+	- wm-session obsoleted
+	- header cleanups
+	- fix monitor for linux 2.0 (Miroslav Stibor)
+        - fix focus/click with multiple emacs frames
+	- all font preferences now have a ...Xft variant that 
+          can be set to fontconfig pattern specification.
+          example: MenuFontNameXft=sans-serif:size=12:bold
+        - enabled shaped window decorations by default (configure)
+
+1.2.14pre3: 2003-12-22
+	- debian fixes (Eduard Bloch)
+	- fixes and cleanups
+
+1.2.14pre2: 2003-12-20
+	- compile fixes for egcs-2.91.66 (Miroslav Stibor)
+	- icewm-session explicitly terminates icewm 
+          and icewmtray (Hanspeter Roth)
+        - code refactoring and cleanup
+
+1.2.14pre1:  2003-11-01
+	- initial support for XRANDR
+	- enable alt+Tab in LITE
+	- only allow a restricted set of prefs to be set in a theme
+	- fix shutdown in logout menu (was a reboot)
+	- fix crash on startup when TaskBarShowWindowListMenu=0 and
+          TaskBarDoubleHeight=1 set (Alexander Portnoy - alexpor)
+	- icesound fixes (some variants need testing)
+	- nested themes menus (Eduard Bloch)
+	- support for rollover titlebar buttons (Rob Costello)
+	- CPU status fixes. New option: TaskBarCPUDelay (Miroslav Stibor)
+	- Net status fixes. New options: TaskBarNetSamples, 
+	  TaskBarNetDelay (Miroslav Stibor)
+	- fixes to icewm-session
+	- Ctrl+Alt+Numpad moves window (Bert Wesarg)
+
+1.2.13: 2003-09-27
+	- build fixes
+	- only handle KDE tray protocol when icewmtray running
+
+1.2.13pre3: 2003-09-14
+	- ShowDesktop button added (someone make a nice icon, please)
+	- fix defunct icewmbg processes on theme selection
+	- fix setting themes with a SPACE in the name
+        - KDE system tray support (experimental)
+	- support for scaled backgrounds (experimental)
+        - fix crash on option parsing in icesound
+	- remove "xftdummy" foundry from default fonts (Pavel Roskin)
+	- add reboot/shutdown to logout menu (Hanspeter Roth)
+	- sort theme menu by name
+
+1.2.13pre2: 2003-09-05
+	- fix icewmbg not setting the background when started before icewm
+
+1.2.13pre1: 2003-08-31
+	- fix ~/.icewm/theme file permissions
+	- fix drawing of checkboxes in menus
+	- fix display corruption in network status
+	- fix memory leak in icewmbg on workspace switches
+	- fix menu behavior with xinerama
+	- Italian translation updated
+	- new preference "DoubleBuffer" (default: 1)
+	- experimental: icewm-session (runs icewmbg. icewmtray, icewm
+          and restarts icewm on crash)
+
+1.2.12: 2003-08-24
+        - MAJOR CHANGE: reverted preferences/theme order to same 
+          as before 1.2.10. Added "prefoverride" file for overriding
+          theme preferences.
+	- icewmbg is only re/started when already running
+	- fix build with --disable-taskbar
+	- fix build with --disable-shape
+        - fix ShowMoveSizeStatus with OpaqueMove/Resize
+
+1.2.11: 2003-08-19
+	- added forcedClose window option (Hanspeter Roth)
+	- added recent average in network monitor
+        - fix icewmbg not setting theme background
+	- fix spelling of _NET_WORKAREA hint (Jeff Pohlmeyer (tgeek))
+        - fix spelling of --client-id option name (YAMAMOTO, Taku <taku@cent.saitama-u.ac.jp>)
+	- fix random restart failures
+	- fix codeset handling on FreeBSD
+	- Czech translation update (Jan Horak)
+	- Bulgarian translation (Pavel Pyuter)
+	- fix painting of exposed icons
+
+1.2.10: 2003-08-11
+	- added "Default" to Themes submenu
+	- documentation updates
+
+1.2.10pre11: 2003-08-10
+	- theme selector now writes the selected theme in ~/.icewm/theme
+	- theme selector now restarts icewmbg automatically
+	- minor cleanups in apm applet
+	- build fixes
+	- Infadel2 theme cleanups (Hanspeter Roth)
+
+1.2.10pre10: 2003-08-01
+	- fixed icewmbg semtransparency support. icewmbg will no longer
+          exit when semitransparency is enabled
+	- major focus cleanups
+
+1.2.10pre9: 2003-07-30
+	- double buffering performance optimizations
+
+1.2.10pre8: 2003-07-27
+	- FIXED: taskbar tray location off by one pixel
+	- FIXED: rendering of icons on big-endian systems when 
+                 --enable-antialiasing
+
+1.2.10pre7: 2003-07-26
+	- FIXED: shaped windows when --enable-shaped-decorations
+	- FIXED: icewmbg prefs now added to default preferences file
+
+1.2.10pre6: 2003-07-25
+	- FIXED: theme local font path with Xft/fontconfig
+	- disabled movement of maximized windows offscreen (use shift to 
+          override)
+	- corefonts now enabled when Xft major version = 1
+
+1.2.10pre5: 2003-07-24
+	- FIXED: compile with --enable-corefonts
+	- FIXED: compile with Xft v1
+	- Dutch translation update by Reinout van Schouwen
+	- added internal border to taskbar
+
+1.2.10pre4: 2003-07-19
+	- FIXED: problem with --enable-shaped-decorations and 
+          full-screen windows (mplayer)
+	- Italian translation update by Yuri Bongiorno
+
+1.2.10pre3: 2003-07-13
+	- implement support for depth 1 window icons
+	- FIXED build with some compilers
+	- painting is now double buffered (TODO: optional) and faster
+	- Russian translation update (Anton B. Farygin)
+
+1.2.10pre2: 2003-07-05
+	- MAJOR CHANGE: the theme needs to be specified in the ~/.icewm/theme
+          file, like this: 
+              Theme=icedesert/default.theme
+	- Theme settings are now loaded before ~/.icewm/preferences
+	- FIXED network monitor crash with "pl" locale (Pawel Warowny)
+	- simplified tray icon option in window menu 
+	- Finnish translation update (Taisto Kuikka (taistok))
+
+1.2.10pre1: 2003-06-29
+	- MAJOR CHANGE: icewm background handling moved to icewmbg program
+	- fixes to gnome2 menu support (Nehal Mistry)
+	- FIXED: task bar auto hide with taskbar menus
+	- FIXED: some focusing problems with gtk2 (Owen Taylor, Bernhard Walle)
+	- code cleanups in font handling
+	- configuration file handling cleanup
+        	
+1.2.9: 2003-06-22
+ 	- added gnome2 menu support (Nehal Mistry)
+	- added missing netwm active window notification
+	- new option FocusRequestFlashTime
+	- fix problem with accented characters in the title bar
+	- fix aspect ratio on maximization
+	- fix gcc 3.3 build
+	- fix crash with a single workspace (oops!)
+	- Polish translation update (Arkadiusz Lipiec)
+	- documentation of using WINDOW_ROLE property in 
+          winoptions (Jo Valentine-Cooper)
+
+1.2.8: 2003-06-08
+	- various build/minor fixes
+	- new option enableAddressBar(=1)
+
+1.2.8pre3: 2003-06-03
+	- fix Alt+Tab window getting stuck under load
+	- menu mnemonics tweaks (Hanspeter Roth)
+	- add mnemonics to zh_TW.Big5.po (Benshark Chen)
+	- task bar layout tweaks
+	- Restrictions on command line argument parsing. 
+          Only -o, -o ARG or --option, --option=ARG forms
+          are accepted now, not any other combinations
+        - improvements for NETWM system tray (you must run 'icewmtray'
+          in background to support this)
+
+1.2.8pre2: 2003-05-18
+	- improved focus handling (alt+tab, window close, workspace switch)
+	- fix taskbar issues from pre1
+ 	- GNOME 2 workspace switcher applet (Adam James Fitzpatrick)
+	- renamed --with-gnome-menus to --enable-menus-gnome1
+	- cleanups in configurable keyboard bindings handling
+	- renamed modMetaIsCtrlAlt to modSuperIsCtrlAlt. Win95keys now 
+          enabled by default.
+
+1.2.8pre1: 2003-05-04
+	- fix: interaction between shaped windows and fullscreen (Owen Marshall)
+	- fix: posible crash on shutdown
+	- minor memory leak fixes
+	- fix handling of fullscreen windows with shaped 
+          window borders (Owen Marshall)
+	- convert zh_CN.gb2312.po to UTF-8 (zh_CN.po) - lark@lark.net.cn
+	- autodetect gnome/kde menu directories (Nehal Mistry)
+	- fixed address bar behavior in various configurations
+	- Hungarian translation update (Peter Somogyi)
+	- Xft2 doesn't require RENDER extension (Make Fabian)
+	- partial Korean translation (Hwang, Sang-Jin / Make Fabian)
+	- LDFLAGS fix (Robert Klein)
+	- fix problem with menufile items not having mnemonics (_)
+	- initial implementation of NETWM system tray
+
+1.2.7: 2003-03-08
+	- minor bug fixes
+
+1.2.7pre3: 2003-03-02
+	- new option QuickSwitchGroupWorkspaces (if
+          QuickSwitchToAllWorkspaces=1)
+        - Italian translation update
+	- more menu tweaks
+	- implement NetWM window type SPLASH
+	- ACPI status patch from Klaus Schneider
+	- Made Alt+<left,right mouse button> behave in more standard manner
+	- DoNotFocus window option added.
+
+1.2.7pre2: 2003-02-26
+	- Major improvement in percieved speed of menus
+	- Dutch translation by Ton Kersten
+	- add new options: ShowRun, ShowAbout, ShowWindowList,
+          ShowLogoutSubMenu, AllowFullscreen (Ton Kersten)
+	- support WM_WINDOW_ROLE, too
+	- fix detection of netwm hints for some apps
+	- fix AutoReloadMenus bug
+
+1.2.7pre1: 2003-02-23
+	- fix .order file handling for gnome menus (Thomas Zajic)
+	- changed default theme to icedesert (Nehal Mistry)
+	- fix crash in alt+tab when window closes
+	- rewrite icewm.spec.in Christian W. Zuckschwerdt (zany@triq.net)
+	- Belarussian translation by Hleb Valoska (el_globus@tut.by)
+	- tweaked character set (CODESET) detection
+	- 'Programs' menu is now invoked from menu file, not from the code
+	- fixed fonts in Infadel2 theme when Xft is used
+
+1.2.6: 2003-01-19
+	- Slovenian translation by Jernej Kovacic
+	- improve focus handling on non-xinerama multihead displays
+	- another submenu/icon handling fix for gnome menus (Thomas Zajic)
+	- added nonICCCMconfigureRequest window option workaround for 
+          non ICCCM compliant applications
+	- WINDOW_ROLE handling for winoptions (Stanislav Svirid)
+	- fix crash in mail status checker in pop/imap configuration
+	- implement startMinimized window option, similiar to startMaximized
+
+1.2.5: 2003-01-05
+	- fix lockup when doing operations through window list
+	- fix compile problem --with-xpm
+	- fix icesh.cc focus handling (by Todd R. Eigenschink)
+	- update workaround for some TK issues
+	- slow startup fix (caused by broken lazy menu loading)
+
+1.2.4: 2003-01-03
+	- fixed submenu/icon handling for gnome menus (Thomas Zajic)
+	- acpi optimization (Michal Ceresna)
+	- fix crash in "Tile ..."
+	- fix submenu deactivation problem (reported by Bernhard Walle)
+	- fix focus loss on xmms exit (reported by Bernhard Walle)
+	- fix problem with restarting the wm (when icewm-menu-gnome1 not
+          present)
+
+1.2.3: 2002-12-26
+	- IMPORTANT: system configuration directory changed to
+          /etc/icewm (from /etc/X11/icewm or /usr/local/etc/X11/icewm).
+          icewm now installs it's data files in /usr/local/share/icewm.
+        - added --disable-winmenu and --disable-taskbar configure options
+	- bug fixes in menu code
+	- fixed lockup when running under session manager (GNOME2)
+
+1.2.3pre2: 2002-12-15
+	- support for Xinerama
+	- rewritten RPM packaging
+	- new "menuprog" statement in menu files for reading a submenu
+          from a pipe
+	- Italian translation update
+	- moved gnome menu support into an external utility (icewm-menu-gnome1)
+          (used trough "menuprog", requires gnome 1.x)
+	- added keybinding for showing the window list menu (KeySysWinListMenu)
+
+1.2.3pre1: 2002-10-20 + soon
+        - some small fixes for the swedish translation (tucker)
+	- new APM/ACPI monitor code by Michal Ceresna (cemi)
+        - Norwegian translation by Petter Johan Olsen
+        - the Address Bar in the taskbar now works even without 
+          TaskBarDoubleHeight (Ctrl+Alt+Space)
+        - new APM/ACPI battery monitoring code
+        - rewritten the work area implementation (doNotCover should 
+          now work much better)
+        - new "preferences" setting: focusOnAppRaise - focus the window when 
+          application requests to raise it
+        - cleaned up the icewmbg implementation (TODO: config file for it)
+        - fixed the Reboot vs Shutdown issue
+        - Alt+Left Button drag now used for window move and 
+          resize (no more Ctrl+Alt)
+        - fixed configure option: --enable-depend now used for make depend
+
+1.2.2: 2002-09-06
+	- fixed icewm.spec file for building RPMs
+	- fixed CHANGES file
+
+1.2.1: 2002-08-31
+	- TaskBar and root menu is no longer disabled under Gnome (adjust 
+          your ~/.icewm/preferences manually: ShowTaskBar=0; UseRootButtons=0)
+        - feature: partial support of the Enhanced Window Manager 
+                   Specification (NETWM) needed for GNOME2 and KDE3
+                   compliance
+flux    - feature: scriptable menus (as found in WindowMaker)
+        - feature: execute "startup" or "restart" script found in resource 
+	    	   path ($ICEWM_HOME, $ETCDIR, $LIBDIR) after initialization
+        - bugfix: added --help switch to icewm, allow GNU stylish 
+                  long options
+        - feature: the directory for user preferences can be selected by
+                   the ICEWM_PRIVCFG variable now (default still is and will
+                   forever be ~/.icewm, but think about the beauty of
+                   setting ICEWM_PRIVCFG to "$HOME/.etc/icewm"...)
+        - bugfix/feature: menu parser is case-insensitive now
+        - bugfix/feature: normal users won't need GNU make anymore
+	- cleanup of lib/.../*.xpm by Andrey Smagin 
+	- FocusChangesWorkspace option by Daniel Pittman -- determines
+          if a new window open on another workspace switches to that
+          workspace
+        - PointerRaiseDelay focusing fix by Thomas Linder
+	- bugfix: enable menu items in window list popup only when appropriate
+          (closes bug 217168)
+	- change the ppp status applet to decrease the scale when the
+          troughput goes down.
+	- feature: improved icesh's worth by adding support for window classes
+        - ui-change: added fullscreen window menu action; changed default key
+          binding for hide, rollup and undoArrange action
+	- added startMaximized{,Vert,Horz} winoptions
+	- initial UrgencyHint implementation
+	- added "menufile" statement for menu files
+	- configure script defaults changed: imlib, i18n, nls are now default
+
+1.2.0: 2002-06-30
+	- Czech translation by Jan Horak
+	- Lithuanian translation updated (Martynas Jocius)
+
+1.2.0pre3: 2002-06-12
+	- updated configure platform coverage
+        - really fix --with-guievents / compile w/ ESD
+        - several memory leaks fixed
+
+1.2.0pre2: 2002-05-26
+	- bugfix: TaskBarDoubleHeight has incorrect layout
+	- workaround: doNotCover option removed from default winoptions
+                      (seems to have problems with GKrellM)
+	- bugfix: --with-guievents; esd compile fix
+
+1.2.0pre1: 2002-05-12
+	- bugfix: fix syntax error when HAVE_BASENAME is defined
+	          (under cygwin for example)
+	- bugfix: updated Catalan translation (thanks Toni Cunyat i Alario)
+	- bugfix: updated config.guess in order to allow autodetection of more
+		  recent architectures
+	- bugfix: the network load indicator field `transferred' overflew
+		  when > 2Go. Now make use of 64 bits value for the network
+		  load (See: bugs.debian.org/118728, thanks Eduard Bloch)
+	- bugfix: fix for sefault when TrayDrawBevel=1 (thanks Julien Lemoine)
+	- bugfix: fix for a window position which marches up the screen, 
+                  noticeable when launching Galeon and Xchat (thanks 
+                  Julien Lemoine)
+	- bugfix: fix display of taskbar(in hide mode)
+	- bugfix: fix logout problem (in icewm-lite)
+	- bugfix: height and width problem in maximized mode 
+	          (difference of 2 pixels)
+	- bugfix: fix problem with xawdecode (in fullscreen mode)
+	- bugfix: POP3 mailcheck breaks with some server (Thanks Rob Funk)
+	- feature: new translation: Simplified Chinese (Thanks Li Wei Jih)
+        - bugfix: crash when handling the application icons
+        - bugfix: layout taskbar to the edge of the window
+        - several options have been deprecated. Look for warning messages
+          on the console at startup
+        - bugfix: memory leak in hasColormap (needs performance tweak)
+        - bugfix: close extra file handles before running apps
+        - bugfix: force layer for dialogs above the parent window
+        - bugfix: fix handling of window gravitu
+        - bugfix: winoptions geometry option fixed
+        - bugfix: handling of win95 keys (XK_Super_L, XK_Super_R)
+        ...
+        
+
+1.0.9-2: 2001-10-09
+        - bugfix: show application supplied frame icons even if without
+          icon mask
+        - bugfix (for binary distribution): determinate the langinfo
+          codeset item id on runtime
+        - bugfix: remove icons from icon cache when destroyed
+        - bugfix/compatibility hack: fallback to linux.xpm when provided by
+          the current theme
+        - bugfix: window menu crashed when tray completely disabled
+        - bugfix: tray crashed when compiled without gradient support
+        - bugfix: #469081 Java cause IceWM to crash on mapping
+
+1.0.9: 2001-10-08
+        - bugfix: #209114 fixed?
+        - feature: new translations: Croatian (Vlatko Kosturjak),
+          Italian (Riccardo Murri), Lithuanian (Gediminas Paulauskas),
+          Polish (Przemyslaw Sulek), Romanian (Tiberiu Micu)
+	- bugfix: killed dangling WindowOptions::icon pointer in combineOptions
+	- bugfix: limitSize still was broken (Max Kirillov)
+        - bugfix/feature: ColorScrollBarInactiveArrow
+        - feature: continuous edge switching
+        - bugfix: colored edge switching cursors
+        - bugfix: COMPOUND_TEXT handling (Florin)
+        - feature: HorizontalEdgeSwitch and VerticalEdgeSwitch
+        - feature: LowerOnClickWhenRaised lower the active window when
+          clicked again
+        - bugfix: #445264 CenterMaximizedWindows=0 was broken
+	- bugfix: dynamic changing of client icons
+	- bugfix: reparenting (aka. swallowing) should work now
+	- bugfix: comments into config examples about discarding of changes
+	- bugfix/feature: massive I18N cleanup: fallback to C locale;
+		  proper dectection of multibyte mode; unicode conversion;
+		  clean, C++ stylish font handling; ...
+	- feature: added icesh - a command line window manager
+	- bugfix: mailbox monitor falls back to /var/spool/mail/$LOGIN
+		  when neither MailBoxPath nor $MAIL are set.
+	- bugfix: use argv[0] to build the themes menu
+	- enhanced "Starting icewm" section of INSTALL and added a section
+	  describing how to setup Xft
+	- experimental feature: antialiasing for icons and text;
+		  configure with --enable-antialiasing and --enable-xfreetype;
+		  --enable-antialiasing attempts to activate XFreeType support
+		  implicitly; use the XFreeType option to disable XFreeType
+		  support on runtime. Xnest (XFree86 4.1.0) crashes on startup 
+		  when Xnest is invisible - why? Are there other X servers
+		  with this problem?
+	- feature: allow to toggle between environment and root property
+		  base GNOME autodetection on compile time;
+		  configure with --with-gnome-root-property[=atom] and
+		  --without-gnome-root-property
+	- feature: menu item to toggle doNotCover flag;
+		  due some internas the window has to be sticky
+		  (allWorkspaces flag) to let this option take effect.
+	- feature: Move/Resize FX (experimental bloat);
+		  options: MoveSizeFXFontName (string),
+		  MoveSizeInterior, MoveSizeDimensionLines,
+		  MoveSizeGaugeLines, MoveSizeDimensionLabels,
+		  MoveSizeGeometryLabels (bitmasks);
+		  configure with --enable-movesize-fx;
+		  problem: Expose problems in other windows with opaque
+		  	   mode. Need to grab XServer. Better solutions?
+	- feature: TitleBarHorzOffset/TitleBarVertOffset
+	- feature: TimeFormatAlt option (Jan Krupa)
+	- feature: icon tray (Jan Krupa)
+		  options: TaskBarShowTray, TrayDrawBevel, TrayShowAllWindows
+		  window option: tray (Ignore: no icon on tray (default);
+		    Minimized: icon on tray and if not minimized also
+		    on task pane; Exclusive: icon on tray only (and not on 
+		    task pane))
+	- bugfix: renamed START_PIXMAP from linux.xpm to icewm.xpm
+	- bugfix: #427048 compatibility issues in Makefile.in
+	- bugfix: #424194 ellipsis for long labels on mini icons
+	- feature: pixmap for workspace buttons: create a "workspace"
+		  subdirectory and name your workspaces accordingly to the
+		  pixmaps in this directory
+	- feature: allow transparent menu selection (ColorActiveMenuItem="")
+	- feature/bugfix: support taskbar/taskbutton* pixmap for all 
+		  pixmap looks (not only gtk)
+	- feature/bugfix: corner pixmap can have another size than specified
+		  by CornerSizeX/Y now
+	- feature: more specific widget setup
+		 (pixmaps: buttonI.xpm, buttonA.xpm, listbg.xpm, dialogbg.xpm, 
+		    taskbar/toolbuttonbg.xpm, taskbar/workspacebuttonbg.xpm
+		    taskbar/workspacebuttonactive.xpm;
+		  colors: ColorToolButton, ColorToolButtonText, 
+		    ColorActiveWorkspaceButton, ColorActiveWorkspaceButtonText,
+		    ColorNormalWorkspaceButton, ColorNormalWorkspaceButtonText;
+		  fonts: ToolButtonFontName, ActiveWorkspaceFontName,
+		    NormalWorkspaceFontName)
+	- experimental feature: gradient support
+		  the option "Gradients" lists the pixmaps to scale;
+		  titlebar gradients can be adjusted with
+		  TitleBarJoinLeft and TitleBarJoinRight;
+		  configure with --enable-gradients
+	- feature: transparent applets (clock, net/cpu status):
+		  use an empty string for their background/idle color
+	- bugfix/feature: DisableImlibCaches
+	- bugfix: reduce warnings with Intel's C++ compiler for Linux
+	- feature DesktopTransparencyColor/Image: fast, but memory consuming
+		  static effects for semi-transparent windows -- I love it
+	- better[?] colormap detection (at least for AIX)
+	- experimental feature: shaped decorations, nonoptimal performance;
+		  option: ShapesProtectClientWindow;
+		  configure with --enable-shaped-decorations
+ 	- optional (and experimental) feature: /proc/wm-session support
+		 (mainly useful for X-PDAs, details in README.wm-session)
+	- feature: mouse wheel support for menus, holding shift increases
+		  velocity by factor 2.5 (should UseMouseWheel be respected?)
+	- bugfix/feature: support for runonce hotkeys
+	- feature: show all icons in quickswitch and more. new options:
+		  QuickSwitchShowIcons, QuickSwitchTextFirst,
+		  QuickSwitchSmallWindow, QuickSwitchHugeIcon, 
+		  QuickSwitchFillSelection, QuickSwitch{Horz,Vert,Icon}Margin, 
+		  QuickSwitchIconBorder, QuickSwitchSeparatorHeight,
+		  ColorQuickSwitchActive (inspired by Andrew Oliver´s and 
+		  Marius Gedminas´s patches #400421 and #400635)
+	- feature: added support for menusep.xpm, menusel.xpm pixmap to 
+		  improve themes using menubg.xpm
+	- bugfix: provide consistence behaviour in resource priority for
+		  absolutely and relatively specified themes
+		 (reported by Helmut Pitters)
+	- feature: new keybindings: KeySysCascade, KeySysArrange,
+		KeySysTileVertical, KeySysTileHorizontal, KeySysUndoArrange
+    		KeySysArrangeIcons, KeySysMinimizeAll, KeySysHideAll
+		 (inspired by Liav Asseraf)
+	- bugfix: #420404 "minimize all" in windowListPopup
+	- bugfix: #420404 superfluous separator for empty menu files
+	- feature: ShowGNOMEAppsMenu, ShowGNOMEUserMenu, ShowKDEMenu
+		 (inspired by Liav Asseraf, Chmouel Boudjnah)
+	- feature: improved net status tooltip, multiline tooltips
+		 (inspired by Marius Gedminas)
+	- bugfix: ctrl-double click resets net monitor graph (Marius Gedminas)
+	- feature: additional keys to move/resize windows
+		 (use combinations of shift and ctrl to speed up,
+		  KP_Begin (5 on keypad) to center) (#400633: Marius Gedminas)
+	- feature: multiple mailbox and network monitors
+	- feature: added mkbuilddir.sh
+	- feature: MailClassHint, ClockClassHint, CPUStatusClassHint
+		   NetStatusClassHint and default values
+	- feature: TaskBarLaunchOnSingleClick command
+
+1.0.8-6: 2001-05-07
+	- bugfix: #419977 icewm-default-1.0.8-5 used invalid --prefix
+
+1.0.8-5: 2001-04-26
+	- bugfix: improved gettext detection
+	- bugfix: Win95Keys=0 caused undeterminated key grabbing
+	- bugfix: #418469 TitleBarCentered compatibility hack
+	- bugfix: improved detection of libesd
+	- bugfix: #418719 help browser has no scroll bar in 1.0.8-4
+	- bugfix: #418383 need to log out twice
+	- bugfix: #418291 Alt+key doesn't work in 1.0.8-4
+		 (thank you KoRn3, for helping me to track it down)
+
+1.0.8-4: 2001-04-23
+	- bugfix: s/TitleButtons/TitleButtonsRight/ in win95/default.theme
+	- bugfix: #409500 Infadel2 theme failed to install
+	- bugfix: segfault in icehelp
+	- bugfix: usage screen for icehelp
+	- bugfix: cursor definitions of global themes (libdir, cfgdir)
+		  were ignored (Olivier Samyn)
+	- bugfix: #409622 duplicate themes not in their sections
+	- bugfix/feature: absolute paths for themes are allowed now
+	- bugfix: #407766 icewm 1.0.6 fails to compile (glibc 2.2 and AIX)
+	- bugfix: #410988 maximizing click failed randomly/
+		  #410971 keybindings not working randomly
+		 (thank you moss, for helping me to track it down)
+	- bugfix: #408519 fd leak on restart
+	- bugfix: #409804, #410954, #410959 doNotCover quirks
+	- feature: Hungarian messages (Czinege Tamas)
+	- feature: Catalan messages (Toni Cunyat i Alario)
+	- feature: ColorDisabledMenuItemShadow
+	- feature: improved autoscrolling of menus 
+	- feature: improved handling of the Penguin/Win_L/Win_R key
+	- feature: MenuMaximalWidth option
+	- feature: TitleBarCentered replaced by TitleBarJustify option
+	- bugfix: autotracking was broken for submenus
+	- feature: TaskBarShowWindowIcons option
+	- bugfix/feature: themeable scrollbars
+	- feature: ShowLogoutMenu option
+	- bugfix: attempt to fix globally active input mode
+		 (focus problems with Nautilus)
+	- feature:  option
+	- bugfix: when reading \xnn sequences very next char was ignored
+	- feature: DontRotateMenuPointer option (cteg, du nervst ;-))
+	- bugfix: consider horiz/vert border when moving maximized windows
+	- bugfix: item selection in window listbox (focusVisible)
+	- bugfix: dragging of scrollbars broken when modifiers were active
+	- bugfix: renamed "Infadel2/All Buttons.theme" to
+		"Infadel2/Overloaded.theme" (some shells do not like
+		"creative" file names containing space characters)
+
+1.0.7: 2001-03-13
+	- feature: consider horiz/vert border when maximizing (heiky, slow)
+	- feature/bugfix: taught the clock applet to respect the user's
+	           current locale (if compiled with I18N support)
+	- feature: native support of semitransparency (gkrellm, Eterm, aterm)
+	- bugfix:  respect user defined key bindings for window switching
+	- bugfix:  fixed a little show stopper in themes menu
+	- feature: colored mouse pointers (inspired by Oleastre)
+	- feature: simple online help (powered by Marko's icehelp)
+	- bugfix:  automatic resizing according to limited workarea
+	- feature: advanced ESound support in icesound (Ch. W. Zuckschwerdt)
+	- feature: YIFF support in icesound (Tara Malina)
+	- bugfix:  heavy code cleanup in icesound (Tara Malina)
+	- feature: add the theme directory to the X server's font path
+		   it contains a file named fonts.dir
+	- bugfix:  new URL decoder (for mailbox monitor) handling escaped
+		   characters
+	- bugfix:  accept Courier-IMAP's STATUS responses
+	- feature: support for IMAP subfolders
+	- bugfix:  documentation updates
+	- bugfix:  some bright parts of menus weren't themeable (white was
+		   used instead of a brighter version of the background color)
+	- bugfix:  improved handling of _WIN_WORKAREA property (allows
+		   applications like the GNOME panel to limit the workspace
+		   available for regular applications) (inspired by Coventive)
+	- feature: runonce keyword in menu, toolbar and keys files
+		   (inspired by Coventive)
+	- bugfix:  destruction of transient windows created dangling pointers
+		   (gnomermind bug)
+	- bugfix/feature: support for WIN_HINTS_DO_NOT_COVER (solves the
+		   trouble with opening drawers and the "Keep below
+		   windows" option of the GNOME Panel, LimitByDockLayer
+		   restores old behavior, added doNotCover winoption for
+		   applications like gkrellm)
+	- feature: TaskBarKeepBelow option
+	- bugfix:  icesound: GNUish usage screen, cleanup/conversion
+		   into C++, NLS support
+	- bugfix:  cleaned up library dependencies (a little bit)
+	- feature: two new titlebar pixmaps: title[JQ][AI].xpm, look into
+		   Infadel for reference
+	- feature: well, some people will smack me: Invadel2 as
+		   new default theme
+
+1.0.6: 2001-01-14
+	- feature: theme menus lists theme source
+	- feature: scaling of application supplied icons (Imlib only)
+	- feature: spanish translation (Antonio de la Torre)
+	- bugfix: "About" desktop menuentry for lite version
+	- bugfix: malformed "NOTE" comment generated by genpref
+	- bugfix: speparate build/install targets for icesound
+	- bugfix/feature: more flexible compile time path configration
+	- bugfix: ppp/net status on non linux/freebsd machines
+	- feature: zh_TW.Big5.po (originally by Li Wei Jih)
+	- bugfix: Proper handling of Shift-Motion in WinListBox
+	- feature: new .spec file building different incarnations of
+	  icewm from one .src.rpm file (Alexander Skwar)
+	- feature: distribution of window manager property file for GNOME
+	- feature: French messages (Frédéric Dubuy)
+	- feature: Finnish messages (Mika Leppänen)
+	- feature: shadows for titlebar texts (slow) - since too much 
+	  people couldn't wait for 1.0.7....
+
+1.0.5: 2000-12-12
+	- NLS support (Yoichi ASAI, Tomohiro Kubota,
+	  Mathias Hasselmann aka. tbf)
+	- workspace switch status (tbf)
+	- font guessing for non-latin1 fonts (Tomohiro Kubota)
+	- infinite ToolTipTime (Marius Gedminas)
+	- key to switch between current and previously active workspace
+	  (Marius Gedminas)
+	- improved handling of transient windows which's parent was
+	  minimized/hidden (Markus Marcek + tbf)
+	- improved GNOME menu handling (NLS, ordering, icons, toplevel
+	  menu) (tbf, inspired by oleastre)
+	- support for KDE menus (with GNOME libraries) (tbf, inspired
+	  by oleastre)
+	- minor icesound improvements (oleastre)
+	- external logout signal (kill -QUIT) (tbf)
+
+1.0.4: 2000-06-11
+	- minor fix for tcl/tk apps (please report any more tcl/tk again)
+	- fix -c option restart (tnx to Diego Zamboni)
+	- auto-detect multiByte (by 
+        - exit Start menu with Alt or Win/...
+
+1.0.3: 2000-03-19
+	- empty taskbar window title fix
+        - set pointer default for each toplevel window
+        - mwm hints tweaking
+        - multiple SIGHUP restart fix
+
+1.0.2: 2000-02-19:
+	- clock should not get stuck anymore
+        - improved handling of wrong MWM hints set by netscape
+        - fixed saving of rolled up window geometry
+        - use $LOGNAME if $USER not set
+        - APM & PPP status improvements
+
+1.0.1: 2000-01-13
+	- ToolTipTime didn't actually work :)
+        - fixed fontset loading problem
+        - i18n (build), MultiByte (config) now enabled by default.
+          If you use an 8-bit character set (most european users), be
+          sure to set $LC_CTYPE correctly (I use sl_SI.iso88592).
+
+1.0: 1999-12-26
+	- minor doc changes
+	- fix for overlap detection by Giuliano Pochini
+	- new option: ToolTipTime (time before tooltip is hidden)
+
+0.9.57: 1999-12-24
+	- fixed random lockup on signal handling if session manager used
+ 	- improved session restore
+ 
+0.9.55: 1999-12-23
+	- fixed restart crash if session manager used
+        - documentation updates
+        
+0.9.55: 1999-12-19
+	- support keys for switching to 12 workspaces
+        - fixes to depth button support
+        - signal handling cleanup
+        - fully fixed size limitations for large windows
+        - new option: MultiByte(=0)
+        - don't switch colormaps in TrueColor mode
+        - more tuning of menu activation
+        
+0.9.54: 1999-12-12
+	- added support for binding arbitrary programs to keys (keys config file)
+	- new option: AddressBarCommand (default none)
+        - improved menu heuristics (Mac like)
+        - new option: MenuActivateDelay (default 10ms)
+        - new option: SubmenuActivateDelay (default 300ms)
+        - new option: ReplayMenuCancelClick (default = 0)
+        - fix gnome pager rollup operation
+        - fixed shutdown and reboot in some situations
+        - fixed session information saving/loading (escape strings)
+        - clipboard (and selection paste) support in addressbar
+
+0.9.53: 1999-12-05
+        - new option CenterTransientsOnOwner (enabled by default)
+	- tooltip improvements
+        - Z-order raise lower button capability (see metal2 theme)
+        - fixed missing button press event replay when clicking outside menu
+
+0.9.52: 1999-11-23
+	- minor tweak of desktop switching code (please report any problems
+          with xawtv, exmh, gnomepager)
+	- default theme now warp3
+        - new options: CPUStatusCommand, NetStatusCommand
+        - fixed PPP status sent/receive colors
+        - portability fixes
+
+0.9.51: 1999-11-21
+	- new option for themes: TitleButtonsSupported (default=xmis)
+        - detect old kstat on Solaris (pre 2.6)
+        - fixed mailbox checking code not to beep on (re)start
+        - new options: confirmLogout, shutdownCommand, rebootCommand
+        - fixed ClientWindowMouseActions (now enabled by default)
+        - support for multiple .theme files in a directory
+        - fixed Move operation in window menu
+        - fixed xawtv again (please report)
+        - new window option: ignorePositionHint to ignore 
+          program specified position hint
+        - fixed arrange of windows on inactive workspaces (from window list)
+        
+0.9.50: 1999/11/13
+	- new option: SmartPlacement=1
+	- new option: TitleBarCentered=0 (pixmapped themes require 4 new title
+pixmaps (titleAS, titleAP, titleIS, titleIP) to support centering
+	- draw ... (ellipsis) in taskbar and titlebar when string too long
+	- configure check for -fpermissive (always uses it for now)
+	- network status now checks if the device is up
+	- fixed drawing of CPU load graph
+	- new option "ShowThemesMenu"
+	- fixed SnapTo to snap to smaller windows too
+	- arrange/cascade/hide/minimize in taskbar and window list implemented
+
+0.9.49: 1999/10/06
+   	- option ClientWindowMouseActions=0 as a workaround for some
+          broken programs (xfm, ...)
+        - --with-gnome-menus is no longer the default (not needed for pure
+          gnome operation)
+        - mailbox pixmaps now have transparency set to make themes look better
+        - fixed stuff to make Solaris CC work (please report)
+        - some fixes to pass -c option when restarting self
+        - improved manual placement with pointer outside window
+        - fixed QuickSwitchToHidden=0
+
+0.9.48: 1999/08/23
+	- new option: TaskBarShowAPMStatus 
+
+0.9.47: 1999/08/22
+	- fixed crash when TaskBarShowWorkspaces=0
+        - changed the look of conditional cascade submenu indicator
+        - APM status (for people with laptops)
+        - CPU status support for Solaris
+        - some warning fixes (need more)
+	- the default configuration file has most things 
+          commented out by default (builtin defaults are the same).
+
+0.9.46: 1999/08/13
+	- fixed clock drawing when AM/PM used.
+        - clock tooltip now updated dynamically
+        - improved mailbox mail handling
+        - mailbox now counts mail again
+        - Ctrl+Alt+Button1 now moves the window (will be configurable later)
+        - Shift+Click on close button now activates Kill Client operation
+        - Rollup->Rolldown tooltip fix.
+
+0.9.45: 1999/08/12
+	- configuration in /etc/X11/icewm works again
+        - fixed the unsigned char madness
+        - fixed net device tooltip
+        - removed generation of different preferences files when GNOME defined
+        - new option: QuickSwitchToHidden
+        - mailCheckDelay default fixed
+        - fixed Desktop and TitleBar button configuration
+        - fixed window menu for current workspace
+
+0.9.44: 1999/08/11
+	- fixes to make it compile
+        - fix start failure when mailbox misconfigured
+
+0.9.43: 1999/08/11
+	- added workarounds for some applications to default 'winoptions' file
+        - fixed bug that caused shaped windows to blink while being moved
+        - fixed Alt+Tab window when not invoked with Alt+Tab :)
+        - fixed handling of GraphicsExpose during scrolling
+        - pop3/imap support for mail checker
+        - new option: AutoDetectGNOME (disables taskbar, desktop handling)
+           GNOME detection is currently based on SESSION_MANAGER env variable
+        - new option: TaskBarShowWindows
+        - renamed option: TaskBarShowPPPStatus -> TaskBarShowNetStatus
+        - new option: ShowMenuButtonIcon
+        - new options:
+           - DesktopWinMenuButton
+           - DesktopWinListButton
+           - DesktopMenuButton
+           - TitleBarMaximizeButton
+           - TitleBarRollupButton
+        - new option: NewMailCommand
+        - new option: MailCheckDelay
+        - Linux: rewritten PPP status to use /proc/net/dev
+        - new option: NetworkStatusDevice
+        - new options for CPU status colors
+        - SnapMove now works during window movement, not just after
+        - support for Super, Hyper modifiers in keybindings
+
+0.9.42: 1999/06/15:
+        - fixes to configure
+	- fixed some focusing problems
+        - some new netscape icons added
+        - fixes to shell command execution (no longer crashes on restart wm)
+        - improvement in shaped windows handling
+        - allow relative pathname in background image specification
+        - made window stacking not interfere with DND icons
+        - fix: minimize action in window list is no longer a toggle
+        - detect both Alt_L and Alt_R keysf for Alt modifier.
+        - configure event coalescing is now done to improve performance
+
+0.9.41: 1999/05/24:
+	- fixed compilation of keyboard configuration
+        - fixed minimized shaped windows with MinimizeToDesktop=1
+        - eliminate duplicate themes in the menu
+        - fix for client window button grab
+
+0.9.40: 1999/05/22
+	- autoconf support contributed by Pavel Roskin
+        - fixed some focus problems
+        - fixed infinite loop when reading menu files
+        - fixed QuickSwitchToAllWorkspaces option
+        
+0.9.39: 1999/05/16
+	- fix MWM hints support on alpha
+        - two settings are changed when --with-gnome is used
+          - desktop background setting is disabled
+          - root window buttons are left for gnome
+          the default preferences generated differently
+        - imlib icon loading improvement? (scaling)
+        - do not search for icon in current directory (found executable sometimes)
+        - focus fix on Ctrl+Alt+Delete cancel
+        - Ctrl+Alt click accesses root menus even with GNOME.
+        - implemented .geometry option for 'winoptions'
+        - unclosable windows no longer stop shutdown
+        - fix for session save when no ~/.icewm directory (also creates directory)
+        - fixed possible crash when accessing window list from taskbar
+        
+0.9.38: 1999/05/02
+	- More pixmap theme support contributed by chister backstrom.
+          See his theme "Natural" for an example.
+        - Cleaned up menu command handling.
+        - Complete rewrite of program menu handling.
+        - Fixed menus not to ignore keyboard when menu is empty.
+        - If (GNOME) session manager is running, shutdown will now use it.
+        - Support saving all window positions on session save
+          (make sure $HOME/.icewm directory exists).
+        - SIGHUP now restarts icewm.
+        - When menu has multiple identical mnemonics, you can now cycle
+          between them. (Program menus now have mnemonics).
+        - Restart option in C+A+Del dialog.
+        - Scrollbars now handle DND scrolling.
+        
+0.9.37: 1999/04/06
+	- documentation updates
+        - fixed parser bug that caused startup problems with commas
+        - fixed crash if there is no maximize button
+        - fixed rare race condition in window mapping
+        - faster startup with XInternAtoms
+        - handle WIN_AREA{_COUNT} - just to be compatible
+        - mailbox is now only counted before showing the tooltip
+        - scroll bar fixes
+
+0.9.36: 1999/03/24
+	- PPP status now disabled by default
+        - new option: AutoReloadMenus
+        - new option: FocusOnMapTransientsActive
+	- lower no longer ignores layers in some situations
+        - compile fixes for g++ 2.7.x
+        - some mem leak fixes
+        - bug fixes...
+
+0.9.35: 1999/03/18
+	- fixed 'genpref' to actually use 'WorkspaceNames' setting
+        - fixed? gqmpeg shape handling
+        - fixed sysmenu button configuration (TitleButtonsLeft='sx' works)
+        - changed gnome apps directory to gnome_datadir_file("gnome/apps").
+
+0.9.34: 1999/03/15
+	- new option: ButtonRaiseMask
+        - new option: TitleButtonsLeft,TitleButtonsRight
+        - new option: WorkspaceNames (list)
+        - new option: TerminalCommand (=xterm)
+        - removed: TitleButtons, AddWorkspace
+        - new option: ShowPopupMenusAbovePointer (=1)
+        - some focus fixes
+        - fixes for rollup,hide title buttons updating
+        - all menu files now dynamically reload
+        - fixed taskbar update when last window minimized
+        - selection/painting fixes in list box
+        - color matching fixes
+
+0.9.33: 1999/02/04
+	- fix mailbox status not updating count if mailbox empty
+        - changed display in pppstatus.cc
+        - initial scrollbar update in window list now fixed
+        - fixed crash in popup menus
+
+0.9.32: 1999/02/02
+	- complete restructuring of source code (less dependencies, faster builds)
+        - fixed some problems with keybindings
+        - horizontal scrollbar for window list
+        - 'make dist' did not build html documentation
+
+0.9.31: 1999/01/31
+	- fix possible crash on dialog close (happened only in ccmalloc)
+        - configurable keyboard bindings (optional, enabled)
+        - new options: ModMetaIsCtrlAlt=1
+        - windows list now hides scrollbar if not needed
+        - fixed focusing problems when switching from empty workspace
+        - Alt+Shift+Tab now handles minimized windows correctly
+        - fixes in taskbar initialization
+
+0.9.30: 1999/01/25
+	- normal size of maximized windows remembered across restarts
+	- reduced colors in gimp icon
+        - removed ShowXButton option
+        - new option: TitleButtons="xmi"
+        - new option: QuickSwitchToAllWorkspaces=0,1
+        - ICCCM compliant window placement
+        - new options: LimitSize, LimitPosition=0,1
+        - new option: TaskBarShowPPPStatus
+        - new options: ColorInvisibleTaskBarApp{Text}
+        - new options: ColorInput{Selection}{Text}
+        - rollup and hide title buttons for some themes
+        - fixes in modifier mapping
+        - Alt+Tab now remembers key codes for Alt modifier.
+        - nicer focus indicator for buttons
+        - cleanups/fixes in window managing/mapping
+        - color palette optimizations
+        - minor shaped window performance improvement
+        - cleanup/unification of auto-scroll
+        - snapTo handles screen edges better
+        - fix for small scrollbars
+        - fix 3d border in win95 titlebar buttons
+        - tab-focus cleanup
+        - consistent handling of 0x0 windows
+
+0.9.29: 1999/01/15
+	- fresh supply of maximize buttons :)
+        - fixes in modifier detection (hardcode mod1=alt even more :)
+        - logout/kill confirmation dialogs
+        - menu autoscroll
+        
+0.9.28: 1999/01/11
+	- --with-xlocale option (default = without)
+        - fixed --with-i18n compile
+        - font fallback fixes
+        - timer optimization
+        - passFirstClickToClient=1 should now work on taskbar too
+        - improved sizeHints handling when no MWM hints set
+        - fix for GNOME compatible _WIN_STATE
+        - support for (ICON.xpm mini/ICON.xpm naming convention (kde?))
+        - try to keep larger part of the pulldown menus on screen
+        - tuneup of the conditional cascade submenus
+        - menus have less spacing between items
+        - window list now centers below chord (root window, titlebar)
+        - Ctrl+Esc will show start menu even if disabled on task bar
+
+0.9.27:
+	- preferences file now autogenerated (with comments)
+        - contributed debian.xpm now uses less colors
+        - motif theme now has X-close button
+        - mailbox status now has icon for no-mail state too.
+        - UseRootButtons option (bitmask) Unused root buttons will be left
+          to other applications (for GNOME)
+        - implemented LogoutCommand and LogoutCancelCommand settings
+        - Ctrl+Alt+R/Win+R runs RunCommand if configured
+        - Autoscrolling in window list.
+        - Clicking on menu item with conditional cascade submenu hides the
+          submenu if visible instead of activating the item.
+        - Conditional cascade item/submenu now behaves just like normal if
+          Control key is held.
+        - Strings now implement some C escaping rules (\n,\t,\xXX).
+        - Scrollbar now has auto-repeat.
+        
+0.9.26:
+	- possible fix for race condition where mouse grab could get stuck
+	- about dialog no longer stays in window list
+
+0.9.25:
+	- fixed launching gnome desktop files
+	- About dialog displaying author and theme info
+
+0.9.24:
+	- GNOME integration fixes
+	- improved handling of SM die,shutdown cancelled callbacks
+
+0.9.23:
+	- Contributed themes are now available separately.
+	- EdgeResistance now back to 32, set it to 10000 to make it infinite.
+        - Tile Horiz/Vert+Undo now available from taskbar and window list.
+        - TaskBar clock should now display day/month names without cutting off
+        - detach executed programs from the tty, open /dev/null as stdin
+        - Logout - send WM_DELETE_WINDOW to all windows and exit after all close
+        - SnapTo: try screen edge first, then other windows
+        - Fix z-order of popup menus when new window opens
+        - Frame painting in Motif,Warp3 no longer blinks.
+
+0.9.22:
+        - window move code changes: added snapTo option, can disable by
+          pressing Ctrl while moving, will not allow move off screen unless
+          Ctrl pressed, to disable this, set EdgeResistance for now (send mail
+          if your really dislike) 
+        - now default EdgeResistance=0 (disabled)
+        - new option: SnapMove=0,1 (enabled by default)
+        - new option: SnapDistance=8
+        - switch workspaces by moving mouse to left/right screen edge
+        - new option: EdgeSwitch=0,1 (default disabled)
+        - new option: EdgeSwitchDelay=600
+        - fixed emacs minimize when MinimizeToDesktop=1
+        - GNOME panel now correctly negotiates workarea when horizontal (see FAQ)
+        - window no longer blinks when moved to new workspace with
+          C+A+S+Left/Right,...
+        - improved window list resizing
+        - new option: DesktopBackgroundCenter
+        - focus now correctly reverts when Alt+F4 pressed
+        - minimized/rollup windows no longer negotiate workarea
+        - Alt+Tab should no longer get stuck (send mail if ever does!)
+        - fixes in root window key handling
+
+0.9.21:
+	- crash on startup when TaskBarAutoHide=1
+	- Alt+Button1Click on titlebar did not lower window
+	- new option: GrabRootWindow=1 - when set to 0 does not grab mouse
+          events for the root window
+
+0.9.20:
+	- TaskBar clock now shows GMT time with ctrl+click (ctrl + mouse-enter
+          for the tooltip.
+        - Taskbar was not updated on Move To command.
+        - Rollup did not correctly reset focus.
+        - Better selection of window to switch to on close (skip unfocusable)
+        - Ctrl+Enter in address bar did not run the shell
+        - Frame buttons do not get focus frames painted around them.
+        - Alt+Tab now shows target frame again.
+        - TaskBar now uses non-resizable frame
+        - Fixed default theme selection.
+        - new option: StrongMouseFocus (default =0)
+        - Alt+Tab should no longer get stuck on occasion.
+        - Taskbar on auto-hide should no longer determine work-area.
+        - Better detection if window can be raised.
+        - Frame menu is now correctly updated with valid options before show.
+        - Fixed too much window flashing on WM restart.
+      
+0.9.19:
+	- new option: TaskBarMailboxStatusCountMessages (default=0)
+	- fixed emacs rollup problem
+	- memory usage reduction by using smaller replicated pixmaps
+        - windows with allWorkspaces winoption set would not start iconized
+
+0.9.18:
+	- new theme: Wigren by Per Wigren <wigren@mail.org>
+        - changed gtk theme to gtk2 (removed metal frame style)
+        - changed WIN_HINTS support to be compatible with latest GNOME (cvs)
+          it will not work with gnome 0.30 (no complaints to me, please)
+        - Alt+Tab crash now really fixed, I hope :)
+        - pixmaps for window frames/titlebars will no replicated at
+          loading. This speeds things up a lot when drawing. Also updated most
+          themes to take advantage of this.
+        
+0.9.17:
+	- updated win31 theme (by Pavel Roskin)
+        - non-resizeable window now hide the resizing border unless
+          requested by MWM hints.
+        - if theme pixmaps for border/titlebar are missing drawing will
+          be done using normal routines
+
+0.9.16:
+	- fvwm theme now installed, too. :)
+        - config fix to use gcc to link and avoid dependency on libstdc++
+        - pointerFocus only activates if mouse actually moves
+	- New theme: TechnologicEnvy by Mike L Kesl <mlkesl@usa.net>
+	- fixed painting of non-resizing-border
+
+0.9.15:
+	- Alt+Tab no longer crashes on empty desktop
+        - Fixed crash in desktop background pixmap loading
+        - Frame border decoration hint was sometimes ignored
+        - Added compatibility kludge for GNOME 0.30 wmpager
+        - Fixed compilation problem for sound events
+        - Taskbar now supports Xdnd v3: bug with workspace switching still unresolved
+        - New: Workspace switching with Ctrl+Alt+[1-9]
+        - New theme: fvwm by Thomas Kaehn <dn10970@dialup.soco.de>
+        
+0.9.14:
+        - new option: QuickSwitchToMinimized - determines if Alt+Tab will
+          cycle trough minimized windows.
+        - fixes in menu generation
+        - display message count as mailbox indicator tooltip
+        - fixes in root menu click handling (chord/click)
+	- fixes (hacks) in modifier autodetect
+        - new options: DesktopBackgroundColor, DesktopBackgroundImage
+        - fixed window positioning on restart for certain window geometries
+        - new theme: aesthetech by "Daniel Richard G." <straker@MIT.EDU>
+
+0.9.13:
+	- The license has changed from GPL to LGPL. There is no library
+          yet, but there will be (someday).
+	- Lots of work on modularity.
+	- Initial support for Xdnd drag drop in the taskbar. You can drag
+          things over the taskbar window icons and the windows will raise.
+	  You can also switch to another workspace by dragging over the 
+          workspace switching buttons.
+	- Fixed 'restart wmaker' problem (again).
+        - Fixes for WarpPointer=1
+        - Alt+Tab now includes minimized windows.
+        - If any titlebar pixmaps are missing, they will be skipped when
+          tiling across the titlebar. If there is only title?B.xpm for the
+          titlebar pixmaps it will be tiled across the entire titlebar.
+	- New settings: DelayPointerFocus=0,1; PointerFocusDelay=x (ms)
+        - Mouse Wheel support (UseMouseWheel=0,1 option)
+            Meta/Ctrl+Alt+wheel can be used to switch between windows.
+        - New theme: BluePlastic by Xavier Bourvellec (slowleon@yahoo.com)
+        - New settings: ClickMotionDelay, delay before even one pixel motion
+          is interpreted as a drag. See also ClickMotionDistance
+        - Experimental support for GNOME menus/imlib icons.
+        - New config program.
+        - Option TaskBarDoubleHeight=0,1
+
+0.9.12:
+	- Task bar did not auto hide when program was run from it :-)
+	- Event grab lock up when clicking both buttons in titlebar menu button.
+	- Fix for WIN_ICONS property.
+	- Windows minimized to desktop were on activated on mouse enter 
+          when in PointerFocus mode.
+
+0.9.11:
+        - Unminimizing the window would not set X focus properly.
+	- Added options AutoRaise and AutoRaiseDelay.
+	- Added options TaskBarAutoHide and AutoHideDelay.
+	- Documentation updates.
+
+0.9.10:
+	- Windows in other layers were not correctly focused on close/switch.
+	- Renamed settings: (old ones will still work for some time)
+		ShowTaskBarClock -> TaskBarShowClock
+		ShowMailBoxStatus -> TaskBarShowMailboxStatus
+		PrettyClock -> TaskBarClockLeds
+		
+	- New settings: TaskBarShowStartMenu, TaskBarShowWindowListMenu.
+	- Bluegold theme updated/renamed to BlueIce (default and light theme)
+	- New theme: Jaywalk by Roef Ragas <rragas@xs4all.nl>
+		
+0.9.9:
+	- NumLock should now be properly ignored for keybindings.
+	- When modal window is closed, it's parent should properly get focus.
+
+0.9.8:
+	- fixed color configuration for pressed buttons.
+        - taskBarShowAllWindows=1 did not activate windows on other
+          workspaces correctly (minimized them instead).
+        - iconized windows were not correctly configurable by clients
+        - new theme "monte-carlo" by: Josef "Jupp" Schugt (jupp@gmx.de)
+
+0.9.7:
+	- added more color/font settings for buttons, minimized window icons
+        - fixes for SGI CC
+        - minimized windows do not appear at the same place anymore (needs
+          tuning)
+
+0.9.6:
+	- upon restart, all WM_STATE hints were reset to WithdrawnState, oops!
+        - major fixes for handling window state. behaves much better when
+          minimizeToDesktop=1, but this is still not completed
+
+0.9.5:
+	- removed debug message for select
+	- fixed painting of conditional cascade indicator in gtk look
+        - fixed icon/pixmap searching. {icons,taskbar,ledclock,mailbox} pixmaps
+          are now searched in themes too.
+        - Added 'bluegold' (hi-color) theme by: Andras Wappel <t1000@freemail.c3.hu>
+        - Added 'metal-big' theme by: Straker Skunk <straker@mit.edu>
+        - Set layer command added to window menu.
+	- Rollup focus fix by: Kevin Brown <kevin@sysexperts.com>
+
+0.9.4:
+	- Hidden windows were not hidden after restart (taskbar).
+	- Reimplemented menu painting. Improvements in Gtk and Metal look.
+0.9.3:
+	- Rollup function did not hide client window
+	- workaround for JDK1.1.5(6?) bug? with reusing windows, when 
+          doing setResizable(false)
+	- bug fixes.
+
+0.9.2:
+	- Restore function did not work.
+        - SM registration was not entirely correct.
+        - A start at Gtk look/theme. Currently only menus are gtk lookalike.
+          A good theme for frame borders would be appreciated (I just copied
+          Metal for now).
+
+0.9.1: 
+	- Initial Session Management support. (only register with the SM).
+	- windows without titlebars now can't be rolled up
+	- some of the WM functionality is now exposed using properties/
+          hints. See WinMgr.h (the spec is not finalized, please comment).
+	- KWM_WIN_ICONS is supported. See WinMgr.h for more extensible
+          solution. Icewm only uses 16x16 and 32x32 icons at this time.
+	- lots of internal changes wrt. workspaces/layers/states. Things
+          like focus/... are still slightly broken. Please report even
+	  the smallest problems (compared to 0.8.16).
+	- winoptions "workspace" and "layer" options now work.
+	- removed fShade (replaced by fRollup in 0.8.16) window option
+	- ... (lots)
+
+0.8.16:
+	- TaskBarShowAllWindows=1 it did not do so after restart
+	- opaqueMove/Resize=0 left border on screen when Esc pressed
+	- Some dialogs in Mathematica incorrectly forced to height=1 pixel
+        - Fix windowlist Show menu option not to focus selected windows
+0.8.15:
+	- fixed wrong handling of transient windows (could sometimes crash)
+	- taskbar now correctly repaints when there is no WM_ICON_NAME set.
+	- window repositioning fixed (xv,java works ok now)
+	- window now loses maximized state if app resizes it
+0.8.14:
+	- Fixed random crashing problem when (un)mapping windows.
+        - Metal theme fixes.
+	- Fixed shaped windows with no titlebar.
+	- Fix MoveToWorkspace to update taskbar correctly.
+	- Memory leak fixes.
+0.8.13:
+	- Bug fixes.
+	- ManualPlacement setting (probably needs tuning)
+0.8.12:
+	- Conditional cascades now used for window list submenus.
+	- Fixed Alt+Tab after workspace was switched.
+	- Normal modal dialogs now keep focus from their owners.
+	- Mouse handling improvements for task bar icons.
+	- ICCCM positioning fixes (too bad ICCCM specifies policy here :-()
+	- Clock mostly reimplemented. Now more customizable.
+	- Tooltips appear in some places.
+	- Simplification of multi-workspace concept. Now only single 
+	  workspace for window and sticky windows.
+	- Mail,Clock,Lock can now be configured to actually run programs.
+
+0.8.11:
+	- Alt+Space is not used by wm, use Shift+Esc instead
+	- Ctrl+Esc shows start menu, Ctrl+Shift+Esc shows window list
+        - Ctrl+Alt+Delete now supports some navigation keys
+        - -t can be used on the command line to specify a theme
+        - PgUp/Dn now work in the window list
+        - Crash with accelx fixed.
+        - Some mnemonics fixed in menus.
+        - Refresh command is now builtin.
+        
+
+0.8.10:
+	- windows would not be raised from taskbar when RaiseOnFocus was 0
+	- added 'restart' for 'menu' file. Use like this:
+          restart "Label" icon window-manager options
+        - you can now define a new look using pixmaps.
+          This is not complete yet. There is a sample win31-like look.
+
+0.8.9:
+	- apps using Globally Active Input could not get focus (fixed?)
+	- Delete,Shift+F10 in window list added.
+	- some memory leak fixes
+
+0.8.8:
+	- added window list (Ctrl+Esc)
+	- added some themes capability
+
+0.8.7:
+	- added setting
+		showTaskBarClock
+		showMailBoxStatus
+		mailBoxPath
+
+0.8.6:
+	- now uses ~/.icewm/ directory for settings. 
+	
+          configuration files have been renamed:
+	    system.icewmrc, .icewmrc -> preferences
+	    system.icewm-menu, .icewm-menu -> menu
+
+          new configuration file: winoptions
+
+	- implemented option: EdgeResistance <0-10000>
+
+	- configurable window options:
+		- icon             set to icon_name
+
+            all boolean options:  set to 0 or 1
+            
+		- onTop
+		- allWorkspaces
+		- ignoreWinList
+		- ignoreTaskBar
+                - fullKeys
+
+              window functions
+		- fMove
+                - fResize
+                - fClose
+                - fMinimize
+                - fMaximize
+                - fHide
+                - fShade
+
+              window decorations
+                - dTitleBar
+                - dSysMenu
+                - dBorder
+                - dResize
+                - dClose
+                - dMinimize
+                - dMaximize
+                - dHide

@@ -1,0 +1,165 @@
+=pod
+
+=head2 NAME
+
+ icewm-session - X.Org session manager provider with IceWM
+
+=head2 SYNOPSIS
+
+B<icewm-session> [I<OPTIONS>]
+
+=head2 DESCRIPTION
+
+icewm-session is an implementation of a X.Org session manager and can be
+run from a X11 session setup. It runs B<icewm> as default window manager
+and controls the life cycle of related support applications.
+
+=head2 OPTIONS
+
+=head2 SPECIFIC OPTIONS
+
+=over
+
+=item B<-c>, B<--config=FILE>
+
+Let IceWM load preferences from I<FILE>.
+
+=item B<-t>, B<--theme=FILE>
+
+Let IceWM load the theme I<FILE>.
+
+=item B<-i>, B<--icewm=FILE>
+
+Use I<FILE> as the IceWM window manager.
+
+=item B<-o>, B<--output=FILE>
+
+Redirect all output to I<FILE>.
+
+=item B<-a>, B<--alpha>
+
+Use a 32-bit visual for translucency.
+
+=item B<-b>, B<--nobg>
+
+Do not start icewmbg.
+
+=item B<-n>, B<--notray>
+
+Do not start icewmtray.
+This is only applicable if IceWM was explicitly configured
+to use an external icewmtray process.
+
+=item B<-s>, B<--sound>
+
+Also start icesound.
+
+=back
+
+=head2 GENERAL OPTIONS
+
+=over
+
+=item B<-d>, B<--display>=I<DISPLAY>
+
+Use I<DISPLAY> to connect to the X server.
+If this option is missing then I<DISPLAY>
+is read from the environment variable C<DISPLAY>.
+
+=item B<--sync>
+
+Use a slower synchronous mode communication with the I<X11> server.
+
+=item B<-h>, B<--help>
+
+Give a list of all supported options and exit.
+
+=item B<-V>, B<--version>
+
+Print the program version and exit.
+
+=item B<-C>, B<--copying>
+
+Print copying permissions and exit.
+
+=back
+
+=head2 DEBUGGING OPTIONS
+
+=over
+
+=item B<-v>, B<---valgrind>
+
+Let C</usr/bin/valgrind> run icewm.
+Thoroughly examines the execution of icewm.
+
+=item B<-g>, B<---catchsegv>
+
+Let C</usr/bin/catchsegv> run icewm.
+Gives a backtrace if icewm segfaults.
+
+=back
+
+=head2 USAGE
+
+On startup icewm-session executes the following steps.
+From the file F<env> in the configuration directory
+it loads additional environment variables, if that file exists.
+Then it will start F<icewmbg> to manage root background colors and images.
+It may also start F<icesound>, if this was enabled at configuration time.
+Then F<icewm> is started.
+
+If there exists an executable script F<startup> in the configuration
+directory, it will be executed. It may contain commands to initialize X11
+settings with F<xset>, load keyboard configuration, start a compositing
+manager like F<compton> and load system tray applications.
+
+When icewm exits, icewm-session will execute a F<shutdown> script,
+if it exists in the configuration directory.
+When this finishes, icewm-session will terminate icewm, icewmbg
+and icesound. Finally, icewm-session will exit.
+
+If the icewm process crashes then icewm-session will attempt to restart
+it. If two such crashes occur in a short period, then icewm-session will
+attempt to popup a dialog using either F<yad>, F<xmessage>, F<kdialog>
+or F<zenity>.  This dialog presents a choice between restarting icewm,
+starting a terminal, or abort execution of icewm-session.
+
+=head2 ENVIRONMENT
+
+=over
+
+=item B<ICEWM_OPTIONS>
+
+A space separated list of options which will be added to the command
+line invocation of F<icewm>. This can be set in the F<env> file.
+
+=back
+
+=head2 SEE ALSO
+
+L<icewm(1)>,
+L<icewm-env(5)>,
+L<icewm-shutdown(5)>,
+L<icewm-startup(5)>,
+L<icewmbg(1)>.
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

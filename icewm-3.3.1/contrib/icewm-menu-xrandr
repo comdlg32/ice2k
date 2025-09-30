@@ -1,0 +1,509 @@
+#!/usr/bin/perl
+#
+# Print menu lines with commands to enable some popular monitor
+# configurations or activate the selected combo.
+#
+# Copyright (c) 2017-2022 Eduard Bloch
+# License: Simplified BSD License
+#
+
+use strict;
+use warnings;
+
+use Getopt::Long qw(:config no_ignore_case bundling auto_help);
+
+#print("# WHAT: ".join(" ", @ARGV));
+
+# helper: (h, v, rate)
+my $prim;
+my @connected;
+my %active;
+my @postcmd;
+
+# development switches. Debug value of 1 is creating output with
+# commented hints, 2 and above dump unformatted extra stuff into output
+my $debug=0;
+# Testing the --activate option without actually executing it
+my $dry_run;
+
+my $xrandr = "xrandr";
+
+# monitor name mapping, either from cache or built from EDID info later
+my %realname;
+
+# main calculation collection
+my @actionMap;
+
+my $activate;
+my $auto_num = 0;
+
+sub parse_arguments
+{
+    my $bad_max;
+    GetOptions("xrandr=s" => \$xrandr,
+            "max"   => \$bad_max,
+            "debug:i"  => \$debug,
+            "activate=s" => \$activate,
+            "dry-run" => \$dry_run,
+            "auto-number" => \$auto_num)
+        or die("Error in command line arguments\n");
+
+    print "# Deprecated option --max, see --help or the manual page for alternatives.\n" if $bad_max;
+
+    if($debug)
+    {
+        eval "use Data::Dumper";
+        eval "use Diagnostics";
+        eval "use warnings FATAL => 'all'";
+    }
+}
+
+sub get_contents
+{
+    my $filename = shift;
+    open my $fh, '<', $filename or return "";
+    my $data = do { local $/; <$fh> };
+    return $data;
+}
+
+print "Running $0\n" if $debug > 1;
+
+my @cfiledata;
+
+$xrandr.=" --verbose";
+
+# Input: blob, start of the string data
+sub strip_tfield
+{
+    my $name = substr($_[0], $_[1], 13);
+    print "heh: $name\n" if $debug > 4;
+    $name=~s/^\W.*//;
+    $name=~s/(\r|\n|\0).*//;
+    $name=~s/\W$//;
+    print "Decoded: $name\n" if $debug > 2;
+    return $name;
+}
+
+sub load_ini
+{
+    my $cfname = "xrandr_menu";
+    foreach ($ENV{XDG_CONFIG_HOME} ? "$ENV{XDG_CONFIG_HOME}/icewm/$cfname" : undef, "$ENV{HOME}/.icewm/$cfname")
+    {
+        next if !$_;
+        print ("# Ini-Check: $_\n") if $debug;
+        next if ! -r $_;
+        my $fd;
+        my %cfg;
+        if (open($fd, "<$_"))
+        {
+            {
+                my %cfg=( "sectype" => "main");
+                push(@cfiledata, \%cfg);
+            }
+
+            for (<$fd>)
+            {
+                s/^\s+//;
+                next if /^\s*#/;
+                s/#.*//;
+                s/\s+$//;
+                chomp;
+                print "# C: $_\n" if $debug > 3;
+                if (/^\[\s*(\w+)(\s+(\w+))?/)
+                {
+                    my %cfg=();
+                    push(@cfiledata, \%cfg);
+                    $cfg{sectype} = $1;
+                    $cfg{"match-name"} = $3 if $3;
+                }
+                elsif(/^(\w\S+)\s*=\s*(\S.*)/)
+                {
+                    my $key = $1;
+                    my $val = $2;
+                    $val=~s/^"(.*)"$/$1/;
+                    my $xr = $cfiledata[-1];
+                    $$xr{$key} = $val;
+                }
+            }
+        }
+        print Dumper(@cfiledata) if $debug > 1;
+        # config was found
+        last;
+    }
+}
+
+sub parse_edid
+{
+    my ($hexblob, $curmon) = @_;
+    my $name = "";
+    my $blob=pack("H*", $hexblob);
+    print "Parsing monitor data for $curmon from $hexblob\n" if $debug > 2;
+  	if ($debug > 4) { my $foo; open($foo,"|hexdump -C"); print $foo $blob; }
+    foreach my $fpos (0..3)
+    {
+        $fpos = 57+$fpos*18;
+        my $cv = substr($blob, $fpos,1);
+        $cv = ord($cv);
+        print "tcode at $fpos: $cv\n" if $debug > 3;
+        if ($cv == 252) # full user description, prefer this
+        {
+            $name = strip_tfield($blob, $fpos + 2);
+            last;
+        }
+  		# the alternative to Display Name descriptor is a set of
+  		# description words (Vendor, Type name, etc.)
+        if ($cv == 254)
+        {
+            my $word = strip_tfield($blob, $fpos + 2);
+            if (length($name) + length($word) < 31)
+            {
+                $name.=" " if $name;
+                $name.=$word;
+            }
+        }
+    }
+    if ($name)
+    {
+        $name.="%PRIMFLAG";
+        $realname{$curmon} = $name.'~'.$curmon;
+        print "Found: $name\n" if $debug > 2;
+    }
+}
+
+sub match_output
+{
+    my $output = shift;
+    my @ret = ();
+    for my $xr (@cfiledata)
+    {
+        next unless ($$xr{"sectype"} eq "main" || $$xr{"sectype"} eq "output");
+
+        my $fil = $$xr{"match-name"};
+        if (defined($fil))
+        {
+            if ($fil =~ /^\/(.*)\/$/)
+            {
+                next unless $output =~ /$1/;
+            }
+            else
+            {
+                next unless $fil eq $output;
+            }
+        }
+        $fil = $$xr{"match-label"};
+        if (defined($fil))
+        {
+            my $label = $realname{$output};
+            if ($fil =~ /^\/(.*)\/$/)
+            {
+                next unless $label =~ /$1/;
+            }
+            else
+            {
+                next unless $fil eq $label;
+            }
+        }
+        push(@ret, $xr);
+    }
+    return @ret;
+}
+
+sub pick_for_output
+{
+    my ($iface, $key) = @_;
+    my $ret;
+    for my $xr (match_output($iface))
+    {
+        my $xro = $$xr{$key};
+        next unless defined($xro);
+        $ret = $xro;
+    }
+    return $ret;
+}
+
+#
+# Select a specified assignment for all combos which match the specified
+# label.
+#
+sub pick_for_combo
+{
+    my $combo = shift;
+    my $key = shift;
+    my $val;
+    for my $xr (@cfiledata)
+    {
+        next unless ($$xr{"sectype"} eq "main" || $$xr{"sectype"} eq "combo");
+        my $fil = ($$xr{"match-name"} or $$xr{"match-label"});
+        if (defined($fil))
+        {
+            if ($fil =~ /^\/(.*)\/$/)
+            {
+                next unless $combo =~ /$1/;
+            }
+            else
+            {
+                next unless $fil eq $combo;
+            }
+        }
+        $val = ($$xr{$key} or $val);
+    }
+    return $val;
+}
+
+sub fmtMode
+{
+    return (pick_for_output(shift, "options") or "--auto");
+}
+
+sub fmtOutputMode
+{
+    my $iface = shift;
+    return "--output $iface ".fmtMode($iface);
+}
+
+sub read_xrandr
+{
+    my @curres;
+    my $currentEdid;
+    my $curmon;
+    my $disabled;
+    for(@_)
+    {
+        print "# DBG: $_" if $debug > 4;
+        my $resFound =/(\d+x\d+\++\d)/;
+        if(/^(\w\S*)\s+(connected|disconnected)\s+(primary)?/)
+        {
+# parse state helper var
+            $curmon = $1;
+            $prim = $curmon if $3;
+# print "# heh? $1 - $2 - $3 - $4\n";
+# disconnected and also no active resolution set!
+            $disabled = ($2 eq "disconnected") && !$resFound;
+            if($disabled)
+            {
+#$turnRestOff.=" --display $curmon --off";
+            }
+            else
+            {
+                push(@connected, $curmon);
+            }
+        }
+
+        # consider active only when there is a flag in the resolution list...
+        $active{$curmon} = (/^\s.*\*current/ && !$disabled) if $curmon;
+
+        if (defined($currentEdid)) {
+            if (/:/) # now analyze and stop merging
+            {
+                parse_edid($currentEdid, $curmon);
+                undef $currentEdid;
+            }
+            else {
+                /(\w+)/;
+                $currentEdid .= $1;
+            }
+        }
+        elsif (/EDID:/) {
+            $currentEdid = "";
+        }
+    }
+
+    parse_edid($currentEdid, $curmon) if $currentEdid;
+}
+
+sub relabel_outputs
+{
+    for my $output (@connected)
+    {
+        my $newLabel = pick_for_output($output, "label");
+        next unless $newLabel;
+        $newLabel=~s/%OUTPUT/$output/g;
+        my $oldLabel = $realname{$output};
+        $newLabel=~s/%LABEL/$oldLabel/g if defined($oldLabel);
+        $realname{$output} = $newLabel;
+    }
+}
+
+sub eval_output
+{
+    my $l = shift;
+    my $r = shift;
+# that is always first and there is only one primary
+    return -333 if ($l eq $prim);
+    return 333 if ($r eq $prim);
+    my $ar = $active{$r} or 0;
+    my $al = $active{$l} or 0;
+    return $ar <=> $al if $al != $ar;
+# both are equally active or not active, then use output name
+    return ($l cmp $r);
+}
+
+sub sort_monitors
+{
+# order the connected list, so that it starts with the active monitors,
+# and among those the primary should be on the first place
+	@connected = sort { eval_output($a, $b) } @connected;
+}
+
+sub ajoin { return join(' ', grep {length($_)} @_); }
+
+sub format_last_off
+{
+    my $start = shift;
+    my $xlast = $#connected;
+    return "" if $start > $xlast;
+    return ajoin(map { "--output '$_' --off" } @connected[$start..$xlast]);
+}
+
+sub nameOf
+{
+    my $id = shift;
+    my $getsPrimary = shift;
+
+    if(exists $realname{$id})
+    {
+        $id = $realname{$id};
+    }
+    else
+    {
+# old workaround for sysfs <-> xrandr mapping
+#        # uber-clever xrandr hides the bustype prefix if the name is unambiguous but the kernel doesn't, so try to find the real name there
+#        foreach ("A", "D", "I") {
+#            my $altName = $id;
+#            return $realname{$altName} if ($altName =~ s/-(\d)/-A-$1/ && exists $realname{$altName});
+#        }
+    }
+    my $flag = $getsPrimary ? "*" : "";
+    $id =~ s/%PRIMFLAG/$flag/g;
+    return $id;
+}
+
+sub loc
+{
+    my $forced = pick_for_output(shift, "posopt");
+    return defined($forced) ? ($forced) : @_;
+}
+
+sub add_conf
+{
+    my ($showname, $icon, $cmd, $postCmdHint) = @_;
+    #	push(@actionMap, [ mini_hash($cmd), $showname, $icon, $cmd ]);
+    my @cmdHints = $postCmdHint ? @{$postCmdHint} : ($prim);
+    my $newPrim = $cmdHints[0];
+    my %dedup;
+    my @xcmds;
+    for my $involved (@cmdHints)
+    {
+        print "# affected: $involved\n" if $debug;
+        my $mocmd = pick_for_output($involved, "postcmd");
+        next unless defined($mocmd);
+        $mocmd=~s/%OUTPUT/$involved/g;
+        next if $dedup{$mocmd}++;
+        push(@xcmds, $mocmd);
+    }
+    my $cocmd = pick_for_combo($showname, "postcmd");
+    push(@xcmds, $cocmd) if ($cocmd && 0 == $dedup{$cocmd});
+    push(@xcmds, "icesh restart") if ($cfiledata[0]{"restart-on-primary-change"} && $newPrim && $newPrim ne $prim);
+
+    if (@xcmds)
+    {
+        $cmd = "sh -c '$xrandr ".join(" ; ", ($cmd, @xcmds))."'";
+    }
+    else
+    {
+        $cmd = "$xrandr $cmd";
+    }
+
+    push(@actionMap, [
+        #reserved
+        undef,
+        $showname, $icon, $cmd ]);
+}
+
+sub run
+{
+    my $rof = "--right-of";
+    my $lof = "--left-of";
+    my $priFlag = "--primary";
+
+    parse_arguments;
+    read_xrandr `$xrandr`;
+    sort_monitors;
+    load_ini;
+    relabel_outputs;
+
+    # XXX: the handling of future parameters is a mess, redundant flag passing for primary, multiple lookups from
+    # config for the same target. It should better be calculated in objects.
+
+    foreach my $mon (@connected)
+    {
+        my @parms = map { "--output $_ ".($_ eq $mon ?  fmtMode($mon)." $priFlag" : "--off") } @connected;
+        add_conf(nameOf($mon), "setscreen".(1+int(@actionMap)), ajoin( @parms), [$mon]);
+    }
+
+    if (@connected > 1)
+    {
+        my $killRest = format_last_off(2);
+        my $sec = $connected[1];
+        add_conf(nameOf($prim, 1)." + ".nameOf($sec), "setscreen12",
+            ajoin(fmtOutputMode($prim), $priFlag, loc($prim), fmtOutputMode($sec), loc($sec, $rof, $prim), $killRest),
+            [$prim, $sec]
+        );
+        add_conf(nameOf($sec)." + ".nameOf($prim, 1), "setscreen21",
+            ajoin(fmtOutputMode($sec), loc($sec), fmtOutputMode($prim), $priFlag, loc($prim, $lof, $sec), $killRest),
+            [$prim, $sec]);
+        add_conf(nameOf($prim)." + ".nameOf($sec, 1), "setscreen12x",
+            ajoin(fmtOutputMode($prim), loc($prim), fmtOutputMode($sec), $priFlag, loc($sec, $rof, $prim), $killRest),
+            [$sec, $prim]
+        );
+        add_conf(nameOf($sec, 1)." + ".nameOf($prim), "setscreen21x",
+            ajoin(fmtOutputMode($prim), loc($prim), fmtOutputMode($sec), $priFlag, loc($sec, $lof, $prim), $killRest),
+            [$sec, $prim]);
+        add_conf(join(" / ", map { nameOf($_) } @connected), "display",
+            ajoin(map { fmtOutputMode($_)." --pos 0x0" } @connected));
+        # one pair is covered above, for 3 and more, let's find something creative
+        if (@connected > 2)
+        {
+            my $cmd;
+            my $last;
+            foreach(@connected)
+            {
+                $cmd .= ' ' if $cmd;
+                $cmd .= fmtOutputMode($_).($last ? " $rof $last" : "");
+                $last = $_;
+            }
+            add_conf(join(" ++ ", map { nameOf($_) } @connected), "display", $cmd, [undef, @connected]);
+        }
+    }
+
+    print Dumper(@actionMap) if $debug > 1;
+
+    if ($activate)
+    {
+        for my $p (@actionMap)
+        {
+            my @el = @{$p};
+            next if $activate ne $el[1];
+            my $cmd = "$xrandr $el[3]";
+            print "# Would run: $cmd\n" if $dry_run;
+            exit($dry_run ? 0 : system("sh", "-c", $cmd));
+        }
+        print STDERR "Unknown selection: $activate\n";
+        exit(42);
+    }
+    else
+    {
+        for my $p (@actionMap)
+        {
+            my @el = @{$p};
+            my $name = $el[1];
+            my $icon = $el[2];
+            $name = $auto_num++ .": ".$name if $auto_num;
+            print "prog '$name' $icon $el[3]\n";
+        }
+    }
+}
+
+run;
+
+# vim: set ai sw=4 ts=4 tw=72 et nocin spell spelllang=en_ca:

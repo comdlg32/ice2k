@@ -1,0 +1,1850 @@
+=pod
+
+=head2 NAME
+
+ icewm-preferences - icewm preferences configuration file
+
+=head2 SYNOPSIS
+
+ $ICEWM_PRIVCFG/preferences
+ $XDG_CONFIG_HOME/icewm/preferences
+ $HOME/.icewm/preferences
+ /etc/icewm/preferences
+ /usr/share/icewm/preferences
+
+=head2 DESCRIPTION
+
+Contains general settings like paths, colors and fonts, but also options
+to control the B<icewm> focus behaviour and the applets which are
+started in the task bar.  The B<icewm> installation will provide a
+default F<preferences> file, which can be copied to the B<icewm> user
+configuration directory and modified.
+
+=head2 FORMAT
+
+=head2 FOCUS AND BEHAVIOR
+
+The following preferences affect focus and general behavior of
+L<icewm(1)>:
+
+=over
+
+=item B<Alpha>=0
+
+Use a 32-bit visual for alpha blending
+
+=item B<Synchronize>=0
+
+Synchronize X11 for debugging (slow)
+
+=item B<LogEvents>=0
+
+Enable event logging for debugging
+
+=item B<Splash>=""
+
+Splash image on startup (IceWM.jpg)
+
+=item B<Trace>=""
+
+Enable tracing for the given list of modules.
+Modules which are traceable include B<conf, font, icon, prog, systray>.
+
+=item B<ClickToFocus>=1
+
+Focus windows by clicking in them.
+
+=item B<FocusOnAppRaise>=0
+
+Focus windows when applications request that they be raised.
+
+=item B<RequestFocusOnAppRaise>=1
+
+Request focus (flashing in taskbar) when application requests raise.
+
+=item B<RaiseOnFocus>=1
+
+Raise windows when focused.
+
+=item B<FocusOnClickClient>=1
+
+Focus window when client area clicked.
+
+=item B<RaiseOnClickClient>=1
+
+Raise window when client area clicked.
+
+=item B<RaiseOnClickTitleBar>=1
+
+Raise window when title bar is clicked.
+
+=item B<RaiseOnClickButton>=1
+
+Raise window when frame button is clicked.
+
+=item B<RaiseOnClickFrame>=1
+
+Raise window when frame border is clicked.
+
+=item B<LowerOnClickWhenRaised>=0
+
+Lower the active window when clicked again.
+
+=item B<PassFirstClickToClient>=1
+
+Pass focusing click on client area to client.
+
+=item B<FocusChangesWorkspace>=0
+
+Change to the workspace of newly focused windows.
+
+=item B<FocusCurrentWorkspace>=0
+
+Move newly focused windows to current workspace.
+
+=item B<FocusOnMap>=1
+
+Focus normal window when initially mapped.
+
+=item B<FocusOnMapTransient>=0
+
+Focus dialog window when initially mapped.
+
+=item B<FocusOnMapTransientActive>=1
+
+Focus dialog window when initially mapped only if parent frame focused.
+
+=item B<MapInactiveOnTop>=1
+
+Put new windows on top even if not focusing them.
+
+=item B<PointerColormap>=1
+
+Colormap focus follows pointer.
+
+=item B<DontRotateMenuPointer>=1
+
+Don't rotate the cursor for popup menus.
+
+=item B<LimitSize>=1
+
+Limit size of windows to screen.
+
+=item B<LimitPosition>=1
+
+Limit position of windows to screen.
+
+=item B<LimitByDockLayer>=0
+
+Let the Dock layer limit the workspace (incompatible with GNOME Panel).
+
+=item B<ConsiderHBorder>=0
+
+Consider border frames when maximizing horizontally.
+
+=item B<ConsiderVBorder>=0
+
+Consider border frames when maximizing vertically.
+
+=item B<ConsiderSizeHintsMaximized>=1
+
+Consider XSizeHints if frame is maximized.
+Turning this off allows the titlebar to cover the width of the screen.
+
+=item B<CenterMaximizedWindows>=0
+
+Center maximized windows which can't fit the screen (like terminals).
+
+=item B<HideBordersMaximized>=0
+
+Hide window borders if window is maximized.
+
+=item B<SizeMaximized>=0
+
+Maximized windows can be resized.
+
+=item B<ShowMoveSizeStatus>=1
+
+Show position status window during move/resize.
+
+=item B<ShowWorkspaceStatus>=1
+
+Show name of current workspace while switching.
+
+=item B<MinimizeToDesktop>=0
+
+Display mini-icons on desktop for minimized windows.
+
+=item B<MiniIconsPlaceHorizontal>=0
+
+Place the mini-icons horizontal instead of vertical.
+
+=item B<MiniIconsRightToLeft>=0
+
+Place new mini-icons from right to left.
+
+=item B<MiniIconsBottomToTop>=0
+
+Place new mini-icons from bottom to top.
+
+=item B<StrongPointerFocus>=0
+
+Always maintain focus under mouse window (makes some keyboard support
+non-functional or unreliable.
+
+=item B<OpaqueMove>=1
+
+Opaque window move.
+
+=item B<OpaqueResize>=1
+
+Opaque window resize.
+
+=item B<ManualPlacement>=0
+
+Windows initially placed manually by user.
+
+=item B<SmartPlacement>=1
+
+Smart window placement (minimal overlap).
+
+=item B<HideTitleBarWhenMaximized>=0
+
+Hide title bar when maximized.
+
+=item B<CenterLarge>=0
+
+Center large windows.
+
+=item B<CenterTransientsOnOwner>=1
+
+Center dialogs on owner window.
+
+=item B<MenuMouseTracking>=0
+
+Menus track mouse even with no mouse buttons held.
+
+=item B<AutoRaise>=0
+
+Raise windows when the mouse pointer enters, after a delay of
+I<AutoRaiseDelay> milliseconds.  Note that C<RaiseOnFocus=1>
+may interfere.
+
+=item B<DelayPointerFocus>=1
+
+Delay pointer focusing when mouse moves.
+
+=item B<Win95Keys>=1
+
+Support the Windows/Super key modifier to activate special functions.
+The left Super key toggles the Start menu, while the right Super key
+toggles the Window list window.
+
+=item B<ModSuperIsCtrlAlt>=0
+
+Treat the Super/Win key modifier as a synonym for the Ctrl+Alt modifier
+combination. The default key bindings have many occurrences of Ctrl+Alt.
+If you enable this, then the Super modifier is an alternative way to
+activate them.
+
+=item B<UseMouseWheel>=0
+
+Support mouse wheel. When pressing Ctrl+Alt rotating the mouse wheel
+on the root window will cycle the focus over the windows.
+
+=item B<TaskBarTaskGrouping>=0
+
+Group applications with the same class name under a single task button.
+0 disables it, 1 shows the number of windows, 2 shows bread crumbs,
+3 shows a number + bread crumbs.
+
+=item B<ShowPopupsAbovePointer>=0
+
+Show popup menus above mouse pointer.
+
+=item B<ReplayMenuCancelClick>=0
+
+Send the clicks outside menus to target window.
+
+=item B<ClientWindowMouseActions>=1
+
+Allow mouse actions on client windows (buggy with some programs).
+
+=item B<GrabRootWindow>=1
+
+Manage root window (EXPERIMENTAL - normally enabled!).
+
+=item B<SnapMove>=1
+
+Snap to nearest screen edge/window when moving windows.
+
+=item B<SnapDistance>=8  [0-64]
+
+Distance in pixels before windows snap together.
+
+=item B<ArrangeWindowsOnScreenSizeChange>=1
+
+Automatically arrange windows when screen size changes.
+
+=item B<AllowFullscreen>=1
+
+Allow to switch a window to fullscreen.
+
+=item B<FullscreenUseAllMonitors>=0
+
+Span over all available screens if window goes into fullscreen.
+
+=item B<MsgBoxDefaultAction>=0  [0-1]
+
+Preselect to Cancel (0) or the OK (1) button in message boxes.
+
+=item B<NetWorkAreaBehaviour>=0  [0-2]
+
+NET_WORKAREA behaviour: 0 (single/multi-monitor with STRUT information,
+like metacity), 1 (always full desktop), 2 (single monitor with STRUT,
+multi-monitor without STRUT).
+
+=back
+
+=head2 QUICK SWITCH
+
+=over
+
+=item B<QuickSwitch>=1
+
+Enable Alt+Tab window switching.
+
+=item B<QuickSwitchToMinimized>=1
+
+Enable Alt+Tab to minimized windows.
+
+=item B<QuickSwitchToHidden>=1
+
+Enable Alt+Tab to hidden windows.
+
+=item B<QuickSwitchToUrgent>=1
+
+Prioritize Alt+Tab to urgent windows.
+
+=item B<QuickSwitchToAllWorkspaces>=0
+
+Include windows from all workspaces in Alt+Tab.
+
+=item B<QuickSwitchGroupWorkspaces>=1
+
+Group windows by workspace together in Alt+Tab.
+
+=item B<QuickSwitchPersistence>=0
+
+Time in seconds to remember the state of Alt+Tab.
+
+=item B<QuickSwitchRaiseCandidate>=0
+
+Raise a selected window while Alt+Tabbing in the QuickSwitch.
+
+=item B<QuickSwitchAllIcons>=1
+
+Show all reachable icons when quick switching.
+
+=item B<QuickSwitchTextFirst>=0
+
+Show the window title above (all reachable) icons.
+
+=item B<QuickSwitchSmallWindow>=0
+
+Create a smaller QuickSwitch window of 1/3 screen width.
+
+=item B<QuickSwitchMaxWidth>=0
+
+Go trough all window titles and choose width of the longest one.
+
+=item B<QuickSwitchVertical>=1
+
+Place the icons and titles vertical instead of horizontal.
+
+=item B<QuickSwitchHugeIcon>=0
+
+Show the huge (48x48) of the window icon for the active window.
+
+=item B<QuickSwitchFillSelection>=0
+
+Fill the rectangle highlighting the current icon.
+
+=back
+
+=head2 EDGE SWITCHING
+
+=over
+
+=item B<EdgeSwitch>=0
+
+Workspace switches by moving mouse to left/right screen edge.
+
+=item B<HorizontalEdgeSwitch>=0
+
+Workspace switches by moving mouse to left/right screen edge.
+
+=item B<VerticalEdgeSwitch>=0
+
+Workspace switches by moving mouse to top/bottom screen edge.
+
+=item B<ContinuousEdgeSwitch>=1
+
+Workspace switches continuously when moving mouse to screen edge.
+
+=item B<EdgeResistance>=32  [0-10000]
+
+Resistance in pixels when trying to move windows off the screen (10000 =
+infinite).
+
+=back
+
+=head2 TASK BAR
+
+The following preferences affect the L<icewm(1)> task bar:
+
+=over
+
+=item B<ShowTaskBar>=1
+
+Show task bar.
+
+=item B<TaskBarAtTop>=0
+
+Task bar at top of the screen.
+
+=item B<TaskBarKeepBelow>=0
+
+Keep the task bar below regular windows.
+
+=item B<TaskBarAutoHide>=0
+
+Auto hide task bar after delay.
+
+=item B<TaskBarFullscreenAutoShow>=1
+
+Auto show task bar when fullscreen window active.
+
+=item B<TaskBarShowClock>=1
+
+Show clock on task bar.
+
+=item B<TaskBarShowAPMStatus>=0
+
+Show battery status monitor on task bar.
+
+=item B<TaskBarShowAPMAuto>=1
+
+Enable TaskBarShowAPMStatus if a battery is present.
+
+=item B<TaskBarShowAPMTime>=1
+
+Show battery status on task bar in time-format
+
+=item B<TaskBarShowAPMGraph>=1
+
+Show battery status in graph mode.
+
+=item B<TaskBarShowMailboxStatus>=1
+
+Show mailbox status on task bar.
+
+=item B<TaskBarMailboxStatusBeepOnNewMail>=0
+
+Beep when new mail arrives.
+
+=item B<TaskBarMailboxStatusCountMessages>=0
+
+Count messages in mailbox.
+
+=item B<TaskBarShowWorkspaces>=1
+
+Show workspace switching buttons on task bar.
+
+=item B<TaskBarShowWindows>=1
+
+Show windows on the taskbar.
+
+=item B<TaskBarShowShowDesktopButton>=1
+
+Show 'show desktop' button on taskbar. If set to 2, it will move the icon to the right side, after the clock.
+
+=item B<ShowEllipsis>=1
+
+Show Ellipsis in taskbar items.
+
+=item B<TaskBarShowTray>=1
+
+Show windows in the tray.
+
+=item B<TaskBarEnableSystemTray>=1
+
+Enable the system tray in the taskbar.
+
+=item B<TrayShowAllWindows>=1
+
+Show windows from all workspaces on tray.
+
+=item B<TaskBarShowTransientWindows>=1
+
+Show transient (dialogs, ...) windows on task bar.
+
+=item B<TaskBarShowAllWindows>=0
+
+Show windows from all workspaces on task bar.
+
+=item B<TaskBarShowWindowIcons>=1
+
+Show icons of windows on the task bar.
+
+=item B<TaskBarShowStartMenu>=1
+
+Show 'Start' menu on task bar.
+
+=item B<TaskBarShowWindowListMenu>=1
+
+Show 'window list' menu on task bar.
+
+=item B<TaskBarShowCPUStatus>=1
+
+Show CPU status on task bar (Linux & Solaris).
+
+=item B<CPUStatusShowRamUsage>=1
+
+Show RAM usage in CPU status tool tip.
+
+=item B<CPUStatusShowSwapUsage>=1
+
+Show swap usage in CPU status tool tip.
+
+=item B<CPUStatusShowAcpiTemp>=1
+
+Show ACPI temperature in CPU status tool tip.
+
+=item B<CPUStatusShowAcpiTempInGraph>=0
+
+Show ACPI temperature in CPU status bar.
+
+=item B<CPUStatusShowCpuFreq>=1
+
+Show CPU frequency in CPU status tool tip.
+
+=item B<NetStatusShowOnlyRunning>=0
+
+Show network status only for connected devices, such as an active ethernet link
+or associated wireless interface. If false, any network interface that has been
+brought up will be displayed.
+
+=item B<TaskBarShowMEMStatus>=1
+
+Show memory usage status on task bar (Linux only).
+
+=item B<TaskBarShowNetStatus>=1
+
+Show network status on task bar (Linux only).
+
+=item B<TaskBarShowCollapseButton>=0
+
+Show a button to collapse the taskbar.
+
+=item B<TaskBarDoubleHeight>=0
+
+Use double-height task bar.
+
+=item B<TaskBarWorkspacesLeft>=1
+
+Place workspace pager on left, not right.
+
+=item B<TaskBarWorkspacesTop>=0
+
+Place workspace pager on top row when using dual-height taskbar.
+
+=item B<TaskBarWorkspacesLimit>=""
+
+Limit the number of taskbar workspaces buttons which are shown on the
+workspaces pane of the taskbar. If the numeric value has a C<p> suffix
+then the limitation is in pixels. A C<%> suffix limits by percentage of
+desktop width. By default a C<B> suffix is assumed for number of buttons.
+
+=item B<TaskBarUseMouseWheel>=1
+
+Enable mouse wheel cycling over workspaces and task buttons in taskbar.
+
+=item B<PagerShowPreview>=1
+
+Show a mini desktop preview on each workspace button.
+
+=item B<PagerShowWindowIcons>=1
+
+Draw window icons inside large enough preview windows on pager (if PagerShowPreview=1).
+
+=item B<PagerShowMinimized>=1
+
+Draw even minimized windows as unfilled rectangles (if PagerShowPreview=1).
+
+=item B<PagerShowBorders>=1
+
+Draw border around workspace buttons (if PagerShowPreview=1).
+
+=item B<PagerShowLabels>=1
+
+Show workspace name label on workspace button (if PagerShowPreview=1)
+
+=item B<PagerShowNumbers>=1
+
+Show number of workspace on workspace button (if PagerShowPreview=1).
+
+=item B<TaskBarLaunchOnSingleClick>=1
+
+Execute taskbar applet commands (like MailCommand, ClockCommand, ...) on single click.
+
+=item B<EnableAddressBar>=1
+
+Enable address bar functionality in taskbar.
+
+=item B<ShowAddressBar>=1
+
+Show address bar in task bar.
+
+=item B<MultiByte>=1
+
+Overrides automatic multiple byte detection.
+
+=item B<ConfirmLogout>=1
+
+Confirm logout.
+
+=item B<ShapesProtectClientWindow>=1
+
+Don't cut client windows by shapes set trough frame corner pixmap.
+
+=item B<DoubleBuffer>=1
+
+Use double buffering when redrawing the display.
+
+=item B<XRRDisable>=1
+
+Disable use of new XRANDR API for dual head (nvidia workaround).
+
+=item B<PreferFreetypeFonts>=1
+
+Favour Xft fonts over core X11 fonts where possible.
+
+=item B<MailBoxPath>=""
+
+A colon separated list of paths of your mailboxes.
+If this is empty, $MAILPATH or $MAIL is used instead.
+
+Path to a mbox file. Remote mail boxes are accessed by specifying an URL
+using the Common Internet Scheme Syntax (RFC 1738):
+
+    `scheme://[user[:password]@]server[:port][/path]`.
+
+Supported schemes are C<pop3>, C<imap> and C<file>.  When the scheme is
+omitted F<file://> is prepended silently. IMAP subfolders can be
+accessed by using the  path component.  Reserved characters like
+I<slash> (C</>), I<at> (C<@>) and I<colon> (C<:>) can be specified using
+escape sequences with a hexadecimal encoding like C<%2f> for the slash
+or C<%40> for the at sign.  For example:
+
+    file:///var/spool/mail/captnmark
+    pop3://markus:%2f%40%3a@maol.ch/
+    imap://mathias@localhost/INBOX.Maillisten.icewm-user
+
+=item B<NetworkStatusDevice>="eth0 wlan0"
+
+Network device for which to show status.
+
+=item B<TimeFormat>="%X"
+
+The clock time format. See the strftime manpage for the meaning of all
+the percent options. It is possible to define multiple clocks for
+different time zones in a single I<TimeFormat>.  A new clock is defined
+by the beginning of the string, and by each time zone specification
+which starts with C<TZ=...>, followed by a space. For example,
+B<TimeFormat>=C<%X TZ=Asia/Aden %T TZ=Asia/Baku %T> defines 3 clocks.
+
+=item B<TimeFormatAlt>=""
+
+Alternate Clock Time format shown every other second.
+
+=item B<DateFormat>="%c"
+
+Clock Date format for tooltip (strftime format string).
+
+=item B<DockApps>="right high desktop"
+
+Support DockApps (right, left, center, down, high, above, below,
+desktop, or empty to disable). Control with Ctrl+Mouse.
+
+=item B<XRRPrimaryScreenName>=""
+
+Screen/output name of the primary screen.
+
+=item B<AcpiIgnoreBatteries>=""
+
+List of battery names (directories) in /proc/acpi/battery to ignore.
+Useful when more slots are built-in, but only one battery is used.
+
+=item B<TaskBarCPUSamples>=20  [2-1000]
+
+The width of the CPU Monitor applet in pixels.
+
+=item B<TaskBarMEMSamples>=20  [2-1000]
+
+The width of the Memory Monitor applet in pixels.
+
+=item B<TaskBarNetSamples>=20  [2-1000]
+
+The width of the Net Monitor applet in pixels.
+
+=item B<TaskbarButtonWidthDivisor>=3  [1-25]
+
+Default number of tasks in taskbar.
+
+=item B<TaskBarWidthPercentage>=100  [0-100]
+
+Task bar width as percentage of the screen width.
+
+=item B<TaskBarJustify>="left"
+
+Taskbar justify left, right or center.
+
+=item B<TaskBarApmGraphWidth>=10  [1-1000]
+
+Width of battery Monitor.
+
+=item B<XineramaPrimaryScreen>=0  [0-63]
+
+Primary screen for xinerama (taskbar, ...).
+
+=item B<KeyboardLayouts>=""
+
+A comma-separated list of keyboard layouts.
+A layout may be enclosed in double quotes.
+Each layout is a name with optional arguments,
+which is to be parsed by the C<setxkbmap> program.
+To support changing keyboard layouts, the
+C<setxkbmap> program must be installed.
+The first in the list is the default layout.
+Programs may have their own keyboard layout
+defined in the F<winoptions> file.
+The first two letters of a layout are used
+to locate an icon image file.
+
+=back
+
+=head2 MENUS
+
+=over
+
+=item B<AutoReloadMenus>=1
+
+Reload menu files automatically.
+
+=item B<ShowProgramsMenu>=0
+
+Show programs submenu.
+
+=item B<ShowSettingsMenu>=1
+
+Show settings submenu.
+
+=item B<ShowFocusModeMenu>=1
+
+Show focus mode submenu.
+
+=item B<ShowThemesMenu>=1
+
+Show themes submenu.
+
+=item B<ShowLogoutMenu>=1
+
+Show logout menu.
+
+=item B<ShowHelp>=1
+
+Show the help menu item.
+
+=item B<ShowLogoutSubMenu>=1
+
+Show logout submenu.
+
+=item B<ShowAbout>=1
+
+Show the about menu item.
+
+=item B<ShowRun>=1
+
+Show the run menu item.
+
+=item B<ShowWindowList>=1
+
+Show the window menu item.
+
+=item B<MenuMaximalWidth>=0  [0-16384]
+
+Maximal width of popup menus,  2/3 of the screen's width if set to zero.
+
+=item B<NestedThemeMenuMinNumber>=25  [0-1234]
+
+Minimal number of themes after which the Themes menu becomes nested (0=disabled).
+
+=back
+
+=head2 TIMINGS
+
+=over
+
+=item B<DelayFuzziness>=10  (0-100)
+
+Delay fuzziness, to allow merging of multiple timer timeouts into one
+(notebook power saving).
+
+=item B<ClickMotionDistance>=4  [0-32]
+
+Pointer motion distance before click gets interpreted as drag.
+
+=item B<ClickMotionDelay>=200  [0-2000]
+
+Delay before click gets interpreted as drag.
+
+=item B<MultiClickTime>=400  [0-5000]
+
+Multiple click time.
+
+=item B<MenuActivateDelay>=40  [0-5000]
+
+Delay before activating menu items.
+
+=item B<SubmenuMenuActivateDelay>=300  [0-5000]
+
+Delay before activating menu submenus.
+
+=item B<ToolTipIcon>=1
+
+Show an application icon in toolbar and tray tooltips.
+
+=item B<ToolTipDelay>=1000  [0-5000]
+
+Delay before tooltip window is displayed.
+
+=item B<ToolTipTime>=0  [0-60000]
+
+Time before tooltip window is hidden (0 means never.
+
+=item B<AutoHideDelay>=300  [0-5000]
+
+Delay before task bar is hidden.
+
+=item B<AutoShowDelay>=500  [0-5000]
+
+Delay before task bar is shown.
+
+=item B<AutoRaiseDelay>=400  [0-5000]
+
+Delay before windows are auto raised if C<AutoRaise=1>.
+
+=item B<PointerFocusDelay>=200  [0-1000]
+
+Delay for pointer focus switching.
+
+=item B<EdgeSwitchDelay>=600  [0-5000]
+
+Screen edge workspace switching delay.
+
+=item B<ScrollBarStartDelay>=500  [0-5000]
+
+Initial scroll bar autoscroll delay.
+
+=item B<ScrollBarDelay>=30  [0-5000]
+
+Scroll bar autoscroll delay.
+
+=item B<AutoScrollStartDelay>=500  [0-5000]
+
+Auto scroll start delay.
+
+=item B<AutoScrollDelay>=60  [0-5000]
+
+Auto scroll delay.
+
+=item B<WorkspaceStatusTime>=2500  [0-2500]
+
+Time before workspace status window is hidden.
+
+=item B<MailCheckDelay>=30  [0-86400]
+
+Delay between new-mail checks. (seconds).
+
+=item B<TaskBarCPUDelay>=500  [10-3600000]
+
+Delay between CPU Monitor samples in ms.
+
+=item B<TaskBarMEMDelay>=500  [10-3600000]
+
+Delay between Memory Monitor samples in ms.
+
+=item B<TaskBarNetDelay>=500  [10-3600000]
+
+Delay between Net Monitor samples in ms.
+
+=item B<FocusRequestFlashTime>=0  [0-86400]
+
+Number of seconds the taskbar app will blink when requesting focus (0 = forever).
+
+=item B<FocusRequestFlashInterval>=250  [0-30000]
+
+Taskbar blink interval (ms) when requesting focus (0 = blinking disabled).
+
+=item B<BatteryPollingPeriod>=10  [2-3600]
+
+Delay between power status updates (seconds).
+
+=item B<PingTimeout>=3  [0-86400]
+
+Timeout in seconds for applications to respond to the _NET_WM_PING protocol.
+
+=back
+
+=head2 BUTTONS AND KEYS
+
+=over
+
+=item B<UseRootButtons>=255  [0-255]
+
+Bitmask of root window button click to use in window manager.
+
+=item B<ButtonRaiseMask>=1  [0-255]
+
+Bitmask of buttons that raise the window when pressed.
+
+=item B<DesktopWinMenuButton>=0  [0-20]
+
+Desktop mouse-button click to show the window list menu.
+
+=item B<DesktopWinListButton>=2 # [0-20]
+
+Desktop mouse-button click to show the window list
+
+=item B<DesktopMenuButton>=3  [0-20]
+
+Desktop mouse-button click to show the root menu.
+
+=item B<TitleBarMaximizeButton>=1  [0-5]
+
+Title bar mouse-button double click to maximize the window to full
+screen with the frame border visible.
+Press Shift to maximize only in the vertical direction.
+Press Alt+Shift to maximize only in the horizontal direction.
+
+=item B<TitleBarRollupButton>=2  [0-5]
+
+Title bar mouse-button double click to rollup the window.
+Press Shift to maximize in the horizontal direction.
+
+=back
+
+=head2 WORKSPACES
+
+=over
+
+=item B<WorkspaceNames>=" 1 ", " 2 ", " 3 ", " 4 "
+
+Create four workspaces with names C< 1 >, C< 2 >, C< 3 > and C< 4 >.
+
+=back
+
+=head2 PATHS
+
+=over
+
+=item B<IconPath>="/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/icons:/usr/share/pixmaps"
+
+Icon search path (colon separated). Also, the icons/ subdirectory in
+IceWM resource folders are searched first.
+
+=item B<IconThemes>="*:-HighContrast"
+
+List of icon themes (colon separated), acting as additional filter of
+icon subdirectories in any of the B<IconPath> folders. Expressions can be
+wildcards, also special wildcards (starting with B<->) can exclude matched
+themes from selection.
+
+=item B<MailBoxPath>=""
+
+A colon separated list of paths of your mailboxes.
+If this is empty, $MAILPATH or $MAIL is used instead.
+
+=back
+
+=head2 PROGRAMS
+
+=over
+
+=item B<MailCommand>="xterm -name mutt -e mutt"
+
+Command to run on mailbox.
+
+=item B<MailClassHint>="mutt.XTerm"
+
+B<WM_CLASS> to allow B<runonce> for B<MailCommand>.
+
+=item B<NewMailCommand>=""
+
+Command to run when new mail arrives.
+
+=item B<LockCommand>=""
+
+Command to lock display/screensaver.
+
+=item B<ClockCommand>="xclock -name icewm -title Clock"
+
+Command to run on clock.
+
+=item B<ClockClassHint>="icewm.XClock"
+
+B<WM_CLASS> to allow B<runonce> for B<ClockCommand>.
+
+=item B<RunCommand>=""
+
+Command to select and run a program.
+
+=item B<OpenCommand>=""
+
+Open command.
+
+=item B<TerminalCommand>="xterm"
+
+Terminal emulator must accept -e option.
+
+=item B<LogoutCommand>=""
+
+Command to start logout.
+
+=item B<LogoutCancelCommand>=""
+
+Command to cancel logout.
+
+=item B<ShutdownCommand>="/bin/sh -c "{ test -e /run/systemd/system && systemctl poweroff; } ||:""
+
+Command to shutdown the system.
+
+=item B<RebootCommand>="/bin/sh -c "{ test -e /run/systemd/system && systemctl reboot; } ||:""
+
+Command to reboot the system.
+
+=item B<SuspendCommand>="test -e /run/systemd/system && systemctl suspend"
+
+Command to send the system to standby mode
+
+=item B<CPUStatusCommand>="xterm -name top -title Process\ Status -e top"
+
+Command to run on CPU status.
+
+=item B<CPUStatusClassHint>="top.XTerm"
+
+B<WM_CLASS> to allow B<runonce> for B<CPUStatusCommand>.
+
+=item B<CPUStatusCombine>=1  0/1
+
+Combine all CPUs to one.
+
+=item B<NetStatusCommand>="xterm -name netstat -title 'Network Status' -e netstat -c"
+
+Command to run on Net status.
+
+=item B<NetStatusClassHint>="netstat.XTerm"
+
+B<WM_CLASS> to allow B<runonce> for B<NetStatusCommand>.
+
+=item B<AddressBarCommand>=""
+
+Command to run for address bar entries.
+
+=back
+
+=head2 WINDOW MENUS
+
+=over
+
+=item B<WinMenuItems>="rmsnxfhualytiecw"
+
+Items supported in menu window (rmsnxfhualytieckw)
+
+=item B<RolloverButtonsSupported>=0
+
+Does it support the 'O' title bar button images (for mouse rollover).
+
+=item B<ShowMenuButtonIcon>=1 # 0/1
+
+Show application icon over menu button
+
+=back
+
+=head2 THEME SETTINGS
+
+The following sections show settings that can be set in theme files.
+They can also be set in the F<preferences> file, but themes will override
+the values set there.  To override the theme values, the settings should
+be set in F<prefoverrides> file: see L<icewm-prefoverrides(5)>.  Default
+values are shown following the equal sign.
+
+=head3 THEME DESCRIPTION
+
+=over
+
+=item B<ThemeAuthor>=""
+
+Theme author, e-mail address, credits.
+
+=item B<ThemeDescription>=""
+
+Description of the theme, credits.
+
+=item B<Look>="nice"
+
+Choose a theme look from one of:
+"win95", "motif", "warp3", "warp4",
+"nice", "metal2", "gtk2", and some others.
+
+=item B<Gradients>=""
+
+List of gradient pixmaps in the current theme.
+
+=back
+
+=head3 THEME BORDERS, ICONS, MARGINS AND BUTTONS
+
+=over
+
+=item B<BorderSizeX>=6  [0-128]
+
+Horizontal window border.
+
+=item B<BorderSizeY>=6  [0-128]
+
+Vertical window border.
+
+=item B<DlgBorderSizeX>=2  [0-128]
+
+Horizontal dialog window border.
+
+=item B<DlgBorderSizeY>=2  [0-128]
+
+Vertical dialog window border.
+
+=item B<CornerSizeX>=24  [0-64]
+
+Resize corner width.
+
+=item B<CornerSizeY>=24  [0-64]
+
+Resize corner height.
+
+=item B<TitleBarHeight>=20  [0-128]
+
+Title bar height.
+
+=item B<TitleBarJustify>=0  [0-100]
+
+Justification of the window title.
+
+=item B<TitleBarHorzOffset>=0  [-128-128]
+
+Horizontal offset for the window title text.
+
+=item B<TitleBarVertOffset>=0  [-128-128]
+
+Vertical offset for the window title text.
+
+=item B<MenuButtonIconVertOffset>=0  [-128-128]
+
+Vertical offset for the menu button icon.
+
+=item B<ScrollBarX>=16  [0-64]
+
+Scrollbar width.
+
+=item B<ScrollBarY>=16  [0-64]
+
+Scrollbar (button) height.
+
+=item B<MenuIconSize>=16  [8-128]
+
+Menu icon size.
+
+=item B<SmallIconSize>=16  [8-128]
+
+Dimension of the small icons.
+
+=item B<LargeIconSize>=32  [8-128]
+
+Dimension of the large icons.
+
+=item B<HugeIconSize>=48  [8-128]
+
+Dimension of the large icons.
+
+=item B<QuickSwitchHorzMargin>=3  [0-64]
+
+Horizontal margin of the quickswitch window.
+
+=item B<QuickSwitchVertMargin>=3  [0-64]
+
+Vertical margin of the quickswitch window.
+
+=item B<QuickSwitchIconMargin>=4  [0-64]
+
+Vertical margin in the quickswitch window.
+
+=item B<QuickSwitchIconBorder>=2  [0-64]
+
+Distance between the active icon and it's border.
+
+=item B<QuickSwitchSeparatorSize>=6  [0-64]
+
+Height of the separator between (all reachable) icons and text, 0 to avoid it.
+
+=item B<TitleButtonsLeft>="s"
+
+Titlebar buttons from left to right (x=close, m=max, i=min, h=hide, r=rollup, s=sysmenu, d=depth).
+
+=item B<TitleButtonsRight>="xmir"
+
+Titlebar buttons from right to left (x=close, m=max, i=min, h=hide, r=rollup, s=sysmenu, d=depth).
+
+=item B<TitleButtonsSupported>="xmis"
+
+Titlebar buttons supported by theme (x,m,i,r,h,s,d).
+
+=item B<TitleBarCentered>=0 # 0/1
+
+Draw window title centered (obsoleted by TitleBarJustify).
+
+=item B<TitleBarJoinLeft>=0 # 0/1
+
+Join title*S and title*T.
+
+=item B<TitleBarJoinRight>=0 # 0/1
+
+Join title*T and title*B.
+
+=item B<TaskBarClockLeds>=0 # 0/1
+
+Task bar clock/battery monitor uses nice pixmap LCD display (but then it
+doesn't display correctly in many languages anymore, e.g., for
+Japanese and Korean it works only when a real font is used and not
+the LCD pixmaps.
+
+=item B<TaskBarGraphHeight>=20  [16-1000]
+
+Height of taskbar monitoring applets.
+
+=item B<TaskbuttonIconOffset>=0 # [0-16]
+
+Width of taskbutton side icons.
+
+=item B<TrayIconMaxWidth>=32 # [16-128]
+
+Maximum scaled width of tray icons.
+
+=item B<TrayIconMaxHeight>=24 # [16-128]
+
+Maximum scaled height of tray icons.
+
+=item B<TrayDrawBevel>=0 # 0/1
+
+Surround the tray with plastic border.
+
+=back
+
+=head3 THEME FONTS
+
+=over
+
+=item B<TitleFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<TitleFontNameXft>="sans-serif:size=12"
+
+Name of the title bar font.
+
+=item B<MenuFontName>="-*-sans-bold-r-*-*-*-100-*-*-*-*-*-*"
+
+=item B<MenuFontNameXft>="sans-serif:size=10:bold"
+
+Name of the menu font.
+
+=item B<StatusFontName>="-*-monospace-bold-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<StatusFontNameXft>="monospace:size=12:bold"
+
+Name of the status display font.
+
+=item B<QuickSwitchFontName>="-*-monospace-bold-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<QuickSwitchFontNameXft>="monospace:size=12:bold"
+
+Name of the font for Alt+Tab switcher window.
+
+=item B<NormalButtonFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<NormalButtonFontNameXft>="sans-serif:size=12"
+
+Name of the normal button font.
+
+=item B<ActiveButtonFontName>="-*-sans-bold-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ActiveButtonFontNameXft>="sans-serif:size=12:bold"
+
+Name of the active button font.
+
+=item B<NormalTaskBarFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<NormalTaskBarFontNameXft>="sans-serif:size=12"
+
+Name of the normal task bar item font.
+
+=item B<ActiveTaskBarFontName>="-*-sans-bold-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ActiveTaskBarFontNameXft>="sans-serif:size=12:bold"
+
+Name of the active task bar item font.
+
+=item B<ToolButtonFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ToolButtonFontNameXft>="sans-serif:size=12"
+
+Name of the tool button font (fallback: NormalButtonFontName).
+
+=item B<NormalWorkspaceFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<NormalWorkspaceFontNameXft>="sans-serif:size=12"
+
+Name of the normal workspace button font (fallback: NormalButtonFontName).
+
+=item B<ActiveWorkspaceFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ActiveWorkspaceFontNameXft>="sans-serif:size=12"
+
+Name of the active workspace button font (fallback: ActiveButtonFontName).
+
+=item B<MinimizedWindowFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<MinimizedWindowFontNameXft>="sans-serif:size=12"
+
+Name of the mini-window font.
+
+=item B<ListBoxFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ListBoxFontNameXft>="sans-serif:size=12"
+
+Name of the window list font.
+
+=item B<ToolTipFontName>="-*-sans-medium-r-*-*-*-120-*-*-*-*-*-*"
+
+=item B<ToolTipFontNameXft>="sans-serif:size=12"
+
+Name of the tool tip font.
+
+=item B<ClockFontName>="-*-monospace-medium-r-*-*-*-140-*-*-*-*-*-*"
+
+=item B<ClockFontNameXft>="monospace:size=12"
+
+Name of the task bar clock font.
+
+=item B<TempFontName>="-*-monospace-medium-r-*-*-*-140-*-*-*-*-*-*"
+
+=item B<TempFontNameXft>="monospace:size=12"
+
+Name of the task bar temperature font.
+
+=item B<ApmFontName>="-*-monospace-medium-r-*-*-*-140-*-*-*-*-*-*"
+
+=item B<ApmFontNameXft>="monospace:size=12"
+
+Name of the task bar battery font.
+
+=item B<InputFontName>="-*-monospace-medium-r-*-*-*-140-*-*-*-*-*-*"
+
+=item B<InputFontNameXft>="monospace:size=12"
+
+Name of the input field font.
+
+=item B<LabelFontName>="-*-sans-medium-r-*-*-*-140-*-*-*-*-*-*"
+
+=item B<LabelFontNameXft>="sans-serif:size=12"
+
+Name of the label font.
+
+=back
+
+=head3 THEME COLORS
+
+=over
+
+=item B<ColorDialog> = "rgb:C0/C0/C0"
+
+Background of dialog windows.
+
+=item B<ColorNormalBorder> = "rgb:C0/C0/C0"
+
+Border of inactive windows.
+
+=item B<ColorActiveBorder> = "rgb:C0/C0/C0"
+
+Border of active windows.
+
+=item B<ColorNormalButton> = "rgb:C0/C0/C0"
+
+Background of regular buttons.
+
+=item B<ColorNormalButtonText> = "rgb:00/00/00"
+
+Text color of regular buttons.
+
+=item B<ColorActiveButton> = "rgb:E0/E0/E0"
+
+Background of pressed buttons.
+
+=item B<ColorActiveButtonText> = "rgb:00/00/00"
+
+Text color of pressed buttons.
+
+=item B<ColorNormalTitleButton> = "rgb:C0/C0/C0"
+
+Background of titlebar buttons.
+
+=item B<ColorNormalTitleButtonText> = "rgb:00/00/00"
+
+Text color of titlebar buttons.
+
+=item B<ColorToolButton> = ""
+
+Background of toolbar buttons, ColorNormalButton is used if empty.
+
+=item B<ColorToolButtonText> = ""
+
+Text color of toolbar buttons, ColorNormalButtonText is used if empty.
+
+=item B<ColorNormalWorkspaceButton> = ""
+
+Background of workspace buttons, ColorNormalButton is used if empty.
+
+=item B<ColorNormalWorkspaceButtonText> = ""
+
+Text color of workspace buttons, ColorNormalButtonText is used if empty.
+
+=item B<ColorActiveWorkspaceButton> = ""
+
+Background of the active workspace button, ColorActiveButton is used if empty.
+
+=item B<ColorActiveWorkspaceButtonText> = ""
+
+Text color of the active workspace button, ColorActiveButtonText is used if empty.
+
+=item B<ColorNormalTitleBar> = "rgb:80/80/80"
+
+Background of the titlebar of regular windows.
+
+=item B<ColorNormalTitleBarText> = "rgb:00/00/00"
+
+Text color of the titlebar of regular windows.
+
+=item B<ColorNormalTitleBarShadow> = ""
+
+Text shadow of the titlebar of regular windows.
+
+=item B<ColorActiveTitleBar> = "rgb:00/00/A0"
+
+Background of the titlebar of active windows.
+
+=item B<ColorActiveTitleBarText> = "rgb:FF/FF/FF"
+
+Text color of the titlebar of active windows.
+
+=item B<ColorActiveTitleBarShadow> = ""
+
+Text shadow of the titlebar of active windows.
+
+=item B<ColorNormalMinimizedWindow> = "rgb:C0/C0/C0"
+
+Background for mini icons of regular windows.
+
+=item B<ColorNormalMinimizedWindowText> = "rgb:00/00/00"
+
+Text color for mini icons of regular windows.
+
+=item B<ColorActiveMinimizedWindow> = "rgb:E0/E0/E0"
+
+Background for mini icons of active windows.
+
+=item B<ColorActiveMinimizedWindowText> = "rgb:00/00/00"
+
+Text color for mini icons of active windows.
+
+=item B<ColorNormalMenu> = "rgb:C0/C0/C0"
+
+Background of pop-up menus.
+
+=item B<ColorNormalMenuItemText> = "rgb:00/00/00"
+
+Text color of regular menu items.
+
+=item B<ColorActiveMenuItem> = "rgb:A0/A0/A0"
+
+Background of selected menu item, leave empty to force transparency.
+
+=item B<ColorActiveMenuItemText> = "rgb:00/00/00"
+
+Text color of selected menu items.
+
+=item B<ColorDisabledMenuItemText> = "rgb:80/80/80"
+
+Text color of disabled menu items.
+
+=item B<ColorDisabledMenuItemShadow> = ""
+
+Shadow of regular menu items.
+
+=item B<ColorMoveSizeStatus> = "rgb:C0/C0/C0"
+
+Background of move/resize status window.
+
+=item B<ColorMoveSizeStatusText> = "rgb:00/00/00"
+
+Text color of move/resize status window.
+
+=item B<ColorQuickSwitch> = "rgb:C0/C0/C0"
+
+Background of the quick switch window.
+
+=item B<ColorQuickSwitchText> = "rgb:00/00/00"
+
+Text color in the quick switch window.
+
+=item B<ColorQuickSwitchActive> = ""
+
+Rectangle around the active icon in the quick switch window.
+
+=item B<ColorDefaultTaskBar> = "rgb:C0/C0/C0"
+
+Background of the taskbar.
+
+=item B<ColorNormalTaskBarApp> = "rgb:C0/C0/C0"
+
+Background for task buttons of regular windows.
+
+=item B<ColorNormalTaskBarAppText> = "rgb:00/00/00"
+
+Text color for task buttons of regular windows.
+
+=item B<ColorActiveTaskBarApp> = "rgb:E0/E0/E0"
+
+Background for task buttons of the active window.
+
+=item B<ColorActiveTaskBarAppText> = "rgb:00/00/00"
+
+Text color for task buttons of the active window.
+
+=item B<ColorMinimizedTaskBarApp> = "rgb:A0/A0/A0"
+
+Background for task buttons of minimized windows.
+
+=item B<ColorMinimizedTaskBarAppText> = "rgb:00/00/00"
+
+Text color for task buttons of minimized windows.
+
+=item B<ColorInvisibleTaskBarApp> = "rgb:80/80/80"
+
+Background for task buttons of windows on other workspaces.
+
+=item B<ColorInvisibleTaskBarAppText> = "rgb:00/00/00"
+
+Text color for task buttons of windows on other workspaces.
+
+=item B<ColorScrollBar> = "rgb:A0/A0/A0"
+
+Scrollbar background (sliding area).
+
+=item B<ColorScrollBarSlider> = "rgb:C0/C0/C0"
+
+Background of the slider button in scrollbars.
+
+=item B<ColorScrollBarButton> = "rgb:C0/C0/C0"
+
+Background of the arrow buttons in scrollbars.
+
+=item B<ColorScrollBarArrow> = "rgb:C0/C0/C0"
+
+Background of the arrow buttons in scrollbars (obsolete).
+
+=item B<ColorScrollBarButtonArrow> = "rgb:00/00/00"
+
+Color of active arrows on scrollbar buttons.
+
+=item B<ColorScrollBarInactiveArrow> = "rgb:80/80/80"
+
+Color of inactive arrows on scrollbar buttons.
+
+=item B<ColorListBox> = "rgb:C0/C0/C0"
+
+Background of listboxes.
+
+=item B<ColorListBoxText> = "rgb:00/00/00"
+
+Text color in listboxes.
+
+=item B<ColorListBoxSelection> = "rgb:80/80/80"
+
+Background of selected listbox items.
+
+=item B<ColorListBoxSelectionText> = "rgb:00/00/00"
+
+Text color of selected listbox items.
+
+=item B<ColorToolTip> = "rgb:E0/E0/00"
+
+Background of tooltips.
+
+=item B<ColorToolTipText> = "rgb:00/00/00"
+
+Text color of tooltips.
+
+=item B<ColorLabel> = "rgb:C0/C0/C0"
+
+Background of labels, leave empty to force transparency.
+
+=item B<ColorLabelText> = "rgb:00/00/00"
+
+Text color of labels.
+
+=item B<ColorInput> = "rgb:FF/FF/FF"
+
+Background of text entry fields (e.g., the addressbar).
+
+=item B<ColorInputText> = "rgb:00/00/00"
+
+Text color of text entry fields (e.g., the addressbar).
+
+=item B<ColorInputSelection> = "rgb:80/80/80"
+
+Background of selected text in an entry field.
+
+=item B<ColorInputSelectionText> = "rgb:00/00/00"
+
+Selected text in an entry field.
+
+=item B<ColorClock> = "rgb:00/00/00"
+
+Background of non-LCD clock, leave empty to force transparency.
+
+=item B<ColorClockText> = "rgb:00/FF/00"
+
+Text color of non-LCD clock.
+
+=item B<ColorKeyboardLayoutText> = ""
+
+Color of keyboard layout indicator.
+
+=item B<ColorApm> = "rgb:00/00/00"
+
+Background of battery monitor, leave empty to force transparency.
+
+=item B<ColorApmText> = "rgb:00/FF/00"
+
+Text color of battery monitor.
+
+=item B<ColorApmBattery> = "rgb:FF/FF/00"
+
+Color of battery monitor when discharging.
+
+=item B<ColorApmLine> = "rgb:00/FF/00"
+
+Color of battery monitor when charging.
+
+=item B<ColorApmGraphBg> = "rgb:00/00/00"
+
+Background color for graph mode.
+
+=item B<ColorCPUStatusUser> = "rgb:00/FF/00"
+
+User load on the CPU monitor.
+
+=item B<ColorCPUStatusSystem> = "rgb:FF/00/00"
+
+System load on the CPU monitor.
+
+=item B<ColorCPUStatusInterrupts> = "rgb:FF/FF/00"
+
+Interrupts on the CPU monitor.
+
+=item B<ColorCPUStatusIoWait> = "rgb:60/00/60"
+
+IO Wait on the CPU monitor.
+
+=item B<ColorCPUStatusSoftIrq> = "rgb:00/FF/FF"
+
+Soft Interrupts on the CPU monitor.
+
+=item B<ColorCPUStatusNice> = "rgb:00/00/FF"
+
+Nice load on the CPU monitor.
+
+=item B<ColorCPUStatusIdle> = "rgb:00/00/00"
+
+Idle (non) load on the CPU monitor, leave empty to force
+transparency.
+
+=item B<ColorCPUStatusSteal> = "rgb:FF/8A/91"
+
+Involuntary Wait on the CPU monitor.
+
+=item B<ColorCPUStatusTemp> = "rgb:60/60/C0"
+
+Temperature of the CPU.
+
+=item B<ColorMEMStatusUser> = "rgb:40/40/80"
+
+User program usage in the memory monitor.
+
+=item B<ColorMEMStatusBuffers> = "rgb:60/60/C0"
+
+OS buffers usage in the memory monitor.
+
+=item B<ColorMEMStatusCached> = "rgb:80/80/FF"
+
+OS cached usage in the memory monitor.
+
+=item B<ColorMEMStatusFree> = "rgb:00/00/00"
+
+Free memory in the memory monitor.
+
+=item B<ColorNetSend> = "rgb:FF/FF/00"
+
+Outgoing load on the network monitor.
+
+=item B<ColorNetReceive> = "rgb:FF/00/FF"
+
+Incoming load on the network monitor.
+
+=item B<ColorNetIdle> = "rgb:00/00/00"
+
+Idle (non) load on the network monitor, leave empty to force transparency.
+
+=item B<DesktopBackgroundColor>=""
+
+Desktop background color(s).
+
+=item B<DesktopTransparencyColor>=""
+
+Color(s) to announce for semitransparent windows.
+
+=back
+
+=head3 DESKTOP BACKGROUND
+
+The following preferences are read by L<icewmbg(1)>:
+
+=over
+
+=item B<DesktopBackgroundCenter>=0  0/1
+
+Display desktop background centered and not tiled.
+
+=item B<DesktopBackgroundScaled>=0  0/1
+
+Resize desktop background to full screen.
+
+=item B<DesktopBackgroundColor>=""
+
+Desktop background color(s).
+
+=item B<DesktopBackgroundImage>=""
+
+Desktop background image(s).
+
+=item B<ShuffleBackgroundImages>=0  0/1
+
+Choose a random selection from the list of background images.
+
+=item B<SupportSemitransparency>=1  0/1
+
+Support for semitransparent terminals like Eterm or gnome-terminal.
+
+=item B<DesktopTransparencyColor>=""
+
+Color(s) to announce for semitransparent windows.
+
+=item B<DesktopTransparencyImage>=""
+
+Image(s) to announce for semitransparent windows.
+
+=item B<DesktopBackgroundMultihead>=0  0/1
+
+Paint the background image over all multihead monitors combined.
+
+=item B<CycleBackgroundsPeriod>=0
+
+Seconds between cycling over all background images, default zero is off.
+
+=back
+
+=head2 EXAMPLES
+
+    Alpha=1
+    Splash="IceWM.jpg"
+    LimitSize=0
+    LimitPosition=0
+    LimitByDockLayer=1
+    QuickSwitchToAllWorkspaces=1
+    QuickSwitchHugeIcon=1
+    QuickSwitchFillSelection=1
+    TaskBarMailboxStatusBeepOnNewMail=1
+    TaskBarMailboxStatusCountMessages=1
+    TaskBarShowMEMStatus=0
+    TaskBarShowCollapseButton=1
+    TaskBarWorkspacesLimit="8"
+    ShowProgramsMenu=1
+    ShowAddressBar=0
+    ToolTipDelay=200
+    ToolTipTime=5000
+    AutoHideDelay=900
+    AutoShowDelay=100
+    EdgeResistance=3
+    KeySysWinMenu=""
+    KeySysWinListMenu="Shift+Ctrl+Esc"
+
+The above example shows how to tell B<icewm> to not bind a specific key:
+I<KeySysWinMenu> in this case.
+
+=head2 FILES
+
+Locations for the F<preferences> file are as follows:
+
+ $ICEWM_PRIVCFG/preferences
+ $XDG_CONFIG_HOME/icewm/preferences
+ $HOME/.icewm/preferences
+ /etc/icewm/preferences
+ /usr/share/icewm/preferences
+
+The locations are searched in the order listed; the first file found is
+read and the remainder ignored.
+
+=head2 SEE ALSO
+
+L<icewm(1)>,
+L<icewm-prefoverride(5)>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

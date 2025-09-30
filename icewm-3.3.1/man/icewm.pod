@@ -1,0 +1,1510 @@
+=pod
+
+=head2 NAME
+
+ icewm - lightweight X11 window manager
+
+=head2 SYNOPSIS
+
+B<icewm> [I<OPTIONS>]
+
+=head2 DESCRIPTION
+
+B<icewm> is a window manager for the X11 window system.
+It aims to be small, fast and familiar to new users.
+
+B<icewm> is called a re-parenting window manager,
+because it draws small frames around application windows.
+By dragging this frame with the mouse, windows are resized or moved.
+
+Because windows may overlap, B<icewm> is also a stacking window manager.
+Many windows may exist, some hidden behind others.
+
+B<icewm> supports a configurable number of virtual desktops.  These are
+called workspaces. Related windows are grouped on a dedicated workspace.
+By switching between workspaces, the user can attend to different tasks,
+while keeping oversight.  This is supported by a task bar and a pager.
+
+The installation comes with several themes. Choose a theme via a menu.
+
+B<icewm> is compliant with the ICCCM and EWMH window manager specifications.
+
+=head2 PROGRAMS
+
+The B<icewm> package includes several programs:
+
+=over
+
+=item L<icewm(1)>
+
+The actual window manager. It positions application windows on screen
+and decorates them with borders. It gives input focus to the current
+active application. B<icewm> supports different focus modes, which are
+explained below. It draws a small task bar at the bottom of the screen,
+which gives easy access to programs, to virtual desktops, to active
+applications, and to a small set of monitoring applets.
+
+=item L<icewmbg(1)>
+
+The background setting application. It can assign plain background color
+or images in different formats to the X background.  Each workspace can
+have its own background.  It supports semi-transparency. Semitransparent
+background image and colour can be configured. When the background image
+has changed then L<icewmbg(1)> can be notified to update the background.
+Multi-head monitor setups are fully supported.  See the L<icewmbg(1)>.
+
+=item L<icewm-session(1)>
+
+L<icewm-session(1)> is the preferred program to start the IceWM system.
+It first loads additional environment variables from the optional
+F<env> file. Then it starts L<icewmbg(1)> and B<icewm>. It also runs
+the F<startup> script and implements basic session management.
+On termination the F<shutdown> script will be run first, then
+L<icewm-session(1)> will terminate B<icewm> and L<icewmbg(1)>.
+L<icewm-session(1)> will also start the optional L<icesound(1)>
+if you give it the B<--sound> option.  See L<icewm-session(1)>.
+
+=item L<icesh(1)>
+
+A powerful tool to control window properties and to interact with the
+window manager. It is typically used in shell scripts. See L<icesh(1)>.
+
+=item L<icehelp(1)>
+
+A small document browser, which is used by B<icewm> to display the
+'IceWM manual' and some man pages.
+
+=item L<icewmhint(1)>
+
+A utility for passing IceWM-specific window options to B<icewm>.
+The options are used to configure the first application which is started
+subsequently.  See L<icewmhint(1)>.
+
+=item L<icesound(1)>
+
+Plays audio files on GUI events which are raised by B<icewm>.
+It supports ALSA, AO and OSS.  See the L<icesound(1)> man page.
+
+=item L<icewm-menu-fdo(1)>
+
+Generate an B<icewm> menu with executable desktop applications
+according to XDG specifications. See the L<icewm-menu-fdo(1)> man page.
+
+=item L<icewm-set-gnomewm(1)>
+
+Configures GNOME to start IceWM instead of its own WM.
+
+=back
+
+=head2 OPTIONS
+
+=head2 COMMON OPTIONS
+
+Each of the IceWM executables supports the following options:
+
+=over
+
+=item B<-c>, B<--config>=I<FILE>
+
+Use I<FILE> as the source of configuration options.  By default B<icewm>
+looks for a file named F<preferences>.  This is a readable text file
+which can be modified with the help of a text editor.
+
+=item B<-t>, B<--theme>=I<NAME>
+
+Use I<NAME> as the name of the B<icewm> theme to use.  A theme defines
+the look and feel of B<icewm>, like colors, fonts and buttons.
+
+=item B<-d>, B<--display>=I<DISPLAY>
+
+Connect to the X11 server on I<DISPLAY>.  By default
+the environment variable C<DISPLAY> is used.
+
+=item B<--sync>
+
+This option specifies to use a slower synchronous communication mode
+with the X11 server.  This is irrelevant for normal use.
+
+=item B<-h>, B<--help>
+
+Gives a complete list of all the available command-line options with
+some very brief explanation.
+
+=item B<-V>, B<--version>
+
+Shows the software release version for this program.
+
+=back
+
+=head2 ICEWM OPTIONS
+
+The B<icewm> program supports some additional options:
+
+=over
+
+=item B<-a>, B<--alpha>
+
+Use a 32-bit visual for translucency. This can also be set in
+the preferences file as C<Alpha=1>.
+
+=item B<--replace>
+
+Instructs B<icewm> to replace an existing window manager.  Provided that
+the window manager being replaced is ICCCM 2.0 compliant, once it
+notices that it is to be replaced it will cease operations and typically
+stop execution.  This allows B<icewm> to establish itself as the only
+active window manager.
+
+=item B<-r>, B<--restart>
+
+Tell B<icewm> to restart itself. This reloads the configuration from
+file. If no window manager is active, then it starts one.
+
+=item B<-s>, B<--splash>=I<IMAGE>
+
+Briefly show I<IMAGE> on startup in the center of the screen.
+This can also be set in the preferences file as Splash=C<image.jpg>.
+
+=item B<--configured>
+
+Shows a list of configuration options which were enabled when B<icewm>
+was compiled from source code.  This can be helpful if one suspects some
+functionality may be missing.
+
+=item B<--directories>
+
+Gives a list of directories where B<icewm> will look for configuration
+data.  This list is printed in the actual order in which B<icewm> uses
+it to search for configuration files.
+
+=item B<-l>, B<--list-themes>
+
+B<icewm> will search all the configuration directories for theme files
+and print a list of all found themes.
+
+=item B<-p>, B<--postpreferences>
+
+This gives a long list of all the internal B<icewm> options with their
+actual values after B<icewm> has processed all of the configuration and
+theme files. In some advanced scenarios this can be helpful to inspect
+which configuration was chosen or whether option formatting was correct.
+
+=item B<--rewrite-preferences>
+
+Overwrite an existing preferences file with an icewm default preferences,
+but preserve all modifications insofar they deviate from the defaults.
+
+=item B<--extensions>
+
+Give a list of the current X extensions, their versions and status.
+
+=item B<--trace>=I<conf>,I<font>,I<icon>,I<prog>,I<systray>
+
+Enable tracing of the paths which are used to load configuration,
+fonts, icons, executed programs, and/or system tray applets.
+
+=back
+
+=head2 USAGE
+
+=head2 TASKBAR
+
+On startup B<icewm> launches the task bar at the bottom of the screen.
+The task bar consists from left to right  of the following components:
+
+The I<Menu> button in the lower left corner gives access to the B<icewm>
+root menu. This menu has sub-menus to start applications, to control
+B<icewm> settings, and the B<icewm> I<Logout> menu.
+
+The I<Show Desktop> button unmaps all application windows to fully
+uncover the desktop.
+
+The I<Window List Menu> button gives access to a menu with a list of
+active windows for the current workspace and a list of workspaces
+with sub-menus for their active application windows.
+
+The I<Toolbar> is a list of icons for applications which are defined in
+the toolbar configuration file.
+
+The I<Workspace Pane> shows one button for each workspace.  The current
+workspace is indicated by a pressed button.  Clicking another workspace
+switches to that workspace.  Press left mouse, then the Shift key, then
+release the left mouse, takes the current window to that workspace.
+Press left, then Alt, then release left, moves only the focused window
+to other workspace, without changing the current workspace.
+
+The workspaces are defined in the F<preferences> file.  To change a name
+for only this session, double click, edit the name and hit Enter.
+When C<PagerShowPreview> is turned on, a small graphical window summary
+for each workspace is shown. They support drag-and-drop: dragging a
+Firefox tab to a workspace button changes the current workspace.
+Then releasing it moves that tab to a new window in that workspace.
+
+The I<Task Pane> consists of a list of wide buttons for each application
+which is running on the current workspace, or all workspaces if
+C<TaskBarShowAllWindows=1>.  Each task button shows the
+application icon and the application title.  The active application is
+indicated by a pressed button.  This is the application which has input
+focus.  Pressing another button activates that application: it is
+brought to the foreground and receives input focus.  Other mouse
+controlled activities on the window buttons are: dragging window buttons
+with the left mouse button to rearrange the order, closing the application
+window with C<Alt> + middle button, lowering the application window with
+C<Ctrl> + middle button, or bringing the application window to the current
+workspace with C<Shift> + middle button if C<TaskBarShowAllWindows=1>.
+
+If there are not many application buttons then a stretch of plain task
+bar is visible.  Clicking on it with the right mouse button gives the
+task bar menu.  Even with a full task pane, this menu can be usually
+accessed by right-clicking the bottom right corner of the taskbar.
+
+The I<Tray Applet> shows system tray objects.
+
+The I<APM Applet> shows battery power status.
+
+The I<Net Applet> shows network activity.  Network devices to monitor
+are given by the C<NetworkStatusDevice> option.
+
+The I<Memory Applet> monitors memory usage.
+
+The I<CPU Applet> monitors processor utilization.
+
+The I<Mailbox Applet> monitors mailbox status changes.
+See the section MAILBOX MONITORING below.
+
+The I<Clock Applet> shows the current time and date.  It is configured
+by the C<TimeFormat> option.
+
+The I<Task Bar Collapse> button collapses the task bar and hides it.
+
+Not all B<icewm> applets may show up on the task bar.  They must have
+been enabled during configuration of the B<icewm> software.  Their
+appearance is also controlled by options in the F<preferences> file.
+
+=head2 INPUT FOCUS
+
+Of all visible windows only one can be the active window.  This is the
+window which has input focus.  It is the primary receiver of keyboard
+and mouse events and hence one can interact with the application which
+created that window.  A primary task of a window manager is to allow the
+user to switch input focus between different windows.  The primary means
+to do this is the mouse pointer.  By moving the mouse pointer over the
+screen to another window, and perhaps also by clicking on a window,
+input focus can be directed.
+
+The C<FocusMode> option controls the way B<icewm> gives input focus to
+applications.  It is initialized by the F<focus_mode> configuration
+file.  The focus mode is set via the I<Focus> menu.  B<icewm> supports
+six focus models:
+
+=over
+
+=item B<1. Click-to-focus>
+
+The default focus mode.  In this mode changing input focus requires to
+click a window with the left mouse button. The window is raised if
+needed.  When an application requests focus its task pane button
+flashes.  This gives the option to honor this request or to ignore it.
+When a new application window appears it automatically receives focus.
+Also when a hidden application raises to the front it receives focus.
+
+=item B<2. Sloppy-mouse-focus>
+
+Sets input focus merely by moving the mouse pointer over a window.  It
+is called sloppy, because if the mouse then leaves the window and moves
+to the desktop background the input focus remains with the last active
+window.  When a window receives focus it is raised.  When an application
+requests focus its task pane button flashes.  A new application or an
+application which raises to the front automatically receives focus.
+
+=item B<3. Explicit-focus>
+
+Focus is even more user-controlled than B<Click-to-focus>.  When a
+window receives focus it is not raised by default, unless the frame
+border is clicked.  No flashing occurs when an application requests
+focus.  When a new application window appears it does not receive focus.
+Only by explicit clicking on a window is focus directed.
+
+=item B<4. Strict-mouse-focus>
+
+Like B<Sloppy> but focus remains with the last window. New applications
+don't receive focus and are mapped behind other windows.  When an
+application raises to the front it still does not get focus.
+
+=item B<5. Quiet-sloppy-focus>
+
+Like B<Sloppy> but no disturbing flashing occurs on the task bar when an
+application requests focus.
+
+=item B<6. Custom-mode>
+
+A focus mode which is defined in detail by ten options in the
+F<preferences> file.
+These are:
+C<ClickToFocus>,
+C<FocusOnAppRaise>,
+C<RequestFocusOnAppRaise>,
+C<RaiseOnFocus>,
+C<RaiseOnClickClient>,
+C<FocusChangesWorkspace>,
+C<FocusOnMap>,
+C<FocusOnMapTransient>,
+C<FocusOnMapTransientActive>,
+C<MapInactiveOnTop>.
+
+All non-Custom focus modes override these ten options.
+
+=back
+
+Apart from the mouse, B<icewm> supports changing input focus in two
+ways by keyboard.  By pressing C<Alt+Esc> or C<Alt+Shift+Esc>,
+input focus is immediately changed to the next or previous window,
+which will be raised to make it fully visible. The other method
+involves the quick switch.
+
+=head2 QUICK SWITCH
+
+The B<QuickSwitch> is a means to quickly and interactively change
+the input focus to another window.  It is activated by pressing the
+C<Alt+Tab> or C<Alt+Shift+Tab> key combination.  A window pops up
+in the centre of the screen with a list of windows to choose from.
+A narrow band indicates a selection: the candidate window that will
+be activated to receive input focus when the Alt key is released.
+
+The selection can be changed by repeatedly pressing the Tab key, while
+keeping the Alt key down. If a Shift key is also down, the direction of
+traversal is reversed. Or use the scroll wheel of the mouse.  Or use
+one of the digit keys to select the corresponding window from the list.
+Arrow keys are also supported, as well as the Home and End key.
+
+To make a selected window the active window, just release the Alt key,
+or hit the Return key, or click on it.  To cancel the QuickSwitch,
+press Escape or click outside of the QuickSwitch window.
+
+A selected window can be closed by Delete, C<Alt+F4>, or the middle
+mouse button.  While the QuickSwitch window is up, one can still change
+workspace with the usual workspace hotkeys.
+
+The QuickSwitch has two distinct modes: vertical and horizontal.
+The window list can include all windows or be limited to the current
+workspace. There is an option to raise the selected candidate.
+See the many preferences available for the QuickSwitch.
+
+=head2 WINDOW PLACEMENT
+
+A second important task of a window manager is to place new windows on
+the screen.  By default B<icewm> chooses a placement with minimal
+overlap, but this is determined by the C<SmartPlacement> option in the
+F<preferences> file.  If C<SmartPlacement> is turned off then windows
+are placed in sequence from left to right and top to bottom.  One can
+also turn on C<ManualPlacement>.  Then new windows appear initially in
+the top left corner and the mouse cursor changes into a fist.  By moving
+the fist cursor to a suitable location and clicking the new window will
+appear at the mouse click location.
+
+=head2 WINDOW LAYERS
+
+Windows can overlap.  Which window appears on top is determined by three
+features.  Newer windows appear over older windows.  By clicking on a
+window it is raised to the top.  But both are overruled by the window
+layer.  Windows can be placed in different layers via the I<Layers>
+menu.  Click with the right mouse button on the window frame and select
+I<Layer>.  From there choose one of seven window layers.  These are
+ordered from higher to lower.  Windows in higher layers appear over
+windows in lower layers.
+
+=head2 TABBED WINDOWS
+
+A window frame may contain multiple client windows. Only one client can
+be visible, while the others are hidden. This is called tabbing.  This
+can be helpful to reduce the number of visible windows. To create a tab,
+drag the title bar with the middle mouse button, while holding down a
+shift key, onto the title bar of another frame. The two title bars will
+start to flash to indicate that they can merge. Release the mouse button
+to merge the client of the upper window to the lower frame.  Now the
+lower frame will have multiple clients, called tabs. The title bar will
+show a vertical bar with triple dots to indicate this.
+To change the current tab either:
+
+=over
+
+=item
+
+Click on the triple dots next to the vertical bar.
+
+=item
+
+Use C<KeyWinNext=Alt+F6> to select the next tab.
+
+=item
+
+Use C<KeyWinPrev=Alt+Shift+F6> for the previous tab.
+
+=item
+
+Use the QuickSwitch.
+
+=item
+
+Use the window list window.
+
+=item
+
+Use a submenu in the window menu.
+
+=back
+
+To change the mouse binding for creating tabs, modify
+B<MouseWinTabbing>=C<Shift+Pointer_Button2>.  Another
+useful setting is B<MouseWinTabbing>=C<Pointer_Button1>.
+
+C<Alt+F4> closes all tabs. To close just the active tab add to C<keys>:
+
+    key "Ctrl+Shift+F4"     icesh -f close
+
+To move the active tab to its own window frame by key, add to C<keys>:
+
+    key "Alt+u"             icesh -f untab
+
+To open all chrome windows in the same frame add this to C<winoptions>:
+
+    google-chrome.frame:    chrome
+
+=head2 WORKSPACES
+
+B<icewm> supports multiple virtual desktops called workspaces.  A
+workspace is like a screen where a subset of all application windows are
+mapped.  Thanks to multiple workspaces we can more easily manage a
+large number of applications.  The number of workspaces and their names
+are configurable in the F<preferences> file through the
+C<WorkspaceNames> option.  By default four workspaces are created
+with the names 1, 2, 3 and 4 thus:
+
+ WorkspaceNames=" 1 ", " 2 ", " 3 ", " 4 "
+
+This syntax is typical for B<icewm> options which receive multiple
+values.  It is a list of comma-separated values each of which can be
+quoted.
+
+The workspaces are visible on the toolbar.  One can switch to a
+different workspace by pressing the workspace button in the toolbar,
+but after becoming familiar with the 'keyboard shortcuts' below one will
+want to use a hotkey to choose a workspace.  If the C<EdgeSwitch>
+options is enabled in the F<preferences> file (with sub-options
+C<HorizontalEdgeSwitch> and C<VerticalEdgeSwitch>) then one can move to
+the next or previous workspace by moving the mouse to the edge of the
+screen.  The C<ContinuousEdgeSwitch> option enables continuous movement
+to subsequent workspaces.  The C<EdgeSwitchDelay> option says how long
+to wait before a change of workspace occurs.
+
+To move an application window to a different workspace one can use a
+keyboard shortcut.  Another option is to select the I<Move To> submenu
+in the window menu of the window frame.
+
+=head2 DRAG AND DROP
+
+The task bar supports drag and drop operations. When a drag
+is in progress, the destination window can be activated by
+hovering the drag icon over the task button for that window.
+Alternatively, the current workspace can be changed by
+hovering the drag icon over the desired workspace button.
+When edge switching is enabled, the current workspace can
+also be changed by bringing the drag icon to the screen edge.
+
+=head2 ADDRESS BAR
+
+If B<EnableAddressBar>=1 then B<KeySysAddressBar>=C<Alt+Ctrl+Space>
+activates the address bar in the task bar.
+If B<ShowAddressBar>=1 it is always shown. This is a command-line in
+the task bar where a shell command can be typed.
+Pressing C<Enter> will execute the command.
+B<AddressBarCommand>=C</bin/sh> will be used to execute the command.
+On C<Control+Enter> the command is executed in a terminal
+as given by B<TerminalCommand>.
+The address bar maintains a history which is navigable by the I<Up>
+and I<Down> keys.
+It supports command completion using C<Tab> or C<Ctrl+I>.
+A rich set of editing operations is supported,
+including cut-/copy-/paste-operations.
+
+=head2 WINDOW LIST
+
+The window list window shows a list of all workspaces. For each
+workspace it shows the window titles of the windows which are mapped
+on it. The bottom entry reads C<All Workspaces>. It holds the sticky
+windows. These windows are mapped in all workspaces.
+
+The window list window is normally hidden. Choose one of the following
+four methods to make it visible:
+
+=over
+
+=item
+
+Select the bottom window list menu entry.
+
+=item
+
+Press the C<KeySysWindowList=Ctrl+Alt+Esc> key.
+
+=item
+
+Press the right Windows key if C<Win95Keys=1>
+
+=item
+
+Press the C<DesktopWinListButton=2> mouse button in the root window.
+
+=item
+
+Press the middle mouse button in a workspace button on the task bar.
+
+=back
+
+A single-click on a window entry selects it. A group of windows can
+be selected by C<Shift+Pointer_Button1> or by dragging with the left
+mouse button. Use C<Ctrl+Pointer_Button1> to individually select
+windows in a multi-selection. A right mouse click over a selection
+will popup the system menu for this selection.  To close the selected
+windows, press C<Delete>. Press C<Shift+Delete> to forcefully kill them.
+Right mouse click below the sticky windows for a menu with window
+arranging actions.
+
+Double-click on a workspace to switch to it.  Double-click on a window
+to activate it.  Or navigate by arrow keys and press Enter.
+The space bar toggles a selection of a window. C<Ctrl+a> and C<Ctrl+/>
+will select the entire list of windows. C<Ctrl+\\> deselects everything.
+Press the first letter of a window title to navigate to it and select
+it. If titles of multiple windows start with the same letter then
+repeatedly pressing the first letter cycles over those windows.
+C<Home> selects the first entry and C<End> the last. C<PageUp> and
+C<PageDown> move up or down by ten entries. Combine this with the
+C<Shift> key to extend a selection over the range of motion.
+
+=head2 MAILBOX MONITORING
+
+The task bar can show one or more icons to reflect the status of a
+mailbox. The mailbox can be a local file or a remote POP or IMAP
+account. For this a couple of options must be set. First,
+F<TaskBarShowMailboxStatus> must be enabled, which it is by default.
+Then the location of the mailbox must be set.  Icewm first looks for
+F<MailBoxPath> in preferences. If this is unset, it looks at the
+environment variables C<MAILPATH> and C<MAIL>.  F<MailBoxPath> may
+contain a space-separated list of mailboxes, while C<MAILPATH> may
+contain a colon-separated list of mailboxes.  If a mailbox starts
+with a slash C</>, then it is a local file, otherwise a URL.
+These are six examples of possible mailboxes:
+
+    file:///var/spool/mail/captnmark
+    file:///home/captnmark/Maildir/
+    pop3://markus:%2f%40%3a@maol.ch/
+    pop3s://markus:password@pop.gmail.com/
+    imap://mathias@localhost/INBOX.Maillisten.icewm-user
+    imaps://mathias:password@imap.gmail.com/INBOX
+
+The POP3S and IMAPS schemes use C<openssl> for TLS/SSL encryption.
+Note that for IceWM to access Gmail you must first configure
+your Gmail account to enable POP3 or IMAP access.
+Make sure you have secure file permissions on your IceWM
+preferences file and the directory which contains it.
+
+Reserved characters in the password, like I<slash>, I<at> and I<colon>
+can be specified using escape sequences with a hexadecimal encoding
+like C<%2f> for the slash or C<%40> for the at sign.
+For example, to hex-encode C<!p@a%s&s~> use this Perl snippet:
+
+    perl -e 'foreach(split("", $ARGV[0])) { printf "%%%02x", ord($_); };
+    print "\n";' '!p@a%s&s~'
+
+Which will print:
+
+    %21%40%23%24%25%5e%26%2a%7e
+
+This is the hex-encoded password. However, it is unwise to store a
+password in your preferences. Consider a wallet extension for IceWM.
+
+IceWM will check a mailbox periodically. The period in seconds can
+be set by the F<MailCheckDelay> option, which is 30 seconds by default.
+
+Whenever new mail arrives, the mailbox icon will be highlighted.
+The color will indicate if the mail has been read or not. Hovering
+the mouse over the mailbox icon will show a tooltip with more details.
+A command can be also be run on new mail. Set the F<NewMailCommand>
+option. Its environment will have these variables set by IceWM:
+
+=over
+
+=item ICEWM_MAILBOX
+
+The mailbox index number of F<MailBoxPath> starting from 1.
+
+=item ICEWM_COUNT
+
+The total number of messages in this mailbox.
+
+=item ICEWM_UNREAD
+
+The number of unread messages in this mailbox.
+
+=back
+
+=head2 KEYBOARD LAYOUT SWITCHING
+
+To control keyboard layouts on the task bar, define in F<preferences>
+the option B<KeyboardLayouts> to a comma-separated list of your
+preferred keyboard layouts. For example:
+
+ KeyboardLayouts="de","fr","jp"
+
+A keyboard layout can simply be a name. Usually this is a two-letter
+country code. See the directory F</usr/share/X11/xkb/symbols> for
+a list of available keyboard layouts for your system.  If it is
+enclosed in double quotes, it can also be a space-separated list of
+command-line arguments to an invocation of the C<setxkbmap> program.
+
+The first layout is the default. It will be installed when icewm starts.
+The task bar will show the current keyboard layout. If an icon can
+be found for the first two letters of the layout, then that icon
+will be shown. Otherwise the first two letters of the name of the
+layout will be shown.
+
+Click on the current keyboard layout to cycle through all the
+available keyboard layouts, or use the B<KeySysKeyboardNext> key.
+Click with the right mouse button to open a menu of all available
+keyboard layouts.
+
+It is also possible to configure a default keyboard layout for
+each program individually in the L<icewm-winoptions(5)> file.
+Whenever such a program receives input focus, icewm will install
+this configured keyboard layout automatically. The keyboard status
+on the task bar will be updated to reflect this.
+
+Please note that for keyboard layout switching to work, the
+C<setxkbmap> program must be installed. To see your current
+keyboard layout settings, do C<setxkbmap -query>.
+
+=head2 KEYBOARD SHORTCUTS
+
+B<icewm> supports a large number of hotkeys to activate some behaviour
+with a single key combination.  These are all configurable in the
+F<preferences> file.  Here we give their preferences name, followed by
+their default value in double quotes, and a short descriptions of their
+effect.
+
+Note that all use one or more key modifiers. Icewm supports the
+following modifiers: Alt, AltGr, Ctrl, Hyper, Meta, Shift, Super.
+Setting B<ModSuperIsCtrlAlt=1> makes the Super modifier an alias
+for Ctrl+Alt.
+
+=over
+
+=item B<KeyWinRaise>=C<Alt+F1>
+
+Raises the window which currently has input focus.
+
+=item B<KeyWinOccupyAll>=C<Alt+F2>
+
+Makes the active window occupy all workspaces.
+
+=item B<KeyWinLower>=C<Alt+F3>
+
+Lowers the window which currently has input focus.
+
+=item B<KeyWinClose>=C<Alt+F4>
+
+Closes the active window.
+
+=item B<KeyWinRestore>=C<Alt+F5>
+
+Restores the active window to its visible state.
+
+=item B<KeyWinNext>=C<Alt+F6>
+
+Switches focus to the next window.
+
+=item B<KeyWinPrev>=C<Alt+Shift+F6>
+
+Switches focus to the previous window.
+
+=item B<KeyWinMove>=C<Alt+F7>
+
+Starts movement of the active window.
+
+=item B<KeyWinSize>=C<Alt+F8>
+
+Starts resizing of the active window.
+
+=item B<KeyWinMinimize>=C<Alt+F9>
+
+Iconifies the active window.
+
+=item B<KeyWinMaximize>=C<Alt+F10>
+
+Maximizes the active window with borders.
+
+=item B<KeyWinMaximizeVert>=C<Alt+Shift+F10>
+
+Maximizes the active window vertically.
+
+=item B<KeyWinMaximizeHoriz>=C<undefined>
+
+Maximizes the active window horizontally.
+
+=item B<KeyWinFullscreen>=C<Alt+F11>
+
+Maximizes the active window without borders.
+
+=item B<KeyWinRollup>=C<Alt+F12>
+
+Rolls up the active window.
+
+=item B<KeyWinHide>=C<Alt+Shift+F12>
+
+Hides the active window.
+
+=item B<KeyWinMenu>=C<Alt+Space>
+
+Posts the window menu.
+
+=item B<KeyWinArrangeNW>=C<Ctrl+Alt+KP_7>
+
+Moves the active window to the top left corner of the screen.
+
+=item B<KeyWinArrangeN>=C<Ctrl+Alt+KP_8>
+
+Moves the active window to the top middle of the screen.
+
+=item B<KeyWinArrangeNE>=C<Ctrl+Alt+KP_9>
+
+Moves the active window to the top right of the screen.
+
+=item B<KeyWinArrangeE>=C<Ctrl+Alt+KP_6>
+
+Moves the active window to the middle right of the screen.
+
+=item B<KeyWinArrangeSE>=C<Ctrl+Alt+KP_3>
+
+Moves the active window to the bottom right of the screen.
+
+=item B<KeyWinArrangeS>=C<Ctrl+Alt+KP_2>
+
+Moves the active window to the bottom middle of the screen.
+
+=item B<KeyWinArrangeSW>=C<Ctrl+Alt+KP_1>
+
+Moves the active window to the bottom left of the screen.
+
+=item B<KeyWinArrangeW>=C<Ctrl+Alt+KP_4>
+
+Moves the active window to the middle left of the screen.
+
+=item B<KeyWinArrangeC>=C<Ctrl+Alt+KP_5>
+
+Moves the active window to the center of the screen.
+
+=item B<KeyWinTileLeft>=""
+
+Let the active window occupy the left half of the screen.
+
+=item B<KeyWinTileRight>=""
+
+Let the active window occupy the right half of the screen.
+
+=item B<KeyWinTileTop>=""
+
+Let the active window occupy the top half of the screen.
+
+=item B<KeyWinTileBottom>=""
+
+Let the active window occupy the bottom half of the screen.
+
+=item B<KeyWinTileTopLeft>=""
+
+Let the active window occupy the top left quarter of the screen.
+
+=item B<KeyWinTileTopRight>=""
+
+Let the active window occupy the top right quarter of the screen.
+
+=item B<KeyWinTileBottomLeft>=""
+
+Let the active window occupy the bottom left quarter of the screen.
+
+=item B<KeyWinTileBottomRight>=""
+
+Let the active window occupy the bottom right quarter of the screen.
+
+=item B<KeyWinTileCenter>=""
+
+Let the active window occupy the center quarter of the screen.
+
+=item B<KeyWinSmartPlace>=C<Ctrl+Alt+Shift+KP_5>
+
+Smart place the active window.
+
+=item B<KeySysWinMenu>=C<Shift+Esc>
+
+Posts the system window menu.
+
+=item B<KeySysWinNext>=C<Alt+Esc>
+
+Give focus to the next window and raise it.
+
+=item B<KeySysWinPrev>=C<Alt+Shift+Esc>
+
+Give focus to the previous window and raise it.
+
+=item B<KeySysDialog>=C<Alt+Ctrl+Del>
+
+Opens the IceWM system dialog in the center of the screen.
+
+=item B<KeySysMenu>=C<Ctrl+Esc>
+
+Activates the IceWM root menu in the lower left corner.
+
+=item B<KeySysWindowList>=C<Alt+Ctrl+Esc>
+
+Opens the IceWM system window list in the center of the screen.
+
+=item B<KeySysAddressBar>=C<Alt+Ctrl+Space>
+
+Opens the address bar in the task bar where a command can be typed.
+
+=item B<KeySysWorkspacePrev>=C<Alt+Ctrl+Left>
+
+Goes one workspace to the left.
+
+=item B<KeySysWorkspaceNext>=C<Alt+Ctrl+Right>
+
+Goes one workspace to the right.
+
+=item B<KeySysWorkspaceLast>=C<Alt+Ctrl+Down>
+
+Goes to the previous workspace.
+
+=item B<KeySysWorkspacePrevTakeWin>=C<Alt+Ctrl+Shift+Left>
+
+Takes the active window one workspace to the left.
+
+=item B<KeySysWorkspaceNextTakeWin>=C<Alt+Ctrl+Shift+Right>
+
+Takes the active window one workspace to the right.
+
+=item B<KeySysWorkspaceLastTakeWin>=C<Alt+Ctrl+Shift+Down>
+
+Takes the active window to the previous workspace.
+
+=item B<KeySysWorkspace1>=C<Alt+Ctrl+1>
+
+Goes to workspace 1.
+
+=item B<KeySysWorkspace2>=C<Alt+Ctrl+2>
+
+Goes to workspace 2.
+
+=item B<KeySysWorkspace3>=C<Alt+Ctrl+3>
+
+Goes to workspace 3.
+
+=item B<KeySysWorkspace4>=C<Alt+Ctrl+4>
+
+Goes to workspace 4.
+
+=item B<KeySysWorkspace5>=C<Alt+Ctrl+5>
+
+Goes to workspace 5.
+
+=item B<KeySysWorkspace6>=C<Alt+Ctrl+6>
+
+Goes to workspace 6.
+
+=item B<KeySysWorkspace7>=C<Alt+Ctrl+7>
+
+Goes to workspace 7.
+
+=item B<KeySysWorkspace8>=C<Alt+Ctrl+8>
+
+Goes to workspace 8.
+
+=item B<KeySysWorkspace9>=C<Alt+Ctrl+9>
+
+Goes to workspace 9.
+
+=item B<KeySysWorkspace10>=C<Alt+Ctrl+0>
+
+Goes to workspace 10.
+
+=item B<KeySysWorkspace11>=C<Alt+Ctrl+minus>
+
+Goes to workspace 11.
+
+=item B<KeySysWorkspace12>=C<Alt+Ctrl+equal>
+
+Goes to workspace 12.
+
+=item B<KeySysWorkspace1TakeWin>=C<Alt+Ctrl+Shift+1>
+
+Takes the active window to workspace 1.
+
+=item B<KeySysWorkspace2TakeWin>=C<Alt+Ctrl+Shift+2>
+
+Takes the active window to workspace 2.
+
+=item B<KeySysWorkspace3TakeWin>=C<Alt+Ctrl+Shift+3>
+
+Takes the active window to workspace 3.
+
+=item B<KeySysWorkspace4TakeWin>=C<Alt+Ctrl+Shift+4>
+
+Takes the active window to workspace 4.
+
+=item B<KeySysWorkspace5TakeWin>=C<Alt+Ctrl+Shift+5>
+
+Takes the active window to workspace 5.
+
+=item B<KeySysWorkspace6TakeWin>=C<Alt+Ctrl+Shift+6>
+
+Takes the active window to workspace 6.
+
+=item B<KeySysWorkspace7TakeWin>=C<Alt+Ctrl+Shift+7>
+
+Takes the active window to workspace 7.
+
+=item B<KeySysWorkspace8TakeWin>=C<Alt+Ctrl+Shift+8>
+
+Takes the active window to workspace 8.
+
+=item B<KeySysWorkspace9TakeWin>=C<Alt+Ctrl+Shift+9>
+
+Takes the active window to workspace 9.
+
+=item B<KeySysWorkspace10TakeWin>=C<Alt+Ctrl+Shift+0>
+
+Takes the active window to workspace 10.
+
+=item B<KeySysWorkspace11TakeWin>=C<Alt+Ctrl+Shift+minus>
+
+Takes the active window to workspace 11.
+
+=item B<KeySysWorkspace12TakeWin>=C<Alt+Ctrl+Shift+equal>
+
+Takes the active window to workspace 12.
+
+=item B<KeySysTileVertical>=C<Alt+Shift+F2>
+
+Tiles all windows from left to right maximized vertically.
+
+=item B<KeySysTileHorizontal>=C<Alt+Shift+F3>
+
+Tiles all windows from top to bottom maximized horizontally.
+
+=item B<KeySysCascade>=C<Alt+Shift+F4>
+
+Makes a horizontal cascade of all windows which are maximized vertically.
+
+=item B<KeySysArrange>=C<Alt+Shift+F5>
+
+Rearranges the windows.
+
+=item B<KeySysUndoArrange>=C<Alt+Shift+F7>
+
+Undoes arrangement.
+
+=item B<KeySysArrangeIcons>=C<Alt+Shift+F8>
+
+Rearranges icons.
+
+=item B<KeySysMinimizeAll>=C<Alt+Shift+F9>
+
+Minimizes all windows.
+
+=item B<KeySysHideAll>=C<Alt+Shift+F11>
+
+Hides all windows.
+
+=item B<KeySysShowDesktop>=C<Alt+Ctrl+d>
+
+Unmaps all windows to show the desktop.
+
+=item B<KeySysCollapseTaskBar>=C<Alt+Ctrl+h>
+
+Hides the task bar.
+
+=item B<KeyTaskBarSwitchNext>=C<undefined>
+
+Switches to the next window in the task bar.
+
+=item B<KeyTaskBarSwitchPrev>=C<undefined>
+
+Switches to the previous window in the task bar.
+
+=item B<KeyTaskBarMoveNext>=C<undefined>
+
+Moves the task bar button of the current window
+right.
+
+=item B<KeyTaskBarMovePrev>=C<undefined>
+
+Moves the task bar button of the current window
+left.
+
+=item B<KeySysWinListMenu>=C<undefined>
+
+Shows the window list menu.
+
+=item B<KeySysKeyboardNext>=C<undefined>
+
+Switch to the next keyboard layout in the KeyboardLayouts list.
+
+=item B<KeySysSwitchNext>=C<Alt+Tab>
+
+Opens the C<QuickSwitch> popup (see L<INPUT FOCUS>)
+and/or moves the selector in the C<QuickSwitch> popup.
+
+=item B<KeySysSwitchLast>=C<Alt+Shift+Tab>
+
+Works like C<KeySysSwitchNext> but moving in the
+opposite direction.
+
+=item B<KeySysSwitchClass>=C<Alt+grave>
+
+Is like C<KeySysSwitchNext> but only for windows
+with the same WM_CLASS property as the currently focused window.
+
+=back
+
+=head2 MOUSE BINDINGS
+
+You can control windows by a modified mouse button press:
+
+=over
+
+=item B<MouseWinMove>=C<Alt+Pointer_Button1>
+
+Moves the window under the mouse over the screen.
+
+=item B<MouseWinSize>=C<Alt+Pointer_Button3>
+
+Resizes the window.  Keep the key and button pressed.
+To enlarge the window move the mouse button away from the center.  To
+shrink it move towards the centre.
+
+=item B<MouseWinRaise>=C<Ctrl+Alt+Pointer_Button1>
+
+Raises the window under the mouse.
+
+=item B<MouseWinLower>=C<Ctrl+Alt+Pointer_Button1>
+
+Lowers the window under the mouse.
+If this is equal to C<MouseWinRaise> and the window can be raised
+then C<MouseWinRaise> takes preference over C<MouseWinLower>.
+
+=item B<MouseWinTabbing>="Shift+Pointer_Button2"
+
+Mouse binding to create tabs.
+Drag the title bar with this button over another title bar.
+When they start to flash, release the button to merge the frame tabs.
+
+=back
+
+The title frame of a window also listens for mouse clicks.  Left double
+clicking maximizes the window (C<TitleBarMaximizeButton=1>). Press
+Shift to only maximize vertically. Press Alt+Shift for horizontally.
+Middle double clicking rolls up the window (C<TitleBarRollupButton=2>).
+Also press Shift to maximize horizontally. If B<TitleBarRollupButton>
+is either 4 or 5 then the scroll wheel controls rolling up or down.
+Pressing a mouse button and moving it will move the window.
+C<Alt+Pointer_Button1> lowers the window.
+
+When the mouse is on the window frame then a left click raises the
+window.  Dragging with the left button down resizes the window.
+Clicking the right button pops up the context menu.  Dragging with the
+right button moves the window.
+
+Clicking on the desktop activates a menu.  The middle button shows the
+window list (C<DesktopWinListButton=2>).  The right button shows the
+root menu (C<DesktopMenuButton=3>). If you press C<Ctrl+Alt> then
+the mouse wheel will focus all applications in turn.
+
+=head2 SIGNALS
+
+B<icewm> supports the following signals:
+
+=over
+
+=item B<SIGHUP>
+
+B<icewm> will restart itself. It is a way to reload the configuration.
+
+=item B<SIGINT>, B<SIGTERM>
+
+B<icewm> will cease to manage application windows and terminate.
+
+=item B<SIGQUIT>
+
+B<icewm> will initiate the logout procedure.  If a C<LogoutCommand>
+preferences option was configured it will be executed.
+
+=item B<SIGUSR2>
+
+Toggle the logging of X11 events, if C<logevents> was configured.
+
+=back
+
+=head2 ENVIRONMENT VARIABLES
+
+=over
+
+=item B<ICEWM_PRIVCFG>
+
+The directory for user private configuration files.  When this
+environment variable is not specified, the default directory is
+F<$XDG_CONFIG_HOME/icewm> when that directory exists, otherwise the
+default value is F<$HOME/.icewm>.
+
+=item B<DISPLAY>
+
+The name of the X11 server.  See L<Xorg(1)> or L<Xserver(1)>.  This
+value can be overridden by the B<--display> option.
+
+=item B<MAILPATH>, B<MAIL>
+
+Gives the location of your mailbox.  If the schema is omitted the local
+"file" schema is assumed.  This is used by the mailbox applet in the
+task bar to show the status of your mailbox.  If the C<MailBoxPath>
+option in the F<preferences> file is set, then that one takes
+precedence.
+
+=back
+
+=head2 FILES
+
+=head2 CONFIGURATION DIRECTORIES
+
+B<icewm> looks for configuration files in the following directories, in
+the given order, until it finds one:
+
+=over
+
+=item F<$ICEWM_PRIVCFG/>
+
+Contains user-specific configurations.  When B<ICEWM_PRIVCFG> is
+specified, this directory takes precedence over
+F<$XDG_CONFIG_HOME/icewm> and F<$HOME/.icewm>.
+
+=item F<$XDG_CONFIG_HOME/icewm/>
+
+Contains user-specific configurations.  When this directory exists it
+take precedence over F<$HOME/.icewm>.
+
+=item F<$HOME/.icewm/>
+
+Contains user-specific configurations.  This is the historical default
+directory.
+
+=item F</etc/icewm/>
+
+Contains system-wide customized defaults.  Please note that your local
+installation may have been configured to use a different system
+location.  The output of C<icewm --directories> will show this location.
+
+=item F</usr/share/icewm/>
+
+Default local installation settings.
+
+=back
+
+=head2 CONFIGURATION FILES
+
+=over
+
+=item F<env>
+
+L<icewm-session(1)> loads additional environment variables from the file
+F<env>.  Each line is subjected to POSIX shell expansion by
+L<wordexp(3)>.  Comment lines starting by a hash-sign (C<#>) are ignored.
+L<icewm-session(1)> will load those expanded lines which contain a name,
+followed by an equals sign, followed by the value (which may be empty).
+
+See L<icewm-env(5)>.
+
+=item F<focus_mode>
+
+Defines the initial value for C<FocusMode>.  Its default value is
+C<FocusMode=1> (Click-to-focus).  This can be changed via the menu.
+B<icewm> will save the Focus menu choice in this file.
+
+See L<icewm-focus_mode(5)>.
+
+=item F<keys>
+
+Global keybindings to launch applications, which need not be window
+manager related.  Each non-empty line starts with the word C<key>.
+After one or more spaces follows a double-quoted string of the bound X11
+key combination like C<Alt+Ctrl+Shift+X>.  Then after at least one space
+follows a shell command-line which will be executed by B<icewm> whenever
+this key combination is pressed.  For example, the following line
+creates a hotkey to reload the B<icewm> configuration:
+
+ key "Ctrl+Shift+r"      icesh restart
+
+See L<icewm-keys(5)>.
+
+=item F<menu>
+
+A menu of applications; usually customized by the user.  B<icewm>
+provides the L<icewm-menu-fdo(1)> program to generate a default menu.
+Similar programs are L<xdg_menu(1)>, L<mmaker(1)> (MenuMaker),
+L<xde-menu(1)>, L<xdgmenumaker(1)>.
+
+See L<icewm-menu(5)>.
+
+=item F<preferences>
+
+Contains general settings like paths, colors and fonts, but also options
+to control the B<icewm> focus behaviour and the applets which are
+started in the task bar.  The B<icewm> installation will provide a
+default F<preferences> file, which can be copied to the B<icewm> user
+configuration directory and modified.
+
+See L<icewm-preferences(5)>.
+
+=item F<prefoverride>
+
+Settings which override the settings from a theme.  Some of the B<icewm>
+configuration options from the preferences file which control the
+look-and-feel may be overridden by the theme, if the theme designer
+thinks this is desirable.  However, this F<prefoverride> file will again
+override this for a few specific options of your choosing.  It is safe
+to leave this file empty initially.
+
+See L<icewm-prefoverride(5)>.
+
+=item F<programs>
+
+An automatically generated menu of applications.  This could be used by
+L<wmconfig(1)>, menu or similar programs to give easy access to all the
+desktop applications which are installed on the system.
+
+See L<icewm-programs(5)>.
+
+=item F<theme>
+
+This file contains the name of the default theme.  On startup B<icewm>
+reads this file to obtain the theme name, unless B<icewm> was started
+with the B<--theme> option.  Whenever a different theme is selected from
+the B<icewm> Menu then the theme file is overwritten with the name of
+the selected theme.  This theme file contains the keyword C<Theme>,
+followed by an equals sign, followed by a double-quoted string with the
+theme name.  The theme name is the name of the theme directory, followed
+by a slash, followed by the theme file.  Usually the theme file is just
+F<default.theme>, but a theme may have alternatives.  Alternatives are
+small tweaks of a theme.  These are specified in their own F<.theme>
+file, which replaces F<default.theme>.  If no theme file exists then
+B<icewm> will use the default setting of
+C<Theme="default/default.theme">.
+
+See L<icewm-theme(5)>.
+
+=item F<toolbar>
+
+Contains names of quick to launch applications with icons for the task
+bar.  Each non-empty non-comment line starts with the keyword B<prog>.
+After one or more spaces follows a name, which is displayed in a tool
+tip whenever the mouse cursor hovers over the toolbar icon.  This name
+may be a double quoted string.  Then follows the bare name of the icon
+to use without extensions.  This icon will be shown in the toolbar.  The
+last component is a shell command-line which will be executed whenever
+the user presses the icon in the toolbar.  For example, the following
+line in toolbar will create a button with tool tip C<Mozilla Firefox>
+with the F<firefox> icon which launches L<firefox(1)> when clicked:
+
+ prog  "Mozilla Firefox"  firefox  /usr/bin/firefox --private-window
+
+See L<icewm-toolbar(5)>.
+
+=item F<winoptions>
+
+Contains settings to control window appearance and behaviour which are
+specific to applications or groups of applications.  Options can control
+the border, whether it appears on the task bar, the window list, the
+system tray and the workspaces.  Also its layer, geometry, whether it
+can be moved, resized and closed.
+
+See L<icewm-winoptions(5)>.
+
+=item F<startup>
+
+Contains commands to be executed on B<icewm> startup.  This is an
+executable script with commands to tweak X11 settings and launch some
+applications which need to be active whenever B<icewm> is started.
+It is run by L<icewm-session(1)> when B<icewm> starts.
+
+See L<icewm-startup(5)>.
+
+=item F<shutdown>
+
+Contains commands to be executed on B<icewm> shutdown.  This is an
+executable script with commands to be executed in the last stage of
+B<icewm> termination.  Typically they may undo some of the effects of
+the F<startup> script.  It is run by L<icewm-session(1)> when B<icewm>
+terminates.
+
+See L<icewm-shutdown(5)>.
+
+=back
+
+=head2 CONFIGURATION SUBDIRECTORIES
+
+=over
+
+=item F<cursors>
+
+May contain cursor icons in the XPM image format. These overrule cursors
+provided by a theme. There are 3 direction cursors: F<left.xpm>,
+F<right.xpm>, F<move.xpm>, 8 resize cursors: F<sizeR.xpm>, F<sizeTR.xpm>,
+F<sizeT.xpm>, F<sizeTL.xpm>, F<sizeL.xpm>, F<sizeBL.xpm>, F<sizeB.xpm>,
+F<sizeBR.xpm>, and 4 scroll cursors: F<scrollL.xpm>, F<scrollR.xpm>,
+F<scrollU.xpm>, and F<scrollD.xpm>.
+By default an XPM header defines four dimensions: width, height, colors
+and chars-per-pixel. For cursors this must be extended to six. The last
+two are the I<x-hotspot> and the I<y-hotspot>. These define which point
+in the XPM image is the sensitive point for the mouse pointer.
+
+=item F<icons>
+
+Contains icons which are used to identify applications.  Usually these
+files are in the XPM format, but the PNG and SVG image formats are also
+supported.  The names of icon files may follow a specific naming
+pattern, like F<app_32x32.xpm>.  They start with a base name, usually
+this is just a single word.  Then follows an underscore, followed by a
+size specification in the format C<SIZExSIZE>.  This is followed by a
+dot and the file extension, where the extension denotes the icon image
+format.  Common sizes are 16, 32 and 48 for small, large and huge icons.
+This depends on the respective C<IconSize> preferences options.
+
+=item F<ledclock>
+
+Pictures of digits for the LED clock which is displayed in the
+bottom-right corner of the task bar.  These can be seen when the
+C<TaskBarShowClock> and C<TaskBarClockLeds> options are both set to 1.
+
+=item F<mailbox>
+
+Icons which are used to display different states of the mailbox applet
+in the task bar.  There are five states and each has its own icon:
+F<mail.xpm>, F<newmail.xpm>, F<unreadmail.xpm>, F<nomail.xpm>,
+F<errmail.xpm>.
+
+=item F<sounds>
+
+Audio files which are played by L<icesound(1)> on GUI events.  These
+are: F<startup.wav>, F<shutdown.wav>, F<restart.wav>, F<launchApp.wav>,
+F<workspaceChange.wav>, F<windowOpen.wav>, F<windowClose.wav>,
+F<dialogOpen.wav>, F<dialogClose.wav>, F<windowMax.wav>,
+F<windowRestore.wav>, F<windowMin.wav>, F<windowHide.wav>,
+F<windowRollup.wav>, F<windowMoved.wav>, F<windowSized.wav>,
+F<windowLower.wav>.
+
+=item F<taskbar>
+
+Pictures to customize the look of the task bar.  These include:
+F<taskbarbg.xpm>, F<taskbuttonactive.xpm>, F<taskbuttonbg.xpm>,
+F<taskbuttonminimized.xpm>, F<toolbuttonbg.xpm>,
+F<workspacebuttonactive.xpm>, F<workspacebuttonbg.xpm>.
+
+=item F<themes>
+
+A directory to store themes.  Each theme is stored in its own
+sub-directory in the F<themes> directory. A theme contains at least a
+F<default.theme> file, and optionally theme alternatives which are
+additional files which have a F<.theme> file name extension and which
+contain tweaks of the F<default.theme> file.
+How to create a theme is explained in the
+L<IceWM Theme Creation Howto|https://ice-wm.org/themes>.
+
+=item F<workspace>
+
+If C<PagerShowPreview> is disabled, icewm looks in the C<workspace>
+directory for images to draw on a workspace button. The image filename
+should have the name of the workspace. The image extension is optional.
+
+=back
+
+=head2 OPACITY
+
+IceWM supports window opacity and transparency in connection with an
+external compositor like L<compton(1)> or L<picom(1)>.
+If a client window sets the C<_NET_WM_WINDOW_OPACITY> property on
+its window, then B<icewm> will copy this to the outer frame window,
+where the compositor will read it and adjust the opacity accordingly.
+
+The opacity can also be set in the L<icewm-winoptions(5)> file.
+L<icesh(1)> can control the opacity level of running applications.
+
+The _NET_WM_WINDOW_TYPE properties which B<icewm> sets on its windows
+are I<DIALOG>, I<NOTIFICATION>, I<POPUP_MENU> and I<TOOLTIP>. The output
+of C<icesh windows> shows their WM_CLASS values. These can be helpful
+to configure compton.
+
+=head2 EXAMPLES
+
+Examples of the above configuration files can be found in the default
+installation path or in the system-wide defaults.  See the output of
+C<icewm --directories> for their locations.
+
+=head2 CONFORMING TO
+
+ICCCM 2.0: partial.  NetWM/EWMH: extensive.
+See the file F<COMPLIANCE> in the distribution for full details.
+
+=head2 SEE ALSO
+
+L<icehelp(1)>,
+L<icesh(1)>,
+L<icesound(1)>,
+L<icewm-env(5)>,
+L<icewm-focus_mode(5)>,
+L<icewm-keys(5)>,
+L<icewm-menu(5)>,
+L<icewm-menu-fdo(1)>,
+L<icewm-menu-xrandr(1)>,
+L<icewm-preferences(5)>,
+L<icewm-prefoverride(5)>,
+L<icewm-programs(5)>,
+L<icewm-session(1)>,
+L<icewm-set-gnomewm(1)>,
+L<icewm-shutdown(5)>,
+L<icewm-startup(5)>,
+L<icewm-theme(5)>,
+L<icewm-toolbar(5)>,
+L<icewm-winoptions(5)>,
+L<icewmbg(1)>,
+L<icewmhint(1)>,
+L<setxkbmap(1)>,
+L<Xorg(1)>,
+L<Xserver(1)>,
+L<xinit(1)>,
+L<xprop(1)>,
+L<xwininfo(1)>,
+L<wmctrl(1)>.
+
+=head2 BUGS
+
+Please report bugs at L<https://github.com/bbidulock/icewm/issues>.
+
+=head2 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head2 LICENSE
+
+B<IceWM> is licensed under the GNU Library General Public License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:
