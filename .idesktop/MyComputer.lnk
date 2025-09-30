@@ -1,0 +1,8 @@
+table Icon
+  Caption: My Computer  
+  Icon: /home/tf/.icons/SE98/devices/32/computer.png
+  X: 21
+  Y: 77
+  Command[0]: xfe /
+end
+

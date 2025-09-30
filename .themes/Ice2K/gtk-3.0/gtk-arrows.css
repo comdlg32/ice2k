@@ -1,0 +1,88 @@
+/* Theme arrows for menus, comboboxes and other widgets */
+
+
+arrow {
+   color: alpha(currentColor, 0.75);
+   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+   min-height: 17px;
+   min-width: 17px; }
+
+
+/* Expander arrows */
+
+
+expander arrow {
+   min-width: 16px;
+   min-height: 16px;
+   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+
+expander arrow:dir(rtl) {
+   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+
+expander arrow:hover {
+   color: @theme_selected_bg_color; }
+
+expander arrow:checked {
+   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+
+
+/* Combobox arrows */
+/* Make arrows transparent as the arrows are currently
+   imbedded in the button image to allow LibreOffice
+   to display dropdown box arrows. */
+
+
+combobox arrow, combobox arrow:disabled {
+   opacity: 0;
+   margin-right: -20px;
+/*   background-image: url("assets/arrow_down.png");*/
+   background-position: center;
+   min-height: 0px;
+   min-width: 0px; }
+
+combobox arrow:disabled {
+   color: transparent;
+   background-position: center;
+   min-height: 10px;
+   min-width: 10px; }
+
+
+/* Spin button arrows */
+
+
+spinbutton.horizontal > button.down {
+   color: transparent;
+   background-image: url("assets/arrow_down.png");
+   background-position: center;
+   min-height: 14px;
+   min-width: 14px;
+}
+
+spinbutton.horizontal > button.up {
+   color: transparent;
+   background-image: url("assets/arrow_up.png");
+   background-position: center;
+   min-height: 14px;
+   min-width: 14px;
+}
+
+
+
+/* Menu arrows */
+
+
+menu > arrow, .menu > arrow {
+   padding: 4px;
+   min-width: 16px;
+   min-height: 16px; }
+menu > arrow.top, .menu > arrow.top {
+   -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+
+menu > arrow.bottom, .menu > arrow.bottom {
+   margin-bottom: -6px;
+   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+
+menu menuitem arrow:dir(ltr), .menu menuitem arrow:dir(ltr) {
+   margin-left: 10px;
+   -gtk-icon-source: url("assets/arrow_right.png"); }
+

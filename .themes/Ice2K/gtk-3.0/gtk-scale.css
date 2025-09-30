@@ -1,0 +1,53 @@
+scale {
+   min-height: 6px;
+   min-width: 10px;
+   padding: 12px; }
+  
+scale fill, scale trough {
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-right: 1px solid @light_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-radius: 0;
+   background-color: @borders;
+   outline-offset: 2px;
+   -gtk-outline-radius: 0; }
+
+scale fill:disabled, scale trough:disabled {
+   background-color: alpha(@dark_shadow, 0.05); }
+
+
+/* Slider styling */
+
+
+scale slider {
+   border-radius: 0;
+   color: @theme_selected_fg_color;
+   background-color: @bg_color;
+   border-top: 1px solid @bg_color;
+   border-left: 1px solid @bg_color;
+   border-right: 1px solid @borders;
+   border-bottom: 1px solid @borders;
+   background-clip: padding-box;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow; }
+ 
+
+/* Trough and slider height:
+   Min height and width specify the slider size, the margin is a
+   function of the slider height and sets the trough height. */
+
+
+scale.vertical slider {
+   margin-left: -11px;
+   margin-right: -11px;
+   min-height: 10px;
+   min-width: 21px;
+}
+
+scale.horizontal slider {
+   margin-top: -11px;
+   margin-bottom: -11px;
+   min-height: 21px;
+   min-width: 10px;
+}

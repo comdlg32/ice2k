@@ -250,8 +250,14 @@ char** getModes(int* count) { // probably the first time i learned how to parse 
 	char* token;
 
 	FILE* fp = popen("xlock . 2>&1", "r");
+	int err = pclose(fp);
 
 	if (!fp) {
+		free(modes);
+		return NULL;
+	}
+
+	if (WEXITSTATUS(err)) {
 		free(modes);
 		return NULL;
 	}
@@ -511,6 +517,7 @@ long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr)
 // from fox imageviewer example
 const FXchar patterns[] =
 	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
+	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
 	"\nBitmap Image (*.bmp)"
 	"\nPNG Image  (*.png)"
 	"\nJPEG Image (*.jpg,*.jpeg)"
@@ -523,10 +530,12 @@ const FXchar patterns[] =
 
 const char* imageExtensions[] = {
 	".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff",
-	".bmp", ".tga", ".pbm", ".ppm", ".pgm"
+	".bmp", ".tga", ".pbm", ".ppm", ".pgm",
+	".htm", ".html", ".mp4", ".flv"
 };
 
 const int imageExtensionsNum = sizeof(imageExtensions) / sizeof(imageExtensions[0]);
+
 
 enum imageLoaders {
 	_I2K_PNG,
@@ -1238,7 +1247,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   int count = 0;
 
-  char wallpaperpath[] = "/home/tf/Picturesa";
+  char wallpaperpath[] = "/home/tf/Pictures";
 
 
   char** wallpapers = getWallpapers(wallpaperpath, &count);

@@ -1,0 +1,119 @@
+.caja-desktop-window * {
+   background-color: transparent; }
+
+.bottom.mate-panel-menu-bar grid {
+   padding: 2px;
+   border-top: 1px solid @bg_color;
+   box-shadow: 0px 1px @light_shadow inset; }
+
+.top.mate-panel-menu-bar grid {
+   padding: 2px;
+   border-bottom: 1px solid @borders;
+   box-shadow: 0px -1px @dark_shadow inset; }
+
+.mate-panel-menu-bar #tasklist-button {
+   margin: 0px;
+   color: @theme_fg_color;
+   border: 0px;
+   border-right: 3px solid @bg_color;
+   border-radius: 0px;
+   background-color: @button_bg_color;
+   box-shadow: inset -2px -2px @dark_shadow, inset -1px -1px @borders, inset 1px 1px @light_shadow }
+
+.mate-panel-menu-bar #tasklist-button:active, .mate-panel-menu-bar #tasklist-button:checked {
+   font-weight: bold;
+   border-radius: 0px;
+   border: 0px;
+   border-top: 1px solid @bg_color;
+   border-right: 3px solid @bg_color;
+   box-shadow: 2px 2px @dark_shadow inset, 1px 1px @borders inset, -2px -2px @button_bg_color inset, -1px -1px @light_shadow inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @toolbar_fg_color;
+   background-color: @button_bg_color; }
+
+.mate-panel-menu-bar menubar {
+   border: none;
+   box-shadow: none;
+   padding-bottom: 1px;
+   margin: 0px;
+}
+
+.mate-panel-menu-bar menubar > menuitem:first-child {
+   font-weight: bold;
+   margin: 0px;
+   margin-bottom: -1px;
+   color: @theme_fg_color;
+   border: 0px;
+   border-right: 3px solid @bg_color;
+   border-radius: 0px;
+   background-color: @button_bg_color;
+   box-shadow: inset -2px -2px @dark_shadow, inset -1px -1px @borders, inset 1px 1px @light_shadow }
+
+.mate-panel-menu-bar menubar > menuitem:first-child:hover {
+   font-weight: bold;
+   margin-bottom: 0px;
+   margin-top: -1px;
+   border-radius: 0px;
+   border: 0px;
+   border-top: 1px solid @bg_color;
+   border-right: 3px solid @bg_color;
+   box-shadow: 2px 2px @dark_shadow inset, 1px 1px @borders inset, -2px -2px @button_bg_color inset, -1px -1px @light_shadow inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @toolbar_fg_color;
+   background-color: @button_bg_color; }
+
+.mate-panel-menu-bar menubar > menuitem:first-child menu {
+  box-shadow: none;
+  border: none;
+  padding-left: 28px;
+  background-color: @button_bg_color;
+  border-image: url("assets/caja_menu_side.png");
+  border-image-slice: 1 1 1 33;
+  border-right: 0px solid;
+  border-top: 0px solid;
+  border-bottom: 0px solid;
+  border-left: 30px solid; }
+
+.mate-panel-menu-bar menubar > menuitem:first-child menu menu {
+  padding: 2px;
+  border-top: 1px solid @bg_color;
+  border-bottom: 1px solid @borders;
+  border-left: 1px solid @bg_color;
+  border-right: 1px solid @borders;
+  box-shadow: inset 1px 1px @light_shadow, inset -1px -1px @dark_shadow;
+  border-image: none;
+  background-color: @theme_bg_color;
+  color: @fg_color; }
+
+
+.mate-panel-menu-bar menubar > menuitem:first-child menu {
+   font-weight: normal; }
+
+.mate-panel-menu-bar #tasklist-button > box > image {
+   margin-right: -4px; }
+
+#showdesktop-button {
+   border: none;
+   box-shadow: none;
+}
+
+#clock-applet-button, #clock-applet-button:checked, #clock-applet-button:active, #clock-applet-button:hover {
+/*
+   margin-top: 1px;
+   margin-bottom: 1px;
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-right: 1px solid @light_shadow;
+   border-bottom: 1px solid @light_shadow;
+*/
+}
+
+
+#PanelPlug {
+/*
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-right: 1px solid @light_shadow;
+   border-bottom: 1px solid @light_shadow;
+*/
+}

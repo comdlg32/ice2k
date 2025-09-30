@@ -1,0 +1,268 @@
+* {
+  -GtkScrollbar-has-backward-stepper: true;
+  -GtkScrollbar-has-forward-stepper: true;
+  -GtkScrollbar-has-secondary-backward-stepper: false;
+  -GtkScrollbar-has-secondary-forward-stepper: false;
+  -GtkScrolledwindow-scrollbar-spacing: 0;
+  -GtkScrolledwindow-scrollbars-within-bevel: 1;
+  -GtkTextView-error-underline-color: @error_color;
+  -GtkToolbutton-icon-spacing: 6;
+  -GtkToolItemGroup-expander-size: 11;
+  -GtkWidget-text-handle-width: 20;
+  -GtkWidget-text-handle-height: 20;
+  -GtkDialog-button-spacing: 10;
+  -GtkDialog-action-area-border: 0;
+  -GtkTreeview-expander-size: 8;
+  background-clip: padding-box;
+  outline-width: 1px;
+  outline-offset: 0;
+  outline-style: dotted;
+  outline-color: @outline_color;
+  -gtk-outline-radius: 0; }
+
+.background {
+  color: @theme_fg_color;
+  background-color: @theme_bg_color; }
+
+.background:backdrop {
+  color: @theme_unfocused_fg_color;
+  background-color: @theme_bg_color; }
+
+*:disabled {
+  -gtk-icon-effect: dim; }
+
+*:hover {
+  -gtk-icon-effect: highlight; }
+
+.gtkstyle-fallback {
+  color: @theme_fg_color;
+  background-color: @theme_bg_color; }
+
+.gtkstyle-fallback:hover {
+  color: @theme_fg_color;
+  background-color: shade(@theme_bg_color, 1.1); }
+  
+.gtkstyle-fallback:active {
+  color: @theme_fg_color;
+  background-color: shade(@theme_bg_color, 0.9); }
+
+.gtkstyle-fallback:disabled {
+  color: @theme_disabled_fg_color;
+  background-color: @theme_disabled_bg_color; }
+
+.gtkstyle-fallback:selected {
+  color: @theme_selected_fg_color;
+  background-color: @theme_selected_bg_color; }
+
+
+/* Hyperlink color */
+
+
+.link {
+  color: @selected_bg_color; }
+
+.link > label, .visited > label {
+   text-decoration-line: underline;
+   color: @selected_bg_color; }
+
+
+/* Hide overflow dashed lines around scrolled windows */
+
+
+undershoot.top, undershoot.right, undershoot.bottom, undershoot.left { background-image: none; }
+
+
+/* App notifications */
+
+
+.app-notification {
+    padding: 3px;
+    border-top: 1px solid @bg_color;
+    border-bottom: 1px solid @borders;
+    border-left: 1px solid @bg_color;
+    border-right: 1px solid @borders;
+    box-shadow: inset 1px 1px @light_shadow, inset -1px -1px @dark_shadow;
+    background-color: @tooltip_bg_color;
+    color: @fg_color; }
+
+
+/* Calendar widget */
+
+
+calendar {
+   padding: 2px;
+   border-width: 1px;
+   border-radius: 0px;
+   border-style: solid;
+   border-color: @borders;
+   color: @text_color; }
+ 
+calendar.header {
+   border: none;
+   color: @theme_selected_bg_color; }
+  
+calendar:selected {
+   border-radius: 0;
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+  
+calendar:indeterminate {
+   color: alpha(currentColor, 0.55); }
+  
+calendar.highlight {
+   color: @theme_selected_bg_color; }
+
+
+/* Scrolled window padding and colors. Don't reference directly otherwise the
+   Libre-Office menu bar will also follow the border and color settings for scrolled windows */
+
+
+paned > scrolledwindow, box > scrolledwindow, overlay > scrolledwindow, notebook > * > scrolledwindow,
+paned > * > notebook > stack > * > scrolledwindow, viewport > grid > scrolledwindow {
+   padding: 1px;
+   margin: 0px;
+   background-color: @theme_base_color;
+}
+
+
+/* Tree view */
+
+
+treeview {
+   background-color: @base_color;
+   color: @fg_color;
+   -treeview-vertical-separator: 0; }
+  
+treeview.view:selected, treeview.view:selected:focus {
+   color: @theme_selected_fg_color;
+}
+
+
+/* Lists */
+
+
+list {
+   color: @text_color;
+   background-color: @theme_base_color;
+   color: @text_color;
+   background-color: @theme_base_color; }
+  
+list row {
+   outline: none;
+   border: none;
+   padding: 2px; }
+    
+list row:selected, list row:selected:hover, list row:selected:focus {
+   border: none;
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+    
+list row:selected:disabled {
+   color: alpha(@theme_selected_fg_color, 0.7);
+   background-color: @theme_selected_bg_color; }
+    
+list row:selected:backdrop {
+   color: @theme_unfocused_selected_fg_color;
+   background-color: @theme_unfocused_selected_bg_color; }
+
+
+/* Side bar */
+
+
+.sidebar list {
+   padding: 1px; }
+
+
+/* Icon view */
+
+
+iconview:selected, iconview:selected:focus, iconview text:selected, 
+iconview text selection, iconview text:selected:focus, iconview text 
+selection:focus {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @theme_selected_bg_color;
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+
+iconview:selected:backdrop, iconview selection:backdrop, 
+iconview text:selected:backdrop, iconview text selection:backdrop {
+   color: @theme_unfocused_selected_fg_color;
+   background-color: @theme_unfocused_selected_bg_color; }
+
+
+/* Rubberband and flowbox */
+
+
+rubberband, flowbox rubberband, treeview.view rubberband, 
+.content-view rubberband, .rubberband, view rubberband, 
+.view.rubberband, .rubberband {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @theme_selected_bg_color;
+   background: none;
+   background-color: alpha(@theme_selected_bg_color, 0.3); }
+
+flowbox flowboxchild {
+   padding: 3px;
+   border-radius: 0px; }
+
+flowbox flowboxchild:selected {
+   outline-offset: -2px;
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+
+
+/* Status bar */
+
+
+statusbar {
+   padding: 0px;
+   margin: -1px;
+   color: @theme_fg_color; }
+ 
+
+/* Tooltip colors */
+
+
+tooltip {
+   border-radius: 0px;
+   box-shadow: none; }
+  
+tooltip.background {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @borders;
+   background-color: @tooltip_bg_color; }
+    
+tooltip.background label {
+   padding: 1px; }
+  
+tooltip * {
+   background-color: transparent;
+   color: @tooltip_fg_color; }
+
+
+/* Labels */
+
+
+label selection {
+   background-color: @selected_bg_color;
+   color: @selected_fg_color; }
+
+
+/* CSD title bar, in this case it is styled and used as a toolbar */
+
+/*
+.titlebar, .titlebar:not(headerbar), headerbar.default-decoration, .csd headerbar.default-decoration, .default-decoration.titlebar:not(headerbar), .csd .default-decoration.titlebar:not(headerbar) {
+   min-height: 26px;
+   margin-bottom: 2px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 0px solid;
+   border-bottom: 0px solid;
+   border-right: 0px solid;
+   border-left: 0px solid;
+   box-shadow: 0px 2px @toolbar_bg_color;
+   background-color: @toolbar_bg_color; }
+*/

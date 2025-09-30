@@ -1,0 +1,8 @@
+table Icon
+  Caption: My Network  
+  Icon: /home/tf/.icons/SE98/status/32/network-idle.png
+  X: 21
+  Y: 152
+  Command[0]: xfe /mnt/tf/smb
+end
+

@@ -1,0 +1,111 @@
+/* Frames and borders, frame and border hacks */
+
+
+/* General frames */
+
+
+frame > border {
+  padding: 1px;
+  border: 1px solid @dark_shadow;
+  border-bottom: 1px solid @light_shadow;
+  border-right: 1px solid @light_shadow;
+  box-shadow: 1px 1px @light_shadow inset, -1px -1px @dark_shadow inset; } 
+
+
+/* Status bar border */
+
+
+statusbar frame > border {
+    padding: 0;
+    box-shadow: none;
+    border: none; }
+
+
+
+/* Styled frames */
+
+
+frame.border-inset > border {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @dark_shadow;
+   box-shadow: 1px 1px @borders inset;
+   border-radius: 0; }
+
+frame.border-outset > border {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @dark_shadow;
+   border-bottom: 1px solid @borders;
+   border-right: 1px solid @borders;
+   box-shadow: -1px -1px @dark_shadow inset;
+   border-radius: 0; }
+
+frame.border-groove > border {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @dark_shadow;
+   border-radius: 0; }
+
+frame.border-ridge > border {
+   border-width: 1px;
+   border-style: solid;
+   border-color: @dark_shadow;
+   border-radius: 0; }
+
+
+/* Terminal Emulator Frames */
+terminal-window notebook, VteTerminal, vte-terminal {
+   padding: 1px;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+
+#xfce4-terminal-notebook {
+   padding: 1px;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+
+/* Hack to make all scrolled window widgets bg color match theme base bg color */
+
+
+scrolledwindow.frame {
+  background-color: @theme_base_color; }
+
+
+/* Hack for scrolled windows and sidebars to always have borders:
+   Specify border for scrolled window widget directly since the scrolled window does not always
+   have a frame. This forces most scrolled windows have a border. Do not reference the scrolled
+   window widget directly, use references through parent widgets otherwise Libre-Office will also
+   put a border around the menu bar */
+
+paned > scrolledwindow, box > scrolledwindow, overlay > scrolledwindow, notebook > * > scrolledwindow,
+paned > * > notebook > stack > * > scrolledwindow, viewport > grid > scrolledwindow, paned > * > scrolledwindow,
+paned > stack > grid > scrolledwindow, .sidebar {
+   padding: 1px;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+
+/* Remove border from sidebar scrolledwindow, sidebar already has a border. */
+
+.sidebar scrolledwindow {
+   padding: 0;
+   margin: 0;
+   border: none;
+   box-shadow: none; }
+
+

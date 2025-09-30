@@ -1,0 +1,59 @@
+/* Using switch widget as a radio button:
+   Slider button is transparent and as the switch
+   state is changed eg checked or unchecked the switch
+   background image changes instead. */
+
+
+/* Unchecked, or switched off background. Changing "color:" to transparent
+   hides the off and on symbols */
+
+switch {
+   min-width: 100px;
+   min-height: 24px;
+   color: transparent;
+   outline-offset: -4px;
+   background-color: transparent;
+   background-image: url("assets/switch.png"); }
+
+
+/* Checked, or switched on background */
+
+
+switch:checked {
+   min-width: 100px;
+   min-height: 24px;
+   color: transparent;
+   outline-offset: -4px;
+   background-color: transparent;
+   background-image: url("assets/switch_checked.png"); }
+
+
+/* Disabled, switched on background */
+
+
+switch:checked :disabled {
+   min-width: 100px;
+   min-height: 24px;
+   color: transparent;
+   outline-offset: -4px;
+   background-color: transparent;
+   background-image: url("assets/switch_checked_disabled.png"); }
+
+
+/* Disabled, switched off background */
+
+
+switch:disabled {
+   color: transparent;
+   outline-offset: -4px;
+   background-color: transparent;
+   background-image: url("assets/switch_disabled.png"); }
+
+
+/* Make switch button transparent */
+
+switch slider {
+   background-color: transparent; }
+
+switch:disabled slider {
+   background-color: transparent; }

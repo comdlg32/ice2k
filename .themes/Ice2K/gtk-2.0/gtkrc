@@ -1,0 +1,77 @@
+include "menubar.rc"
+include "colors.rc"
+
+gtk-icon-sizes = "mini-commander-icon=32,32:print-manager=32,32:panel-button=32,32:gtk-dnd=32,32:gtk-menu=16,16:panel-menu=22,22:gtk-large-toolbar=16,16:gtk-small-toolbar=16,16:gtk-button=16,16:gtk-dialog=32,32"
+
+style "standard-default"
+{
+  GtkWidget::interior_focus = 2
+  GtkButton::default_border = { 0, 0, 0, 0 }
+  GtkButton::default_outside_border = { 1, 1, 1, 1 }
+  GtkOptionMenu::indicator_size = { 9, 5 }
+  GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
+  GtkComboBox::appears-as-list = 1
+  GtkNotebook::tab-overlap = 4
+
+  GtkButton::child_displacement_x = 1
+  GtkButton::child_displacement_y = 1
+
+  GtkMenu::horizontal-padding = 1
+  GtkMenu::vertical-padding = 1
+  GtkMenu::horizontal-offset = -6
+
+  GtkScrolledWindow::scrollbar-spacing = 0
+  GtkScrolledWindow::scrollbars-within-bevel = 1
+
+  engine "redmond95" {}
+}
+
+class "GtkWidget" style "standard-default"
+
+widget_class "*MenuItem*" style "standard-menu"
+
+class "*MenuBar.*MenuItem*" style "standard-menubar-item"
+widget_class "*MenuBar.*MenuItem*" style "standard-menubar-item"
+
+class "GtkList" style "standard-list"
+
+style "standard-scrollbar"
+{
+  GtkRange::trough_border = 0
+  GtkRange::slider_width = 16
+  GtkRange::stepper_size = 16
+  GtkRange::stepper_spacing = 0
+}
+
+class "GtkScrollbar" style "standard-scrollbar"
+
+
+style "standard-scales"
+{
+  GtkRange::slider-width = 21
+  GtkScale::slider-length = 11
+}
+
+class "*Scale*" style "standard-scales"
+
+style "standard-option-menu"
+{
+  GtkOptionMenu::indicator_width = 7
+  GtkOptionMenu::indicator_left_spacing = 6
+  GtkOptionMenu::indicator_right_spacing = 4
+}
+
+class "GtkOptionMenu" style "standard-option-menu"
+
+class "GtkProgressBar" style "standard-progressbar"
+
+
+class "GtkEntry" style "standard-entry"
+
+style "tab_style"
+{
+  xthickness = 4
+}
+
+class "GtkNotebook" style "tab_style"
+

@@ -1,0 +1,54 @@
+style "standard-default"
+{
+  fg[ACTIVE]        = "textcolor"
+  fg[INSENSITIVE]   = "lightshadowcolor"
+  fg[NORMAL]        = "textcolor"
+  fg[PRELIGHT]      = "textcolor"
+  fg[SELECTED]      = "seltextcolor"
+
+  bg[ACTIVE]        = "basecolor"
+  bg[INSENSITIVE]   = "basecolor"
+  bg[NORMAL]        = "basecolor"
+  bg[PRELIGHT]      = "basecolor"
+  bg[SELECTED]      = "selbackcolor"
+
+  base[ACTIVE]      = "selbackcolor"
+  base[NORMAL]      = "basecolor"
+  base[NORMAL]      = "backcolor"
+  base[PRELIGHT]    = "selbackcolor"
+  base[SELECTED]    = "selbackcolor"
+
+  text[ACTIVE]      = "seltextcolor"
+  text[INSENSITIVE] = "lightshadowcolor"
+  text[NORMAL]      = "textcolor"
+  text[PRELIGHT]    = "seltextcolor"
+  text[SELECTED]    = "seltextcolor"
+}
+
+style "standard-menu"
+{
+  bg[PRELIGHT] = "selbackcolor"
+  fg[PRELIGHT] = "seltextcolor"
+}
+
+style "standard-menubar-item"
+{
+  bg[PRELIGHT] = "basecolor"
+  fg[PRELIGHT] = "textcolor"
+}
+
+style "standard-list"
+{
+   bg[NORMAL] = "backcolor"
+   bg[PRELIGHT] = "textcolor"
+}
+
+style "standard-progressbar" {
+  fg[PRELIGHT] = "backcolor"
+} 
+
+style "standard-entry"
+{
+  bg[SELECTED] = "seltextcolor"
+  bg[SELECTED] = "selbackcolor"
+}

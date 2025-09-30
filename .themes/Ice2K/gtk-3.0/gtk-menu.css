@@ -1,0 +1,131 @@
+/* Menu borders and colors */
+
+.menu, menu {
+    padding: 2px;
+    border-top: 1px solid @bg_color;
+    border-bottom: 1px solid @borders;
+    border-left: 1px solid @bg_color;
+    border-right: 1px solid @borders;
+    box-shadow: inset 1px 1px @light_shadow, inset -1px -1px @dark_shadow;
+    background-color: @theme_bg_color;
+    color: @fg_color; }
+
+combobox menu, combox .menu {
+    border: 1px solid @borders;
+    box-shadow: none;
+    background-color: @base_color;
+    padding: 0px; }
+
+
+/* Force initial font instead of repsecting parent widget font */
+
+.context-menu, popover.touch-selection, 
+.csd popover.touch-selection,
+popover.background.touch-selection, 
+.csd popover.background.touch-selection {
+   font: initial; }
+
+
+/* Adjust padding so selected itmes fit inside menu borders */
+
+
+menu menuitem {
+    margin: 0;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding: 2px; }
+
+menu menuitem:first-child {
+    margin-top: 1px }
+
+menu menuitem:last-child {
+    margin-bottom: 1px }
+
+combobox menuitem,
+combobox menuitem {
+    margin: 1px; }
+
+
+/* Menu item states */
+
+
+menuitem:active,
+menuitem:hover {
+   background-color: @theme_selected_bg_color;
+   color: @theme_selected_fg_color; }
+
+menuitem:disabled {
+   color: @disabled_fg_color;
+   text-shadow: 1px 1px @light_shadow; }
+
+
+toolbar menubar {
+   -GtkToolbar-button-relief: normal; }
+
+
+/* Style menubar to match toolbars */
+
+
+menubar, .menubar {
+   -GtkWidget-window-dragging: true;
+   margin: 0;
+   padding: 1px;
+   padding-top: 0;
+   margin-bottom: 0;
+   background-color: @toolbar_bg_color; 
+   border-top: 0px solid;
+   border-bottom: 0;
+   border-right: 0;
+   border-left: 0;
+   background-color: @menubar_bg_color;
+   color: @menubar_fg_color; }
+
+menubar > menuitem, .menubar > menuitem {
+   margin: 0px;
+   padding: 4px 6px;
+   border: none;
+   color: @menubar_fg_color;
+   background-color: transparent; }
+  
+
+/* Make selected menubar items appear as toolbar buttons */
+
+
+menubar > menuitem:hover, .menubar > menuitem:hover {
+   color: @menubar_fg_color;
+   border-color: @menubar_bg_color;
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: inset 1px 1px @dark_shadow, inset -1px -1px @light_shadow; }
+
+
+/* Menubar item states */
+
+
+menubar > menuitem:disabled, .menubar > menuitem:disabled {
+   text-shadow: 1px 1px @light_shadow;
+   color: @theme_disabled_fg_color;
+   background-color: transparent; }
+
+menuitem accelerator {
+   color: alpha(currentColor, 0.55); }
+  
+menuitem accelerator:hover {
+   color: alpha(@theme_selected_fg_color, 0.8); }
+
+menuitem accelerator:disabled {
+   color: @theme_disabled_fg_color; }
+
+
+/* Hamburger menus */
+
+
+popover, .csd popover {
+   border-radius: 0;
+   padding: 3px;
+   box-shadow: none;
+   border: 1px solid @borders;
+   border-left: 1px solid @light_shadow;
+   border-top: 1px solid @light_shadow;
+   box-shadow: -1px -1px @bg_color, -1px -1px @dark_shadow inset;
+   background-color: @bg_color; }

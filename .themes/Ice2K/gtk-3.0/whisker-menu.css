@@ -1,0 +1,151 @@
+/*  Add menu border */
+#whiskermenu-window border {
+  padding: 1px;
+  padding-right: 2px;
+  border-top: 1px solid @bg_color;
+  border-bottom: 1px solid @borders;
+  border-left: 1px solid @bg_color;
+  border-right: 1px solid @borders;
+  box-shadow: inset 1px 1px @light_shadow, -1px -1px @dark_shadow inset; }
+
+
+#whiskermenu-button {
+  font-weight: bold;
+  margin-left: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 1px;
+  color: @theme_fg_color;
+  border-top: 1px solid @button_bg_color;
+  border-left: 1px solid @button_bg_color;
+  border-right: 1px solid @borders;
+  border-bottom: 1px solid @borders;
+  border-radius: 0px;
+  background-color: @button_bg_color;
+  box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow,
+  0 -2px @light_shadow, 0 -1px @bg_color; }
+
+
+/* Change active button to checkered button */
+#whiskermenu-button:checked,
+#whiskermenu-button:active {
+  border: none;
+  box-shadow: none;
+  border-top: 1px solid @borders;
+  border-left: 1px solid @borders;
+  border-bottom: 1px solid @light_shadow;
+  border-right: 1px solid @light_shadow;
+  box-shadow: 1px 1px @dark_shadow inset, -1px -1px @button_bg_color inset,
+  0 -2px @light_shadow, 0 -1px @bg_color;
+  background-image: url("assets/scrollbar_trough.png");
+  color: @toolbar_fg_color;
+  background-color: @button_bg_color; }
+
+#whiskermenu-button box > image {
+  margin: 2px; }
+
+
+#whiskermenu-window scrolledwindow {
+  border-radius: 0px;
+   box-shadow: none;
+   padding: 1px;
+   padding-left: 5px;
+  background-color: @bg_color;
+   border: none;
+   border-left: 1px solid @dark_shadow; 
+   box-shadow: 1px 0 @light_shadow inset;
+   border-radius: 0px; }
+
+
+#whiskermenu-window stack:first-child > scrolledwindow {
+  border: none;
+  box-shadow: none;
+  padding: 1px;
+  padding-left: 2px;
+  margin-left: 1px;
+  margin-bottom: 1px;
+  margin-right: 0px;
+  border-radius: 0px;
+  background-color: @button_bg_color;
+  border-image: url("assets/menu_side.png");
+  border-image-slice: 0 0 0 30;
+  border-left: 25px solid; }
+
+#whiskermenu-window treeview {
+  background-color: @bg_color; }
+
+
+#whiskermenu-window entry {
+  border: 1px solid @dark_shadow;
+  box-shadow: none;
+  margin-bottom: 2px;
+  margin-left: 2px;
+  margin-right: 2px; }
+
+
+#whiskermenu-window box > scrolledwindow:first-child {
+  border: none;
+  box-shadow: none;
+  padding: 1px;
+  padding-left: 2px;
+  margin-left: 1px;
+  margin-bottom: 1px;
+  margin-right: 0px;
+  border-radius: 0px;
+  background-color: @button_bg_color;
+  border-image: url("assets/menu_side.png");
+  border-image-slice: 0 0 0 30;
+  border-left: 25px solid; }
+
+
+
+#whiskermenu-window list {
+  margin: 6px; }
+
+
+#whiskermenu-window treeview:hover {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+#whiskermenu-window treeview:selected {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color; }
+
+#whiskermenu-window button {
+  border-radius: 0; }
+
+#whiskermenu-window box > scrolledwindow button:hover,
+#whiskermenu-window box > scrolledwindow button:checked  {
+  box-shadow: none;
+  border: 1px solid transparent;
+  background-image: none;
+  background-color: @selected_bg_color;
+  color: @selected_fg_color; }
+
+/* Style menu window logout buttons */
+#whiskermenu-window > frame > stack > box.vertical > box.horizontal button.flat {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+  margin: 0;
+  padding: 2px; }
+
+/* Style menu separators */
+#whiskermenu-window separator {
+  min-height: 2px;
+  margin-left: 3px;
+  background-color: @light_shadow;
+  box-shadow: 0 1px @dark_shadow inset; }
+
+/* Add gradient to top of whisker-menu window
+   Note: @active_title_color is not a standard GTK3 reference
+   and is configured in the gtk.css file */
+#whiskermenu-window > frame > stack > box > box:first-child {
+  padding: 2px;
+  margin: 0;
+  color: @active_title_text;
+  background-image: linear-gradient(to right, @active_title_color1, @active_title_color); }
+
+#whiskermenu-window entry {
+  margin: 0; }

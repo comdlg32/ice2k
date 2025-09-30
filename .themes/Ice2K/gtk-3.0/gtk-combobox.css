@@ -1,0 +1,46 @@
+/* Combobox settings */
+combobox {
+   min-height: 23px;
+   padding: 1px;
+   background-color: @base_color;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+combobox :checked {
+   padding: 1px;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+combobox:disabled {
+   background-color: @bg_color;
+}
+
+
+combobox cellview, combobox cellview:focus, combobox cellview:checked,
+combobox cellview:active, combobox cellview:hover {
+   background-color: transparent;
+   padding: 0px;
+   margin-top: -2px;
+   margin-bottom: -2px; }
+
+combobox button:checked box {
+   margin: 0;
+   margin-left: -4px;
+   margin-top: 2px;
+   margin-right: -4px;
+   margin-bottom: 2px; }
+
+combobox > box {
+   margin: -2px; }
+
+combobox button:checked box {
+   margin: -1px;
+   margin-left: -2px; }

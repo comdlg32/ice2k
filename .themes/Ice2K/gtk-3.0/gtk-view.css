@@ -1,0 +1,38 @@
+.content-view.view {
+   background-color: @theme_base_color; }
+  
+.content-view.view:hover {
+   background-color: alpha(@theme_selected_bg_color, 0.6); }
+
+.content-view.view:selected, .content-view.view:active {
+   background-color: @theme_selected_bg_color; }
+  
+.content-view.view:disabled {
+   background-color: shade(@theme_base_color, 0.7); }
+
+.view {
+   background-color: @base_color;
+   color: @text_color; }
+
+view:not(treeview) {
+   color: @text_color;
+   caret-color: @text_color;
+   background-color: @theme_base_color;
+   border-radius: 0px; }
+
+.view:disabled {
+   color: @theme_disabled_fg_color;
+   background-color: @theme_disabled_bg_color; }
+  
+.view:selected, .view:selected:focus, .view text:selected, .view text:selected:focus, .view text selection, .view text selection:focus {
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+    
+.view:selected:disabled, .view:selected:focus:disabled, .view text:selected:disabled, .view text:selected:focus:disabled, .view text selection:disabled, .view text selection:focus:disabled {
+   color: mix(@theme_selected_fg_color, @theme_disabled_fg_color, 0.5);
+   background-color: @theme_selected_bg_color; }
+    
+.view:selected:backdrop, .view:selected:focus:backdrop, .view text:selected:backdrop, .view text:selected:focus:backdrop, .view text selection:backdrop, .view text selection:focus:backdrop {
+   color: @theme_unfocused_selected_fg_color;
+   background-color: @theme_unfocused_selected_bg_color; }
+

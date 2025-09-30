@@ -1,0 +1,9 @@
+table Icon
+  Caption: Mutt  
+  Icon: /home/tf/.icons/SE98/apps/32/thunderbird.png
+  X: 21
+  Y: 377
+  Command[0]: xterm -title mutt -e mutt
+  Command[1]: idesktool Firefox.lnk
+end
+

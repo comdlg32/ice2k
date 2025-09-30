@@ -1,0 +1,73 @@
+separator, separator:backdrop {
+  -gtk-icon-source: none;
+  min-width: 1px;
+  min-height: 1px;
+
+/* Make window separators transparent this avoids 
+   apps displaying separators under toolbar boarders 
+   and edges: */
+
+  background-color: transparent;
+ }
+
+paned > separator {
+  border: none;
+  color: transparent;
+  min-width: 3px;
+  min-height: 1px;
+  background-color: transparent; }
+
+paned > separator:backdrop {
+  min-width: 3px;
+  min-height: 1px;
+  background-color: transparent; }
+  
+paned > separator:selected {
+  min-width: 3px;
+  min-height: 1px;
+  background-color: transparent; }
+
+button separator {
+  margin: 1px 1px; }
+
+#AboutDialog separator {
+  margin: 2px;
+  border-width: 1px;
+  border-style: none;
+  box-shadow: 0px 1px @light_shadow;
+  background-color: @dark_shadow; }
+
+
+toolbar separator {
+  margin-left: 2px;
+  margin-right: 2px;
+  border: none;
+  box-shadow: 1px 0px @light_shadow;
+  background-color: @dark_shadow; }
+
+toolbar separator:backdrop {
+  border: none;
+  box-shadow: 1px 0px @light_shadow;
+  background-color: @dark_shadow; }
+
+menuitem separator, menu separator {
+  margin: 2px;
+  margin-left: 8px;
+  margin-right: 8px;
+  border-width: 1px;
+  border-style: none;
+  box-shadow: 0px 1px @light_shadow;
+  background-color: @dark_shadow; }
+
+popover separator {
+  margin: 2px;
+  box-shadow: 0px 1px @light_shadow;
+  background-color: @dark_shadow; }
+  
+combobox separator {
+  background: transparent;
+  border: none; }
+
+list separator, list separator:backdrop {
+  background: none; }
+

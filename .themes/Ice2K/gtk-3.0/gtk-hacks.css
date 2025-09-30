@@ -1,0 +1,251 @@
+/* File chooser hack to make the location bar 
+   widget to match the window bg color */
+
+
+filechooser stack {
+   background-color: @theme_bg_color; }
+
+filechooser stack box {
+   background-color: @theme_bg_color; }
+
+filechooser stack button box {
+   background-color: @button_bg_color; }
+
+.horizontal.dialog-actionbox {
+   background-color: @theme_bg_color; }
+
+
+/* Nemo hacks:
+   Add padding below toolbar, hide separators since the 
+   scrolled window frames act as separators, menu items must
+   be reapplied after making separators transparent */
+
+
+.nemo-window sidebar separator {
+   background-color: transparent; }
+
+.nemo-window menu separator {
+   box-shadow: 0 1px @light_shadow;
+   background-color: @dark_shadow; }
+
+.nemo-window menuitem separator {
+   color: @borders;
+   border-style: none;
+   border-width: 0px; }
+
+.nemo-window toolbar button {
+  padding: 4px;
+}
+
+.nemo-window toolbar {
+   padding: 2px;
+   padding-top: 4px;
+   padding-bottom: 4px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 2px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 2px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+.nemo-window menubar {
+   padding: 0px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 2px solid;
+   border-bottom: 0px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+/* Nemo colors must be specified or drag and drop items 
+   have black text on a black background */
+
+.nemo-window .nemo-window-pane widget.entry:selected, .nemo-window .nemo-window-pane widget.entry:selected:focus {
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; 
+}
+
+
+/* Fix meld scrolled window appearance */
+
+
+.meld-notebook scrolledwindow {
+   margin: 0; }
+
+
+/* Remove bottom black border from header boxes 
+   since the toolbars already have a border */
+
+
+.header-box {
+   margin-top: 0px;
+   border-top: 2px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 2px solid;
+   border-image: url("assets/headerbox.png");
+   border-image-slice: 2 2 2 2; 
+   background-color: @toolbar_bg_color; }
+
+
+/* Remove application dialog image icon */
+messagedialog image {
+   margin-left: -1000px;
+}
+
+/* caja and thunar various ui hacks */
+.caja-navigation-window > grid > paned > * {
+   border-top: 2px solid;
+   border-image: url("assets/headerbox.png");
+   border-image-slice: 2 2 2 2
+}
+
+.caja-side-pane treeview {
+   color: #000;
+   background-color: transparent;
+}
+
+.caja-side-pane scrolledwindow {
+   background-image: url("assets/treeview.png");
+   background-position: left top; 
+   background-repeat: no-repeat;
+}
+
+.caja-navigation-window toolbar {
+   padding: 2px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 0px solid;
+   border-bottom: 0px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+.caja-navigation-window paned > box > paned > box > .horizontal {
+   margin: -4px;
+   margin-bottom: -2px;
+   padding: 3px;
+   padding-top: 4px;
+   border-top: 0px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+.caja-navigation-window grid > paned > box > notebook widget > box {
+   padding: 1px;
+   border-color: @borders;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset; }
+
+.caja-navigation-window statusbar,
+.thunar statusbar {
+   border: 1px solid @dark_shadow;
+   border-right: 1px solid @light_shadow;
+   border-bottom: 1px solid @light_shadow;
+   padding: 0;
+   margin: 0;
+   margin-top: 2px;
+   margin-right: -10px;
+   margin-left: -10px;
+}
+
+.caja-navigation-window statusbar > frame,
+.thunar statusbar > frame {
+   margin: -3px;
+   margin-left: 0px;
+}
+
+.thunar menubar,
+.caja-navigation-window menubar {
+   padding: 0px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 2px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+.thunar toolbar {
+   padding: 2px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 2px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 0px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+.thunar entry {
+   margin: 4px; }
+
+
+/* Fix thunar scrolled window borders */
+.thunar scrolledwindow {
+   border: none;
+   padding: 2px;
+   border-radius: 0px;
+   box-shadow: 2px 2px @borders inset, 1px 1px @dark_shadow inset, 
+              -2px -2px @theme_bg_color inset, -1px -1px @light_shadow inset; }
+
+#GeanyMenubar {
+   padding: 0px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 2px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }
+
+#GeanyToolbar {
+   padding: 2px;
+   margin-top: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   color: @toolbar_fg_color;
+   background-color: @toolbar_bg_color; 
+   border-top: 0px solid;
+   border-bottom: 2px solid;
+   border-right: 2px solid;
+   border-left: 7px solid;
+   border-image: url("assets/fm_toolbar.png");
+   border-image-slice: 2 2 2 7; }

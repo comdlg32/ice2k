@@ -30,3 +30,5 @@ Credits to https://github.com/travy-patty for logo and branding
 And credits to Microsoft for their icons/assets/design :P
 
 If I forgot to credit someone, let me know.
+
+Anything that I haven't put a license file in is licensed in the GPLv2.

@@ -1,0 +1,23 @@
+image, image:disabled, label, label:disabled, box, box:disabled {
+   background-color: transparent; }
+
+image:disabled {
+   color: alpha(currentColor, 0.5); }
+
+/* Brighten images when hovered and colorize when selected */
+
+image {
+   color: alpha(currentColor, 0.75); }
+
+image:hover {
+   color: alpha(currentColor, 0.9); }
+
+image:selected, image:selected:hover {
+   color: @theme_selected_fg_color; }
+  
+view image, view image:hover {
+   color: alpha(currentColor, 0.9); }
+  
+view image:selected, view image:selected:hover {
+   color: @theme_selected_fg_color; }
+

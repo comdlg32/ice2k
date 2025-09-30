@@ -1,0 +1,120 @@
+/* Notebook and tabs */
+
+notebook {
+   padding: 0; }
+
+/* Did not move notebook frame references to frame css file because
+   the references are tied so closely to the settings below: */
+
+/* Adjust tab positions */
+
+notebook.frame {
+   margin-top: 2px;
+   border-color: @borders; }
+
+notebook.frame > header {
+   margin: -1px; }
+
+notebook.frame > header.top {
+   border:none;
+   margin-left: 0px;
+   margin-right: 1px;
+   margin-bottom: 0px; }
+
+notebook.frame > header.bottom {
+   margin-left: 0px;
+   margin-right: 1px;
+   margin-top: 0px; }
+
+notebook.frame > header.left {
+   margin-top: 1px;
+   margin-right: 0px; }
+      
+notebook.frame > header.right {
+   margin-top: 0px;
+   margin-left: 0px; }
+
+notebook.frame > header.top, notebook.frame > header.bottom {
+   padding-left: 0;
+   padding-right: 0; }
+      
+notebook.frame > header.left, notebook.frame > header.right {
+   padding-top: 0;
+   padding-bottom: 0; }
+
+notebook > stack:not(:only-child) {
+   margin: 0px;
+   border: 1px solid @borders;
+   border-top: 1px solid @light_shadow;
+   border-left: 1px solid @light_shadow;
+   padding: 2px;
+   background-color: @notebook_bg_color;
+   box-shadow: inset -1px -1px @dark_shadow ;  }
+
+
+/* Tab colors and border images */
+
+
+notebook tab {
+   border-style: solid;
+   border-radius: 0;
+   border-color: transparent;
+   color: @theme_fg_color;
+   background-color: @notebook_bg_color;
+   outline-width: 0; }
+    
+notebook tab:checked {
+   color: @theme_fg_color;
+   border-color: @borders;
+   background-color: @notebook_bg_color; }
+  
+notebook > header {
+   background-color: @theme_bg_color; }
+
+/* Top tabs */
+
+notebook > header.top > tabs > tab {
+   border-width: 5px 5px 2px 5px;
+   border-image: url("assets/tab_top_checked.png");
+   border-image-slice: 5 5 2 5; }
+        
+notebook > header.top > tabs > tab:checked {
+   margin-bottom: -1px;
+   border-image: url("assets/tab_top.png");
+   border-image-slice: 5 5 2 5; }
+
+/* Bottom tabs */
+
+notebook > header.bottom > tabs > tab {
+   border-width: 2px 5px 5px 5px;
+   border-image: url("assets/tab_bottom_checked.png");
+   border-image-slice: 2 5 5 5; }
+        
+notebook > header.bottom > tabs > tab:checked {
+   margin-top: -2px;
+   border-image: url("assets/tab_bottom.png");
+   border-image-slice: 2 5 5 5; }
+
+/* Right side tabs */
+
+notebook > header.right > tabs > tab {
+   border-width: 4px 8px 6px 0px;
+   border-image: url("assets/tab_right_checked.png");
+   border-image-slice: 4 8 6 0; }
+
+notebook > header.right > tabs > tab:checked {
+   margin-left: -2px;
+   border-image: url("assets/tab_right.png");
+   border-image-slice: 4 8 6 0; }
+
+/* Left side tabs */
+
+notebook > header.left > tabs > tab {
+   border-width: 4px 0 6px 8px;
+   border-image: url("assets/tab_left_checked.png");
+   border-image-slice: 4 0 6 8; }
+        
+notebook > header.left > tabs > tab:checked {
+   margin-right: -1px;
+   border-image: url("assets/tab_left.png");
+   border-image-slice: 4 0 6 8; }

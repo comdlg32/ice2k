@@ -1,0 +1,9 @@
+table Icon
+  !Caption: Explorer  
+  Icon: /home/tf/.idesktop/blank.xpm
+  X: 36
+  Y: 346
+  Command[0]: firefox-esr
+  Command[1]: idesktool Firefox.lnk
+end
+

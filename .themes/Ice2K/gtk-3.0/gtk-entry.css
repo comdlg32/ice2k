@@ -1,0 +1,76 @@
+/* Entry textbox */
+
+entry {
+   padding: 3px;
+   border: 1px solid;
+   border-color: @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset;
+   color: @text_color;
+   caret-color: @text_color;
+   background-color: @theme_base_color; }
+
+entry:selected, entry:selected:focus, entry selection, entry selection:focus {
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+
+entry:disabled {
+   background-color: @bg_color;
+   color: @disabled_fg_color; }
+
+entry.read-only {
+   background-color: @base_color; }
+
+entry > image.left {
+   padding-right: 5px; }
+ 
+entry > image.right {
+   padding-left: 5px; }
+
+
+/* Combo box entry */
+
+
+combobox entry {
+   margin-top: 1px;
+   margin-bottom: 1px;
+   box-shadow: none;
+   background-color: transparent;
+   border: none; }
+
+combobox entry:disabled {
+   text-shadow: 1px 1px @light_shadow;
+   margin-top: 1px;
+   margin-bottom: 1px;
+   box-shadow: none;
+   background-color: transparent;
+   border: none; }
+
+
+/* Spin button entry */
+
+
+spinbutton entry:disabled,
+spinbutton entry:disabled:backdrop {
+   background-color: transparent;
+   box-shadow: none;
+   border: none;
+   color: @disabled_fg_color; }
+
+spinbutton.horizontal entry,
+spinbutton.vertical entry {
+   background-color:transparent;
+   border: none;
+   box-shadow: none; }
+
+
+/* Hamburger menu entry */
+popover entry, popover scrolledwindow {
+   box-shadow: none;
+   background-color: @base_color;
+   border: 1px solid @dark_shadow; }
+
+
+

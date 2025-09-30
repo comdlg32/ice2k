@@ -1,0 +1,47 @@
+/* Progressbar text */
+
+
+progressbar {
+   padding: 0px;
+   border: none;
+   color: mix(@theme_fg_color, @theme_selected_fg_color, 0.5);
+   background-color: transparent; }
+
+treeview.view.progressbar {
+   padding: 0px;
+   border: none;
+   color: mix(@theme_fg_color, @theme_selected_fg_color, 0.5);
+   background-color: @selected_bg_color; }
+
+
+/* Progressbar bar color */
+
+
+progressbar progress {
+   border: none;
+   border-radius: 0px;
+   background-color: @theme_selected_bg_color; }
+
+
+/* Progressbar borders */
+
+
+progressbar trough {
+   padding: 1px;
+   border: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   border-radius: 0px;
+   box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset;
+   background-color: @theme_base_color; }
+
+treeview.view.trough, treeview.view.trough:selected {
+   border: 1px solid @selected_bg_color;
+   padding: 2px;
+   background-color: @base_color; }
+  
+progressbar.horizontal trough, progressbar.horizontal progress {
+   min-height: 18px; }
+
+progressbar.vertical trough, progressbar.vertical progress {
+   min-width: 18px; }

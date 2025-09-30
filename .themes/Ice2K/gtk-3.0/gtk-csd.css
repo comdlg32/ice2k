@@ -1,0 +1,164 @@
+/* Titlebar colors and headerbar styling for GTK CSD */
+
+
+/* Window borders */
+
+
+decoration {
+  padding: 3px;
+  background-color: @bg_color;
+  border: 1px solid @bg_color; 
+  border-right: 1px solid @borders;
+  border-bottom: 1px solid @borders;
+  box-shadow: 1px 1px @light_shadow inset, -1px -1px @dark_shadow inset;
+  border-radius: 0; }
+
+
+/* Override previous menu settings if CSD is used */
+
+.csd menu {
+  border: none;
+  padding: 0px;
+  margin: 0;
+  box-shadow: none; }
+
+.csd menuitem {
+  margin: 0; }
+
+.mate-panel-menu-bar menubar > menuitem:first-child menu .csd menu {
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none; }
+
+
+/* Titlebar colors, label text and button and styling */
+
+
+.titlebar {
+  margin-bottom: 0px; }
+
+headerbar {
+  border-bottom: 1px solid @dark_shadow;
+  border-right: 1px solid @dark_shadow;
+  margin: 0;
+  padding-top: 1px;
+  padding-bottom: 0;
+  padding-left: 3px;
+  padding-right: 2px;
+  background-image: linear-gradient(to right, @active_title_color1, @active_title_color); }
+
+headerbar:backdrop {
+  border-color: transparent;
+  background-image: linear-gradient(to right, @inactive_title_color, @inactive_title_color1) }
+
+headerbar:first-child {
+  margin-left: 6px; }
+
+.title, .subtitle {
+  color: @selected_fg_color;
+  font-weight: bold;
+  font-size: 9pt;
+  margin: 0;
+  padding: 0; }
+
+.subtitle {
+  font-size: 8pt;
+  padding-bottom: 2px;
+  margin-bottom: 4px; }
+
+.title:backdrop, .subtitle:backdrop {
+  color: @inactive_title_text; }
+
+headerbar > widget > * label {
+  color: @active_title_text; }
+
+headerbar:backdrop > widget > * label {
+  color: @inactive_title_text; }
+
+headerbar entry {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border: 1px solid @dark_shadow;
+  box-shadow: none; }
+
+.toolbar-cover-frame {
+  margin: 2px;
+  border-color: transparent;
+  background-color: transparent; }
+
+headerbar button, headerbar:focus button {
+  min-height: 1px;
+  margin-right: 2px;
+  font-weight: bold;
+  font-size: 9pt;
+  background-color: transparent;
+  box-shadow: none;
+  border: 1px solid transparent;
+  color: @active_title_text;
+  padding: 2px; }
+
+
+headerbar:backdrop button {
+  color: @inactive_title_text; }
+
+
+headerbar button:hover {
+  color: @fg_color;
+  background-color: @bg_color;
+  border: 1px solid @borders;
+  border-top: 1px solid @light_shadow;
+  border-left: 1px solid @light_shadow;
+  box-shadow: -1px -1px @dark_shadow inset; }
+
+
+/* Close, minimize and maximize buttons */
+
+
+.titlebutton, .titlebutton:active, .titlebutton:hover, .titlebutton:backdrop {
+  border: none;
+  margin-right: 0px;
+  box-shadow: none;
+  -gtk-icon-source: none;
+  background-image: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  color: transparent; }
+
+.minimize, .minimize:hover, .minimize:backdrop {
+  background-image: url("assets/minimize_normal.png");
+  margin-top: 4px;
+  margin-right: -4px; }
+
+.minimize:active {
+  background-image: url("assets/minimize_pressed.png"); }
+
+.maximize, .maximize:hover, .maximize:backdrop {
+  background-image: url("assets/maximize_normal.png");
+  margin-top: 4px;
+  margin-left: -5px;
+  margin-right: -5px; }
+
+.maximize:active {
+  background-image: url("assets/maximize_pressed.png"); }
+
+.restore, .restore:hover, .restore:backdrop {
+  background-image: url("assets/restore_normal.png");
+  margin-top: 4px;
+  margin-left: -5px;
+  margin-right: -5px; }
+
+.close, .close:hover, .close:backdrop {
+  margin-left: -4px;
+  margin-top: 4px;
+  background-image: url("assets/close_normal.png"); }
+
+.close:active {
+  background-image: url("assets/close_pressed.png"); }
+
+
+/* Restore close button background for info bar */
+
+
+.error .close, .warning .close, .info .cose, .question .close {
+  background-image: none; }

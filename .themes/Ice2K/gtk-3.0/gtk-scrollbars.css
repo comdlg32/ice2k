@@ -1,0 +1,170 @@
+/* Scrollbar buttons, trough, slider.
+   Note: Firefox uses different scrollbar button names  
+   such as .button.up instead of button.top hence the 
+   extra scrollbar button references */
+
+scrollbar {
+   border-top: 0px solid; 
+   border-bottom: 0px solid;
+   border: none;
+   background-color: @bg_color;
+   background-image: url("assets/scrollbar_trough.png");
+}
+
+scrollbar trough {
+   border: none;
+   border-radius: 0; }
+
+
+scrollbar.overlay-indicator {
+   opacity: 1; }
+  
+
+/* Horizontal scroll bar */
+
+
+scrollbar.horizontal slider {
+   min-width: 45px;
+   min-height: 15px;
+   margin: 0px;
+   border-top: 1px solid @bg_color;
+   border-left: 1px solid @bg_color;
+   border-right: 1px solid @borders;
+   border-bottom: 1px solid @borders;
+   border-radius: 0px;
+   background-clip: padding-box;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow;}
+  
+scrollbar.horizontal button,
+scrollbar.horizontal .button {
+   background-image: url("assets/scrollbar_button.png");
+   background-size: 100% 100%;
+   min-height: 17px;
+   min-width: 17px; 
+   margin: 0px;
+   padding: 0px;
+   background-color: transparent;
+   border: none;
+   box-shadow: none; }
+
+scrollbar.horizontal button:active,
+scrollbar.horizontal .button:active {
+   min-width: 17px;
+   min-height: 17px;
+   border: 1px solid @dark_shadow; 
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: none; }
+
+scrollbar.horizontal button.down:active,
+scrollbar.horizontal .button.right:active {
+   min-height: 15px;
+   min-width: 15px;
+   -gtk-icon-source: none;
+   background-image: url("assets/arrow_right.png"); }
+
+scrollbar.horizontal button.up:active,
+scrollbar.horizontal .button.left:active {
+   min-height: 15px;
+   min-width: 15px;
+   -gtk-icon-source: none;
+   background-image: url("assets/arrow_left.png"); }
+
+scrollbar.horizontal button.down {
+   -gtk-icon-source: url("assets/arrow_right.png"); }
+
+scrollbar.horizontal .button.right {
+   -gtk-icon-source: none;
+   background-image: url("assets/scroll_right_button.png"); }
+
+scrollbar.horizontal button.up {
+   -gtk-icon-source: url("assets/arrow_left.png"); }
+
+scrollbar.horizontal .button.left {
+   -gtk-icon-source: none;
+   background-image: url("assets/scroll_left_button.png"); }
+
+/* Vertical scrollbar */
+
+
+scrollbar.vertical slider {
+   min-width: 15px;
+   min-height: 45px;
+   margin: 0px;
+   border-top: 1px solid @bg_color;
+   border-left: 1px solid @bg_color;
+   border-right: 1px solid @borders;
+   border-bottom: 1px solid @borders;
+   border-radius: 0px;
+   background-clip: padding-box;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow; }
+
+/* Specify buttons for LibreOffice */
+
+scrollbar.vertical button,
+scrollbar.vertical .button {
+   background-image: url("assets/scrollbar_button.png");
+   background-size: 100% 100%;
+   min-height: 17px;
+   min-width: 17px; 
+   margin: 0px;
+   padding: 0px;
+   border: none;
+   background-color: @button_bg_color;
+   box-shadow: none; }
+
+
+scrollbar.vertical button:active,
+scrollbar.vertical .button:active {
+   min-width: 17px;
+   min-height: 17px;
+   border: 1px solid @dark_shadow; 
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: none; }
+
+/* End LibreOffice support */
+
+
+/* Note: There are redundent entries and image files due to the workaround
+   for LibreOffice scrollbar buttons causing issues with my original Firefox 
+   scrollbarbutton fix */
+
+scrollbar.vertical button.down:active,
+scrollbar.vertical .button.bottom:active {
+   min-height: 15px;
+   min-width: 15px;
+   -gtk-icon-source: none;
+   background-image: url("assets/arrow_down.png"); }
+
+scrollbar.vertical button.up:active,
+scrollbar.vertical .button.top:active {
+   min-height: 15px;
+   min-width: 15px;
+   -gtk-icon-source: none;
+   background-image: url("assets/arrow_up.png"); }
+
+scrollbar.vertical button.down {
+   -gtk-icon-source: url("assets/arrow_down.png"); }
+
+scrollbar.vertical .button.bottom {
+   -gtk-icon-source: none;
+   background-image: url("assets/scroll_down_button.png"); }
+
+scrollbar.vertical button.up {
+   -gtk-icon-source: url("assets/arrow_up.png"); }
+
+scrollbar.vertical .button.top {
+   -gtk-icon-source: none;
+   background-image: url("assets/scroll_up_button.png");
+}
+  
+
+/* Mystery */
+
+
+treeview scrollbar.vertical {
+   border-top: 1px solid @borders;
+   margin-top: -1px; }

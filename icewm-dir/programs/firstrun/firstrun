@@ -1,6 +1,7 @@
 #!/bin/sh
 i2kcfg="$HOME/.icewm/cfg"
 read firstrun < "$i2kcfg/ice2k/firstruncomplete"
+export firstrun
 
 firstrunactions()
 {
@@ -11,6 +12,15 @@ firstrunactions()
 	cp xferc ~/.config/xfe
 	cp xres ~/.icewm
 	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.icewm/xres"
+
+	for i in ~/.idesktop/*.lnk; do
+		sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$i"
+	done
+
+	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.config/dunst/dunstrc"
+
+	cd ~/.icewm/programs/setcolor
+	~/.icewm/programs/
 }
 
 if [ "$firstrun" -eq 0 ]; then

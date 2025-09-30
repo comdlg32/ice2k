@@ -1,0 +1,171 @@
+#XfcePanelWindow {
+   padding-top: 2px;
+   background-color: @button_bg_color;
+   padding-bottom: 0px; }
+
+#XfcePanelWindow button {
+   margin: 2px;
+   margin-left: 0px; }
+
+#XfcePanelWindow button > box {
+   margin-top: 1px;
+   margin-right: 3px; }
+
+#XfcePanelWindow button box > image {
+   margin-right: -5px; }
+
+#XfcePanelWindowWrapper {
+   box-shadow: 0 1px @light_shadow;
+   margin-top: 3px; }
+
+#XfcePanelWindow button:active, #XfcePanelWindow button:checked {
+   font-weight: bold;
+   margin-top: 2px;
+   margin-bottom: 2px;
+   margin-left: 1px;
+   border: none;
+   box-shadow: none;
+   border-top: 1px solid @borders;
+   border-left: 1px solid @borders;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: 1px 1px @dark_shadow inset, -1px -1px @button_bg_color inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @toolbar_fg_color;
+   background-color: @button_bg_color; }
+
+#XfcePanelWindow #launcher-arrow, 
+#XfcePanelWindow #launcher-arrow:hover {
+   border-radius: 0;
+   margin: 0;
+   margin-top: 1px;
+   padding: 3px; }
+
+#XfcePanelWindow #launcher-arrow:active {
+   box-shadow: 1px 1px @dark_shadow inset, -1px -1px @light_shadow inset;
+   background-image: none;
+   border: transparent solid; }
+
+#XfcePanelWindow {
+   box-shadow: 0 1px @light_shadow inset;
+   border-top: @light_shadow 1px solid; }
+
+#XfcePanelWindow #clock-button,
+#XfcePanelWindow #clock-button:hover,
+#XfcePanelWindow #clock-button:checked {
+   margin-left: -2px;
+   padding-right: 3px;
+   margin-top: 3px;
+   margin-bottom: 2px;
+   box-shadow: none;
+   border-top: 1px solid @dark_shadow;
+   border-right: 1px solid @light_shadow;
+   background-image: none;
+   font-weight: normal;
+   border-bottom: 1px solid @light_shadow; }
+
+#XfcePanelWindow #clock-button > label {
+  margin-right: 4px;
+  margin-left: 2px;
+  margin-top: 1px;
+}
+
+#applicationmenu-button {
+   font-weight: bold;
+   padding: 4px;
+   margin-left: 4px;
+   margin-top: 2px;
+   margin-bottom: 2px;
+   color: @theme_fg_color;
+   border-top: 1px solid @button_bg_color;
+   border-left: 1px solid @button_bg_color;
+   border-right: 1px solid @borders;
+   border-bottom: 1px solid @borders; 
+   border-radius: 0px;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow,
+   0 -2px @light_shadow, 0 -1px @bg_color; }
+
+#applicationmenu-button:checked, #whiskermenu-button:active {
+   border: none;
+   box-shadow: none;
+   margin-right: 1px;
+   border-top: 1px solid @borders;
+   border-left: 1px solid @borders;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: 1px 1px @dark_shadow inset, -1px -1px @button_bg_color inset,
+   0 -2px @light_shadow, 0 -1px @bg_color;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @toolbar_fg_color;
+   background-color: @button_bg_color; }
+
+#applicationmenu-button box {
+   padding: 3px; }
+
+XfdesktopIconView .view {
+   color: #fff; 
+   background-color: transparent;
+   text-shadow: 1px 1px #000; }
+
+XfdesktopIconView .view:active {
+   color: #fff; }
+
+XfdesktopIconView:active {
+   color: @selected_bg_color;
+   background-color: @selected_bg_color; }
+
+/* Hack to give the task bar a pseudo handle
+Remove code after this comment to disable the fake handle image.
+Since the task bar name changes based on individual panel layout, support
+up to 24 different positions. */
+
+#tasklist > box, #tasklist-1 > box, #tasklist-2 > box, #tasklist-3 > box, 
+#tasklist-4 > box, #tasklist-5 > box, #tasklist-6 > box, #tasklist-7 > box, 
+#tasklist-8 > box, #tasklist-9 > box, #tasklist-10 > box, #tasklist-11 > box, 
+#tasklist-12 > box, #tasklist-13 > box, #tasklist-14 > box, #tasklist-15 > box, 
+#tasklist-16 > box, #tasklist-17 > box, #tasklist-18 > box, #tasklist-19 > box,
+#tasklist-20 > box, #tasklist-21 > box, #tasklist-22 > box, #tasklist-23 > box, 
+#tasklist-24 > box {
+   border-left: 11px solid;
+   border-image: url("assets/handle.png");
+   border-image-slice: 2 2 2 11;
+}
+
+/* Hack to give the first launcher icon a pseudo handle */
+#XfcePanelWindow  widget > widget:nth-child(2) box #launcher-arrow {
+   border-left: 11px solid;
+   border-image: url("assets/handle.png");
+   border-image-slice: 4 4 3 11;
+}
+
+#XfcePanelWindow  widget > widget:nth-child(2) box #launcher-arrow image {
+   margin-left: 2px;
+   margin-right: 2px;
+}
+
+#XfcePanelWindow  widget > widget:nth-child(2) box #launcher-arrow:active image {
+   margin-left: 2px;
+   margin-right: 3px;
+}
+
+#xfce4-notification-plugin {
+   border: 1px solid #000;
+   background-color: #000;
+}
+
+/*System tray box */
+
+#systray-1 > box, #systray-2 > box, #systray-3 > box, #systray-4 > box, #systray-5 > box, #systray-6 > box, #systray-7 > box,
+#systray-8 > box, #systray-9 > box, #systray-10 > box, #systray-11 > box, #systray-12 > box, #systray-13 > box, #systray-14 >box,
+#systray-15 > box, #systray-16 > box, #systray-17 > box, #systray-18 > box, #systray-19 > box, #systray-20 > box, #systray-21 >box {
+   box-shadow: 1px 3px @dark_shadow inset, 0 2px @bg_color inset, 0 -1px @light_shadow inset;
+   margin-top: 0px;
+   padding-top: 0;
+   padding-left: 3px;
+   border-top: 1px solid @light_shadow;
+   border-right: none;
+   padding-bottom: 2px;
+   margin-bottom: 2px;
+}
+

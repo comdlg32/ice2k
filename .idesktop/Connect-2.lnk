@@ -1,0 +1,9 @@
+table Icon
+  Caption: the Internet  
+  Icon: /home/tf/.idesktop/blank.xpm
+  X: 37
+  Y: 496
+  Command[0]: firefox-esr
+  Command[1]: idesktool Firefox.lnk
+end
+

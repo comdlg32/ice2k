@@ -1,0 +1,14 @@
+style "menubaritem"
+{
+	engine "pixmap"
+	{
+		image
+		{
+			function = BOX
+			file = "dot.gif"
+		}
+	}
+
+}
+
+class "GtkMenuBar*"             style "menubaritem"

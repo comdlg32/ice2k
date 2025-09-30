@@ -1,0 +1,601 @@
+/* General buttons */
+
+
+button {
+   padding: 4px 6px 4px 6px;
+   border-radius: 0px;
+   color: @button_fg_color;
+   /*border-top: 1px solid @button_bg_color;*/
+   /*border-left: 1px solid @button_bg_color;*/
+   border-top: 0px solid @button_bg_color;
+   border-left: 0px solid @button_bg_color;
+   border-right: 1px solid @dark_shadow2;
+   border-bottom: 1px solid @dark_shadow2;
+   border-radius: 0px;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow;
+   outline-offset: -4px; }
+
+button:active {
+   color: @theme_fg_color;
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-right: 0px solid @borders;
+   border-bottom: 0px solid @borders;
+   box-shadow: 0 0 0 1px @dark_shadow inset;
+   background-color: @button_bg_color;
+}
+
+button:active:focus:not(combobox) {
+   box-shadow: -1px -1px 0 0 @dark_shadow inset, 0 0 0 1px @borders;
+}
+
+button:focus:not(combobox) {
+   box-shadow: inset -1px 0 @dark_shadow, inset 0 -1px @dark_shadow, inset 1px 0 @light_shadow, inset 0 1px @light_shadow, 0 0 0 1px @borders;
+}
+
+button:checked {
+   color: @theme_fg_color;
+   box-shadow: 1px 1px @dark_shadow inset;
+   border-color: @borders;
+   background-color: @button_bg_color;
+}
+
+button:checked:disabled {
+   color: @disabled_fg_color;
+   text-shadow: 1px 1px @light_shadow;
+   border-color: @borders;
+   background-color: @button_bg_color; }
+
+button:disabled {
+   text-shadow: 1px 1px @light_shadow;
+   color: @disabled_fg_color }
+
+
+/* General flat buttons */
+
+
+button.flat {
+   border-color: transparent;
+   border-radius: 2px;
+   color: @theme_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+button.flat:hover {
+   color: @toolbar_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px -1px @dark_shadow, inset 1px 1px @light_shadow; }
+
+button.flat:active {
+   color: @button_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: inset 1px 1px @dark_shadow, inset -1px -1px @light_shadow; }
+
+button.flat:checked {
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: -1px -1px @button_bg_color inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @button_fg_color;
+   background-color: @button_bg_color; }
+
+button.flat:disabled {
+   text-shadow: 1px 1px @light_shadow;
+   border-color: transparent;
+   border-radius: 2px;
+   color: @disabled_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+
+/* Combobox button */
+
+
+combobox button, combobox button:focus {
+   margin: 2px;
+   box-shadow: none;
+   outline-color: transparent;
+   outline-offset: -1px;
+   background-color: transparent;
+   border: solid;
+   padding: 0px;
+   border-width: 2px 18px 2px 2px;
+   border-image: url("assets/combobox.png");
+   border-image-slice: 2 18 2 2; }
+
+combobox button:checked, combobox button:active {
+   margin: 2px;
+   box-shadow: none;
+   outline-color: transparent;
+   outline-offset: -1px;
+   outline-width: 1px;
+   background-color: transparent;
+   border: solid;
+   padding: 0px;
+   border-width: 2px 18px 2px 2px;
+   border-image: url("assets/combobox_checked.png");
+   border-image-slice: 2 18 2 2; }
+
+combobox button:disabled {
+   background-color: transparent; }
+
+
+/* Circular buttons */
+
+
+button.circular, button.circular-button {
+   padding: 0;
+   min-width: 16px;
+   min-height: 24px;
+   padding: 2px 6px;
+   border-radius: 50%;
+   -gtk-outline-radius: 50%; }
+
+
+/* Linked buttons */
+
+
+.linked button, .linked .raised button {
+   margin-left: 1px; }
+
+.vertical.linked button {
+   margin-left: 1px; }
+
+
+/* Misc buttons */
+
+
+.floating-bar button {
+   border-style: none;
+   background-color: transparent; }
+
+calendar.button {
+   color: @theme_selected_bg_color; }
+
+
+/* Dialog Buttons */
+
+
+messagedialog button:first-child {
+   margin-left: 0; }
+
+messagedialog button:last-child {
+   margin-right: 0; }
+
+messagedialog button {
+   margin-left: 10px;
+   margin-right: 10px;
+   margin-top: 0;
+   padding: 4px 6px;
+   min-width: 20px; }
+
+messagedialog button box {
+   background-color: @button_bg_color; }
+
+
+
+/* Notebook tab buttons */
+
+
+notebook button.flat {
+   border-color: transparent;
+   color: @theme_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+notebook button.flat:hover {
+   border-color: transparent;
+   color: @theme_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+notebook button.flat:active {
+   border-color: transparent;
+   color: @theme_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+notebook button.flat:disabled {
+    border-color: transparent;
+    color: alpha(@theme_fg_color, 0.8);
+    background-color: transparent; }
+
+notebook tab button, notebook tab button:hover, notebook tab button:focus, 
+notebook tab button:active, notebook tab button:checked, 
+notebook tab button:active:hover, notebook tab button:checked:hover, 
+notebook tab button:backdrop, notebook tab:checked button, 
+notebook tab:checked button:hover, notebook tab:checked button:focus, 
+notebook tab:checked button:active, notebook tab:checked button:checked, 
+notebook tab:checked button:active:hover, notebook tab:checked button:checked:hover, 
+notebook tab:checked button:backdrop {
+   min-height: 0;
+   min-width: 0;
+   padding: 0;
+   margin: 0;
+   border-color: transparent;
+   border: none;
+   background-color: transparent;
+   color: @theme_fg_color; }
+
+
+/* Tree view headers */
+
+
+treeview header button {
+   border-width: 0 1px 1px 0;
+   border-radius: 0;
+   box-shadow: none; }
+
+treeview header button, treeview header button:active, treeview header button:focus, treeview header button:active:focus {
+   box-shadow: none;
+   background-image: none;
+   background-color: @button_bg_color; }
+
+treeview header button:hover, treeview header button:active:hover, treeview header button:hover:focus, treeview header button:active:hover:focus {
+   box-shadow: none;
+   color: @theme_fg_color;
+   background-color: @button_bg_color; }
+
+treeview header:last-child button {
+   padding: 4px;
+   margin-top: -1px;
+   border-right: 1px solid @borders;
+   border-bottom:1px solid @borders;
+   border-top: 1px solid @borders;
+   box-shadow: 1px 1px @light_shadow inset, -1px -1px @dark_shadow inset;
+}
+
+
+/* Sidebar button */
+
+
+button.sidebar-button:hover, button.sidebar-button:active {
+   color: @theme_fg_color; }
+button.sidebar-button:not(:hover):not(:active) > image {
+   opacity: 0.5; }
+
+
+/* Spin buttons */
+
+
+spinbutton {
+  padding: 1px;
+  border-color: @borders;
+  border: 1px solid @dark_shadow;
+  border-bottom: 1px solid @light_shadow;
+  border-right: 1px solid @light_shadow;
+  border-radius: 0px;
+  box-shadow: 1px 1px @borders inset, -1px -1px @theme_bg_color inset;
+  background-color: @base_color;
+  color: @text_color; }
+  
+spinbutton:disabled {
+  background-color: @bg_color; }
+
+spinbutton:not(.vertical) selection, spinbutton:not(.vertical) selection:focus {
+   color: @theme_selected_fg_color;
+   background-color: @theme_selected_bg_color; }
+
+spinbutton button:disabled {
+   color: @theme_disabled_fg_color; }
+
+spinbutton button:disabled:backdrop {
+   color: @theme_unfocused_disabled_fg_color; }
+
+spinbutton.horizontal > button.down,
+spinbutton.horizontal > button.up {
+   color: transparent;
+   padding: 0px; }
+
+spinbutton.vertical > button.up,
+spinbutton.vertical > button.down {
+}
+
+
+/* Filechooser location bar button */
+
+filechooser button {
+   border-top: 1px solid transparent;
+   border-left: 1px solid transparent;
+}
+
+
+filechooser button:checked, filechooser button:active {
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: inset -1px 0 @button_bg_color, -1px 0 @button_bg_color, inset 0 -1px @button_bg_color, inset 1px 0 @borders, inset 0 1px @borders;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @button_fg_color;
+   background-color: @button_bg_color; 
+}
+
+filechooser button:checked box, filechooser button:active box {
+background-color: transparent;
+}
+
+
+
+/* Toolbar buttons */ 
+
+
+toolbar button {
+   margin: 1px; }
+
+toolbar button.flat {
+   outline-color: transparent;
+   margin: 0px;
+   border: transparent 1px solid;
+   border-radius: 0px;
+   color: @button_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+ 
+toolbar button.flat:hover {
+   color: @button_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   box-shadow: inset -1px -1px @dark_shadow, inset 1px 1px @light_shadow; }
+   
+toolbar button.flat:active {
+   color: @button_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: inset 1px 1px @dark_shadow, inset -1px -1px @light_shadow; }
+
+toolbar button.flat:checked {
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: -1px -1px @button_bg_color inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @button_fg_color;
+   background-color: @button_bg_color; }
+
+toolbar button.flat:disabled {
+   border-color: transparent;
+   border-radius: 2px;
+   color: @disabled_fg_color;
+   box-shadow: none;
+   background-color: transparent; }
+
+.primary-toolbar button {
+   outline-color: transparent;
+   border: 1px solid transparent;
+   border-radius: 0px;
+   color: @button_fg_color;
+   box-shadow: none; }
+
+.primary-toolbar .raised button {
+   border-color: transparent;
+   border-radius: 0px;
+   color: @button_fg_color;
+   box-shadow: none;
+}
+
+.primary-toolbar button:active, .primary-toolbar .raised button:hover {
+   color: @button_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: inset 1px 1px @light_shadow, inset -1px -1px @dark_shadow; }
+
+.primary-toolbar button:active, .primary-toolbar .raised button:active {
+   color: @button_fg_color;
+   border-color: @button_bg_color;
+   background-color: @button_bg_color;
+   background-image: none;
+   box-shadow: inset 1px 1px @dark_shadow, inset -1px -1px @light_shadow; }
+ 
+.primary-toolbar button:checked, .primary-toolbar .raised button:checked {
+   border-top: 1px solid @dark_shadow;
+   border-left: 1px solid @dark_shadow;
+   border-bottom: 1px solid @light_shadow;
+   border-right: 1px solid @light_shadow;
+   box-shadow: -1px -1px @button_bg_color inset;
+   background-image: url("assets/scrollbar_trough.png");
+   color: @button_fg_color;
+   background-color: @button_bg_color; }
+
+.primary-toolbar button:checked:disabled, .primary-toolbar .raised button:checked:disabled {
+   border-color: transparent;
+   border-radius: 0px;
+   color: @disabled_fg_color;
+   box-shadow: none;
+}
+
+.primary-toolbar button:disabled, .primary-toolbar .raised button:disabled {
+   color: @disabled_fg_color; }
+
+
+/* Hamburger menu buttons */
+
+
+popover modelbutton:hover {
+   background-color: @theme_selected_bg_color;
+   color: @theme_selected_fg_color; }
+
+popover modelbutton:disabled {
+   color: @disabled_fg_color;
+   text-shadow: 1px 1px @light_shadow; }
+
+popover modelbutton {
+   padding: 4px; }
+
+
+/* Check and radio buttons */
+
+
+check, radio, check:disabled, radio:disabled {
+   margin: 0px;
+   border-style: none;
+   background-color: transparent; }
+
+checkbutton.text-button :disabled, radiobutton.text-button :disabled {
+   color: @disabled_fg_color;
+   text-shadow: 1px 1px @light_shadow;
+   outline-offset: 0; }
+
+check, .check {
+   -gtk-icon-source: url("assets/c_box.png"); }
+
+check:disabled, .check:disabled {
+   -gtk-icon-source: url("assets/c_box_ins.png"); }
+
+check:active, check:checked, .check:active, .check:checked {
+   -gtk-icon-source: url("assets/c_box_checked.png"); }
+
+check:active:disabled, check:checked:disabled, .check:active:disabled, .check:checked:disabled {
+   -gtk-icon-source: url("assets/c_box_ins_checked.png"); }
+
+check:indeterminate, .check:indeterminate {
+   -gtk-icon-source: url("assets/c_box_mixed.png"); }
+    
+check:indeterminate:disabled, .check:indeterminate:disabled {
+   -gtk-icon-source: url("assets/c_box_ins_mixed.png"); }
+
+radio, .radio {
+   -gtk-icon-source: url("assets/radio.png"); }
+
+radio:disabled, .radio:disabled {
+   -gtk-icon-source: url("assets/radio_ins.png"); }
+
+radio:active, radio:checked, .radio:active, .radio:checked {
+   -gtk-icon-source: url("assets/radio_checked.png"); }
+
+radio:active:disabled, radio:checked:disabled, .radio:active:disabled, .radio:checked:disabled {
+   -gtk-icon-source: url("assets/radio_ins_checked.png"); }
+
+radio:indeterminate, .radio:indeterminate {
+   -gtk-icon-source: url("assets/radio_mixed.png"); }
+
+radio:indeterminate:disabled, .radio:indeterminate:disabled {
+   -gtk-icon-source: url("assets/radio_ins_mixed.png"); }
+
+menuitem check, menuitem radio {
+   min-height: 16px;
+   min-width: 16px; }
+
+view.content-view check:hover, view.content-view check:disabled, view.content-view check:selected {
+   background-color: transparent; }
+
+
+/* App notification bar buttons - set color for each type of notification */
+
+
+.info button {
+   border-color: shade(@info_bg_color, 0.8);
+   color: @info_fg_color;
+   background-image: none;
+   background-color: shade(@info_bg_color, 1.08); }
+   
+.info button:hover {
+   border-color: shade(@info_bg_color, 0.85);
+   background-color: shade(@info_bg_color, 1.1); }
+
+.info button:active {
+   border-color: shade(@info_bg_color, 0.6);
+   background-color: shade(@info_bg_color, 0.95); }
+
+.info button:active:hover {
+   border-color: shade(@info_bg_color, 0.85); }
+
+.info button.close {
+   color: @info_fg_color; }
+
+.info button.close:hover {
+   background-color: alpha(@light_shadow, 0.2); }
+
+.info button.close:active {
+   color: @info_fg_color;
+   background-color: alpha(@dark_shadow, 0.1); }
+
+.warning button {
+   border-color: shade(@warning_bg_color, 0.8);
+   color: @warning_fg_color;
+   background-image: none;
+   background-color: shade(@warning_bg_color, 1.08); }
+
+.warning button:hover {
+   border-color: shade(@warning_bg_color, 0.85);
+   background-color: shade(@warning_bg_color, 1.1); }
+
+.warning button:active {
+   border-color: shade(@warning_bg_color, 0.6);
+   background-color: shade(@warning_bg_color, 0.95); }
+
+.warning button:active:hover {
+   border-color: shade(@warning_bg_color, 0.85); }
+
+.warning button.close {
+   color: @warning_fg_color; }
+
+.warning button.close:hover {
+   background-color: alpha(@light_shadow, 0.2); }
+      
+.warning button.close:active {
+   color: @warning_fg_color;
+   background-color: alpha(@dark_shadow, 0.1); }
+
+.question button {
+   border-color: shade(@question_bg_color, 0.8);
+   color: @question_fg_color;
+   background-image: none;
+   background-color: shade(@question_bg_color, 1.08); }
+
+.question button:hover {
+   border-color: shade(@question_bg_color, 0.85);
+   background-color: shade(@question_bg_color, 1.1); }
+
+.question button:active {
+   border-color: shade(@question_bg_color, 0.6);
+   background-color: shade(@question_bg_color, 0.95); }
+
+.question button:active:hover {
+   border-color: shade(@question_bg_color, 0.85); }
+
+.question button.close {
+   color: @question_fg_color; }
+
+.question button.close:hover {
+   background-color: alpha(@light_shadow, 0.2); }
+
+.question button.close:active {
+   color: @question_fg_color;
+   background-color: alpha(@dark_shadow, 0.1); }
+
+.error button {
+   border-color: shade(@error_bg_color, 0.8);
+   color: @error_fg_color;
+   background-image: none;
+   background-color: shade(@error_bg_color, 1.08); }
+   
+.error button:hover {
+   border-color: shade(@error_bg_color, 0.85);
+   background-color: shade(@error_bg_color, 1.1); }
+
+.error button:active {
+   border-color: shade(@error_bg_color, 0.6);
+   background-color: shade(@error_bg_color, 0.95); }
+
+.error button:active:hover {
+   border-color: shade(@error_bg_color, 0.85); }
+
+.error button.close {
+   color: @error_fg_color; }
+     
+.error button.close:hover {
+   background-color: alpha(@light_shadow, 0.2); }
+      
+.error button.close:active {
+   color: @error_fg_color;
+   background-color: alpha(@dark_shadow, 0.1); }

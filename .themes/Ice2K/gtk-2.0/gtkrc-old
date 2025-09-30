@@ -1,0 +1,118 @@
+include "menubar.rc"
+
+gtk-icon-sizes = "mini-commander-icon=32,32:print-manager=32,32:panel-button=32,32:gtk-dnd=32,32:gtk-menu=16,16:panel-menu=22,22:gtk-large-toolbar=16,16:gtk-small-toolbar=16,16:gtk-button=16,16:gtk-dialog=32,32"
+
+style "standard-default"
+{
+  GtkWidget::interior_focus = 2
+  GtkButton::default_border = { 1, 1, 1, 1 }
+  GtkButton::default_outside_border = { 1, 1, 1, 1 }
+  GtkOptionMenu::indicator_size = { 9, 5 }
+  GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
+  GtkComboBox::appears-as-list = 1
+  GtkNotebook::tab-overlap = 4
+
+  GtkButton::child_displacement_x = 1
+  GtkButton::child_displacement_y = 1
+
+  GtkMenu::horizontal-padding = 1
+  GtkMenu::vertical-padding = 1
+  GtkMenu::horizontal-offset = -6
+
+  GtkScrolledWindow::scrollbar-spacing = 0
+  GtkScrolledWindow::scrollbars-within-bevel = 1
+
+  fg[ACTIVE]        = { 0.0, 0.0, 0.0 }
+  fg[INSENSITIVE]   = { 0.5, 0.5, 0.5 }
+  fg[NORMAL]        = { 0.0, 0.0, 0.0 }
+  fg[PRELIGHT]      = { 0.0, 0.0, 0.0 }
+  fg[SELECTED]      = { 1.0, 1.0, 1.0 }
+
+  bg[ACTIVE]        = { 0.83, 0.81, 0.78 } 
+  bg[INSENSITIVE]   = { 0.83, 0.81, 0.78 } 
+  bg[NORMAL]        = { 0.83, 0.81, 0.78 } 
+  bg[PRELIGHT]      = { 0.83, 0.81, 0.78 } 
+  bg[SELECTED]      = { 0.04, 0.14, 0.41 }
+
+  base[ACTIVE]      = { 0.04, 0.14, 0.41 }
+  base[INSENSITIVE] = { 0.83, 0.81, 0.78 }
+  base[NORMAL]      = { 1.0, 1.0, 1.0 }
+  base[PRELIGHT]    = { 0.04, 0.14, 0.41 }
+  base[SELECTED]    = { 0.04, 0.14, 0.41 }
+
+  text[ACTIVE]      = { 1.0, 1.0, 1.0 }
+  text[INSENSITIVE] = { 0.5, 0.5, 0.5 }
+  text[NORMAL]      = { 0.0, 0.0, 0.0 }
+  text[PRELIGHT]    = { 1.0, 1.0, 1.0 }
+  text[SELECTED]    = { 1.0, 1.0, 1.0 }
+
+  engine "redmond95" {}
+}
+
+class "GtkWidget" style "standard-default"
+
+style "standard-menu"
+{
+  bg[PRELIGHT] = { 0.04, 0.14, 0.41 }
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+}
+
+widget_class "*MenuItem*" style "standard-menu"
+
+style "standard-menubar-item"
+{
+  bg[PRELIGHT] = { 0.83, 0.81, 0.78 } 
+  fg[PRELIGHT] = { 0.0, 0.0, 0.0 }
+}
+
+class "*MenuBar.*MenuItem*" style "standard-menubar-item"
+widget_class "*MenuBar.*MenuItem*" style "standard-menubar-item"
+
+style "standard-list"
+{
+   bg[NORMAL] = { 0.9, 0.9, 0.9 }
+   bg[PRELIGHT] = { 0.0, 0.0, 0.0 }
+}
+
+class "GtkList" style "standard-list"
+
+style "standard-scrollbar"
+{
+  GtkRange::trough_border = 0
+  GtkRange::slider_width = 16
+  GtkRange::stepper_size = 16
+  GtkRange::stepper_spacing = 0
+}
+
+class "GtkScrollbar" style "standard-scrollbar"
+
+
+style "standard-scales"
+{
+  GtkRange::slider-width = 21
+  GtkScale::slider-length = 11
+}
+
+class "*Scale*" style "standard-scales"
+
+style "standard-option-menu"
+{
+  GtkOptionMenu::indicator_width = 7
+  GtkOptionMenu::indicator_left_spacing = 6
+  GtkOptionMenu::indicator_right_spacing = 4
+}
+
+class "GtkOptionMenu" style "standard-option-menu"
+
+style "standard-progressbar" {
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+} 
+class "GtkProgressBar" style "standard-progressbar"
+
+
+style "standard-entry"
+{
+  bg[SELECTED] = "#1C40A8"
+  fg[SELECTED] = { 1.0, 1.0, 1.0 }
+}
+class "GtkEntry" style "standard-entry"

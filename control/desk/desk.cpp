@@ -511,6 +511,7 @@ long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr)
 // from fox imageviewer example
 const FXchar patterns[] =
 	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
+	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
 	"\nBitmap Image (*.bmp)"
 	"\nPNG Image  (*.png)"
 	"\nJPEG Image (*.jpg,*.jpeg)"
@@ -523,10 +524,12 @@ const FXchar patterns[] =
 
 const char* imageExtensions[] = {
 	".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff",
-	".bmp", ".tga", ".pbm", ".ppm", ".pgm"
+	".bmp", ".tga", ".pbm", ".ppm", ".pgm",
+	".htm", ".html", ".mp4", ".flv"
 };
 
 const int imageExtensionsNum = sizeof(imageExtensions) / sizeof(imageExtensions[0]);
+
 
 enum imageLoaders {
 	_I2K_PNG,

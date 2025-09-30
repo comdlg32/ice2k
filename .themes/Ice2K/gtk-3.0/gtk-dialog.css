@@ -1,0 +1,28 @@
+/* GTK Dialogs */
+
+
+dialog stack {
+   background-color: @theme_bg_color;
+}
+
+/* Add icon to dialogs, add margin between dialog buttons */
+
+messagedialog .horizontal.dialog-action-box {
+   min-width: 0;
+   margin-right: 0;
+   background-color: transparent;
+   padding-left: 0;
+   padding-right: 50px;
+   padding-bottom: 10px; }
+
+messagedialog {
+  background-image: url("assets/warning.png");
+  background-position: 5px 5px;
+  background-size: 60px;
+  background-repeat: no-repeat;
+}
+
+messagedialog .dialog-vbox {
+border-left: 55px solid transparent;
+min-height: 120px;
+}

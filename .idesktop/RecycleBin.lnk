@@ -1,0 +1,9 @@
+table Icon
+  Caption: Recycle Bin  
+  Icon: /home/tf/.icons/SE98/places/32/user-trash-full.png
+  X: 21
+  Y: 227
+  Command[0]: xfe $HOME/.local/share/Trash/files
+  Command[1]: idesktool RecycleBin.lnk
+end
+
