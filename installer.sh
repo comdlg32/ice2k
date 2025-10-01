@@ -167,8 +167,7 @@ if groups | grep -v -q input; then
 
 		if [ "$line" = "y" ]; then
 			a=0
-			echo "done!!"
-			sudo usermod -aG input "$USER" && echo "done."
+			sudo usermod -aG input "$USER" && echo "done!!!"
 		elif [ "$line" = "n" ]; then
 			echo "ok..."
 			a=0
@@ -196,8 +195,7 @@ if groups | grep -v -q audio; then
 
 		if [ "$line" = "y" ]; then
 			a=0
-			echo "done!"
-			sudo usermod -aG audio "$USER" && echo "done."
+			sudo usermod -aG audio "$USER" && echo "done!!!"
 		elif [ "$line" = "n" ]; then
 			echo "ok..."
 			a=0
