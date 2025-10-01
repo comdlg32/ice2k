@@ -139,9 +139,75 @@ sudo update-fonts-alias misc
 sudo update-fonts-dir 100dpi
 sudo update-fonts-alias 100dpi
 
-echo "$USER ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown, /usr/sbin/pm-suspend
+echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/poweroff, /sbin/poweroff, /usr/sbin/reboot, /sbin/reboot, /sbin/shutdown, /sbin/pm-suspend, /usr/sbin/pm-suspend
 $USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
 $USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
 $USER ALL=(ALL) NOPASSWD: /sbin/iwlist
 $USER ALL=(ALL) NOPASSWD: /usr/bin/eject" || sudo tee -a /etc/sudoers >/dev/null
+
+#!/bin/sh
+
+echo
+echo "installation successful!!!!"
+
+a=1
+if groups | grep -v -q input; then
+	echo
+	echo "if this is a fresh install, you probably want to add yourself"
+	echo "to the input group. else there is a high chance input won't"
+	echo "work."
+	echo
+
+	while [ $a -eq 1 ]; do
+		echo -n "add $USER to input group? [Y/N] "
+
+		read line;
+
+		line="$(echo -n "$line" | tr A-Z a-z)"
+
+		if [ "$line" = "y" ]; then
+			a=0
+			echo "done!!"
+			sudo usermod -aG input "$USER" && echo "done."
+		elif [ "$line" = "n" ]; then
+			echo "ok..."
+			a=0
+		fi
+	done
+fi
+a=1
+if groups | grep -v -q audio; then
+
+	echo
+	echo ======================================================
+	echo
+
+	echo "unless you will install pulseaudio/pipewire or already have it"
+	echo "installed, you should probably add yourself to the audio group"
+	echo "or you wont have working audio."
+	echo
+
+	while [ $a -eq 1 ]; do
+		echo -n "add $USER to audio group? [Y/N] "
+
+		read line;
+
+		line="$(echo -n "$line" | tr A-Z a-z)"
+
+		if [ "$line" = "y" ]; then
+			a=0
+			echo "done!"
+			sudo usermod -aG audio "$USER" && echo "done."
+		elif [ "$line" = "n" ]; then
+			echo "ok..."
+			a=0
+		fi
+	done
+fi
+
+
+echo
+echo "if you want to launch ice2k.sys..."
+echo "run: 'cd ~ && startx'"
+echo
 

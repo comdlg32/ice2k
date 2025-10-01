@@ -30,6 +30,10 @@ I'll make proper .desktop files for those soon.
 
 I had to kind of rush this, expect bugs.
 
+I am not responsible for any kind of damage to your computer. You should
+probably not test this on your main computer for now, you can lose
+data (unlikely. however you are most likely to lose dotfiles)
+
 MAIN AUTHORS
 xcomposite
 https://m1nuscle.neocities.org/main
