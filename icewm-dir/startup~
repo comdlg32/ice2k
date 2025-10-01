@@ -28,7 +28,6 @@ cbatticon -x "$HOME/.icewm/programs/backlight/backlight" \
 cd "$HOME"
 
 # animated background manager
-backmgr
 ~/.icewm/programs/animbg/animbg &
 sleep 0.5
 
