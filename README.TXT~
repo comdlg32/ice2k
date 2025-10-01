@@ -25,6 +25,11 @@ Run the following:
     cd ..
     startx
 
+You can run most of the programs included from the source tree.
+I'll make desktop files soon.
+
+I had to kind of rush this, expect bugs.
+
 MAIN AUTHORS
 xcomposite
 https://m1nuscle.neocities.org/main

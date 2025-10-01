@@ -25,7 +25,10 @@ Run the following:
     cd ..
     startx
 
-I had to kind of rush the installer, expect bugs.
+You can run most of the programs included from the source tree.
+I'll make proper .desktop files for those soon.
+
+I had to kind of rush this, expect bugs.
 
 MAIN AUTHORS
 xcomposite
