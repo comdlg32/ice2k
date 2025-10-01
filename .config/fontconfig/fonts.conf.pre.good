@@ -1,0 +1,197 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+<include ignore_missing="yes">conf.d</include>
+ <match target="font" >
+  <edit mode="assign" name="hintstyle" >
+   <const>hintfull</const>
+  </edit>
+ </match>
+ <match target="font" >
+  <edit mode="assign" name="antialias" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="hinting" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="hintstyle" >
+   <const>hintfull</const>
+  </edit>
+  <edit mode="assign" name="rgba" >
+   <const>rgb</const>
+  </edit>
+  <edit mode="assign" name="autohint" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="lcdfilter" >
+   <const>lcdlegacy</const>
+  </edit>
+  <edit mode="assign" name="dpi" >
+   <double>96</double>
+  </edit>
+  <edit mode="assign" name="hinting" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="hintstyle" >
+   <const>hintfull</const>
+  </edit>
+  <edit mode="assign" name="rgba" >
+   <const>none</const>
+  </edit>
+ </match>
+<match target="font">
+  <test name="family" qual="any" >
+   <string>Tahoma</string>
+  </test>
+    <test name="slant" compare="eq">
+      <double>0</double>
+    </test>
+  <test name="pixelsize" qual="any" compare="less">
+   <double>12</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="hinting" >
+   <bool>true</bool>
+  </edit>
+  <edit mode="assign" name="hintstyle" >
+   <const>hintfull</const>
+  </edit>
+  <edit mode="assign" name="rgba" >
+   <const>none</const>
+  </edit>
+  <edit mode="assign" name="autohint" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="lcdfilter" >
+   <const>lcdnone</const>
+  </edit>
+  <edit mode="assign" name="dpi" >
+   <double>96</double>
+  </edit>
+  <edit mode="assign" name="hinting" >
+   <bool>true</bool>
+  </edit>
+ </match>
+<match target="font">
+  <test name="family" compare="eq" >
+   <string>Arial</string>
+  </test>
+    <test name="slant" compare="eq">
+      <double>0</double>
+    </test>
+  <test name="pixelsize" qual="any" compare="less">
+   <double>20</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>true</bool>
+  </edit>
+ </match>
+<match target="font">
+  <test name="family" compare="eq" >
+   <string>Liberation Sans</string>
+  </test>
+    <test name="slant" compare="eq">
+      <double>0</double>
+    </test>
+  <test name="pixelsize" qual="any" compare="less">
+   <double>20</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>true</bool>
+  </edit>
+ </match>
+<match>
+  <test qual="all" name="prgname" target="pattern" compare="eq">
+    <string>cli</string>
+  </test>
+  <test qual="any" name="family"><string>Cantarell</string></test>
+  <edit mode="assign" name="family">
+    <string>Tahoma</string>
+  </edit>
+  <edit mode="assign" name="pixelsize">
+    <double>11</double>
+  </edit>
+</match>
+<match>
+  <test qual="any" name="family"><string>Comic Sans MS</string></test>
+  <edit mode="assign" name="family">
+    <string>Comic Relief</string>
+  </edit>
+</match>
+<match>
+  <test qual="any" name="family"><string>Webdings</string></test>
+  <edit mode="assign" name="family">
+    <string>Freedings</string>
+  </edit>
+</match>
+
+
+<match target="font">
+  <test name="family" qual="any" >
+   <string>Unifont</string>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+ </match>
+
+<match target="font">
+  <test name="family" qual="any" >
+   <string>DejaVu Sans Mono</string>
+  </test>
+  <test qual="any" name="size" compare="less">
+   <double>18</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+ </match>
+
+<match target="font">
+  <test name="family" qual="any" >
+   <string>Lucida Console</string>
+  </test>
+  <test qual="any" name="size" compare="less">
+   <double>18</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+ </match>
+
+<match target="font">
+  <test name="family" qual="any" >
+   <string>Bitstream Vera Sans Mono</string>
+  </test>
+  <test qual="any" name="size" compare="less">
+   <double>18</double>
+  </test>
+  <edit mode="assign" name="antialias" >
+   <bool>false</bool>
+  </edit>
+  <edit mode="assign" name="embeddedbitmap" >
+   <bool>true</bool>
+  </edit>
+ </match>
+
+
+
+<include ignore_missing="yes">conf.d</include>
+</fontconfig>

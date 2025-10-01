@@ -1169,6 +1169,9 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
     ico_bmp = new FXGIFIcon(app, resico_bmp);
   }
 
+  ico_bmp->create();
+  ico_nobg->create();
+
   //char buf[256] = {0};
 
   /* iniString config;
@@ -1258,7 +1261,9 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   int count = 0;
 
-  char wallpaperpath[] = "/home/tf/Pictures";
+  char wallpaperpath[PATH_MAX] = "";
+  snprintf(wallpaperpath, sizeof(wallpaperpath), "%s/%s", getHomeDir(), "Pictures");
+
   
 
   char** wallpapers = getWallpapers(wallpaperpath, &count);

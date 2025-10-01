@@ -1,0 +1,39 @@
+table Config
+  FillStyle: none
+  CursorOver: arrow
+  FontName: tahoma
+  FontSize: 8
+  FontColor: #ffffff
+  ToolTip.FontSize: 8
+  ToolTip.FontName: tahoma
+  ToolTip.ForeColor: #000000
+  ToolTip.BackColor: #ffffe1
+  ToolTip.CaptionOnHover: false
+  ToolTip.CaptionPlacement: Bottom
+  Locked: true
+  Transparency: 0
+  Shadow: true
+  ShadowColor: #151515
+  ShadowX: 1
+  ShadowY: 1
+  Bold: false
+  ClickDelay: 200
+  IconSnap: true
+  SnapWidth: 85
+  SnapHeight: 75
+  SnapOrigin: TopLeft
+  SnapShadow: true
+  SnapShadowTrans: 200
+  CaptionOnHover: false
+end
+
+table Actions
+  Lock: control right doubleClk
+  Drag: left hold
+  EndDrag: left singleClk
+  Execute[0]: left doubleClk
+  Execute[1]: right doubleClk
+  Execute[2]: middle doubleClk
+  Reload: shift control alt middle tripleClk
+end
+

@@ -119,6 +119,7 @@ cp -rf .foxrc ~/
 cp -rf .idesktop ~/
 cp -rf .icons ~/
 cp -rf .themes ~/
+cp .ideskrc ~/
 cp .Xresources ~/
 cp .gtkrc-2.0 ~/
 

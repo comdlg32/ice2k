@@ -1,0 +1,14 @@
+  <match target="font">
+    <test name="family" qual="any">
+      <string>Tahoma</string>
+    </test>
+    <edit name="antialias" mode="assign">
+      <bool>false</bool>
+    </edit>
+    <edit name="hintstyle" mode="assign">
+      <const>hintslight</const>
+    </edit>
+    <edit name="lcdfilter" mode="assign">
+      <const>lcdlegacy</const>
+    </edit>
+  </match>
