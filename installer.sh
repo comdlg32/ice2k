@@ -122,6 +122,8 @@ cp -rf .themes ~/
 cp .ideskrc ~/
 cp .Xresources ~/
 cp .gtkrc-2.0 ~/
+cp .Xsession ~/
+ln -s "$HOME/.Xsession" "$HOME/.xinitrc"
 
 sudo mkdir -p /usr/share/fonts/X11/misc
 sudo mkdir -p /usr/share/fonts/truetype

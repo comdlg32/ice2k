@@ -2,7 +2,7 @@
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
 export NO_AT_BRIDGE=1
-export LD_LIBRARY_PATH=/usr/local/lib
+
 export DO_NOT_TRACK=1
 export ICE2KSYS_SOUND_LOGON="$HOME/.icewm/sounds/logon.wav"
 export ICE2KSYS_SOUND_LOGOFF="$HOME/.icewm/sounds/logoff.wav"

@@ -10,6 +10,21 @@ The source code is kinda messy. I plan on rewriting a majority in C(++).
 I might have forgotten to put some things here (the source tree is all
 around my home folder... I'm trying to organize it)
 
+
+INSTALLATION?
+You should use a fresh Debian 13 installation. I have tested this with only
+a fresh Debian 13 installation without any DE/WM installed.
+
+It may work on other Debian-based distros but I haven't tested that.
+
+Run the following:
+    sudo apt-get install git ca-certificates
+    git clone https://github.com/comdlg32/ice2k
+    cd ice2k
+    ./installer.sh
+    cd ..
+    startx
+
 MAIN AUTHORS
 xcomposite
 https://m1nuscle.neocities.org/main
@@ -30,7 +45,7 @@ Credits to https://github.com/travy-patty for logo and branding
 
 Credits to the cbatticon authors for their program
 Credits to the yad authors for their program
-
+Credits to the developers of the IceWM project
 
 And credits to Microsoft for their icons/assets/design :P
 
