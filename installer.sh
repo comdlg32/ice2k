@@ -10,7 +10,7 @@ libsm-dev libice-dev libxrandr-dev libxft-dev libxpm-dev libjpeg-dev \
 libpng-dev libfontconfig1-dev libxinerama-dev libfribidi-dev libimlib2-dev xterm \
 x11-utils xinit intltool intltool-debian libxcb-util-dev libx11-xcb-dev \
 build-essential libfox-1.6-dev psmisc libxtst-dev libserialport-dev \
-libpci-dev feh tk imagemagick libgtk2.0-dev tk-tktray xxkb \
+libpci-dev feh tk imagemagick libgtk2.0-dev tk-tktray xxkb x11-xserver-utils \
 || exit
 
 

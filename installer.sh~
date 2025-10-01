@@ -114,6 +114,7 @@ cp -rf .idesktop ~/
 cp -rf .icons ~/
 cp -rf .themes ~/
 cp .Xresources ~/
+cp .gtkrc-2.0 ~/
 
 sudo mkdir -p /usr/share/fonts/X11/misc
 sudo mkdir -p /usr/share/fonts/truetype
