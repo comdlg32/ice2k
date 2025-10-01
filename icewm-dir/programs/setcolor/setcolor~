@@ -595,7 +595,7 @@ echo 'xman*manualPage.background: '"$backcolor"
 echo 'xman*directory.background: '"$backcolor"
 echo '*shadowThickness: 1') | tee ~/.icewm/xrescolors | xrdb -merge
 
-if ["$firstrun" -eq 0 ]; then
+if ! ["$firstrun" -eq 0 ]; then
 	if test -f "/tmp/ice2k-$USER/volume.pid"; then
 		kill -15 "$(cat "/tmp/ice2k-$USER/volume.pid")"
 		rm "/tmp/ice2k-$USER/volume.pid"

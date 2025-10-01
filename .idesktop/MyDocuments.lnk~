@@ -1,6 +1,6 @@
 table Icon
   Caption: My Documents  
-  Icon: REPLACEWITHHOMEFOLDER/.icewm/icons/desk/documents.png
+  Icon: REPLACEWITHHOMEFOLDER/.icewm/icons/desk/recyclef.png
   X: 21
   Y: 2
   Command[0]: xfe
