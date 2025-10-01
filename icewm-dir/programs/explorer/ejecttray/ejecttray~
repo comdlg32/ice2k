@@ -1,6 +1,4 @@
 #!/bin/sh
-SCRIPTDIR="$(dirname -- "$0")"
-
 yad \
 --notification --no-middle \
 --image="$SCRIPTDIR/eject_mini.png" \
