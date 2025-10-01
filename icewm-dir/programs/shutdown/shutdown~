@@ -1,4 +1,5 @@
 #!/bin/sh
+# replace legacy shutdown dialog
 exec shutdlg
 
 if type sleep | grep -q -- "shell builtin" ; then
