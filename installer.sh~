@@ -119,6 +119,7 @@ cp -rf .foxrc ~/
 cp -rf .idesktop ~/
 cp -rf .icons ~/
 cp -rf .themes ~/
+cp .ideskrc ~/
 cp .Xresources ~/
 cp .gtkrc-2.0 ~/
 
@@ -135,3 +136,10 @@ sudo update-fonts-dir misc
 sudo update-fonts-alias misc
 sudo update-fonts-dir 100dpi
 sudo update-fonts-alias 100dpi
+
+echo "$USER ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown, /usr/sbin/pm-suspend
+$USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
+$USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
+$USER ALL=(ALL) NOPASSWD: /sbin/iwlist
+$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" || sudo tee -a /etc/sudoers >/dev/null
+

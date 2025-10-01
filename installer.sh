@@ -11,7 +11,7 @@ libpng-dev libfontconfig1-dev libxinerama-dev libfribidi-dev libimlib2-dev xterm
 x11-utils xinit intltool intltool-debian libxcb-util-dev libx11-xcb-dev \
 build-essential libfox-1.6-dev psmisc libxtst-dev libserialport-dev \
 libpci-dev feh tk imagemagick libgtk2.0-dev tk-tktray xxkb x11-xserver-utils \
-bc alsa-utils xfonts-cronyx* \
+bc alsa-utils xfonts-cronyx* idesk \
 || exit
 
 
@@ -136,3 +136,10 @@ sudo update-fonts-dir misc
 sudo update-fonts-alias misc
 sudo update-fonts-dir 100dpi
 sudo update-fonts-alias 100dpi
+
+echo "$USER ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown, /usr/sbin/pm-suspend
+$USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
+$USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
+$USER ALL=(ALL) NOPASSWD: /sbin/iwlist
+$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" || sudo tee -a /etc/sudoers >/dev/null
+
