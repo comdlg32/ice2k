@@ -336,7 +336,7 @@ int main(int argc, char* argv[])
                      G_CALLBACK(destroy), NULL); 
     gtk_container_set_border_width(GTK_CONTAINER(window), 0);	
 
-	gtk_widget_set_size_request(GTK_WIDGET(window), WINDOW_WIDTH, WINDOW_HEIGHT);
+	gtk_widget_set_size_request(GTK_WINDOW(window), WINDOW_WIDTH, WINDOW_HEIGHT);
   
 
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);

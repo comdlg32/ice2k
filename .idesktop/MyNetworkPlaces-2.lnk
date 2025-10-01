@@ -1,6 +1,6 @@
 table Icon
   Caption: Places 
-  Icon: /home/tf/.idesktop/blank.xpm
+  Icon: REPLACEWITHHOMEFOLDER/.idesktop/blank.xpm
   X: 35
   Y: 196
   Command[0]: xfe /mnt/tf/smb

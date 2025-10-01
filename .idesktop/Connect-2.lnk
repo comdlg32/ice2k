@@ -1,6 +1,6 @@
 table Icon
   Caption: the Internet  
-  Icon: /home/tf/.idesktop/blank.xpm
+  Icon: REPLACEWITHHOMEFOLDER/.idesktop/blank.xpm
   X: 37
   Y: 496
   Command[0]: firefox-esr

@@ -1,6 +1,6 @@
 table Icon
   Caption: Mozilla Firefox  
-  Icon: /home/tf/.icons/SE98/apps/32/firefox.png
+  Icon: REPLACEWITHHOMEFOLDER/.icons/SE98/apps/32/firefox.png
   X: 21
   Y: 302
   Command[0]: firefox-esr

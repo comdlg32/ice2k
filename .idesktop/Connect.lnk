@@ -1,6 +1,6 @@
 table Icon
   Caption: Connect to  
-  Icon: /home/tf/.idesktop/Connect.png
+  Icon: REPLACEWITHHOMEFOLDER/.idesktop/Connect.png
   X: 21
   Y: 452
 end

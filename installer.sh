@@ -50,6 +50,11 @@ simplebuild control/sysdm
 simplebuild control/desk
 
 (
+cd icewm-dir/programs/ice2krun
+./compile.sh
+)
+
+(
 cd icewm-3.3.1
 libtoolize --force
 aclocal
