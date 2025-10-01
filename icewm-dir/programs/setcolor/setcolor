@@ -1,5 +1,6 @@
 #!/bin/sh
 . ~/.icewm/programs/common/iniparse
+if [ -z ${firstrun+x} ]; then firstrun=1; fi
 
 scheme="$(cat "$1")"
 

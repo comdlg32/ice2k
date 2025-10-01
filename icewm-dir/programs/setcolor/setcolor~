@@ -523,7 +523,7 @@ getejecttray()
         	                '$0 ~ " DISPLAY=:" n "[\n .]" { print $1 }'
 }
 
-if ! ["$firstrun" -eq 0 ]; then
+if [ "$firstrun" -ne 0 ]; then
 	# lets not do such intensive stuff on the first run...
 	if which wine >/dev/null 2>&1; then
 		changewinecolors > /tmp/winecolors.reg && wine regedit /s 'Z:\tmp\winecolors.reg' && rm /tmp/winecolors.reg
@@ -552,7 +552,7 @@ s/activetitlebarleftmiddle/$activetitlebarleftmiddle/gI; \
 s/activetitlebarleft/$activetitlebarleft/gI; \
 s/activetitlebarmiddle/$activetitlebarmiddle/gI" | tee "$HOME/.config/qt6ct/colors/Ice2K.conf" > "$HOME/.config/qt5ct/colors/Ice2K.conf"
 
-if ! ["$firstrun" -eq 0 ]; then
+if [ "$firstrun" -ne 0 ]; then
 	kill -15 $(getpid icondetect)
 	kill -15 $(getejecttray)
 	
@@ -595,7 +595,7 @@ echo 'xman*manualPage.background: '"$backcolor"
 echo 'xman*directory.background: '"$backcolor"
 echo '*shadowThickness: 1') | tee ~/.icewm/xrescolors | xrdb -merge
 
-if ! ["$firstrun" -eq 0 ]; then
+if [ "$firstrun" -ne 0 ]; then
 	if test -f "/tmp/ice2k-$USER/volume.pid"; then
 		kill -15 "$(cat "/tmp/ice2k-$USER/volume.pid")"
 		rm "/tmp/ice2k-$USER/volume.pid"
