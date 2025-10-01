@@ -247,6 +247,20 @@ char** getModes(int* count) { // probably the first time i learned how to parse 
 
 	char* token;
 
+	char *path = getenv("PATH"), *d;
+	char pathbuf[512];
+	path = strdup(path);
+
+	for (d = strtok(path, ":"); d; d = strtok(NULL, ":")) {
+		snprintf(pathbuf, sizeof(pathbuf), "%s/xlock", d);
+		if (access(pathbuf, X_OK) == 0) break;
+	}
+
+	free(path);
+
+	if (access(pathbuf, X_OK) != 0) return NULL;
+
+	
 	FILE* fp = popen("xlock . 2>&1", "r");
 
 	if (!fp) {
@@ -1245,7 +1259,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
   int count = 0;
 
   char wallpaperpath[] = "/home/tf/Pictures";
-
+  
 
   char** wallpapers = getWallpapers(wallpaperpath, &count);
   char* wallname;

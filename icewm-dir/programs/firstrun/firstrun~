@@ -20,7 +20,7 @@ firstrunactions()
 	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.config/dunst/dunstrc"
 
 	cd ~/.icewm/programs/setcolor
-	~/.icewm/programs/setcolor/setcolor colorscheme
+	~/.icewm/programs/
 }
 
 if [ "$firstrun" -eq 0 ]; then

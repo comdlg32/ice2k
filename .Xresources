@@ -1,4 +1,3 @@
-#include ".Xresources.d/gvim"
 XXkb*type: tray
 xxkb*type: tray
 XTerm*selectToClipboard: true
