@@ -74,7 +74,7 @@ menu "Sear_ch" search {
 	prog "For Files..." search spacefm -f
 }
 prog "Help" help xman
-prog "Run..." run ~/.icewm/programs/ice2krun/run
+prog "Run..." run sh -c "$HOME/.icewm/programs/ice2krun/run"
 separator
 #prog "Sh_ut Down..." shutdown ~/.icewm/programs/shutdown/shutdown
 prog "Sh_ut Down..." shutdown shutdlg
