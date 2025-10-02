@@ -11,7 +11,7 @@ libpng-dev libfontconfig1-dev libxinerama-dev libfribidi-dev libimlib2-dev xterm
 x11-utils xinit intltool intltool-debian libxcb-util-dev libx11-xcb-dev \
 build-essential libfox-1.6-dev psmisc libxtst-dev libserialport-dev \
 libpci-dev feh tk imagemagick libgtk2.0-dev tk-tktray xxkb x11-xserver-utils \
-bc alsa-utils xfonts-cronyx* idesk gtk2-engines \
+bc alsa-utils xfonts-cronyx* idesk gtk2-engines libxt-dev xidle \
 || exit
 
 
@@ -86,6 +86,17 @@ make -j$(nproc)
 sudo make install
 set +e
 ) || exit
+
+(
+cd xlockmore-*
+set -e
+./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
+make clean
+make -j$(nproc)
+sudo make install
+set +e
+) || exit
+
 
 (
 cd yad-*
