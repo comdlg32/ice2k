@@ -88,6 +88,17 @@ set +e
 ) || exit
 
 (
+cd xlockmore-*
+set -e
+./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
+make clean
+make -j$(nproc)
+sudo make install
+set +e
+) || exit
+
+
+(
 cd yad-*
 
 aclocal
@@ -144,7 +155,7 @@ echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/poweroff, /sbin/poweroff, /usr/sbin/re
 $USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
 $USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
 $USER ALL=(ALL) NOPASSWD: /sbin/iwlist
-$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" | sudo sh -c 'cat >> /dev/sudoers'
+$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" | sudo tee -a /dev/sudoers >/dev/null
 
 echo
 echo "installation successful!!!!"

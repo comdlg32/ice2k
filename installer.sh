@@ -155,7 +155,7 @@ echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/poweroff, /sbin/poweroff, /usr/sbin/re
 $USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
 $USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
 $USER ALL=(ALL) NOPASSWD: /sbin/iwlist
-$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" | sudo sh -c 'cat >> /dev/sudoers'
+$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" | sudo sh -c 'cat >> /etc/sudoers'
 
 echo
 echo "installation successful!!!!"
