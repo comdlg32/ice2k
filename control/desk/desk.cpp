@@ -319,12 +319,14 @@ freemodes:
 
 endloop:
 
-	char *last = modes[mcount - 1];
-	int len = strlen(last);
+	if (mcount > 0) {
+		char *last = modes[mcount - 1];
+		int len = strlen(last);
 
-	if (len > 0 && last[len-1] == ']') {
-		last[len-1] = '\0';
-	}
+		if (len > 0 && last[len-1] == ']') {
+			last[len-1] = '\0';
+		}
+	}	
 
 
 	modes[mcount] = NULL;
@@ -832,7 +834,8 @@ long DesktopProperties::onCmdOk(FXObject* obj,FXSelector sel,void* ptr) {
 	return 1;
 }
 
-char* scrvalue;
+char scrvalue2[] = "";
+char* scrvalue = scrvalue2;
 int scrdelay = 15;
 int scrpassword = 1;
 
@@ -1413,6 +1416,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
   char* type;
 
+
   if (resmgr) {
     XrmInitialize();
     db = XrmGetStringDatabase(resmgr);
@@ -1440,12 +1444,16 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
   }
 
   
-  for (int i = 0; i < modec; ++i) {
-    scrsel->insertItem(i+1, modes[i]);
-    if (!strcmp(modes[i], scrvalue))
-      scrsel->setCurrentItem(i+1);
+  if (!modes || modec == 0) {
+    puts("whoops!");
+  } else {
+    for (int i = 0; i < modec; ++i) {
+      scrsel->insertItem(i+1, modes[i]);
+      if (!strcmp(modes[i], scrvalue))
+        scrsel->setCurrentItem(i+1);
+    }
     
-    free(modes[i]);
+    //free(modes[i]);
   }
 
   if (modec < 12) {
