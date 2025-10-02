@@ -1,6 +1,6 @@
 # run dialog, gmrun is good but it doesnt look windows like.
 #key "Super+R" gmrun
-key "Super+R" /home/tf/.icewm/programs/ice2krun/run
+key "Super+R" sh -c "$HOME/.icewm/programs/ice2krun/run"
 
 # lock
 key "Super+L" "~/.icewm/programs/lock/lock2k"

@@ -1,0 +1,368 @@
+/********************************************************************************
+*                                                                               *
+*                         Scribble  Application coding sample                   *
+*                                                                               *
+********************************************************************************/
+#include <fx.h>
+#include <fxkeys.h>
+#include <ice2k/branding.h>
+#include <pwd.h>
+#include <unistd.h>
+
+// optional
+// common controls library, replaces certain fox toolkit controls with
+// more accurate widnows ones
+//
+// if you do not want to override fox toolkit controls use
+// #define _DO_NOT_OVERRIDE_FOX_CONTROLS
+//
+// before including common controls!
+
+#include <ice2k/comctl32.h>
+
+// from ice2k xfe src
+void FXTextField::drawCursor(FXuint state){
+  FXint cl,ch,xx,xlo,xhi;
+  if((state^flags)&FLAG_CARET){
+    if(xid){
+      FXDCWindow dc(this);
+      FXASSERT(0<=cursor && cursor<=contents.length());
+      FXASSERT(0<=anchor && anchor<=contents.length());
+      xx=coord(cursor)-1;
+
+      xlo=FXMAX(xx-2,border);
+      xhi=FXMIN(xx+3,width-border);
+
+      dc.setClipRectangle(xlo,border,xhi-xlo,height-(border<<1));
+
+      if(state&FLAG_CARET){
+        dc.setForeground(cursorColor);
+        dc.fillRectangle(xx+1,padtop+border+1,1,height-1-padbottom-padtop-(border<<1));
+        }
+
+      // Erase I-beam
+      else{
+
+        // Erase I-beam, plus the text immediately surrounding it
+        dc.setForeground(backColor);
+        dc.fillRectangle(xx-2,border+1,5,height-1-(border<<1));
+
+        // Draw two characters before and after cursor
+        cl=ch=cursor;
+        if(0<cl){
+          cl=contents.dec(cl);
+          if(0<cl){
+            cl=contents.dec(cl);
+            }
+          }
+        if(ch<contents.length()){
+          ch=contents.inc(ch);
+          if(ch<contents.length()){
+            ch=contents.inc(ch);
+            }
+          }
+        drawTextRange(dc,cl,ch);
+        }
+      }
+    flags^=FLAG_CARET;
+    }
+  }
+
+long FXTextField::onPaint(FXObject*, FXSelector, void* ptr)
+{
+    FXEvent*   ev = (FXEvent*)ptr;
+    FXDCWindow dc(this, ev);
+
+    // Draw frame
+    drawFrame(dc, 0, 0, width, height);
+
+    // Draw background
+    dc.setForeground(backColor);
+    dc.fillRectangle(border, border, width-(border<<1), height-(border<<1));
+
+
+    // Draw text, clipped against frame interior
+    dc.setClipRectangle(border, border, width-(border<<1), height-(border<<1));
+    drawTextRange(dc, 0, contents.length());
+
+    // Draw caret
+    if (flags&FLAG_CARET)
+    {
+        int xx = coord(cursor)-1;
+        dc.setForeground(cursorColor);
+        dc.fillRectangle(xx+1, padtop+border, 1, height-padbottom-padtop-(border<<1));
+        //dc.fillRectangle(xx-2, padtop+border, 5, 1);
+        //dc.fillRectangle(xx-2, height-border-padbottom-1, 5, 1);
+    }
+
+    return(1);
+}
+
+
+
+FXMainWindow* mainwin;
+// if you are using one, you include your resources file here
+#include "res/foxres.h"
+
+FXIcon* mainIcon;
+FXIcon* mainIconLarge;
+
+// Main Window
+class RunBox : public FXMainWindow {
+
+	// Macro for class hierarchy declarations
+	FXDECLARE(RunBox)
+
+private:
+	FXHorizontalFrame *contents;                // Content frame
+	FXVerticalFrame   *canvasFrame;             // Canvas frame
+	FXVerticalFrame   *buttonFrame;             // Button frame
+	FXCanvas          *canvas;                  // Canvas to draw into
+	int                mdflag;                  // Mouse button down?
+	int                dirty;                   // Canvas has been painted?
+	FXColor            drawColor;               // Color for the line
+
+protected:
+	RunBox() {}
+
+public:
+	// Message handlers
+	long onPaint(FXObject*, FXSelector, void*);
+	long onCmdAccept(FXObject*, FXSelector, void*);
+	long onVerifyAccept(FXObject*, FXSelector, void*);
+	long onUnmap(FXObject*, FXSelector, void*);
+	long onMap(FXObject*, FXSelector, void*);
+	long onCmdBrowse(FXObject*, FXSelector, void*);
+	long onKeyPress(FXObject*, FXSelector, void*);
+public:
+	// Messages for our class
+	enum {
+		ID_FIRST = FXMainWindow::ID_LAST,
+		ID_ACCEPT,
+		ID_BROWSE,
+		ID_LAST
+	};
+
+public:
+
+	// RunBox's constructor
+	RunBox(FXApp* a);
+
+	// Initialize
+	virtual void create();
+
+	virtual ~RunBox();
+};
+
+
+
+// Message Map for the Scribble Window class
+FXDEFMAP(RunBox) RunBoxMap[] = {
+	FXMAPFUNC(SEL_COMMAND,           RunBox::ID_ACCEPT, RunBox::onCmdAccept),
+	FXMAPFUNC(SEL_VERIFY,            RunBox::ID_ACCEPT, RunBox::onVerifyAccept),
+	FXMAPFUNC(SEL_UNMAP,             0, RunBox::onUnmap),
+	FXMAPFUNC(SEL_MAP,               0, RunBox::onMap),
+	FXMAPFUNC(SEL_COMMAND,           RunBox::ID_BROWSE, RunBox::onCmdBrowse),
+      FXMAPFUNC(SEL_KEYPRESS,          0, RunBox::onKeyPress),
+};
+
+// Macro for the ScribbleApp class hierarchy implementation
+FXIMPLEMENT(RunBox, FXMainWindow, RunBoxMap, ARRAYNUMBER(RunBoxMap));
+
+FXTextField* textbox;
+
+int rancommand = 0;
+
+
+// from fox fxdialogbox src
+long RunBox::onKeyPress(FXObject* sender,FXSelector sel,void* ptr){
+	if (FXTopWindow::onKeyPress(sender,sel,ptr)) return 1;
+
+	if ( ((FXEvent*)ptr)->code==KEY_Escape ) {
+		handle(this,FXSEL(SEL_COMMAND,ID_CLOSE),NULL);
+		return 1;
+	}
+
+	return 0;
+}
+
+
+long RunBox::onUnmap(FXObject* obj,FXSelector sel,void* ptr) {
+	if (rancommand) {
+		mainwin->killFocus();
+		mainwin->ungrab();
+		textbox->ungrab();
+		ungrab();
+
+		int sysval = system(textbox->getText().text());
+
+		if (sysval == -1) {
+			rancommand = 0;
+			FXMessageBox::error(getApp(),MBOX_OK,"Error",
+				"Could not execute the program.");
+			mainwin->show(PLACEMENT_DEFAULT);
+
+			return 1;
+		}
+
+		int ret = WEXITSTATUS(sysval);
+	
+		if (ret != 0) {
+			rancommand = 0;
+			FXMessageBox::error(getApp(),MBOX_OK,textbox->getText().text(),
+				"The program was either not found or failed to execute properly.");
+
+
+			mainwin->show(PLACEMENT_DEFAULT);
+		} else {
+			rancommand = 0;
+			getApp()->exit(0);
+		}
+
+		rancommand = 0;
+	}
+
+	FXMainWindow::onUnmap(obj,sel,ptr);
+
+
+	return 1;
+}
+
+long RunBox::onMap(FXObject* obj,FXSelector sel,void* ptr) {
+	FXMainWindow::onMap(obj,sel,ptr);
+
+	mainwin->setFocus();
+	textbox->setFocus();
+	textbox->selectAll();
+
+	return 1;
+}
+
+long RunBox::onCmdAccept(FXObject* obj,FXSelector sel,void* ptr) {
+
+	rancommand = 1;
+	mainwin->hide();
+	return 1;
+}
+
+long RunBox::onVerifyAccept(FXObject* obj,FXSelector sel,void* ptr) {
+	if (strlen((char*)ptr) > 259)
+		return 1;
+
+	return 0;
+}
+
+
+const char* getHomeDir() {
+	const char *homedir;
+
+	if ((homedir = getenv("HOME")) == NULL) {
+		homedir = getpwuid(getuid())->pw_dir;
+	}
+
+	return homedir;
+}
+
+
+long RunBox::onCmdBrowse(FXObject*,FXSelector,void*){
+	FXFileDialog open(mainwin,"Browse");
+
+	const char* home = getHomeDir();
+	open.setDirectory(home);
+
+	if (open.execute(PLACEMENT_SCREEN)) {
+		textbox->setText(open.getFilename());
+	}
+
+	return 1;
+}
+
+// Construct a RunBox
+RunBox::RunBox(FXApp *a) : FXMainWindow(a, "Run", mainIcon, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,0,0, 11,11,18,17, 11, 10) {
+	FXPacker* infocont = new FXPacker(this,FRAME_NONE, 0,0,0,0, 0,0,0,0, 11,0); 
+
+
+	new FXLabel(infocont, "", mainIconLarge, LAYOUT_SIDE_LEFT|LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
+	new FXLabel(infocont, "Type the name of a program, folder, document, or", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,-1);
+	new FXLabel(infocont, "Internet resource, and Windows will open it for you.", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
+
+	FXHorizontalFrame* textbcont = new FXHorizontalFrame(this,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,1,0,0, 13,0); 
+
+	new FXLabel(textbcont, "&Open:", NULL, LAYOUT_CENTER_Y|LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
+	textbox = new FXTextField(textbcont, 44,this,ID_ACCEPT,TEXTFIELD_ENTER_ONLY|LAYOUT_CENTER_Y|LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK,0,0,0,0, 4,3,1,2);
+
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this,LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0, 0,0,23,0, 6,0); 
+
+
+	// Button to clear
+	new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|BUTTON_DEFAULT|FRAME_THICK|FRAME_RAISED, 0,0,75,23, 0,0,0,0);
+
+	// Exit button
+	new FXButton(btncont, "Cancel", NULL, getApp(), FXApp::ID_QUIT, LAYOUT_FIX_WIDTH|BUTTON_DEFAULT|LAYOUT_FIX_HEIGHT|FRAME_THICK|FRAME_RAISED, 0,0,75,23, 0,0,0,0);
+
+	new FXButton(btncont, "&Browse...", NULL, this, ID_BROWSE, LAYOUT_FIX_WIDTH|BUTTON_DEFAULT|LAYOUT_FIX_HEIGHT|FRAME_THICK|FRAME_RAISED, 0,0,75,23, 0,0,0,0);
+	
+}
+
+
+RunBox::~RunBox() {
+}
+
+
+// Create and initialize
+void RunBox::create() {
+	// Create the windows
+	FXMainWindow::create();
+
+	FXWindow* fxroot = getApp()->getRootWindow();
+	int rheight = fxroot->getHeight();
+
+	setX(5+3);
+	setY(rheight-getDefaultHeight()-27-4-5);
+
+
+	// Make the main window appear
+	show(PLACEMENT_DEFAULT);
+}
+
+
+
+
+// Here we begin
+int main(int argc, char *argv[]) {
+	// Make application
+	FXApp application("RunBox", "Ice2KProj");
+	FXApp* app = &application;
+
+	char* windows = i2kBGetWinVersion();
+
+	if ( !(strcmp(windows, "srv03")) )
+		strcpy(windows, "xp");
+
+	if ( !(strcmp(windows, "xp")) ) {
+		mainIcon = new FXBMPIcon(&application, resico_run16xp);
+		mainIcon->blend(app->getBaseColor());
+
+		mainIconLarge = new FXBMPIcon(&application, resico_run32xp);
+		mainIconLarge->blend(app->getBaseColor());
+	} else {
+		mainIcon = new FXGIFIcon(&application, resico_run16);
+		mainIconLarge = new FXGIFIcon(&application, resico_run32);
+	}
+
+	// Start app
+	application.init(argc, argv);
+
+	// Scribble window
+	mainwin = new RunBox(&application);
+
+	// Create the application's windows
+	application.create();
+
+	// Run the application
+	return application.run();
+}
+
+
+
+

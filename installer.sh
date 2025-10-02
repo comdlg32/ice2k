@@ -48,11 +48,12 @@ simplebuild shell/hotplug
 simplebuild shell/backmgr
 simplebuild control/sysdm
 simplebuild control/desk
+simplebuild run
 
-(
-cd icewm-dir/programs/ice2krun
-./compile.sh
-)
+# (
+# cd icewm-dir/programs/ice2krun
+# ./compile.sh
+# )
 
 (
 cd icewm-3.3.1
@@ -143,9 +144,7 @@ echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/poweroff, /sbin/poweroff, /usr/sbin/re
 $USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
 $USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
 $USER ALL=(ALL) NOPASSWD: /sbin/iwlist
-$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" || sudo tee -a /etc/sudoers >/dev/null
-
-#!/bin/sh
+$USER ALL=(ALL) NOPASSWD: /usr/bin/eject" | sudo sh -c 'cat >> /dev/sudoers'
 
 echo
 echo "installation successful!!!!"
@@ -203,9 +202,14 @@ if groups | grep -v -q audio; then
 	done
 fi
 
-
 echo
 echo "if you want to launch ice2k.sys..."
-echo "run: 'cd ~ && startx'"
+echo
+echo "if you had to enable groups earlier, you have to logout first."
+echo "run exit, log back in and then you can run startx!"
+echo
+echo "if not"
+echo
+echo "'cd ~ && startx'"
 echo
 

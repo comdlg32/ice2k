@@ -162,3 +162,5 @@ SeaMonkey.Composer.icon: communicator-composer
 SeaMonkey.addressbook.icon: communicator-browser
 
 TigerVNC Viewer.icon: mstsc
+
+RunBox.icon: run

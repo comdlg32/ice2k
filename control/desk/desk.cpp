@@ -640,14 +640,29 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 FXIcon* ico_bmp;
 
+const char* getHomeDir() {
+	const char *homedir;
+
+	if ((homedir = getenv("HOME")) == NULL) {
+		homedir = getpwuid(getuid())->pw_dir;
+	}
+
+	return homedir;
+}
+
 // from fox imageviewer example
 long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 	char* filepath = (char*)tree->getCurrentItem()->getData();
 
 	FXFileDialog open(this,"Open Image");
+	const char* home = getHomeDir();
 
 	open.setFilename(filepath);
 	open.setPatternList(patterns);
+
+	if (filepath == NULL) {
+		open.setDirectory(home);
+	}
 
 	if (open.execute()) {
 		filepath = strdup(open.getFilename().text());
@@ -852,15 +867,7 @@ int makeDirectory(const char *dir) {
 	return 1;
 }
 
-const char* getHomeDir() {
-	const char *homedir;
 
-	if ((homedir = getenv("HOME")) == NULL) {
-		homedir = getpwuid(getuid())->pw_dir;
-	}
-
-	return homedir;
-}
 
 
 int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=NULL) {
