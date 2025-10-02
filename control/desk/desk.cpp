@@ -319,10 +319,13 @@ freemodes:
 
 endloop:
 
-	int modeLen = strlen(token);
-	//token[modeLen-1] = '\0';
-	modes[mcount-1][modeLen-1] = '\0';
-	//printf("%s\n", token);
+	char *last = modes[mcount - 1];
+	int len = strlen(last);
+
+	if (len > 0 && last[len-1] == ']') {
+		last[len-1] = '\0';
+	}
+
 
 	modes[mcount] = NULL;
 

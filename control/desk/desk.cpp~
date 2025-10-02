@@ -319,10 +319,12 @@ freemodes:
 
 endloop:
 
-	int modeLen = strlen(token);
+	if (token) {
+		int modeLen = strlen(token);
 	//token[modeLen-1] = '\0';
-	modes[mcount-1][modeLen-1] = '\0';
+		modes[mcount-1][modeLen-1] = '\0';
 	//printf("%s\n", token);
+	}
 
 	modes[mcount] = NULL;
 
@@ -661,7 +663,6 @@ long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 	open.setPatternList(patterns);
 
 	if (filepath == NULL) {
-		puts("m");
 		open.setDirectory(home);
 	}
 
