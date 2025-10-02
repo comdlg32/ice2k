@@ -1,0 +1,66 @@
+# build applications
+# May need -lkernel32 if get LeaveCriticalSection error
+#TARGET_HOST=i686-w64-mingw32-
+TARGET_HOST=x86_64-w64-mingw32-
+CC=${TARGET_HOST}gcc
+CXX=${TARGET_HOST}g++
+#CC=gcc-3
+#CXX=g++-3
+MAKE=make
+
+# compiler flags
+CFLAGS	=	-DWIN32 -O2 -mwindows -Wall
+#CFLAGS	+=	-mno-cygwin
+#CFLAGS	+=	-DDEBUG
+
+# Include & Library directories
+WIN32API=/usr/include/w32api
+INCS=-I$(WIN32API)
+# LIBS=-L/usr/lib/w32api -lscrnsave -lcrypt
+#LIBS=-optl-static -B/usr/lib/mingw -L/usr/lib/w32api -lopengl32 -lglu32
+LIBS=-L/usr/lib/w32api -lopengl32 -lglu32
+PROG=xlock95.scr
+
+OBJS=xlock/*.o modes/*.o modes/glx/*.o win32/*.o  win32/*.res
+
+# specific rules
+all:	$(PROG)
+
+$(PROG):	xlock modes win32
+	(cd xlock ; $(MAKE) -f Makefile.win32 )
+	(cd modes ; $(MAKE) -f Makefile.win32 )
+	(cd modes/glx ; $(MAKE) -f Makefile.win32 )
+	(cd win32 ; $(MAKE) -f Makefile.win32 )
+	$(CXX) $(CFLAGS) -static -o $@ $(OBJS) $(LIBS)
+
+clean:
+	(cd xlock ; $(MAKE) -f Makefile.win32 clean )
+	(cd modes ; $(MAKE) -f Makefile.win32 clean )
+	(cd modes/glx ; $(MAKE) -f Makefile.win32 clean )
+	(cd win32 ; $(MAKE) -f Makefile.win32 clean )
+	rm -f *.scr core *~ *% *.bak *.rej *.orig *.patch *.pure
+
+distclean: clean
+
+small:	all
+	strip --strip-all $(PROG)
+	(upx --best $(PROG) ; true)
+
+install:	small
+#	cp -p $(PROG) `cygpath -W`/System32
+	cp -p $(PROG) `cygpath -W`/SysWOW64
+
+uninstall:
+	rm -f `cygpath -W`/$(PROG)
+
+antic:
+	(cd xlock ; $(MAKE) -f Makefile.win32 antic )
+	(cd modes ; $(MAKE) -f Makefile.win32 antic )
+	(cd modes/glx ; $(MAKE) -f Makefile.win32 antic )
+	(cd win32 ; $(MAKE) -f Makefile.win32 antic )
+
+cppcheck:
+	(cd xlock ; $(MAKE) -f Makefile.win32 cppcheck )
+	(cd modes ; $(MAKE) -f Makefile.win32 cppcheck )
+	(cd modes/glx ; $(MAKE) -f Makefile.win32 cppcheck )
+	(cd win32 ; $(MAKE) -f Makefile.win32 cppcheck )

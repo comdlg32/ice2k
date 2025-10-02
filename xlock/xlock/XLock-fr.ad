@@ -1,0 +1,15 @@
+!! French by: Eric LASSAUGE <lassauge AT users.sourceforge.net>
+XLock.username: Nom: 
+XLock.password: Mot de Passe: 
+XLock.info: Entrez le mot de passe ou choisissez l'icône pour verrouiller.
+XLock.validate: Validation ...
+XLock.invalid: Mot de passe invalide.
+XLock.logoutButtonLabel: Cliquer ici pour fermer la session
+XLock.logoutButtonHelp: \
+Vous pouvez fermer cette session si aucun terminal n'est disponible.\n\
+ATTENTION: Ceci fermera violemment toutes les applications ouvertes par\n\
+l'utilisateur. Vous devriez le contacter si possible avant de fermer\n\
+sa session.
+XLock.logoutFailedString: \
+Echec de la fermeture de session.\n\
+Impossible de fermer la session de l'utilisateur courant.

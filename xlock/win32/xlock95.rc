@@ -1,0 +1,40 @@
+#include <windows.h>
+#include <scrnsave.h>
+#include "xlock95.h"
+
+STRINGTABLE
+BEGIN
+    IDS_DESCRIPTION "xlock95 Screen Saver"
+END
+
+ICON_APP  ICON  DISCARDABLE "xlock.ico"
+
+DLG_SCRNSAVECONFIGURE DIALOG 6, 18, 216, 121
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "xlock95 Screen Saver setup"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX      "Mode",       MODE_BOX,         5,  7, 80,107
+    LISTBOX                     MODE_LIST,       10, 17, 70, 98,  LBS_USETABSTOPS | WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX      "",           DESC_LABEL,      90,  7,116, 66
+    LTEXT         "Delay",      DELAY_LABEL,    100, 17, 19,  8
+    LTEXT         "",           DELAY_TEXT,     130, 17, 70, 10
+    LTEXT         "Count",      COUNT_LABEL,    100, 29, 20,  8
+    LTEXT         "",           COUNT_TEXT,     130, 29, 70, 10
+    LTEXT         "Cycles",     CYCLES_LABEL,   100, 41, 22,  8
+    LTEXT         "",           CYCLES_TEXT,    130, 41, 70, 10
+    CHECKBOX      "Enabled",    ENABLE_BUTTON,  100, 54, 42, 10
+
+    CTEXT         "",           VERSION_TEXT,    90, 80,116, 10
+
+    PUSHBUTTON    "OK",         IDOK,           104,100, 40, 14
+    PUSHBUTTON    "Cancel",     IDCANCEL,       156,100, 40, 14
+END
+
+/*#ifndef MANIFEST_RESOURCE_ID
+#define MANIFEST_RESOURCE_ID 1
+#endif
+
+MANIFEST_RESOURCE_ID 	RT_MANIFEST	"xlock95.manifest"*/
+/*1   24    DISCARDABLE   "xlock95.manifest"*/

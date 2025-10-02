@@ -1,0 +1,43 @@
+/* XPM */
+static char *xlock[] = {
+/* width height ncolors chars_per_pixel */
+"32 32 4 1",
+/* colors */
+"  c None",
+". c steel blue",
+"X c red",
+"o c black",
+/* pixels */
+"                                ",
+"XXXXXXX           XX            ",
+" XXXXXXX         XX             ",
+" XXXXXXX         XX             ",
+"  XXXXXXX       XX              ",
+"  XXXXXXX       XX       ...    ",
+"   XXXXXXX     XX       .....   ",
+"   XXXXXXX     XX      .......  ",
+"    XXXXXXX   XX       .......  ",
+"    XXXXXXX   XX       ... ...  ",
+"     XXXXXXX XX       ...   ... ",
+"     XXXXXXX XX       ...   ... ",
+"      XXXXX XX        ..     .. ",
+"      XXXXX XX        ..     .. ",
+"       XXX XX         ..     .. ",
+"       XXX XX                   ",
+"       XX XXX        ...........",
+"       XX XXX        ...........",
+"      XX XXXXX       ...........",
+"      XX XXXXX       ...........",
+"     XX  XXXXXX      ...o...o...",
+"     XX  XXXXXX      .o.ooooo.o.",
+"    XX    XXXXXX     .o.o...o.o.",
+"    XX    XXXXXX     .o.ooooo.o.",
+"   XX      XXXXXX    .o.o...o.o.",
+"   XX      XXXXXX    .o.ooooo.o.",
+"  XX        XXXXXX   .o.o...o.o.",
+"  XX        XXXXXX   .o.ooooo.o.",
+" XX          XXXXXX  ...o...o...",
+" XX          XXXXXX  ...........",
+"XX            XXXXXX ...........",
+"                                "
+};

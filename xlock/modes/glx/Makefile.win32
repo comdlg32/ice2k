@@ -1,0 +1,83 @@
+# build applications
+#TARGET_HOST=i686-w64-mingw32-
+TARGET_HOST=x86_64-w64-mingw32-
+CC=${TARGET_HOST}gcc
+CXX=${TARGET_HOST}g++
+#CC=gcc-3
+#CXX=g++-3
+
+# compiler flags
+CFLAGS	=	-DWIN32 -DHAVE_CXX -DUSE_GL -mwindows -O2 -Wall
+#CFLAGS	+=	-mno-cygwin
+#CFLAGS	+=	-DDEBUG
+
+# Include & Library directories
+INCS=-I../../xlock -I../../win32 -I..
+
+# C sources
+SRC=		atlantis.c whale.c dolphin.c shark.c swim.c \
+		atunnels.c tunnel_draw.c \
+		bevel.c			\
+		boxed.c			\
+		bubble3d.c b_draw.c b_lockglue.c b_sphere.c \
+		cage.c			\
+		dino.c			\
+		fire.c			\
+		gears.c			\
+		invert.c		\
+		lament.c		\
+		mball.c			\
+		moebius.c		\
+		morph3d.c		\
+		noof.c			\
+		oct.c			\
+		pipes.c	pipeobjs.c buildlwo.c \
+		pyraminx.c		\
+		rubik.c			\
+		sballs.c		\
+		sierpinski3d.c		\
+		skewb.c			\
+		sproingies.c sproingiewrap.c \
+		s1_1.c s1_2.c s1_3.c s1_4.c s1_5.c s1_6.c s1_b.c \
+		stairs.c		\
+		superquadrics.c
+
+#		glplanet.c: xbm stuff
+#		invert.c: problems linking C++
+#		juggler3d.c: requires glxfonts.c
+#		lament.c: xpm dependencies
+#		sphere.c tube.c gltrackball.c trackball.c
+#		molecule.c tube.c glxfonts.c
+#		molecule.c: uses fonts maybe other work
+#		text3d.cc text3d2.cc rotator.c
+#		xpm-ximage.c
+#		maze3d.c ximage-loader.c
+
+# C++ sources
+CC_SRC=		i_figureeight.cc i_sphere.cc i_threejet.cc i_twojet.cc \
+		i_linkage.cc i_spline.cc i_threejetvec.cc i_twojetvec.cc
+
+XBMS=
+
+# objects
+OBJS	=	$(SRC:.c=.o)
+OBJS	+=	$(CC_SRC:.cc=.o)
+
+# general rules
+.c.o:
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCS)
+
+.cc.o:
+	$(CXX) $(CFLAGS) -c -o $@ $< $(INCS)
+
+# specific rules
+all:	$(XBMS) $(OBJS)
+
+clean:
+	rm -f *.o *~ $(XBMS)
+
+antic:
+	antic *.h *.c *.cc
+
+cppcheck:
+	cppcheck -f -q *.c *.cc

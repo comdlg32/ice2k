@@ -39,24 +39,27 @@ xcomposite
 https://m1nuscle.neocities.org/main
 
 CREDITS
-Credits to enfaun and PixelOCDGuy for base of IceWM theme
-Credits to enfaun for GTK3 theme
-Credits to ohno for helping a bit out with my code
-Credits to zippy for testing
-Credits to the XFE project for the base of the file manager
-Credits to rozniak for porting XP/2K cursors
+Thanks to enfaun and PixelOCDGuy for base of IceWM theme
+Thanks to enfaun for GTK3 theme
+Thanks to ohno for helping a bit out with my code
+Thanks to zippy for testing
+Thanks to the XFE project for the base of the file manager
+Thanks to rozniak for porting XP/2K cursors
 http://roland65.free.fr/xfe/
-Credits to nestoris for SE98 icon theme
-Credits to b00merang for linxp icon theme
-Credits to the FOX toolkit contributors for contributing to the FOX project,
+Thanks to nestoris for SE98 icon theme
+Thanks to b00merang for linxp icon theme
+Thanks to the FOX toolkit contributors for contributing to the FOX project,
 some code of it is being used here.
-Credits to https://github.com/travy-patty for logo and branding
+Thanks to https://github.com/travy-patty for logo and branding
 
-Credits to the cbatticon authors for their program
-Credits to the yad authors for their program
-Credits to the developers of the IceWM project
+Thanks to the cbatticon authors for their program
+Thanks to the yad authors for their program
+Thanks to the developers of the IceWM project
+Thanks to https://sillycycle.com/xlockmore.html for working on xlockmore
+all these years
+Thanks to Microsoft for their icons/assets/design :P
 
-And credits to Microsoft for their icons/assets/design :P
+And thanks to YOU for being here! :^)
 
 If I forgot to credit someone, let me know.
 

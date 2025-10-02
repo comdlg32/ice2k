@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Name=Xlock
+Name[zh_TW]=極限螢幕鎖定
+Comment=Screen Saver
+Comment[zh_TW]=Xlockmore 螢幕保護程式
+Comment[fr]=Economiseur d'écran
+Encoding=UTF-8
+Icon=gnome-lockscreen
+Exec=xlock
+Terminal=false
+Type=Application
+Categories=Application;Utility;

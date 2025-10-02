@@ -1,0 +1,34 @@
+anemone       (requires ???, added but turned off double buffering)
+atunnels      (included but needs xpm texturing)
+dclock        (XSetFont(), XFreeFont(), added but no text working)
+decay         (requires ???, black screen)
+deluxe        (requires ???, added but turned off double buffering)
+fire          (included but needs xpm texturing for ground and trees)
+flag          (requires utsname.h)
+fzort         (requires ipc.h shm.h Xutil.h XShm.h)
+glplanet      (xbm dependencies)
+goop          (requires XSetPlaneMask())
+juggler3d     (requires glxfont.c)
+lament        (included but needs xpm texturing)
+marquee       (requires XTextExtents(), XSetFont(), XFreeFont())
+molecule      (font problem)
+nose          (included but bottom bar displayed)  
+puzzle        (requires ???, black screen)
+run           (requires SIGKILL)
+sballs        (included but needs xpm texturing)
+swirl         (requires XPutPixel(), ScreenCount(), BitmapPad())
+t3d           (requires ???, black screen)
+text3d        (font issues, C++)
+text3d2       (font issues, C++)
+
+Not sure if its setup the best way for GL.  Still have some WIN32 defines
+in every gl mode.
+
+To debug compile with -DEBUG and use "OutputDebugString" to print out
+variables.  This can then be printed using Dbgview
+http://www.sysinternals.com/   (yeah it got gobbled up my Microsoft).
+
+Recent updates:
+bubble, ifs, strange fixed as XCopyPlane(), XSetGraphicsExposures() was added
+fixed petri for black default color
+anemone and deluxe added but lose black default color when dbuf turned on

@@ -1,0 +1,61 @@
+# build applications
+#TARGET_HOST=i686-w64-mingw32-
+TARGET_HOST=x86_64-w64-mingw32-
+CC=${TARGET_HOST}gcc
+RC=${TARGET_HOST}windres
+#CC=gcc-3
+#RC=windres
+MAKE=make
+
+# compiler flags
+CFLAGS	=	-DWIN32 -DSYSV -mwindows -O2 -Wall
+#CFLAGS	+=	-mno-cygwin
+#CFLAGS	+=	-DDEBUG -D_DEBUG
+
+# Include & Library directories
+WIN32API=/usr/include/w32api
+INCS=-I$(WIN32API) -I../xlock -I.
+
+.SUFFIXES: .c .o .exe .rc .res
+
+# sources
+SRCS=Xapi.c xlock95.c scrnsave.c
+
+# objects
+OBJS=$(SRCS:.c=.o)
+
+# general rules
+.rc.res:
+	$(RC) --include-dir $(WIN32API) $< -O coff -o $@
+
+.c.o:
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCS)
+
+# specific rules
+all:	$(OBJS) xlock95.res
+
+xlock95.o:	xlock95.h ../xlock/version.h
+
+xlock.ico:	../pixmaps/t-xlock.xpm ../pixmaps/s-xlock.xpm
+	xpmtoppm -alphaout t-xlock_mask.ppm ../pixmaps/t-xlock.xpm >\
+		t-xlock.ppm
+	xpmtoppm -alphaout s-xlock_mask.ppm ../pixmaps/s-xlock.xpm >\
+		s-xlock.ppm
+	ppmtowinicon -andpgms\
+		t-xlock.ppm t-xlock_mask.ppm\
+		s-xlock.ppm s-xlock_mask.ppm\
+		> xlock.ico
+	$(RM) *.ppm
+
+xlock95.res:	xlock95.h xlock.ico
+
+clean:
+	rm -f *.o *.res *.scr core *~ *% *.bak *.rej *.orig *.patch *.pure
+
+distclean: clean
+
+antic:
+	antic *.h *.c
+
+cppcheck:
+	cppcheck -f -q *.c

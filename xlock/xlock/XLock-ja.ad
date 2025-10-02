@@ -1,0 +1,12 @@
+!! Japanese by: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
+XLock.username: ログイン名:
+XLock.password: パスワード:
+XLock.info: Enter パスワードを入力して下さい。アイコンをクリックすると再ロックします。
+XLock.validate: パスワード検査中...
+XLock.invalid: パスワードが違います。
+XLock.logoutButtonLabel: ここを押すとログアウトします
+XLock.logoutButtonHelp: \
+ターミナルから X を起動していない場合はセッションの終了が出来ます。
+XLock.logoutFailedString: \
+ログアウトに失敗しました。\n\
+このユーザーは自動ログアウト出来ません。

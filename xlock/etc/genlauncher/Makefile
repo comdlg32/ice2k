@@ -1,0 +1,34 @@
+# lex could really be flex
+#LEX = lex
+#LEXLIB = -ll
+#CC = cc
+
+LEX = flex
+LEXLIB = -lfl
+CC = gcc
+
+#CC = cc -g
+#CC = cc -Ac -g
+#CC = cc -Xc -g
+#CC = acc -g
+#CC = CC -g
+#CC = gcc -g -Wall -ansi -pedantic
+#CC = gcc -g -Wall -W -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Waggregate-return -Wmissing-prototypes -Wstrict-prototypes
+#CC = g++ -g -Wall
+
+RM = rm -f
+
+all : xlockgen
+	perl genbuild.pl
+
+lex.yy.c : xlockgen.lex
+	$(LEX) xlockgen.lex
+
+xlockgen : lex.yy.c lmode.h
+	$(CC) lex.yy.c -o $@ $(LEXLIB)
+
+clean :
+	$(RM) core *~ *% *.bak *.orig *.rej make.log MakeOut *.patch *.exe
+
+distclean : clean
+	$(RM) xlockgen lex.yy.c xlockgen.exe
