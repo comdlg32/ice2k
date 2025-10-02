@@ -1,0 +1,115 @@
+# Previously written for xscreensaver-2.17 and xscreensaver-5.10.
+Currently this is for getting xlockmore modes running in xscreensaver-6.08.
+
+First figure out how to compile xscreensaver without my changes.
+For me I had to do this:
+  sudo apt-get -y install intltool # install intltool 0.51.0
+  tar xvzf ~/Downloads/xscreensaver-6.08.tar.gz
+  cd xscreensaver-6.08
+  ./configure # Says needs systemd, not sure where to get this
+  make
+  used to die trying to build ximage-loader.o in 5.44... not my issue
+  used to die in xscreenaver.o for XInput2.h in 6.01
+  (previously had trouble with: libglade-2.0 not found...
+  it warns about no demo and no jpeg)
+
+Then... with a "make -f Makefile.in distclean" copy of latest xlock code,
+  say its xlockmore-5.74:
+  cd ..
+  cp -rp xlockmore-5.74 xscreensaver-6.08/xlockmore 
+  cd xscreensaver-6.08
+  # edit configure.ac (previously configure.in) replace 
+  sed -i 's#utils jwxyz hacks hacks/glx driver#utils jwxyz hacks xlockmore/xlock xlockmore/modes xlockmore/modes/glx hacks/glx driver#' configure.ac
+  sed -i 's#hacks/Makefile#hacks/Makefile\n          xlockmore/xlock/Makefile\n          xlockmore/modes/Makefile\n          xlockmore/modes/glx/Makefile#' configure.ac
+  autoconf
+  # (I made copies configure.ac and configure in this directory.   If you do
+  # not have autoconf just replace the ones there, but may go out of date.)
+  cd xlockmore/xlock
+  mv Makefile.inxs Makefile.in
+  cd ../modes
+  mv Makefile.inxs Makefile.in
+  cd glx
+  mv Makefile.inxs Makefile.in
+  cd ../../..
+  ./configure
+# For me I had to edit the config.h:
+  sed -i 's/\/* #undef HAVE_GTK2 *\//#define HAVE_GTK2 1/' config.h
+  sed -i 's/#define HAVE_EGL 1/\/*#undef HAVE_EGL *\//' config.h
+# (for 5.45 and above did not need to do this:
+# I had to add -lpng16 to the end of HACK_POST in many Makefiles (hacks/Makefile))
+
+ make
+  # used die with a fatal error for X11/extensions/XInput2.h
+ cd hacks
+ cp -p xlockmore.h xlockmore.h.orig
+ cp -p xlockmoreI.h xlockmoreI.h.orig
+ cp -p xlockmore.c xlockmore.c.orig
+ cp ../xlockmore/xscreensaver/xlockmore.h .  # just edited to add common.h, stuff Jamie forgot about I guess
+ cp ../xlockmore/xscreensaver/xlockmoreI.h .  # small edit for recursion_depth
+ cp ../xlockmore/xscreensaver/xlockmore.c .  # small edit for blank mode for the completionist
+ make xlockmore.o
+ cd glx
+ make # fails so needed -lpng16 also (< 5.45)
+ cd ../../xlockmore/xlock
+ make
+# gives a few warnings about fgets in iostuff.c and unrecognized command line option
+   ‘-Wno-language-extension-token’
+ cd ../modes
+ make
+# gives a few warnings about kill, wait, geoms_buf in run.c
+# New automata.c and automata.h supplied and all automata modes should use this.
+# (Makefile.inxs modified to use this version already rather than the one in xscreensaver.)
+ cd glx
+ rm -f *track* # confuses build
+ make
+
+Some warnings to clean up:
+iostuff.c: In function ‘getWords’:
+iostuff.c:855:14: warning: ignoring return value of ‘fgets’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  855 |       (void) fgets(p, BUFSIZ - strlen(&buf[screen * BUFSIZ]), pp);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+iostuff.c:857:14: warning: ignoring return value of ‘fgets’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  857 |       (void) fgets(p, BUFSIZ - strlen(&buf[screen * BUFSIZ]), pp);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/string.h:494,
+                 from /usr/include/X11/Xos.h:62,
+                 from xlock.h:240,
+                 from iostuff.c:27:
+In function ‘strncpy’,
+    inlined from ‘getImage’ at iostuff.c:510:10:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: warning: ‘__builtin_strncpy’ specified bound 256 equals destination size [-Wstringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ‘strncpy’,
+    inlined from ‘getPixmap’ at iostuff.c:719:10:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: warning: ‘__builtin_strncpy’ specified bound 256 equals destination size [-Wstringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ‘strncpy’,
+    inlined from ‘getModeFont’ at iostuff.c:748:10:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: warning: ‘__builtin_strncpy’ specified bound 256 equals destination size [-Wstringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+run.c: In function ‘free_run_screen’:
+run.c:107:10: warning: implicit declaration of function ‘kill’; did you mean ‘ceill’? [-Wimplicit-function-declaration]
+   (void) kill(rp->numberprocess, SIGKILL);
+          ^~~~
+          ceill
+run.c:107:10: warning: nested extern declaration of ‘kill’ [-Wnested-externs]
+run.c:108:10: warning: implicit declaration of function ‘wait’; did you mean ‘write’? [-Wimplicit-function-declaration]
+   (void) wait(&n);
+          ^~~~
+          write
+run.c:108:10: warning: nested extern declaration of ‘wait’ [-Wnested-externs]
+
+Current runtime status:
+pacman: see README one directory above as it affects xlock also.
+
+stairs: The ball does not move smoothly; it just teleports to above the
+stairs and then teleports to the next level instead of bouncing like
+Xscreensaver version does.(Maintainer has not duplicated this, xscreensaver
+version has better bounce and color).
+
+decay/image/puzzle: just show an image of a xscreensaver icon (just wanted it
+do something), would be nice to add some arbitrary image.

@@ -1,0 +1,32 @@
+The following needs to be done to source to create a win32 version
+of xlockmore.
+
+
+1. Root directory:
+1.1.	New files: Makefile.win32
+1.2.	Create win32 directory
+
+2. modes directory:
+2.1.	New files: Makefile.win32
+
+3. win32 directory:
+3.1.	New files: xlockrc.rc, xlock.ico, Xapi.c, Xapi.h, 
+			xlockmore95.c, Makefile.win32, readme.src, readme.txt,
+			todo.txt
+
+4. xlock directory:
+4.1.	New files: Makefile.win32
+4.2.    apply patches: color.c iostuff.c mode.h mode.c parsecmd.c
+			resource.c util.c xbm.c xlock.c xlock.h
+
+
+
+
+NOTES:
+galaxy: colors can get out of range. Ie when 256, can get higher 
+than this for star colors. I had galcol=240, with max star color
+possible 240 + 32 -1 = 271.
+Black out appears to be always using x,y of 0,0.
+Flickers a lot (no double buffer) (my issue)
+
+ico: some artifacts left (my issue)

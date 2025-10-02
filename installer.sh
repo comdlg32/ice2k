@@ -48,7 +48,7 @@ simplebuild shell/hotplug
 simplebuild shell/backmgr
 simplebuild control/sysdm
 simplebuild control/desk
-simplebuild run
+simplebuild rundlg
 
 # (
 # cd icewm-dir/programs/ice2krun

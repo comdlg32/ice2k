@@ -1,0 +1,45 @@
+#! /bin/sh
+PWD=`pwd`
+#DIR=`basename ${PWD}`
+#NAME=${DIR}
+NAME=xlockmore
+GROUP=${NAME}
+if test "$1" = ""; then
+	VERSION=`grep VERSION xlock/version.h | sed 's/^.*"\(.*\)"/\1/'`
+	RELEASE=1
+else
+	VERSION=$1
+	if test "$2" = ""; then
+		RELEASE=1
+	else
+		RELEASE=$2
+	fi
+fi
+CATEGORY="X11"
+SUMMARY="xlock screen locker"
+DESCRIPTION="xlock locks the X server till the user enters
+their password at the keyboard."
+DIR_URI="https://www.sillycycle.com/${GROUP}"
+PKG=tar.xz
+SRC_DIR=${NAME}-${VERSION}
+SRC_URI=${DIR_URI}/${SRC_DIR}.${PKG}
+FILE=${SRC_DIR}-${RELEASE}.cygport
+echo "# package name
+NAME=\"${NAME}\"
+VERSION=${VERSION}
+RELEASE=${RELEASE}
+#SRC_DIR=${SRC_DIR}
+
+# setup.hint generation
+CATEGORY=\"${CATEGORY}\"
+SUMMARY=\"${SUMMARY}\"
+DESCRIPTION=\"${DESCRIPTION}\"
+#REQUIRES=\"libaudiofile1 libesd0 libGL1 libGLU1 libX11_6 libXm4 libXpm4 libXt6\"
+
+# source and patch files
+SRC_URI=\"${SRC_URI}\"
+#PATCH_URI=\"\"
+
+# use the standard src_compile, src_install and src_test"\
+ > ../${FILE}
+

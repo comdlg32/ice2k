@@ -1,0 +1,15 @@
+!! Traditional Chinese by: Wei-Lun Chao <chaoweilun AT gmail.com>
+XLock.username: 帳號：
+XLock.password: 密碼：
+XLock.info: 輸入密碼以解除鎖定；點選圖示以重新鎖定。
+XLock.validate: 驗證登入中…
+XLock.invalid: 無效的登入。
+XLock.logoutButtonLabel: 點選此處以登出
+XLock.logoutButtonHelp: \
+如果沒有任何可用的終端機，您就可以登出此次執行階段。\n\
+警告：這將會砍掉使用者已經執行的任何開啟中應用軟體。\n\
+您應該在將使用者登出之前，儘可能嘗試與他們聯絡。
+XLock.logoutFailedString: \
+嘗試登出時失敗。\n\
+目前使用者無法自動登出。
+XLock.message: 請稍候，馬上回來！

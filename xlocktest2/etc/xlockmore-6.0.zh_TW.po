@@ -1,0 +1,160 @@
+# Traditional Chinese Messages for xlockmore.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the xlockmore package.
+# Wei-Lun Chao <chaoweilun@gmail.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xlockmore 6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-02-12 20:00+0800\n"
+"PO-Revision-Date: 2008-02-12 20:00+0800\n"
+"Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "World Population"
+msgstr "世界人口"
+
+msgid " People"
+msgstr " 人"
+
+msgid "Tropical Forest Countdown"
+msgstr "熱帶雨林倒數"
+
+msgid " Tropical Forest in "
+msgstr " 熱帶雨林消失於 "
+
+msgid "Current HIV Infections World Wide"
+msgstr "目前全世界愛滋病感染數"
+
+msgid " Cases"
+msgstr " 例"
+
+msgid "Used in research"
+msgstr "研究用途"
+
+msgid "Consumed for Food by Mankind"
+msgstr "人類所消耗的食物"
+
+msgid " animals this year"
+msgstr " 隻動物於今年"
+
+msgid "Countdown to Y2K (1 January 2000, 0:00 hour)"
+msgstr "倒數到 Y2K (2000 年 1 月 1 日 0:00)"
+
+msgid "Time since Y2K (1 January 2000)"
+msgstr "時間自 Y2K (2000 年 1 月 1 日)"
+
+msgid "Countdown to the end of the Second Millennium (1 January 2001, 0:00 hour)"
+msgstr "倒數到第二千禧年的結束 (2001 年 1 月 1 日 0:00)"
+
+msgid "Time since the start of the Third Millennium (1 January 2001)"
+msgstr "時間自第三千禧年的開始 (2001 年 1 月 1 日)"
+
+msgid "day"
+msgstr "天"
+
+msgid "days"
+msgstr "天"
+
+msgid "hour"
+msgstr "小時"
+
+msgid "hours"
+msgstr "小時"
+
+msgid "minute"
+msgstr "分"
+
+msgid "minutes"
+msgstr "分"
+
+msgid "second"
+msgstr "秒"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "Hectares"
+msgstr "公頃"
+
+msgid "Acres"
+msgstr "英畝"
+
+msgid "Name:"
+msgstr "帳號："
+
+msgid "Password:"
+msgstr "密碼："
+
+msgid "Enter password to unlock; select icon to lock."
+msgstr "輸入密碼以解除鎖定；點選圖示以重新鎖定。"
+
+msgid "Validating login..."
+msgstr "驗證登入中…"
+
+msgid "Invalid login."
+msgstr "無效的登入。"
+
+msgid "Invalid login, Caps Lock on."
+msgstr "無效的登入，大寫鍵目前鎖定。"
+
+msgid "Click here to logout"
+msgstr "點選此處以登出"
+
+msgid ""
+"You may log out this session if no terminals are available.\n"
+"WARNING: This will crash any open applications that the user\n"
+"has running. You should try to contact the user if possible\n"
+"before logging them out."
+msgstr ""
+"如果沒有任何可用的終端機，您就可以登出此次執行階段。\n"
+"警告：這將會砍掉使用者已經執行的任何開啟中應用軟體。\n"
+"您應該在將使用者登出之前，儘可能嘗試與他們聯絡。"
+
+msgid ""
+"Logout attempt FAILED.\n"
+"Current user could not be automatically logged out."
+msgstr ""
+"嘗試登出時失敗。\n"
+"目前使用者無法自動登出。"
+
+msgid "Go away, no one is here"
+msgstr "請稍候，馬上回來！"
+
+msgid "Enter Kerberos password to unlock; select icon to lock."
+msgstr "輸入 Kerberos 密碼以解除鎖定；點選圖示以重新鎖定。"
+
+msgid " failed attempt."
+msgstr " 次失敗。"
+
+msgid " failed attempts."
+msgstr " 次失敗。"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Auto-logout failed"
+msgstr "自動登出失敗"
+
+msgid "%d minute%s elapsed since locked.                           \n"
+msgstr "鎖定之後過了 %d 分鐘%s。                         \n"
+
+msgid "%d:%02d hour%s elapsed since locked.                            \n"
+msgstr "鎖定之後過了 %d:%02d 小時%s。                          \n"
+
+msgid "%d minute%s until the public logout button appears.           \n"
+msgstr "%d 分鐘%s 直到公開的登出按鈕出現。         \n"
+
+msgid "%d:%02d hours until the public logout button appears.       \n"
+msgstr "%d:%02d 小時直到公用的登出按鈕出現。     \n"
+
+msgid "%d minute%s until auto-logout.    \n"
+msgstr "%d 分鐘%s 直到自動登出。  \n"
+
+msgid "%d:%02d hours until auto-logout.  \n"
+msgstr "%d:%02d 小時直到自動登出。\n"

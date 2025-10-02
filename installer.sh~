@@ -48,11 +48,12 @@ simplebuild shell/hotplug
 simplebuild shell/backmgr
 simplebuild control/sysdm
 simplebuild control/desk
+simplebuild run
 
-#(
-#cd icewm-dir/programs/ice2krun
-#./compile.sh
-#)
+# (
+# cd icewm-dir/programs/ice2krun
+# ./compile.sh
+# )
 
 (
 cd icewm-3.3.1

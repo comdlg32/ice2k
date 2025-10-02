@@ -304,7 +304,7 @@ dnl Now check if the installed GTK is sufficiently new. (Also sanity
 dnl checks the results of gtk-config to some extent
 dnl
       rm -f conf.gtktest
-      AC_TRY_RUN([
+      AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <gtk/gtk.h>
 #include <stdio.h>
 
@@ -366,7 +366,7 @@ main ()
     }
   return 1;
 }
-],, no_gtk=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
+]])],[],[no_gtk=yes],[echo $ac_n "cross compiling; assumed OK... $ac_c"])
        CFLAGS="$ac_save_CFLAGS"
        LIBS="$ac_save_LIBS"
      fi
@@ -388,11 +388,10 @@ main ()
           echo "*** Could not run GTK test program, checking why..."
           CFLAGS="$CFLAGS $GTK_CFLAGS"
           LIBS="$LIBS $GTK_LIBS"
-          AC_TRY_LINK([
+          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <gtk/gtk.h>
 #include <stdio.h>
-],      [ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version)); ],
-        [ echo "*** The test program compiled, but did not run. This usually means"
+]], [[ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version)); ]])],[ echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding GTK or finding the wrong"
           echo "*** version of GTK. If it is not finding GTK, you'll need to set your"
           echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
@@ -405,8 +404,7 @@ main ()
           echo "*** If you have a RedHat 5.0 system, you should remove the GTK package that"
           echo "*** came with the system with the command"
           echo "***"
-          echo "***    rpm --erase --nodeps gtk gtk-devel" ],
-        [ echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "***    rpm --erase --nodeps gtk gtk-devel" ],[ echo "*** The test program failed to compile or link. See the file config.log for the"
           echo "*** exact error that occurred. This usually means GTK was incorrectly installed"
           echo "*** or that you have moved GTK since it was installed. In the latter case, you"
           echo "*** may want to edit the gtk-config script: $GTK_CONFIG" ])
@@ -3637,7 +3635,7 @@ EOF
          mglv=`(eval "$ac_cpp conftest.$ac_ext") | sed -n \
                's/^configure:.*\([0-9][0-9]*\).*\([0-9][0-9]*\).*$/\1.\2/p'`
 dnl autoconf-4.53 really hates this next line
-dnl         mglv=`(eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_CC | sed -n \
+dnl         mglv=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | sed -n \
 dnl               's/^configure:.*\([0-9][0-9]*\).*\([0-9][0-9]*\).*$/\1.\2/p'`
          changequote([,])
 
@@ -3751,11 +3749,11 @@ ac_save_LIBS="$LIBS"
 CFLAGS="${CFLAGS} ${XLOCKINC}"
 LIBS="${XLOCKLIBPATHS} ${XLOCKLIBS} -lX11 -lXext -lm"
 AC_CACHE_VAL(ac_cv_c_gl1_1,[
-AC_TRY_LINK([#define _XOPEN_SOURCE 1
-#include <GL/gl.h>], [
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#define _XOPEN_SOURCE 1
+#include <GL/gl.h>]], [[
 GLint texture;
 glBindTexture(GL_TEXTURE_2D, texture);
-], ac_cv_c_gl1_1=yes, ac_cv_c_gl1_1=no)])
+]])],[ac_cv_c_gl1_1=yes],[ac_cv_c_gl1_1=no])])
 dnl This does not seem to work on Sun's OpenGL
 dnl if test x"$ac_cv_c_gl1_1" = xyes; then
     AC_DEFINE([HAVE_GLBINDTEXTURE], [1], [GL Bind Texture])
@@ -5217,12 +5215,9 @@ fi
 dnl AC_CHECK_FUNCS(gettimeofday)
 AC_MSG_CHECKING(how to call gettimeofday)
 AC_CACHE_VAL(ac_cv_gettimeofday_args,
- [AC_TRY_COMPILE([#include <stdlib.h>
-#include <sys/time.h>],
-     [struct timeval tv; struct timezone tzp;
-      gettimeofday(&tv, &tzp);],
-     [ac_gettimeofday_args=2],
-     [AC_TRY_COMPILE([#include <stdlib.h>
+ [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <sys/time.h>]], [[struct timeval tv; struct timezone tzp;
+      gettimeofday(&tv, &tzp);]])],[ac_gettimeofday_args=2],[_au_m4_changequote([,])AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/time.h>],
          [struct timeval tv; gettimeofday(&tv);],
          [ac_gettimeofday_args=1],
@@ -5267,12 +5262,12 @@ fi
 
 AC_MSG_CHECKING([matherr support])
 AC_CACHE_VAL(ac_cv_c_matherr,[
-AC_TRY_COMPILE([#define _XOPEN_SOURCE 1
-#include <math.h>], [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define _XOPEN_SOURCE 1
+#include <math.h>]], [[
 struct exception x;
 x.type = DOMAIN;
 x.type = SING;
-], ac_cv_c_matherr=yes, ac_cv_c_matherr=no)])
+]])],[ac_cv_c_matherr=yes],[ac_cv_c_matherr=no])])
 if test x"$ac_cv_c_matherr" = xyes; then
     AC_DEFINE([USE_MATHERR], [1], [math error])
     AC_MSG_RESULT(yes)
@@ -5283,11 +5278,11 @@ fi
 dnl Problems here if -I/usr/include used with gcc on Solaris
 AC_MSG_CHECKING([struct sigset_t])
 AC_CACHE_VAL(ac_cv_c_sigset_t,[
-AC_TRY_COMPILE([/*#define _XOPEN_SOURCE 1*/
-#include <signal.h>], [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[/*#define _XOPEN_SOURCE 1*/
+#include <signal.h>]], [[
 typedef struct {unsigned long __sigbits[4];} sigset_t;
 sigset_t sigmask;
-], ac_cv_c_sigset_t=yes, ac_cv_c_sigset_t=no)])
+]])],[ac_cv_c_sigset_t=yes],[ac_cv_c_sigset_t=no])])
 if test x"$ac_cv_c_sigset_t" = xyes; then
   case "${canonical}" in
     *-*-solaris2.0* | *-*-solaris2.1* | *-*-solaris2.2* | *-*-solaris2.3* | *-*-solaris2.4* | *-*-solaris2.5*)
@@ -5308,9 +5303,9 @@ ac_save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -I/usr/include"
 AC_MSG_CHECKING([whether wchar_t is defined internal to C++])
 AC_CACHE_VAL(ac_cv_c_wchar_t,[
-AC_TRY_COMPILE([
-#include <stddef.h>], [
-], ac_cv_c_wchar_t=no, ac_cv_c_wchar_t=yes)])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <stddef.h>]], [[
+]])],[ac_cv_c_wchar_t=no],[ac_cv_c_wchar_t=yes])])
 if test x"$ac_cv_c_wchar_t" = xyes; then
   AC_DEFINE([_WCHAR_T], [1], [wide character type defined])
   AC_MSG_RESULT(yes)

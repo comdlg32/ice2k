@@ -1,0 +1,66 @@
+Valgrind output (Debian 9.0-ish, amd64).
+
+$ valgrind --leak-check=full --num-callers=32 ./xlock -mode blank -inwindow
+==465== Memcheck, a memory error detector
+==465== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==465== Using Valgrind-3.12.0.SVN and LibVEX; rerun with -h for copyright info
+==465== Command: ./xlock -mode blank -inwindow
+==465==
+==465==
+==465== HEAP SUMMARY:
+==465== in use at exit: 475,270 bytes in 2,997 blocks
+==465== total heap usage: 13,246 allocs, 10,249 frees, 1,660,572 bytes allocated
+==465==
+==465== 12 bytes in 1 blocks are definitely lost in loss record 27 of 1,165
+==465== at 0x4C2BBAF: malloc (in
+/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==465== by 0x59573F7: XineramaQueryScreens (Xinerama.c:317)
+z==465== by 0x134980: main (xlock.c:3438)
+==465==
+==465== 45 (16 direct, 29 indirect) bytes in 1 blocks are definitely lost in
+loss record 802 of 1,165
+==465== at 0x4C2BBAF: malloc (in
+/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==465== by 0x5DB75BE: copy_string_list (FSWrap.c:136)
+==465== by 0x5DB75BE: XCreateFontSet (FSWrap.c:188)
+==465== by 0x136AA0: createFontSet (xlock.c:3101)
+==465== by 0x1345AF: main (xlock.c:3331)
+==465==
+==465== 180 (80 direct, 100 indirect) bytes in 1 blocks are definitely lost in
+loss record 1,058 of 1,165
+==465== at 0x4C2BBAF: malloc (in
+/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==465== by 0x5DB75BE: copy_string_list (FSWrap.c:136)
+==465== by 0x5DB75BE: XCreateFontSet (FSWrap.c:188)
+==465== by 0x136AA0: createFontSet (xlock.c:3101)
+==465== by 0x13458C: main (xlock.c:3321)
+==465==
+==465== 1,688 (136 direct, 1,552 indirect) bytes in 1 blocks are definitely lost
+in loss record 1,127 of 1,165
+==465== at 0x4C2DDCF: realloc (in
+/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==465== by 0x5DE669C: add_codeset.isra.10 (lcGeneric.c:186)
+==465== by 0x5DE6C01: load_generic (lcGeneric.c:742)
+==465== by 0x5DE850E: initialize (lcGeneric.c:1012)
+==465== by 0x5DE8D27: _XlcCreateLC (lcPubWrap.c:89)
+==465== by 0x5E09A0F: _XlcUtf8Loader (lcUTF8Load.c:47)
+==465== by 0x5DF02BD: _XOpenLC (lcWrap.c:293)
+==465== by 0x5DF04EA: _XrmInitParseInfo (lcWrap.c:368)
+==465== by 0x5DD83BF: NewDatabase (Xrm.c:503)
+==465== by 0x5DDBA08: XrmGetFileDatabase (Xrm.c:1678)
+==465== by 0x13A9EF: parsefilepath.constprop.2 (resource.c:1380)
+==465== by 0x13ABED: getAppResources (resource.c:1748)
+==465== by 0x13ABED: getResources (resource.c:1900)
+==465== by 0x134555: main (xlock.c:3245)
+==465==
+==465== LEAK SUMMARY:
+==465== definitely lost: 244 bytes in 4 blocks
+==465== indirectly lost: 1,681 bytes in 36 blocks
+==465== possibly lost: 0 bytes in 0 blocks
+==465== still reachable: 473,345 bytes in 2,957 blocks
+==465== suppressed: 0 bytes in 0 blocks
+==465== Reachable blocks (those to which a pointer was found) are not shown.
+==465== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==465==
+==465== For counts of detected and suppressed errors, rerun with: -v
+==465== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
