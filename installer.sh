@@ -2,6 +2,8 @@
 cd "$(dirname -- "$(readlink -f -- "$0"; )")"
 export INSTALLSCRDIR="$PWD"
 
+sudo apt-get update
+sudo apt-get upgrade
 sudo apt-get install --no-install-recommends --no-install-suggests \
 autotools-dev automake libtool gettext gettext-base gettext-el gnulib autopoint \
 xserver-xorg x11-apps twm xserver-xorg-dev libfontconfig-dev \
