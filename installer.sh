@@ -2,6 +2,29 @@
 cd "$(dirname -- "$(readlink -f -- "$0"; )")"
 export INSTALLSCRDIR="$PWD"
 
+sudo apt-get update
+
+a=1
+echo
+echo "your system is going to get updated"
+echo
+
+while [ $a -eq 1 ]; do
+	echo -n "is this fine? [Y/N] "
+
+	read line;
+
+	line="$(echo -n "$line" | tr A-Z a-z)"
+
+	if [ "$line" = "y" ]; then
+		a=0
+		sudo apt-get upgrade
+	elif [ "$line" = "n" ]; then
+		echo "ok..."
+		a=0
+	fi
+done
+
 sudo apt-get install --no-install-recommends --no-install-suggests \
 autotools-dev automake libtool gettext gettext-base gettext-el gnulib autopoint \
 xserver-xorg x11-apps twm xserver-xorg-dev libfontconfig-dev \
