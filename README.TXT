@@ -35,8 +35,8 @@ probably not test this on your main computer for now, you can lose
 data (unlikely. however you are most likely to lose dotfiles)
 
 MAIN AUTHORS
-xcomposite
-https://m1nuscle.neocities.org/main
+xcomposite (me)
+https://johnconnection.neocities.org/ (https://github.com/johnconnection )
 
 CREDITS
 Thanks to enfaun and PixelOCDGuy for base of IceWM theme
