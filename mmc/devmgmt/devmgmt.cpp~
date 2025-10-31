@@ -305,7 +305,7 @@ int getMonitors(char* buf, int bufsize ) {
 
 			if (y) {
 				strcat(buf, ",");
-				strncat(buf, outputInfo->name, bufsize);
+				strncat(buf, outputInfo->name, bufsize - strlen(buf) - 1);
 			} else {
 				strcpy(buf, outputInfo->name);
 			}
@@ -364,6 +364,7 @@ private:
   FXTreeItem*              devNetwork;
   FXTreeItem*              devUnknown;
   FXTreeItem*              devSerial;
+  FXTreeItem*              devPrinters;
   FXTreeItem*              devSound;
   FXTreeItem*              devSystem;
   FXTreeItem*              devUsbCon;
@@ -392,6 +393,7 @@ private:
   FXIcon*                  ico_dev_network;
   FXIcon*                  ico_dev_unknown;
   FXIcon*                  ico_dev_serial;
+  FXIcon*                  ico_dev_printer;
   FXIcon*                  ico_dev_sound;
   FXIcon*                  ico_dev_usb;
   FXIcon*                  ico_dev_firewire;
@@ -582,6 +584,7 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
     devUnknown = tree->appendItem(top,"Other devices",ico_dev_unknown,ico_dev_unknown);
 
     devSerial = tree->appendItem(top,"Ports (COM & LPT)",ico_dev_serial,ico_dev_serial);
+    devPrinters = tree->appendItem(top,"Printers",ico_dev_printer,ico_dev_printer);
     devSound = tree->appendItem(top,"Sound, video and game controllers",ico_dev_sound,ico_dev_sound);
     //branch = tree->appendItem(top,"Storage volumes",ico_dev_disk,ico_dev_disk);
 
@@ -758,7 +761,21 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
 
     }
-  return 1;
+
+    DIR *printd = NULL;
+    struct dirent *printdir = NULL;
+    printd = opendir("/dev");
+
+    if (printd) {
+      while ((printdir = readdir(printd)) != NULL) {
+        if (strncmp(printdir->d_name, "lp", 2) == 0) {
+          printf("%s\n", printdir->d_name);
+        }
+      }
+      closedir(printd);
+    }
+
+    return 1;
     
 }
 
@@ -864,6 +881,7 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
   ico_dev_network = new FXGIFIcon(app, resico_dev_network, IMAGE_NEAREST); ico_dev_network->create();
   ico_dev_unknown = new FXGIFIcon(app, resico_dev_unknown, IMAGE_NEAREST); ico_dev_unknown->create();
   ico_dev_serial = new FXGIFIcon(app, resico_dev_serial, IMAGE_NEAREST); ico_dev_serial->create();
+  ico_dev_printer = new FXGIFIcon(app, resico_dev_printer, IMAGE_NEAREST); ico_dev_printer->create();
   ico_dev_sound = new FXGIFIcon(app, resico_dev_sound, IMAGE_NEAREST); ico_dev_sound->create();
   ico_dev_usb = new FXGIFIcon(app, resico_dev_usb, IMAGE_NEAREST); ico_dev_usb->create();
   ico_dev_firewire = new FXGIFIcon(app, resico_dev_firewire, IMAGE_NEAREST); ico_dev_firewire->create();
