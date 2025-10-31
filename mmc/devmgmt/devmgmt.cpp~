@@ -769,11 +769,26 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
     if (printd) {
       while ((printdir = readdir(printd)) != NULL) {
         if (strncmp(printdir->d_name, "lp", 2) == 0) {
-          printf("%s\n", printdir->d_name);
+	    tree->appendItem(devPrinters, printdir->d_name, ico_dev_printer, ico_dev_printer);
         }
       }
       closedir(printd);
     }
+
+    printdir = NULL;
+    printd = NULL;
+
+    printd = opendir("/dev/usb");
+
+    if (printd) {
+      while ((printdir = readdir(printd)) != NULL) {
+        if (strncmp(printdir->d_name, "lp", 2) == 0) {
+	    tree->appendItem(devPrinters, printdir->d_name, ico_dev_printer, ico_dev_printer);
+        }
+      }
+      closedir(printd);
+    }
+
 
     return 1;
     

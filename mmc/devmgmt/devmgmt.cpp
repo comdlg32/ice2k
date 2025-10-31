@@ -736,6 +736,36 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
     sp_free_port_list(portList);
 
+    DIR *printd = NULL;
+    struct dirent *printdir = NULL;
+    printd = opendir("/dev");
+
+    if (printd) {
+      while ((printdir = readdir(printd)) != NULL) {
+        if (strncmp(printdir->d_name, "lp", 2) == 0) {
+	    tree->appendItem(devPrinters, printdir->d_name, ico_dev_printer, ico_dev_printer);
+        }
+      }
+      closedir(printd);
+    }
+
+    printdir = NULL;
+    printd = NULL;
+
+    printd = opendir("/dev/usb");
+    char printername[256+4] = { 0 };
+
+    if (printd) {
+      while ((printdir = readdir(printd)) != NULL) {
+        if (strncmp(printdir->d_name, "lp", 2) == 0) {
+	    snprintf(printername, sizeof(printername), "usb/%s", printdir->d_name);
+	    tree->appendItem(devPrinters, printername, ico_dev_printer, ico_dev_printer);
+        }
+      }
+      closedir(printd);
+    }
+
+
     FXTreeItem* loopthruprev;
     FXTreeItem* loopthru = top->getFirst();
 
@@ -760,33 +790,6 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
 
 
-    }
-
-    DIR *printd = NULL;
-    struct dirent *printdir = NULL;
-    printd = opendir("/dev");
-
-    if (printd) {
-      while ((printdir = readdir(printd)) != NULL) {
-        if (strncmp(printdir->d_name, "lp", 2) == 0) {
-	    tree->appendItem(devPrinters, printdir->d_name, ico_dev_printer, ico_dev_printer);
-        }
-      }
-      closedir(printd);
-    }
-
-    printdir = NULL;
-    printd = NULL;
-
-    printd = opendir("/dev/usb");
-
-    if (printd) {
-      while ((printdir = readdir(printd)) != NULL) {
-        if (strncmp(printdir->d_name, "lp", 2) == 0) {
-	    tree->appendItem(devPrinters, printdir->d_name, ico_dev_printer, ico_dev_printer);
-        }
-      }
-      closedir(printd);
     }
 
 
