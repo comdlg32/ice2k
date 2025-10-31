@@ -291,7 +291,7 @@ int getMonitors(char* buf, int bufsize ) {
 	if (!XRRQueryExtension(dpy, &eventBase, &errorBase))
 		return 1;
 
-	resources = XRRGetScreenResources(dpy, root);
+	resources = XRRGetScreenResourcesCurrent(dpy, root);
 
 	if (!resources)
 		return 1;
@@ -301,9 +301,11 @@ int getMonitors(char* buf, int bufsize ) {
 	for (int i = 0; i < resources->noutput; i++) {
 		XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, resources, resources->outputs[i]);
 		if (outputInfo->connection == RR_Connected) {
+			buf[0] = '\0';
+
 			if (y) {
 				strcat(buf, ",");
-				strncat(buf, outputInfo->name, bufsize);
+				strncat(buf, outputInfo->name, bufsize - strlen(buf) - 1);
 			} else {
 				strcpy(buf, outputInfo->name);
 			}
@@ -616,7 +618,7 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
       //tree->appendItem(branch,computerType,ico_dev_computer,ico_dev_computer);
 
     char monitors[512];
-    getMonitors(monitors, sizeof(monitors));
+    //getMonitors(monitors, sizeof(monitors));
     if (!getMonitors(monitors, sizeof(monitors))) {
 	char* monitortok = strtok(monitors, ",");
 

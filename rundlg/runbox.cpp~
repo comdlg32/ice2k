@@ -6,8 +6,6 @@
 #include <fx.h>
 #include <fxkeys.h>
 #include <ice2k/branding.h>
-#include <pwd.h>
-#include <unistd.h>
 
 // optional
 // common controls library, replaces certain fox toolkit controls with
@@ -347,7 +345,7 @@ int main(int argc, char *argv[]) {
 		mainIconLarge->blend(app->getBaseColor());
 	} else {
 		mainIcon = new FXGIFIcon(&application, resico_run16);
-		mainIconLarge = new FXGIFIcon(&application, resico_run16);
+		mainIconLarge = new FXGIFIcon(&application, resico_run32);
 	}
 
 	// Start app
