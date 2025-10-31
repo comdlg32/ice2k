@@ -1394,8 +1394,21 @@ void makeBoard() {
 }
 
 void refreshBoard() {
-	deleteBoard();
-	makeBoard();
+	//deleteBoard();
+	//makeBoard();
+	freeBoard();
+	allocBoard();
+	updateBoard();
+
+	app->removeTimeout(mainwin, ID_TIMER);
+	timedisp->setValue(0);
+
+	minedisp->setValue(mines);
+
+	firstclk = TRUE;
+	lost = FALSE;
+	won = FALSE;
+	disfield = FALSE;
 }
 
 

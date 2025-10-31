@@ -336,7 +336,6 @@ BOOL pressed;
 #define _ROWS_INTERMEDIATE 16
 #define _COLS_INTERMEDIATE 16
 #define _MINES_INTERMEDIATE 40
-//#define _MINES_INTERMEDIATE 2
 
 #define _ROWS_EXPERT 16
 #define _COLS_EXPERT 30
@@ -1395,8 +1394,20 @@ void makeBoard() {
 }
 
 void refreshBoard() {
-	deleteBoard();
-	makeBoard();
+	//deleteBoard();
+	//makeBoard();
+	freeBoard();
+	allocBoard();
+
+	app->removeTimeout(mainwin, ID_TIMER);
+	timedisp->setValue(0);
+
+	minedisp->setValue(mines);
+
+	firstclk = TRUE;
+	lost = FALSE;
+	won = FALSE;
+	disfield = FALSE;
 }
 
 
