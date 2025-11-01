@@ -1,4 +1,6 @@
 
+
+
 #include "config.h"
 #include "i18n.h"
 
@@ -55,6 +57,12 @@ FXbool file_tooltips;
 FXbool relative_resize;
 extern FXMainWindow* mainWindow;
 
+
+int g_grip_r;
+int xp;
+
+int btn_rpad;
+int btn_lpad;
 
 // External global variables
 extern char**   args;
@@ -187,8 +195,43 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     // menubar = new FXMenuBar(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_RAISED|FRAME_SUNKEN);
 
     // Site where to dock (for toolbars)
-    FXHorizontalFrame* dockcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0);
-    FXDockSite* topdock = new FXDockSite(dockcont, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_SUNKEN,0,0,0,0,0,0,0,0,0);
+
+    FXPacker* dockcont = new FXPacker(this, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0);
+
+    FXPacker* dockcont2 = new FXPacker(dockcont, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+    FXHorizontalFrame* rebarbordertop = new FXHorizontalFrame(dockcont, LAYOUT_SIDE_TOP|LAYOUT_TOP|LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_Y, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+    rebarbordertop->setBackColor(getApp()->getShadowColor());
+
+
+    FXPacker* rebarborderbottom2 = new FXPacker(dockcont, LAYOUT_SIDE_BOTTOM|LAYOUT_BOTTOM|LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 0, 0, 1, 0, 0, 0, 0);
+    rebarborderbottom2->setBackColor(getApp()->getHiliteColor());
+
+    FXHorizontalFrame* rebarborderbottom = new FXHorizontalFrame(dockcont, LAYOUT_SIDE_BOTTOM|LAYOUT_BOTTOM|LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+    rebarborderbottom->setBackColor(getApp()->getShadowColor());
+
+    FXFrame* rebarborderbottomright = new FXFrame(rebarborderbottom, LAYOUT_SIDE_RIGHT|LAYOUT_RIGHT|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0, 0, 1, 1, 0, 0, 0, 0);
+    rebarborderbottomright->setBackColor(getApp()->getHiliteColor());
+
+
+
+    FXFrame* rebarbordertop1 = new FXFrame(rebarbordertop, LAYOUT_SIDE_RIGHT|LAYOUT_RIGHT|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0, 0, 1, 1, 0, 0, 0, 0);
+    rebarbordertop1->setBackColor(getApp()->getHiliteColor());
+
+    FXFrame* rebarborderleft = new FXFrame(dockcont2, LAYOUT_SIDE_LEFT|LAYOUT_LEFT|LAYOUT_FILL_Y|LAYOUT_FIX_WIDTH, 0, 0, 1, 0, 0, 0, 0, 0);
+    rebarborderleft->setBackColor(getApp()->getShadowColor());
+
+    FXHorizontalFrame* rebarborderright = new FXHorizontalFrame(dockcont2, LAYOUT_SIDE_RIGHT|LAYOUT_RIGHT|LAYOUT_FILL_Y|LAYOUT_FIX_WIDTH, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0);
+    FXDockSite* topdock = new FXDockSite(dockcont2, LAYOUT_SIDE_TOP|LAYOUT_LEFT|LAYOUT_FILL_X|FRAME_SUNKEN,0,0,0,0,-1,-2,0,-2,0);
+
+    FXFrame* rebarborderright1 = new FXFrame(rebarborderright, LAYOUT_SIDE_RIGHT|LAYOUT_RIGHT|LAYOUT_FILL_Y|LAYOUT_FIX_WIDTH, 0, 0, 1, 0, 0, 0, 0, 0);
+    rebarborderright1->setBackColor(getApp()->getHiliteColor());
+
+    FXFrame* rebarborderright2 = new FXFrame(rebarborderright, LAYOUT_SIDE_RIGHT|LAYOUT_RIGHT|LAYOUT_FILL_Y|LAYOUT_FIX_WIDTH, 0, 0, 1, 0, 0, 0, 0, 0);
+    rebarborderright2->setBackColor(getApp()->getShadowColor());
+
+
+
     // New menu bar
     FXToolBarShell* dragshell0 = new FXToolBarShell(this, FRAME_RAISED,0,0,0,0,0,0);
     //FXHorizontalFrame* menubarcont = new FXHorizontalFrame(this, FRAME_RAISED|LAYOUT_DOCK_NEXT|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -203,7 +246,17 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     // General toolbar
     FXToolBarShell* dragshell1 = new FXToolBarShell(this, FRAME_RAISED,0,0,0,0,0,0);
     generaltoolbar = new FXToolBar(topdock, dragshell1, LAYOUT_DOCK_NEXT|LAYOUT_SIDE_TOP|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    new FXToolBarGrip(generaltoolbar, generaltoolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,5,2,2);
+
+    // xp mode
+    if ( tbdirbackicon->getWidth() == 24 ) {
+      xp = 1;
+      g_grip_r = 3;
+    } else {
+      xp = 0;
+      g_grip_r = 5;
+    }
+
+    new FXToolBarGrip(generaltoolbar, generaltoolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,g_grip_r,2,2);
 
     // Tools toolbar
     FXToolBarShell* dragshell2 = new FXToolBarShell(this, FRAME_RAISED,0,0,0,0,0,0);
@@ -288,10 +341,15 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     lpanel->setActive();
 
     FXString sort_func;
+    // char sort_func;
 
     // Dir panel options
+
+    //std::map<FXString, int> sort_map = {
     sort_func = getApp()->reg().readStringEntry("DIR PANEL", "sort_func", "ascendingCase");
-    if (sort_func == "ascendingCase")
+
+    // wtf?
+    /* if (sort_func == "ascendingCase")
     {
         dirpanel->setSortFunc(DirList::ascendingCase);
     }
@@ -306,37 +364,163 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     else if (sort_func == "descending")
     {
         dirpanel->setSortFunc(DirList::descending);
+    } */
+
+
+    // std::map my beloved
+    std::map<FXString, int> sort_map;
+        sort_map["ascendingCase"] = 1;
+        sort_map["descendingCase"] = 2;
+
+        sort_map["ascending"] = 3;
+        sort_map["descending"] = 4;
+
+        sort_map["ascendingCaseMix"] = 5;
+        sort_map["descendingCaseMix"] = 6;
+
+        sort_map["ascendingMix"] = 7;
+        sort_map["descendingMix"] = 8;
+
+        sort_map["ascendingSize"] = 9;
+        sort_map["descendingSize"] = 10;
+
+        sort_map["ascendingSizeMix"] = 11;
+        sort_map["descendingSizeMix"] = 12;
+
+        sort_map["ascendingType"] = 13;
+        sort_map["descendingType"] = 14;
+
+        sort_map["ascendingTypeMix"] = 15;
+        sort_map["descendingTypeMix"] = 16;
+
+        sort_map["ascendingExt"] = 17;
+        sort_map["descendingExt"] = 18;
+
+        sort_map["ascendingExtMix"] = 19;
+        sort_map["descendingExtMix"] = 20;
+
+        sort_map["ascendingTime"] = 21;
+        sort_map["descendingTime"] = 22;
+
+        sort_map["ascendingTimeMix"] = 23;
+        sort_map["descendingTimeMix"] = 24;
+
+        sort_map["ascendingUser"] = 25;
+        sort_map["descendingUser"] = 26;
+
+        sort_map["ascendingUserMix"] = 27;
+        sort_map["descendingUserMix"] = 28;
+
+        sort_map["ascendingGroup"] = 29;
+        sort_map["descendingGroup"] = 30;
+
+        sort_map["ascendingGroupMix"] = 31;
+        sort_map["descendingGroupMix"] = 32;
+
+        sort_map["ascendingPerm"] = 33;
+        sort_map["descendingPerm"] = 34;
+
+        sort_map["ascendingPermMix"] = 35;
+        sort_map["descendingPermMix"] = 36;
+    // those who switch:
+    switch (sort_map[sort_func]) {
+        case  1: dirpanel->setSortFunc(DirList::ascendingCase); break;
+        case  2: dirpanel->setSortFunc(DirList::descendingCase); break;
+
+        case  3: dirpanel->setSortFunc(DirList::ascending); break;
+        case  4: dirpanel->setSortFunc(DirList::descending); break;
     }
 
     // Left panel options
     sort_func = getApp()->reg().readStringEntry("LEFT PANEL", "sort_func", "ascendingCase");
-    if (sort_func == "ascendingCase")
+
+    switch (sort_map[sort_func]) {
+        case  1: lpanel->setSortFunc(FileList::ascendingCase); break;
+        case  2: lpanel->setSortFunc(FileList::descendingCase); break;
+
+        case  3: lpanel->setSortFunc(FileList::ascending); break;
+        case  4: lpanel->setSortFunc(FileList::descending); break;
+
+        case  5: lpanel->setSortFunc(FileList::ascendingCaseMix); break;
+        case  6: lpanel->setSortFunc(FileList::descendingCaseMix); break;
+
+        case  7: lpanel->setSortFunc(FileList::ascendingMix); break;
+        case  8: lpanel->setSortFunc(FileList::descendingMix); break;
+
+        case  9: lpanel->setSortFunc(FileList::ascendingSize); break;
+        case 10: lpanel->setSortFunc(FileList::descendingSize); break;
+
+        case 11: lpanel->setSortFunc(FileList::ascendingSizeMix); break;
+        case 12: lpanel->setSortFunc(FileList::descendingSizeMix); break;
+
+        case 13: lpanel->setSortFunc(FileList::ascendingType); break;
+        case 14: lpanel->setSortFunc(FileList::descendingType); break;
+
+        case 15: lpanel->setSortFunc(FileList::ascendingTypeMix); break;
+        case 16: lpanel->setSortFunc(FileList::descendingTypeMix); break;
+
+        case 17: lpanel->setSortFunc(FileList::ascendingExt); break;
+        case 18: lpanel->setSortFunc(FileList::descendingExt); break;
+
+        case 19: lpanel->setSortFunc(FileList::ascendingExtMix); break;
+        case 20: lpanel->setSortFunc(FileList::descendingExtMix); break;
+
+        case 21: lpanel->setSortFunc(FileList::ascendingTime); break;
+        case 22: lpanel->setSortFunc(FileList::descendingTime); break;
+
+        case 23: lpanel->setSortFunc(FileList::ascendingTimeMix); break;
+        case 24: lpanel->setSortFunc(FileList::descendingTimeMix); break;
+
+        case 25: lpanel->setSortFunc(FileList::ascendingUser); break;
+        case 26: lpanel->setSortFunc(FileList::descendingUser); break;
+
+        case 27: lpanel->setSortFunc(FileList::ascendingUserMix); break;
+        case 28: lpanel->setSortFunc(FileList::descendingUserMix); break;
+
+        case 29: lpanel->setSortFunc(FileList::ascendingGroup); break;
+        case 30: lpanel->setSortFunc(FileList::descendingGroup); break;
+
+        case 31: lpanel->setSortFunc(FileList::ascendingGroupMix); break;
+        case 32: lpanel->setSortFunc(FileList::descendingGroupMix); break;
+
+        case 33: lpanel->setSortFunc(FileList::ascendingPerm); break;
+        case 34: lpanel->setSortFunc(FileList::descendingPerm); break;
+
+        case 35: lpanel->setSortFunc(FileList::ascendingPermMix); break;
+        case 36: lpanel->setSortFunc(FileList::descendingPermMix); break;
+    }
+    // wtf
+    /* if (sort_func == "ascendingCase")
     {
         lpanel->setSortFunc(FileList::ascendingCase);
     }
-    else if (sort_func == "ascendingCaseMix")
-    {
-        lpanel->setSortFunc(FileList::ascendingCaseMix);
-    }
+
     else if (sort_func == "descendingCase")
     {
         lpanel->setSortFunc(FileList::descendingCase);
+    }
+
+    else if (sort_func == "ascending")
+    {
+        lpanel->setSortFunc(FileList::ascending);
+    }
+
+    else if (sort_func == "descending")
+    {
+        lpanel->setSortFunc(FileList::descending);
+    }
+
+    else if (sort_func == "ascendingCaseMix")
+    {
+        lpanel->setSortFunc(FileList::ascendingCaseMix);
     }
     else if (sort_func == "descendingCaseMix")
     {
         lpanel->setSortFunc(FileList::descendingCaseMix);
     }
-    else if (sort_func == "ascending")
-    {
-        lpanel->setSortFunc(FileList::ascending);
-    }
     else if (sort_func == "ascendingMix")
     {
         lpanel->setSortFunc(FileList::ascendingMix);
-    }
-    else if (sort_func == "descending")
-    {
-        lpanel->setSortFunc(FileList::descending);
     }
     else if (sort_func == "descendingMix")
     {
@@ -453,7 +637,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     else if (sort_func == "descendingPermMix")
     {
         lpanel->setSortFunc(FileList::descendingPermMix);
-    }
+    } */
     FXuint ignore_case = getApp()->reg().readUnsignedEntry("LEFT PANEL", "ignore_case", 1);
     lpanel->setIgnoreCase(ignore_case);
     FXuint dirs_first = getApp()->reg().readUnsignedEntry("LEFT PANEL", "dirs_first", 1);
@@ -461,7 +645,65 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
 
     // Right panel options
     sort_func = getApp()->reg().readStringEntry("RIGHT PANEL", "sort_func", "ascendingCase");
-    if (sort_func == "ascendingCase")
+
+    switch (sort_map[sort_func]) {
+        case  1: rpanel->setSortFunc(FileList::ascendingCase); break;
+        case  2: rpanel->setSortFunc(FileList::descendingCase); break;
+
+        case  3: rpanel->setSortFunc(FileList::ascending); break;
+        case  4: rpanel->setSortFunc(FileList::descending); break;
+
+        case  5: rpanel->setSortFunc(FileList::ascendingCaseMix); break;
+        case  6: rpanel->setSortFunc(FileList::descendingCaseMix); break;
+
+        case  7: rpanel->setSortFunc(FileList::ascendingMix); break;
+        case  8: rpanel->setSortFunc(FileList::descendingMix); break;
+
+        case  9: rpanel->setSortFunc(FileList::ascendingSize); break;
+        case 10: rpanel->setSortFunc(FileList::descendingSize); break;
+
+        case 11: rpanel->setSortFunc(FileList::ascendingSizeMix); break;
+        case 12: rpanel->setSortFunc(FileList::descendingSizeMix); break;
+
+        case 13: rpanel->setSortFunc(FileList::ascendingType); break;
+        case 14: rpanel->setSortFunc(FileList::descendingType); break;
+
+        case 15: rpanel->setSortFunc(FileList::ascendingTypeMix); break;
+        case 16: rpanel->setSortFunc(FileList::descendingTypeMix); break;
+
+        case 17: rpanel->setSortFunc(FileList::ascendingExt); break;
+        case 18: rpanel->setSortFunc(FileList::descendingExt); break;
+
+        case 19: rpanel->setSortFunc(FileList::ascendingExtMix); break;
+        case 20: rpanel->setSortFunc(FileList::descendingExtMix); break;
+
+        case 21: rpanel->setSortFunc(FileList::ascendingTime); break;
+        case 22: rpanel->setSortFunc(FileList::descendingTime); break;
+
+        case 23: rpanel->setSortFunc(FileList::ascendingTimeMix); break;
+        case 24: rpanel->setSortFunc(FileList::descendingTimeMix); break;
+
+        case 25: rpanel->setSortFunc(FileList::ascendingUser); break;
+        case 26: rpanel->setSortFunc(FileList::descendingUser); break;
+
+        case 27: rpanel->setSortFunc(FileList::ascendingUserMix); break;
+        case 28: rpanel->setSortFunc(FileList::descendingUserMix); break;
+
+        case 29: rpanel->setSortFunc(FileList::ascendingGroup); break;
+        case 30: rpanel->setSortFunc(FileList::descendingGroup); break;
+
+        case 31: rpanel->setSortFunc(FileList::ascendingGroupMix); break;
+        case 32: rpanel->setSortFunc(FileList::descendingGroupMix); break;
+
+        case 33: rpanel->setSortFunc(FileList::ascendingPerm); break;
+        case 34: rpanel->setSortFunc(FileList::descendingPerm); break;
+
+        case 35: rpanel->setSortFunc(FileList::ascendingPermMix); break;
+        case 36: rpanel->setSortFunc(FileList::descendingPermMix); break;
+    }
+
+
+    /* if (sort_func == "ascendingCase")
     {
         rpanel->setSortFunc(FileList::ascendingCase);
     }
@@ -604,7 +846,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     else if (sort_func == "descendingPermMix")
     {
         rpanel->setSortFunc(FileList::descendingPermMix);
-    }
+    } */
     ignore_case = getApp()->reg().readUnsignedEntry("RIGHT PANEL", "ignore_case", 1);
     rpanel->setIgnoreCase(ignore_case);
     dirs_first = getApp()->reg().readUnsignedEntry("RIGHT PANEL", "dirs_first", 1);
@@ -618,15 +860,21 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     //btn = new FXButton(throbbertoolbar, NULL, throbicon, this,  XFileExplorer::ID_DIR_BACK, 0);
 
     FXPacker* throbbg = new FXPacker(throbbertoolbar, LAYOUT_FILL_Y|LAYOUT_CENTER_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    //throbbg->setBackColor(FXRGB(0, 0, 0));
-    throbbg->setBackColor(FXRGB(255, 255, 255));
+    throbbg->setBackColor(FXRGB(0, 0, 0));
+    //throbbg->setBackColor(FXRGB(255, 255, 255));
+    //throbbg->setBackColor(col);
 
     FXPacker* throbcont = new FXPacker(throbbg, LAYOUT_CENTER_Y|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0, 0, 38, 22, 0, 0, 0, 0, 0, 0);
-    //throbcont->setBackColor(FXRGB(0, 0, 0));
-    throbcont->setBackColor(FXRGB(255, 255, 255));
+    throbcont->setBackColor(FXRGB(0, 0, 0));
+    //throbcont->setBackColor(FXRGB(255, 255, 255));
 
     throbber = new FXLabel(throbcont, "", throbanimicon, LAYOUT_FIX_Y|LAYOUT_CENTER_X|LAYOUT_FILL_X|ICON_BEFORE_TEXT|LAYOUT_TOP|LAYOUT_LEFT, 0, 0, 0, 0, 0, 0, 0, 0);
     throbber->setBackColor(FXRGB(0, 0, 0));
+    ///throbanimicon->render();
+    //throbanimicon->create();
+    //FXColor col = throbanimicon->getPixel(2,2);
+    //FXColor col = throbanimicon->getPixel(2,2);
+    //printf("%d", col);
 
 
     //getApp()->addTimeout(this,ID_ANIMTHROB,10);
@@ -637,18 +885,27 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
 
     // General toolbar
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "go_back", "Ctrl-Backspace");
-    btn = new FXButton(generaltoolbar, _("Back")+TAB+_("Go to previous folder")+PARS(key), tbdirbackicon, this, XFileExplorer::ID_DIR_BACK, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,3,3,2,2);
+
+    if (xp = 1) {
+      btn_rpad = 1;
+    }
+
+
+    btn = new FXButton(generaltoolbar, _("Back")+TAB+_("Go to previous folder")+PARS(key), tbdirbackicon, this, XFileExplorer::ID_DIR_BACK, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,5,3,2,2);
+
     hotkey = _parseAccel(key);
     btn->addHotKey(hotkey);
 
-    btnbackhist = new FXArrowButton(generaltoolbar, this, XFileExplorer::ID_DIR_BACK_HIST, LAYOUT_FILL_Y|FRAME_RAISED|ARROW_DOWN|ARROW_TOOLBAR,0,0,0,0,0,0,0,0);
+    // btnbackhist = new FXArrowButton(generaltoolbar, this, XFileExplorer::ID_DIR_BACK_HIST, LAYOUT_FILL_Y|FRAME_RAISED|ARROW_DOWN|ARROW_TOOLBAR,0,0,0,0,0,0,0,0);
+    btnbackhist = new FXButton(generaltoolbar, "", arrowicon, this, XFileExplorer::ID_DIR_BACK_HIST, LAYOUT_FILL_Y|BUTTON_TOOLBAR|FRAME_RAISED,0,0,0,0,4,3,2,0);
 
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "go_forward", "Shift-Backspace");
-    btn = new FXButton(generaltoolbar, TAB+_("Go to next folder")+PARS(key), tbdirforwardicon, this, XFileExplorer::ID_DIR_FORWARD, BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
+    btn = new FXButton(generaltoolbar, TAB+_("Go to next folder")+PARS(key), tbdirforwardicon, this, XFileExplorer::ID_DIR_FORWARD, BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,3,2,0,0);
     hotkey = _parseAccel(key);
     btn->addHotKey(hotkey);
 
-    btnforwardhist = new FXArrowButton(generaltoolbar, this, XFileExplorer::ID_DIR_FORWARD_HIST, LAYOUT_FILL_Y|FRAME_RAISED|ARROW_DOWN|ARROW_TOOLBAR,0,0,0,0,0,0,0,0);
+    btnforwardhist = new FXButton(generaltoolbar, "", arrowicon, this, XFileExplorer::ID_DIR_FORWARD_HIST, LAYOUT_FILL_Y|BUTTON_TOOLBAR|FRAME_RAISED,0,0,0,0,4,3,2,0);
+    //btnforwardhist = new FXArrowButton(generaltoolbar, this, XFileExplorer::ID_DIR_FORWARD_HIST, LAYOUT_FILL_Y|FRAME_RAISED|ARROW_DOWN|ARROW_TOOLBAR,0,0,0,0,0,0,0,0);
 
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "go_up", "Backspace");
     btn = new FXButton(generaltoolbar, TAB+_("Go to parent folder")+PARS(key), tbdirupicon, this, XFileExplorer::ID_DIR_UP, BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
@@ -679,7 +936,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
 
 
     // Show folders pane
-    btn = new FXButton(generaltoolbar, "Folders", tbtreeonepanelicon, this, XFileExplorer::ID_SWITCH_TREE, BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|ICON_BEFORE_TEXT|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
+    foldersbtn = new FXButton(generaltoolbar, "Folders", tbtreeonepanelicon, this, XFileExplorer::ID_SWITCH_TREE, BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|ICON_BEFORE_TEXT|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
 
 
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "new_file", "Ctrl-N");
@@ -764,7 +1021,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     new FXMenuRadio(viewtoolbarmenu, _("&Small Icons"), lpanel, FilePanel::ID_SHOW_MINI_ICONS);
     new FXMenuRadio(viewtoolbarmenu, _("&Details"), lpanel, FilePanel::ID_SHOW_DETAILS);
 
-    viewbutton = new FXMenuButton(generaltoolbar, "", tbiconsmenuicon, viewtoolbarmenu, BUTTON_TOOLBAR|FRAME_SUNKEN|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
+    viewbutton = new FXMenuButton(generaltoolbar, "", tbiconsmenuicon, viewtoolbarmenu, MENUBUTTON_TOOLBAR|FRAME_SUNKEN|LAYOUT_FILL_Y,0,0,0,0,3,3,0,0);
 
 #if defined(linux)
 
@@ -798,7 +1055,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "refresh", "Ctrl-R");
 
     // Location bar
-    new FXLabel(locationbar, _("Address"),NULL,LAYOUT_CENTER_Y,0,0,0,0,1,4,0,0);
+    new FXLabel(locationbar, _("A&ddress"),NULL,LAYOUT_CENTER_Y,0,0,0,0,1,4,0,0);
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "clear_location", "Ctrl-L");
     hotkey = _parseAccel(key);
     btn->addHotKey(hotkey);
@@ -816,7 +1073,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
 
     int entericonsize = tbentericon->getWidth();
 
-    printf("%d\n", entericonsize);
+    // printf("%d\n", entericonsize);
 
     if (entericonsize == 20) {
        go_lpad = 4;
@@ -831,6 +1088,12 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     }
 
     new FXButton(locationbar, _("Go")+TAB+_("Go to location"), tbentericon, this, ID_GOTO_LOCATION, BUTTON_TOOLBAR|LAYOUT_FILL_Y|LAYOUT_CENTER_Y|LAYOUT_LEFT|ICON_BEFORE_TEXT|FRAME_RAISED, 0, 0, 0, 0, go_lpad, go_rpad, go_tpad, go_bpad);
+    // FXButton* gobutton = new FXButton(locationbar, _("Go")+TAB+_("Go to location"), tbentericon, this, ID_GOTO_LOCATION, BUTTON_TOOLBAR|LAYOUT_FILL_Y|LAYOUT_CENTER_Y|LAYOUT_LEFT|ICON_BEFORE_TEXT|FRAME_RAISED, 0, 0, 0, 0, 0, 0, go_tpad, go_bpad);
+    //gobutton->detach();
+    //gobutton->create();
+    //printf("%d\n", gobutton->getWidth());
+    //printf("%d\n", gobutton->getHeight());
+
 
 
     // Menus
@@ -1910,12 +2173,13 @@ void XFileExplorer::saveConfig()
         FXbool save_win_pos = getApp()->reg().readUnsignedEntry("SETTINGS", "save_win_pos", false);
         if (save_win_pos)
         {
+            int l = 0; int t = 0; int r; int b;
             // Account for the Window Manager border size
-            XWindowAttributes xwattr;
-            if (XGetWindowAttributes((Display*)getApp()->getDisplay(), this->id(), &xwattr))
+            // XWindowAttributes xwattr;
+            if (getWMBorders(l, r, t, b))
             {
-                getApp()->reg().writeIntEntry("OPTIONS", "xpos", getX()-xwattr.x);
-                getApp()->reg().writeIntEntry("OPTIONS", "ypos", getY()-xwattr.y);
+                getApp()->reg().writeIntEntry("OPTIONS", "xpos", getX()-l);
+                getApp()->reg().writeIntEntry("OPTIONS", "ypos", getY()-t);
             }
             else
             {
@@ -3398,6 +3662,9 @@ long XFileExplorer::onCmdSwitchTree(FXObject* sender, FXSelector sel, void* ptr)
        if ( rpanel->shown() ) {
        if ( dirpanel->shown() ) {
         panel_view=TWO_PANELS;
+        //foldersbtn->setButtonStyle(BUTTON_TOOLBAR);
+        //foldersbtn->setFrameStyle(FRAME_RAISED);
+
         if (vertpanels)
             lpanel->setWidth((int)round(twopanels_lpanel_pct*window_width));
         else
@@ -3412,10 +3679,12 @@ long XFileExplorer::onCmdSwitchTree(FXObject* sender, FXSelector sel, void* ptr)
         // Handle active icon
         lpanel->showActiveIcon(true);
 
-        //sender->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
 
         } else {
         panel_view=TREE_TWO_PANELS;
+        //foldersbtn->setButtonStyle(0);
+        //foldersbtn->setFrameStyle(FRAME_RAISED);
         dirpanel->setWidth((int)round(treetwopanels_tree_pct*window_width) );
         if (vertpanels)
             lpanel->setWidth((int)round(treetwopanels_lpanel_pct*window_width));
@@ -3430,12 +3699,17 @@ long XFileExplorer::onCmdSwitchTree(FXObject* sender, FXSelector sel, void* ptr)
         rpanel->showCorner(true);
         // Handle active icon
         lpanel->showActiveIcon(true);
-        //sender->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
         }
 
        } else {
        if ( dirpanel->shown() ) {
            panel_view=ONE_PANEL;
+
+           //foldersbtn->setButtonStyle(BUTTON_TOOLBAR);
+           //foldersbtn->setFrameStyle(FRAME_RAISED);
+
+           // foldersbtn->setButtonStyle(BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|ICON_BEFORE_TEXT|LAYOUT_FILL_Y);
            if (dirpanel->shown())
                dirpanel->handle(sender,FXSEL(SEL_COMMAND,DirPanel::ID_TOGGLE_TREE),ptr);
            if (rpanel->shown())
@@ -3446,9 +3720,13 @@ long XFileExplorer::onCmdSwitchTree(FXObject* sender, FXSelector sel, void* ptr)
             // Handle active icon
             lpanel->showActiveIcon(false);
 
-            //sender->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
+            foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
         } else {
            panel_view=TREE_PANEL;
+           //foldersbtn->setButtonStyle(FRAME_NONE);
+           //foldersbtn->setFrameStyle(FRAME_SUNKEN);
+
+           // foldersbtn->setButtonStyle(FRAME_SUNKEN|LAYOUT_TOP|LAYOUT_LEFT|ICON_BEFORE_TEXT|LAYOUT_FILL_Y);
            dirpanel->setWidth((int)round(treepanel_tree_pct*window_width) );
            if (!dirpanel->shown())
                dirpanel->handle(sender,FXSEL(SEL_COMMAND,DirPanel::ID_TOGGLE_TREE),ptr);
@@ -3460,7 +3738,7 @@ long XFileExplorer::onCmdSwitchTree(FXObject* sender, FXSelector sel, void* ptr)
            // Handle active icon
            lpanel->showActiveIcon(true);
 
-           //sender->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
+           sender->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
         }
 
        }
@@ -3480,6 +3758,7 @@ long XFileExplorer::onCmdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
     switch(FXSELID(sel))
     {
     case ID_SHOW_ONE_PANEL:
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
         panel_view=ONE_PANEL;
         if (dirpanel->shown())
             dirpanel->handle(sender,FXSEL(SEL_COMMAND,DirPanel::ID_TOGGLE_TREE),ptr);
@@ -3494,6 +3773,7 @@ long XFileExplorer::onCmdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
         break;
 
     case ID_SHOW_TWO_PANELS:
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
         panel_view=TWO_PANELS;
         if (vertpanels)
             lpanel->setWidth((int)round(twopanels_lpanel_pct*window_width));
@@ -3511,6 +3791,7 @@ long XFileExplorer::onCmdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
         break;
 
     case ID_SHOW_TREE_PANEL:
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
         panel_view=TREE_PANEL;
         dirpanel->setWidth((int)round(treepanel_tree_pct*window_width) );
         if (!dirpanel->shown())
@@ -3525,6 +3806,7 @@ long XFileExplorer::onCmdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
         break;
 
     case ID_SHOW_TREE_TWO_PANELS:
+        foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
         panel_view=TREE_TWO_PANELS;
         dirpanel->setWidth((int)round(treetwopanels_tree_pct*window_width) );
         if (vertpanels)
@@ -3729,6 +4011,7 @@ long XFileExplorer::onUpdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
             msg = FXWindow::ID_CHECK;
             if (rpanelmenutitle->shown())
             {
+                foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
                 rpanelmenutitle->hide();
                 rpanelmenutitle->disable();
                 lpanelmenutitle->setText(_("&Panel"));
@@ -3757,6 +4040,7 @@ long XFileExplorer::onUpdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
             msg=FXWindow::ID_CHECK;
             if (!rpanelmenutitle->shown())
             {
+                foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_UNCHECK),ptr);
                 rpanelmenutitle->enable();
                 rpanelmenutitle->show();
                 rpanelmenutitle->setText(_("&Right panel"));
@@ -3777,6 +4061,7 @@ long XFileExplorer::onUpdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
             msg=FXWindow::ID_CHECK;
             if (rpanelmenutitle->shown())
             {
+                foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
                 rpanelmenutitle->hide();
                 rpanelmenutitle->disable();
                 lpanelmenutitle->setText(_("&Panel"));
@@ -3808,6 +4093,7 @@ long XFileExplorer::onUpdShowPanels(FXObject* sender,FXSelector sel,void* ptr)
             msg = FXWindow::ID_CHECK;
             if (!rpanelmenutitle->shown())
             {
+                foldersbtn->handle(this,FXSEL(SEL_COMMAND,FXWindow::ID_CHECK),ptr);
                 rpanelmenutitle->enable();
                 rpanelmenutitle->show();
                 rpanelmenutitle->setText(_("&Right panel"));
@@ -4534,7 +4820,7 @@ long XFileExplorer::onUpdFileRestore(FXObject* o,FXSelector,void* ptr)
 
 
 // Update the file operation menu items
-long XFileExplorer::onUpdFileMan(FXObject* o,FXSelector,void*)
+inline long XFileExplorer::onUpdFileMan(FXObject* o,FXSelector,void*)
 {
     // Update the panelfocus variable
     if (lpanel->getCurrent()->isActive())
@@ -4564,7 +4850,7 @@ long XFileExplorer::onUpdFileMan(FXObject* o,FXSelector,void*)
 
 
 // Update the file rename menu items
-long XFileExplorer::onUpdFileRename(FXObject* o,FXSelector,void*)
+inline long XFileExplorer::onUpdFileRename(FXObject* o,FXSelector,void*)
 {
     int num=lpanel->getCurrent()->getNumSelectedItems();
     if (num==1)
@@ -4581,7 +4867,7 @@ long XFileExplorer::onUpdFileRename(FXObject* o,FXSelector,void*)
 
 
 // Update the paste menu and button
-long XFileExplorer::onUpdFilePaste(FXObject* o,FXSelector sel,void*)
+inline long XFileExplorer::onUpdFilePaste(FXObject* o,FXSelector sel,void*)
 {
     lpanel->getCurrent()->handle(o,FXSEL(SEL_UPDATE,FilePanel::ID_PASTE_CLIPBOARD),NULL);
     return 1;
@@ -4589,7 +4875,7 @@ long XFileExplorer::onUpdFilePaste(FXObject* o,FXSelector sel,void*)
 
 
 // Update the root menu items
-long XFileExplorer::onUpdSu(FXObject* o,FXSelector,void*)
+inline long XFileExplorer::onUpdSu(FXObject* o,FXSelector,void*)
 {
     FXbool root_mode=getApp()->reg().readUnsignedEntry("OPTIONS","root_mode",true);
 
@@ -4825,7 +5111,7 @@ void XFileExplorer::openFiles(vector_FXString startURIs)
 
 
 // Quit immediately and properly, if asked
-long XFileExplorer::onUpdQuit(FXObject* o,FXSelector,void*)
+inline long XFileExplorer::onUpdQuit(FXObject* o,FXSelector,void*)
 {
     if (stop)
         onQuit(0,0,0);
@@ -4847,7 +5133,7 @@ int throby = 0;
 }*/
 
 
-long XFileExplorer::onCmdAnimateThrobber(FXObject* sender,FXSelector sel,void*) {
+inline long XFileExplorer::onCmdAnimateThrobber(FXObject* sender,FXSelector sel,void*) {
 	if ( throby == throbymax ) {
 		throby = 0;
 	} else {
@@ -4859,14 +5145,14 @@ long XFileExplorer::onCmdAnimateThrobber(FXObject* sender,FXSelector sel,void*) 
 	return 1;
 }
 
-long XFileExplorer::onCmdStopAnimateThrobber(FXObject* sender,FXSelector sel,void*) {
+inline long XFileExplorer::onCmdStopAnimateThrobber(FXObject* sender,FXSelector sel,void*) {
 	getApp()->removeTimeout(this,ID_ANIMTHROB);
 	throby = 0;
 	throbber->move(0, 0);
 	return 1;
 }
 
-long XFileExplorer::onCmdActivateThrobber(FXObject* sender,FXSelector sel,void*) {
+inline long XFileExplorer::onCmdActivateThrobber(FXObject* sender,FXSelector sel,void*) {
 	//printf("%d\n", throbymax);
 	//printf("%d\n", throbanimicon->getHeight());
 	//throbymax = - throbanimicon->getHeight();

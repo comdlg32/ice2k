@@ -2173,12 +2173,13 @@ void XFileExplorer::saveConfig()
         FXbool save_win_pos = getApp()->reg().readUnsignedEntry("SETTINGS", "save_win_pos", false);
         if (save_win_pos)
         {
+            int l = 0; int t = 0; int dummy;
             // Account for the Window Manager border size
-            XWindowAttributes xwattr;
-            if (XGetWindowAttributes((Display*)getApp()->getDisplay(), this->id(), &xwattr))
+            // XWindowAttributes xwattr;
+            if (getWMBorders(l, dummy, t, dummy))
             {
-                getApp()->reg().writeIntEntry("OPTIONS", "xpos", getX()-xwattr.x);
-                getApp()->reg().writeIntEntry("OPTIONS", "ypos", getY()-xwattr.y);
+                getApp()->reg().writeIntEntry("OPTIONS", "xpos", getX()-l);
+                getApp()->reg().writeIntEntry("OPTIONS", "ypos", getY()-t);
             }
             else
             {
