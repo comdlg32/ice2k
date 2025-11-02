@@ -1,3 +1,5 @@
+![Screenshot of Ice2K.sys](screenie.png)
+```
 
 Ice2K/XP.sys
 =================================
@@ -64,3 +66,4 @@ And thanks to YOU for being here! :^)
 If I forgot to credit someone, let me know.
 
 Anything that I haven't put a license file in is licensed in the GPLv2.
+```
