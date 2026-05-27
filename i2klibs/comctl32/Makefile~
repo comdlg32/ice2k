@@ -19,7 +19,7 @@ VERSION = 0.0.1
 
 #COBJECTS = $(CSOURCES:.c=.o)
 
-CXXSOURCES = comctl32.cpp
+CXXSOURCES = comctl32.cpp I2KComboBox.cpp I2KListBox.cpp
 CXXOBJECTS = $(CXXSOURCES:.cpp=.o)
 
 
@@ -36,11 +36,13 @@ clean:
 
 install: all
 	mkdir -p $(PREFIX)/include/ice2k
-	cp comctl32.h $(PREFIX)/include/ice2k/comctl32.h
+	cp *.h $(PREFIX)/include/ice2k/
 	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 
 uninstall:
-	rm $(PREFIX)/include/ice2k/comctl32.h
+	rm $(PREFIX)/include/ice2k/I2KComboBox.h || true
+	rm $(PREFIX)/include/ice2k/I2KListBox.h || true
+	rm $(PREFIX)/include/ice2k/comctl32.h || true
 	rmdir $(PREFIX)/include/ice2k >/dev/null 2>&1 || true
-	rm -f $(PREFIX)/lib/$(OUTPUT)
+	rm -f $(PREFIX)/lib/$(OUTPUT) || true
 

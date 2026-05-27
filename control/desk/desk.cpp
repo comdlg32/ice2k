@@ -170,6 +170,8 @@ FXColorWell* colorwell;
 
 void DesktopProperties::create() {
 	FXMainWindow::create();
+
+	tree->makeItemVisible(tree->getCurrentItem());
 }
 
 DesktopProperties::~DesktopProperties() {

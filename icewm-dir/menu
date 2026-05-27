@@ -58,14 +58,16 @@ menu "D_esktop" desktop {
 		prog "" "" "true"
 	}
 	separator
-	prog "Properties" "" "~/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher"
+	#prog "Properties" "" "~/.icewm/programs/control/cpls-bin/wallswitcher/wallswitcher"
+	prog "Properties" "" deskcpl
 }
 menu "_Documents" documents {
 	prog "My Computer" computer xfe /
 	prog "My Documents" documents xfe
 }
 menu "_Settings" settings {
-	prog "Control Panel" settings sh -c "$HOME/.icewm/programs/control/control"
+	#prog "Control Panel" settings sh -c "$HOME/.icewm/programs/control/control"
+	prog "Control Panel" settings control
 	prog "IceWM Configuration" settings uxterm -e "nano ~/.icewm/preferences"
 	prog "Printers" printer xdg-open localhost:631/admin
 	menuprog "Monitors" computer icewm-menu-xrandr

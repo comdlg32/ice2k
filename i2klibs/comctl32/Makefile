@@ -36,11 +36,15 @@ clean:
 
 install: all
 	mkdir -p $(PREFIX)/include/ice2k
-	cp *.h $(PREFIX)/include/ice2k/
+	cp I2KComboBox.h $(PREFIX)/include/ice2k/
+	cp I2KListBox.h $(PREFIX)/include/ice2k/
+	cp comctl32.h $(PREFIX)/include/ice2k/
 	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 
 uninstall:
-	rm $(PREFIX)/include/ice2k/*.h || true
+	rm $(PREFIX)/include/ice2k/I2KComboBox.h || true
+	rm $(PREFIX)/include/ice2k/I2KListBox.h || true
+	rm $(PREFIX)/include/ice2k/comctl32.h || true
 	rmdir $(PREFIX)/include/ice2k >/dev/null 2>&1 || true
 	rm -f $(PREFIX)/lib/$(OUTPUT) || true
 

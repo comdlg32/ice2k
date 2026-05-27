@@ -170,6 +170,8 @@ FXColorWell* colorwell;
 
 void DesktopProperties::create() {
 	FXMainWindow::create();
+
+	tree->makeItemVisible(tree->getCurrentItem());
 }
 
 DesktopProperties::~DesktopProperties() {
@@ -645,14 +647,19 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 FXIcon* ico_bmp;
 
-const char* getHomeDir() {
-	const char *homedir;
+int getHomeDir(char* buf, int size) {
+	char *homedir;
 
 	if ((homedir = getenv("HOME")) == NULL) {
 		homedir = getpwuid(getuid())->pw_dir;
 	}
 
-	return homedir;
+	if (homedir == NULL) return 0;
+
+	sprintf(buf, "%.*s", size-1, homedir);
+	buf[size-1] = '\0';
+
+	return 1;
 }
 
 // from fox imageviewer example
@@ -835,8 +842,7 @@ long DesktopProperties::onCmdOk(FXObject* obj,FXSelector sel,void* ptr) {
 }
 
 char scrvalue2[] = "";
-//char* scrvalue = scrvalue2;
-char* scrvalue;
+char* scrvalue = scrvalue2;
 int scrdelay = 15;
 int scrpassword = 1;
 

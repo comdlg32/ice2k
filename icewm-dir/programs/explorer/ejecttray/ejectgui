@@ -1,4 +1,6 @@
 #!/bin/sh
+exec ejtray
+
 filtereject()
 {
 	while read linedisk; do

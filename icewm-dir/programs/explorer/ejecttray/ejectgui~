@@ -1,0 +1,37 @@
+#!/bin/sh
+filtereject()
+{
+	while read linedisk; do
+		if ! [ "$(lsblk -no SIZE --nodeps -r $(echo -n $linedisk | awk '{print $1}'))" = "0B" ]; then
+			echo "$linedisk"
+		fi
+	done
+}
+
+KEY="$(~/.icewm/programs/common/random)"
+SCRIPTDIR="$(dirname -- "$0")"
+
+yad --title="Safely Remove Hardware" --class=saferemovetext --name=saferemovetext --geometry=500x300 --tabnum=1 --borders=6 --image-on-top --image="$SCRIPTDIR/eject.png" --plug=$KEY \
+--form --text="Select the device you want to unplug or eject, and then click Stop.
+When Ice2K.sys reopens this window and the device you ejected is
+not there, it's safe to unplug the device from your computer." &
+
+keyhold()
+{
+	yad --skip-taskbar \
+	--class=saferemove --name=saferemove \
+	--width=400 --height=300 \
+	--button="Stop":0 --button="Close":1 \
+	--borders=4 --paned --key="$KEY" --orient=vertical \
+	--center --title="Safely Remove Hardware" --window-icon="$SCRIPTDIR/eject_mini.png"
+	export errcode=$?
+}
+keyhold&
+disk="$(lsblk -r --output PATH,TRAN,HOTPLUG --nodeps -n | filtereject | awk '$2=="usb" {print "drive-removable-media-usb\n"$1}' | \
+yad --title="Safely Remove Hardware" --class=saferemovelist --name=saferemovelist --text="Hardware devices:" --tabnum=2 --borders=2 --list --column=Icon:IMG --column=Device --no-headers --no-rules-hint --plug=$KEY)"
+
+if test "$disk"; then
+	export disktoeject="$(echo $disk | cut -c 2- | head -c -2)"
+	pkexec eject $disktoeject
+	exec "$0"
+fi

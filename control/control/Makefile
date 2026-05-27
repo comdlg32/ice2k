@@ -2,13 +2,13 @@
 
 CC = g++
 
-CFLAGS = -Wall -c -fno-rtti -fno-exceptions
-CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions
-LDFLAGS = `fox-config --libs` -lctl32
+CFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*.gif
+ICONS = res/*.png res/items/*.png res/xpitems/*.png
 SOURCES = control.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = control
@@ -32,6 +32,7 @@ clean:
 
 install:
 	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
+	strip $(PREFIX)/bin/$(EXECUTABLE)
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(EXECUTABLE)

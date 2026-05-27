@@ -6,4 +6,4 @@ yad \
 --image="$SCRIPTDIR/eject_mini.png" \
 --text="Safely Remove Hardware" \
 --class=saferemovetray --name=saferemovetray --title=saferemovetray \
---command="ejectgui" --menu "Safely Remove Hardware!ejtray"
+--command="ejtray" --menu "Safely Remove Hardware!ejtray"
