@@ -3,7 +3,7 @@
 key "Super+R" runbox
 
 # lock
-key "Super+L" "~/.icewm/programs/lock/lock2k"
+key "Super+L" xlock
 
 key "Print" sh -c 'import -window root png:- | xclip -selection clipboard -target image/png &'
 key "Alt+Print" sh -c 'import -frame -window $(xdotool getactivewindow) png:- | xclip -selection clipboard -target image/png &'

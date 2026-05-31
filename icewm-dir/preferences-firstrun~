@@ -597,7 +597,7 @@ IconThemes="SE98:hicolor:locolor:gnome:Adwaita:*:-HighContrast"
 # NewMailCommand=""
 
 #  Command to lock display/screensaver
-LockCommand=xlock
+LockCommand="~/.icewm/lock2k"
 #LockCommand="xsecurelock"
 #  Command to run on clock
 #ClockCommand="xclock -geometry -0-26 -name icewm -title Clock"

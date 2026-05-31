@@ -155,7 +155,7 @@ MenuMouseTracking=1 # 0/1
 # DelayPointerFocus=1 # 0/1
 
 #  Support win95 keyboard keys (Penguin/Meta/Win_L,R shows menu)
-Win95Keys=0 # 0/1
+# Win95Keys=1 # 0/1
 
 #  Treat Super/Win modifier as Ctrl+Alt
 ModSuperIsCtrlAlt=0 # 0/1
@@ -170,7 +170,7 @@ UseMouseWheel=0 # 0/1
 # ReplayMenuCancelClick=0 # 0/1
 
 #  Alt+Tab window switching
-QuickSwitch=0 # 0/1  
+QuickSwitch=1 # 0/1  
 
 #  Alt+Tab to minimized windows
 # QuickSwitchToMinimized=1 # 0/1
@@ -233,7 +233,7 @@ QuickSwitchVertical=0 # 0/1
 # ArrangeWindowsOnScreenSizeChange=1 # 0/1
 
 #  Show task bar
-ShowTaskBar=0 # 0/1  
+ShowTaskBar=1 # 0/1  
 
 #  Task bar at top of the screen
 TaskBarAtTop=0 # 0/1  
@@ -505,13 +505,13 @@ MenuMaximalWidth=0 # [0-16384]
 # ButtonRaiseMask=1 # [0-255]
 
 #  Desktop mouse-button click to show the window list menu
-DesktopWinMenuButton=0 # [0-20]
+DesktopWinMenuButton=2 # [0-20]
 
 #  Desktop mouse-button click to show the window list
 DesktopWinListButton=0 # [0-20]
 
 #  Desktop mouse-button click to show the root menu
-DesktopMenuButton=0 # [0-20]
+DesktopMenuButton=3 # [0-20]
 
 #  TitleBar mouse-button double click to maximize the window
 # TitleBarMaximizeButton=1 # [0-5]
@@ -545,7 +545,7 @@ DesktopMenuButton=0 # [0-20]
 
 #  default number of tasks in taskbar
 #TaskbarButtonWidthDivisor=4
-TaskbarButtonWidthDivisor=9
+TaskbarButtonWidthDivisor=3
 
 
 #  Task bar width as percentage of the screen width
@@ -579,7 +579,7 @@ TaskBarGraphHeight=18 # [16-1000]
 # NetWorkAreaBehaviour=0 # [0-2]
 
 #  Icon search path (colon separated)
-IconPath="/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/icons:/usr/share/pixmaps:"
+IconPath="REPLACEWITHHOMEFOLDER/.icons:/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/icons:/usr/share/pixmaps:"
 
 #  Colon separated icon theme list with wildcard support. Minus prefix - can be used to exclude themes.
 IconThemes="SE98:hicolor:locolor:gnome:Adwaita:*:-HighContrast"
@@ -597,7 +597,7 @@ IconThemes="SE98:hicolor:locolor:gnome:Adwaita:*:-HighContrast"
 # NewMailCommand=""
 
 #  Command to lock display/screensaver
-LockCommand=xlock
+LockCommand="~/.icewm/lock2k"
 #LockCommand="xsecurelock"
 #  Command to run on clock
 #ClockCommand="xclock -geometry -0-26 -name icewm -title Clock"
@@ -761,14 +761,14 @@ MouseWinSize=""
 #  Move the Task Bar button of the current window left
 # KeyTaskBarMovePrev=""
 
-KeySysWinMenu=""
+KeySysWinMenu="Alt+Space"
 
 #KeySysDialog="Alt+Ctrl+Del"
 
 # KeySysDialog=""
-KeySysMenu=""
+# KeySysMenu="Ctrl+Esc"
 
-KeySysWindowList=""
+KeySysWindowList="Super+Tab"
 
 # KeySysWinListMenu=""
 
@@ -856,7 +856,7 @@ KeySysShowDesktop="Super+D"
 # KeySysCollapseTaskBar="Alt+Ctrl+h"
 
 #WorkspaceNames=" 1 ", " 2 ", " 3 ", " 4 "
-WorkspaceNames="1"
+WorkspaceNames="1", "2"
 
 # KeyboardLayouts="us","nl"
 
@@ -1381,11 +1381,7 @@ DesktopBackgroundCenter=0
 DesktopBackgroundScaled=1
 
 #  Desktop background image(s)
-#DesktopBackgroundImage="/home/tf/.icewm/wallpapers/Windows_2000.jpg"
-#DesktopBackgroundImage="/home/tf/.icewm/1STBOOT.BMP"
-#DesktopBackgroundImage="/mnt/tf/windrive/wallpapers/Water lilies.jpg"
-#DesktopBackgroundImage="/home/tf/Wallpapers/Autumn.jpg"
-DesktopBackgroundImage="/home/tf/triplegears.png"
+DesktopBackgroundImage=
 
 #  Desktop background color(s)
 DesktopBackgroundColor="#3b6ea5"

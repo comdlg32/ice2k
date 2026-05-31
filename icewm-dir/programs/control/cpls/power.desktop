@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Power
-Icon=preferences-system-power
-Exec=batmeter
-StartupNotify=true
-Terminal=false

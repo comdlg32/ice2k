@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=System
-Icon=preferences-system
-Exec=sysdmcpl
-StartupNotify=true
-Terminal=false

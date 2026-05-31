@@ -43,7 +43,7 @@ if [ "$1" = "restart" ]; then
 fi
 
 if [ "$1" = "standby" ]; then
-	nohup xlock > /dev/null 2>&1 &
+	nohup sh -c 'sh -c "$HOME/.icewm/programs/lock/lock2k"' > /dev/null 2>&1 &
 	#sudo pm-suspend
 	sleep 3 && zzz
 fi

@@ -50,7 +50,7 @@ Synchronize=0 # 0/1
 # LowerOnClickWhenRaised=0 # 0/1
 
 #  Pass focusing click on client area to client
-# PassFirstClickToClient=1 # 0/1
+PassFirstClickToClient=1 # 0/1
 
 #  Change to the workspace of newly focused windows
 # FocusChangesWorkspace=0 # 0/1
@@ -153,9 +153,10 @@ MenuMouseTracking=1 # 0/1
 
 #  Delay pointer focusing when mouse moves
 # DelayPointerFocus=1 # 0/1
+DelayPointerFocus=0 # 0/1
 
 #  Support win95 keyboard keys (Penguin/Meta/Win_L,R shows menu)
-Win95Keys=0 # 0/1
+# Win95Keys=1 # 0/1
 
 #  Treat Super/Win modifier as Ctrl+Alt
 ModSuperIsCtrlAlt=0 # 0/1
@@ -170,7 +171,7 @@ UseMouseWheel=0 # 0/1
 # ReplayMenuCancelClick=0 # 0/1
 
 #  Alt+Tab window switching
-QuickSwitch=0 # 0/1  
+QuickSwitch=1 # 0/1  
 
 #  Alt+Tab to minimized windows
 # QuickSwitchToMinimized=1 # 0/1
@@ -233,13 +234,13 @@ QuickSwitchVertical=0 # 0/1
 # ArrangeWindowsOnScreenSizeChange=1 # 0/1
 
 #  Show task bar
-ShowTaskBar=0 # 0/1  
+ShowTaskBar=1 # 0/1  
 
 #  Task bar at top of the screen
 TaskBarAtTop=0 # 0/1  
 
 #  Keep the task bar below regular windows
-# TaskBarKeepBelow=0 # 0/1
+TaskBarKeepBelow=0 # 0/1
 
 #  Auto hide task bar after delay
 TaskBarAutoHide=0 # 0/1
@@ -433,16 +434,18 @@ DoubleBuffer=0 # 0/1
 # XRRDisable=0 # 0/1
 
 #  Favour Xft fonts over core X11 fonts where possible
-PreferFreetypeFonts=0 # 0/1
+PreferFreetypeFonts=1 # 0/1
 
 #  Delay fuzziness in ms, to allow merging of multiple timer timeouts into one for notebook power saving
 # DelayFuzziness=10 # [0-100]
 
 #  Pointer motion distance before click gets interpreted as drag
 # ClickMotionDistance=4 # [0-32]
+ClickMotionDistance=0 # [0-32]
 
 #  Delay in ms before click gets interpreted as drag
-# ClickMotionDelay=200 # [0-2000]
+ClickMotionDelay=200 # [0-2000]
+# ClickMotionDelay=0 # [0-2000]
 
 #  Multiple click time in ms
 # MultiClickTime=400 # [0-5000]
@@ -502,16 +505,17 @@ MenuMaximalWidth=0 # [0-16384]
 # UseRootButtons=255 # [0-255]
 
 #  Bitmask of buttons that raise the window when pressed
-# ButtonRaiseMask=1 # [0-255]
+# ButtonRaiseMask=255 # [0-255]
+ButtonRaiseMask=255 # [0-255]
 
 #  Desktop mouse-button click to show the window list menu
-DesktopWinMenuButton=0 # [0-20]
+DesktopWinMenuButton=2 # [0-20]
 
 #  Desktop mouse-button click to show the window list
 DesktopWinListButton=0 # [0-20]
 
 #  Desktop mouse-button click to show the root menu
-DesktopMenuButton=0 # [0-20]
+DesktopMenuButton=3 # [0-20]
 
 #  TitleBar mouse-button double click to maximize the window
 # TitleBarMaximizeButton=1 # [0-5]
@@ -544,6 +548,7 @@ DesktopMenuButton=0 # [0-20]
 # TaskBarNetDelay=500 # [10-3600000]
 
 #  default number of tasks in taskbar
+#TaskbarButtonWidthDivisor=2
 #TaskbarButtonWidthDivisor=4
 TaskbarButtonWidthDivisor=9
 
@@ -579,10 +584,10 @@ TaskBarGraphHeight=18 # [16-1000]
 # NetWorkAreaBehaviour=0 # [0-2]
 
 #  Icon search path (colon separated)
-IconPath="/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/icons:/usr/share/pixmaps:"
+IconPath="/home/tf/.icons:/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/icons:/usr/share/pixmaps:"
 
 #  Colon separated icon theme list with wildcard support. Minus prefix - can be used to exclude themes.
-IconThemes="SE98:hicolor:locolor:gnome:Adwaita:*:-HighContrast"
+IconThemes="SE98:hicolor:locolor:gnome:Adwaita:-HighContrast"
 
 #  Colon separated paths of your mailboxes, otherwise $MAILPATH or $MAIL is used
 # MailBoxPath=""
@@ -597,7 +602,7 @@ IconThemes="SE98:hicolor:locolor:gnome:Adwaita:*:-HighContrast"
 # NewMailCommand=""
 
 #  Command to lock display/screensaver
-LockCommand=xlock
+LockCommand="~/.icewm/lock2k"
 #LockCommand="xsecurelock"
 #  Command to run on clock
 #ClockCommand="xclock -geometry -0-26 -name icewm -title Clock"
@@ -637,10 +642,10 @@ RunCommand="gmrun"
 # SuspendCommand="xsecurelock & test -e /run/systemd/system && systemctl suspend || sudo -n /usr/sbin/pm-suspend"
 SuspendCommand=
 #  Command to run on CPU status
-# CPUStatusCommand="x-terminal-emulator -T 'Process Status' -e top"
+CPUStatusCommand="xterm -T 'Process Status' -e htop"
 
 #  WM_CLASS to allow runonce for CPUStatusCommand
-# CPUStatusClassHint="top.XTerm"
+CPUStatusClassHint="htop.XTerm"
 
 #  Combine all CPUs to one
 # CPUStatusCombine=1 # 0/1
@@ -680,10 +685,10 @@ MouseWinMove=""
 MouseWinSize=""
 
 #  Mouse binding to raise window
-# MouseWinRaise="Ctrl+Alt+Pointer_Button1"
+MouseWinRaise=""
 
 #  Mouse binding to lower window
-# MouseWinLower="Ctrl+Alt+Pointer_Button1"
+MouseWinLower=""
 
 # KeyWinRaise="Alt+F1"
 
@@ -761,14 +766,14 @@ MouseWinSize=""
 #  Move the Task Bar button of the current window left
 # KeyTaskBarMovePrev=""
 
-KeySysWinMenu=""
+KeySysWinMenu="Alt+Space"
 
 #KeySysDialog="Alt+Ctrl+Del"
 
 # KeySysDialog=""
-KeySysMenu=""
+# KeySysMenu="Ctrl+Esc"
 
-KeySysWindowList=""
+KeySysWindowList="Super+Tab"
 
 # KeySysWinListMenu=""
 
@@ -856,7 +861,7 @@ KeySysShowDesktop="Super+D"
 # KeySysCollapseTaskBar="Alt+Ctrl+h"
 
 #WorkspaceNames=" 1 ", " 2 ", " 3 ", " 4 "
-WorkspaceNames="1"
+WorkspaceNames="1", "2"
 
 # KeyboardLayouts="us","nl"
 
@@ -927,10 +932,10 @@ ShowMenuButtonIcon=1 # 0/1
 # TitleBarJustify=0 # [0-100]
 
 #  Horizontal offset for the window title text
-TitleBarHorzOffset=0 # [-128-128]
+#TitleBarHorzOffset=2 # [-128-128]
 
 #  Vertical offset for the window title text
-# TitleBarVertOffset=0 # [-128-128]
+#TitleBarVertOffset=0 # [-128-128]
 
 #  Vertical offset for the menu button icon
 MenuButtonIconVertOffset=0 # [-128-128]
@@ -1375,21 +1380,16 @@ DesktopBackgroundMultihead=0
 DesktopBackgroundCenter=0
 
 #  Support for semitransparent terminals like Eterm or gnome-terminal
-# SupportSemitransparency=1 # 0/1
+SupportSemitransparency=0 # 0/1
 
 #  Resize desktop background to full screen
 DesktopBackgroundScaled=1
 
 #  Desktop background image(s)
-#DesktopBackgroundImage="/home/tf/.icewm/wallpapers/Windows_2000.jpg"
-#DesktopBackgroundImage="/home/tf/.icewm/1STBOOT.BMP"
-#DesktopBackgroundImage="/mnt/tf/windrive/wallpapers/Water lilies.jpg"
-#DesktopBackgroundImage="/home/tf/Wallpapers/Autumn.jpg"
-DesktopBackgroundImage="/home/tf/triplegears.png"
+DesktopBackgroundImage=""
 
 #  Desktop background color(s)
 DesktopBackgroundColor="#3b6ea5"
-#DesktopBackgroundColor="#a5a5a5"
 
 #  Image(s) to announce for semitransparent windows
 # DesktopTransparencyImage=""
@@ -1403,3 +1403,4 @@ DesktopBackgroundColor="#3b6ea5"
 #  Seconds between cycling over all background images, default zero is off
 # CycleBackgroundsPeriod=0 # [0-2147483647]
 
+ToolTipIcon=0

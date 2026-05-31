@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Internet
-Icon=internet-web-browser
-Exec=firefox about:preferences
-StartupNotify=true
-Terminal=false
