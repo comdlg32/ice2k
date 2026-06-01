@@ -15,6 +15,8 @@ const unsigned char* wbanner;
 
 // gpt helped me for certain stuff here
 
+static char buf[64];
+
 static void loadSettings() {
   if (!loaded) {
     FXString path = FXSystem::getHomeDirectory() + "/.foxrc/Desktop";
@@ -24,88 +26,164 @@ static void loadSettings() {
   }
 }
 
+int i2kBGetWinVersionInt() {
+	loadSettings();
+	char* windows = (char*)settings.readStringEntry("ICE2K", "windows", "2k");
+
+	if (!strcmp(windows, "xp")) {
+		return ICE2K_BRAND_WINXP;
+	} else if (!strcmp(windows, "srv03")) {
+		return ICE2K_BRAND_WINSRV03;
+	} else {
+		return ICE2K_BRAND_WIN2K;
+	}
+}
+
 char *i2kBGetWinVersion() {
-  loadSettings();
-  char* windows = (char*)settings.readStringEntry("ICE2K", "windows", "2k");
-  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
-    return windows;
-  else
-    return (char*)"2k";
+	loadSettings();
+	char* windows = (char*)settings.readStringEntry("ICE2K", "windows", "2k");
+
+	if (!strcmp(windows, "xp") || !strcmp(windows, "srv03")) {
+		return windows;
+	} else {
+		return (char*)"2k";
+	}
 }
 
 const unsigned char *i2kBGetWinBrandingImage(size_t *size) {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!wbanner) {	  
-    if (!(strcmp(windows, "xp")))
-      wbanner = banner;
-    else if (!(strcmp(windows, "srv03")))
-      wbanner = banner03;
-    else
-      wbanner = banner2k;
+	loadSettings();
+	int	windows = i2kBGetWinVersionInt();
 
-    if (size)
-      *size = sizeof(wbanner);
-  }
+	if (!wbanner) {	  
+		if (windows == ICE2K_BRAND_WINXP) {
+			wbanner = banner;
+		} else if (windows == ICE2K_BRAND_WINSRV03) {
+			wbanner = banner03;
+		} else {
+			wbanner = banner2k;
+		}
 
-  return wbanner;
+		if (size != NULL) *size = sizeof(wbanner);
+	}
+
+	return wbanner;
 }
 
 const unsigned char *i2kBGetWinShutBrandingImage(size_t *size) {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!wbanner) {	  
-    if (!(strcmp(windows, "xp")))
-      wbanner = banner;
-    else if (!(strcmp(windows, "srv03")))
-      wbanner = banner03;
-    else
-      wbanner = banner2kshut;
+	loadSettings();
+	int windows = i2kBGetWinVersionInt();
 
-    if (size)
-      *size = sizeof(wbanner);
-  }
+	if (!wbanner) {
+		if (windows == ICE2K_BRAND_WINXP) {
+			wbanner = banner;
+		} else if (windows == ICE2K_BRAND_WINSRV03) {
+			wbanner = banner03;
+		} else {
+			wbanner = banner2kshut;
+		}
 
-  return wbanner;
+		if (size != NULL) *size = sizeof(wbanner);
+	}
+	
+	return wbanner;
 }
 
+int i2kBGetMicrosoftNameSafe(char* str, int len) {
+	loadSettings();
+	int windows = i2kBGetWinVersionInt();
+	
+	if (len > 2) {
+		if (windows == ICE2K_BRAND_WINXP || windows == ICE2K_BRAND_WINSRV03) {
+			strncpy(str, "Microsoft ®", len-1);
+		} else {
+			strncpy(str, "Microsoft (R)", len-1);
+		}
+
+		str[len-1] = '\0';
+		return 1;
+	}
+
+	return 0;
+}
+
+
+
 char *i2kBGetMicrosoftName() {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
-    return (char*)"Microsoft ®";
-  else
-    return (char*)"Microsoft (R)";
+	i2kBGetMicrosoftNameSafe(buf, sizeof(buf));
+	return (char*)buf;
+}
+
+int i2kBGetCopyrightSymbolSafe(char* str, int len) {
+	loadSettings();
+	int windows = i2kBGetWinVersionInt();
+	
+	if (len > 2) {
+		if (windows == ICE2K_BRAND_WINXP || windows == ICE2K_BRAND_WINSRV03) {
+			strncpy(str, "©", len-1);
+		} else {
+			strncpy(str, "(C)", len-1);
+		}
+
+		str[len-1] = '\0';
+		return 1;
+	}
+
+	return 0;
 }
 
 
 char *i2kBGetCopyrightSymbol() {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!strcmp(windows, "xp") || !strcmp(windows, "srv03"))
-    return (char*)"©";
-  else
-    return (char*)"(C)";
+	i2kBGetCopyrightSymbolSafe(buf, sizeof(buf));
+	return (char*)buf;
+}
+
+int i2kBGetFullOSNameSafe(char* str, int len) {
+	loadSettings();
+	int windows = i2kBGetWinVersionInt();
+	
+	if (len > 2) {
+		if (windows == ICE2K_BRAND_WINXP) {
+			strncpy(str, "Microsoft Windows XP", len-1);
+		} else if (windows == ICE2K_BRAND_WINSRV03) {
+			strncpy(str, "Microsoft Windows Server 2003", len-1);
+		} else {
+			strncpy(str, "Microsoft Windows 2000", len-1);
+		}
+
+		str[len-1] = '\0';
+		return 1;
+	}
+
+	return 0;
 }
 
 char *i2kBGetFullOSName() {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!strcmp(windows, "xp"))
-    return (char*)"Microsoft Windows XP";
-  else if (!strcmp(windows, "srv03"))
-    return (char*)"Microsoft Windows Server 2003";
-  else
-    return (char*)"Microsoft Windows 2000";
+	i2kBGetFullOSNameSafe(buf, sizeof(buf));
+	return (char*)buf;
+}
+
+
+int i2kBGetOSNameSafe(char* str, int len) {
+	loadSettings();
+	int windows = i2kBGetWinVersionInt();
+	
+	if (len > 2) {
+		if (windows == ICE2K_BRAND_WINXP) {
+			strncpy(str, "Windows XP", len-1);
+		} else if (windows == ICE2K_BRAND_WINSRV03) {
+			strncpy(str, "Windows Server 2003", len-1);
+		} else {
+			strncpy(str, "Windows 2000", len-1);
+		}
+
+		str[len-1] = '\0';
+		return 1;
+	}
+
+	return 0;
 }
 
 char *i2kBGetOSName() {
-  loadSettings();
-  char* windows = i2kBGetWinVersion();
-  if (!strcmp(windows, "xp"))
-    return (char*)"Windows XP";
-  else if (!strcmp(windows, "srv03"))
-    return (char*)"Windows Server 2003";
-  else
-    return (char*)"Windows 2000";
+	i2kBGetOSNameSafe(buf, sizeof(buf));
+	return (char*)buf;
 }

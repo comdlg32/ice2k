@@ -1,5 +1,9 @@
 #include <stddef.h>
 
+#define ICE2K_BRAND_WIN2K 0
+#define ICE2K_BRAND_WINXP 1
+#define ICE2K_BRAND_WINSRV03 2
+
 char *i2kBGetWinVersion();
 char *i2kBGetFullOSName();
 char *i2kBGetOSName();
