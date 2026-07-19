@@ -68,6 +68,45 @@ FXIcon* ico_sysdm_32;
 FXIcon* ico_printers_16;
 FXIcon* ico_printers_32;
 
+FXIcon* ico_devmgmt_16;
+FXIcon* ico_devmgmt_32;
+
+/* ncpa */
+FXIcon* ico_ncpa_dial;
+FXIcon* ico_ncpa_dial_down;
+FXIcon* ico_ncpa_dial_idle;
+FXIcon* ico_ncpa_dial_nohw;
+FXIcon* ico_ncpa_dial_rx;
+FXIcon* ico_ncpa_dial_tx;
+FXIcon* ico_ncpa_dial_txrx;
+FXIcon* ico_ncpa_direct;
+FXIcon* ico_ncpa_direct_down;
+FXIcon* ico_ncpa_direct_idle;
+FXIcon* ico_ncpa_direct_rx;
+FXIcon* ico_ncpa_direct_tx;
+FXIcon* ico_ncpa_direct_txrx;
+FXIcon* ico_ncpa_lan;
+FXIcon* ico_ncpa_lan_down;
+FXIcon* ico_ncpa_lan_idle;
+FXIcon* ico_ncpa_lan_nohw;
+FXIcon* ico_ncpa_lan_rx;
+FXIcon* ico_ncpa_lan_tx;
+FXIcon* ico_ncpa_lan_txrx;
+FXIcon* ico_ncpa_vpn;
+FXIcon* ico_ncpa_vpn_idle;
+FXIcon* ico_ncpa_vpn_rx;
+FXIcon* ico_ncpa_vpn_tx;
+FXIcon* ico_ncpa_vpn_txrx;
+
+/* font */
+FXIcon* ico_ttffont_16;
+FXIcon* ico_ttffont_32;
+FXIcon* ico_bmpfont_16;
+FXIcon* ico_bmpfont_32;
+
+
+FXIconList*              iconlist;
+
 FXMainWindow* controlwin;
 
 FXSettings xfesettings;
@@ -95,11 +134,18 @@ int winsaved = 0;
 #define CPL_ID_SYSDM     11
 #define CPL_ID_INETCPL   12
 #define CPL_ID_PRINTERS  13
+#define CPL_ID_DEVMGMT   14
 
-#define SHF_ID_CONTROL 1
-#define SHF_ID_NCPA 2
+
+#define SHF_ID_EXPLORER 1
+#define SHF_ID_CONTROL 2
+#define SHF_ID_NCPA 3
+#define SHF_ID_FONTS 4
 
 int shellfolder = SHF_ID_CONTROL;
+
+unsigned int history[16] = {0};
+int historyval = 0;
 
 class ControlPanel : public FXMainWindow {
 	FXDECLARE(ControlPanel)
@@ -136,7 +182,6 @@ class ControlPanel : public FXMainWindow {
 		FXToolBar*               throbtoolbar;
 
 		FXPacker*                iconlistframe;
-		FXIconList*              iconlist;
 
 	protected:
 		ControlPanel(){}
@@ -144,6 +189,8 @@ class ControlPanel : public FXMainWindow {
 	public:
 		long onCplActivate(FXObject*,FXSelector,void*);
 		long onRightClick(FXObject*,FXSelector,void*);
+
+		int runCpl(int);
 
 
 		long doNothing(FXObject*,FXSelector,void*);
@@ -155,6 +202,10 @@ class ControlPanel : public FXMainWindow {
 
 		long onCmdViewMenu(FXObject*,FXSelector,void*);
 		long onCmdUp(FXObject*,FXSelector,void*);
+		long switchFolder(int);
+		long switchFolderHist(int);
+		long onCmdBack(FXObject*,FXSelector,void*);
+		long onCmdForward(FXObject*,FXSelector,void*);
 
 
 		void setFocus();
@@ -201,6 +252,9 @@ FXDEFMAP(ControlPanel) ControlPanelMap[] = {
 };
 
 FXIMPLEMENT(ControlPanel,FXMainWindow,ControlPanelMap,ARRAYNUMBER(ControlPanelMap));
+
+FXLabel* addressicon;
+FXComboBox* address;
 
 long ControlPanel::doNothing(FXObject*,FXSelector,void*) {
 	return 1;
@@ -306,15 +360,65 @@ int saveWindowPosition() {
 	return 1;
 }
 
+int changeTitle() {
+	if (controlwin == NULL) return 0;
+	
+	switch(shellfolder) {
+		case SHF_ID_CONTROL:
+			controlwin->setTitle("Control Panel");
+			address->setText("Control Panel");
+			controlwin->setIcon(ico_control);
+			addressicon->setIcon(ico_control);
+			break;
 
-long ControlPanel::onCmdUp(FXObject*,FXSelector,void*) {
-	saveWindowPosition();
-	getApp()->exit();
-	system("xfe / &");
-	usleep(1000 * 700);
+		case SHF_ID_NCPA:
+			controlwin->setTitle("Network Connections");
+			address->setText("Network Connections");
+			controlwin->setIcon(ico_ncpa_16);
+			addressicon->setIcon(ico_ncpa_16);
+			break;
+
+		case SHF_ID_FONTS:
+			controlwin->setTitle("Fonts");
+			address->setText("Fonts");
+			controlwin->setIcon(ico_fonts_16);
+			addressicon->setIcon(ico_fonts_16);
+			break;
+
+		default:
+			break;
+	}
+
 	return 1;
 }
 
+
+
+void controlPanelList(FXIconList* icl) {
+	icl->clearItems();
+
+	shellfolder = SHF_ID_CONTROL;
+	changeTitle();
+
+	icl->setHeaders(NULL, 0);
+	icl->appendHeader("Name", NULL, 150);
+	icl->appendHeader("Comment", NULL, 300);
+
+	icl->appendItem("Add/Remove\tInstalls and removes programs", ico_appwiz_32, ico_appwiz_16, (void*)CPL_ID_APPWIZ);
+	icl->appendItem("Controllers\tAdds, removes, and configures game controller hardware such as joysticks and gamepads", ico_joy_32, ico_joy_16, (void*)CPL_ID_JOY);
+	icl->appendItem("Date/Time\tSets the date, time, and time zone for your computer", ico_timedate_32, ico_timedate_16, (void*)CPL_ID_TIMEDATE);
+	//icl->appendItem("Device Manager\tThe Device Manager lists all the hardware devices installed on your computer", ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
+	icl->appendItem("Display\tCustomizes your desktop display and screen saver", ico_desk_32, ico_desk_16, (void*)CPL_ID_DESK);
+	icl->appendItem("Fonts\tDisplays and manages fonts on your computer", ico_fonts_32, ico_fonts_16, (void*)CPL_ID_FONTS);
+	icl->appendItem("Input\tCustomizes your keyboard and mouse settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
+	icl->appendItem("Internet\tCustomizes your Internet display and connections settings", ico_inetcpl_32, ico_inetcpl_16, (void*)CPL_ID_INETCPL);
+	icl->appendItem("Modems\tConfigures your modem properties", ico_modem_32, ico_modem_16, (void*)CPL_ID_MODEM);
+	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
+	icl->appendItem("Sound\tConfigures sound devices", ico_mmsys_32, ico_mmsys_16, (void*)CPL_ID_MMSYS);
+	icl->appendItem("Network Connections\tConnects to other computers, networks, and the Internet", ico_ncpa_32, ico_ncpa_16, (void*)CPL_ID_NCPA);
+	icl->appendItem("Power\tConfigures energy-saving settings for your computer", ico_powercfg_32, ico_powercfg_16, (void*)CPL_ID_POWERCFG);
+	icl->appendItem("System\tProvides system information and changes environment settings", ico_sysdm_32, ico_sysdm_16, (void*)CPL_ID_SYSDM);
+}
 
 
 long ControlPanel::onCmdViewMenu(FXObject* obj,FXSelector,void*) {
@@ -357,31 +461,6 @@ long ControlPanel::onRightClick(FXObject* obj,FXSelector sel,void* ptr) {
 	return 1;
 }
 
-void ControlPanel::create() {
-	FXMainWindow::create();
-	show(PLACEMENT_DEFAULT);
-	//position(winx+4, winy+23, winw, winh);
-}
-
-
-// hack to fix focusing issues on icewm
-//
-// fox toolkit calls setfocus on the main window one way or another
-// and the way fox focuses the window causes issues and right now
-// i'm too lazy to fork fox to fix it
-void ControlPanel::setFocus() { return; }
-
-
-ControlPanel::~ControlPanel() {
-	saveWindowPosition();
-
-	delete filemenu;
-	delete editmenu;
-	delete viewmenu;
-	delete favoritesmenu;
-	delete toolsmenu;
-	delete helpmenu;
-}
 
 FXIcon* loadPNGIcon(FXApp* app, const void* pix=NULL,
                     FXColor clr=FXRGB(192,192,192), FXColor blendclr=FXRGB(255,255,255),
@@ -515,19 +594,204 @@ void getIconPath(char* buf, unsigned int len) {
 	sprintf(buf, "%.*s", (int)len-1, iconpath);
 }
 
-int runCpl(int cpl) {
+
+
+
+#define NCPA_IFTYPE_LAN 1
+#define NCPA_IFTYPE_WLAN 2
+#define NCPA_IFTYPE_DIAL 3
+
+
+
+void fontsList(FXIconList* icl) {
+	char entryname[1024] = {0};
+	icl->clearItems();
+
+	shellfolder = SHF_ID_FONTS;
+	changeTitle();
+
+	icl->setHeaders(NULL, 0);
+	icl->appendHeader("Font Name", NULL, 400);
+	icl->appendHeader("Type", NULL, 100);
+
+	FXFontDesc* fonts;
+	FXuint numfonts, i;
+
+	if (FXFont::listFonts(fonts, numfonts, FXString::null)) {
+		for (i = 0; i < numfonts; i++) {
+			if (fonts[i].flags & FXFont::Scalable) {
+				sprintf(entryname, "%.*s\tTrueType Font",
+						(int)(sizeof(entryname)-sizeof("\tTrueType Font")-1)-1,
+						fonts[i].face);
+				icl->appendItem(entryname, ico_ttffont_32, ico_ttffont_16);
+			} else {
+				sprintf(entryname, "%.*s\tBitmap Font",
+						(int)(sizeof(entryname)-sizeof("\tBitmap Font")-1)-1,
+						fonts[i].face);
+				icl->appendItem(entryname, ico_bmpfont_32, ico_bmpfont_16);
+			}
+		}
+		FXFREE(&fonts);
+	}
+}
+
+
+void ncpaList(FXIconList* icl) {
+	icl->clearItems();
+
+	shellfolder = SHF_ID_NCPA;
+	changeTitle();
+
+	icl->setHeaders(NULL, 0);
+	icl->appendHeader("Name", NULL, 200);
+	icl->appendHeader("Type", NULL, 100);
+	icl->appendHeader("Status", NULL, 100);
+
+
+	struct ifaddrs *addrs, *tmp;
+	char netitem[256];
+	char nettype[32];
+
+	int iftype = NCPA_IFTYPE_LAN;
+
+	getifaddrs(&addrs);
+	tmp = addrs;
+
+	while (tmp) {
+	    if (tmp->ifa_addr == NULL) goto next;
+		if (tmp->ifa_addr->sa_family != AF_PACKET) goto next;
+		
+		if (!strcmp(tmp->ifa_name, "lo")) goto next;
+
+		if (!strncmp(tmp->ifa_name, "wl", 2)) {
+			strcpy(nettype, "Wireless");
+			iftype = NCPA_IFTYPE_WLAN;
+		} else {
+			strcpy(nettype, "LAN");
+			iftype = NCPA_IFTYPE_LAN;
+		}
+
+		if (tmp->ifa_flags & IFF_UP) {
+			sprintf(netitem, "%.15s\t%.32s\tEnabled", tmp->ifa_name, nettype);
+		} else {
+			sprintf(netitem, "%.15s\t%.32s\tDisabled", tmp->ifa_name, nettype);
+		}
+		
+		switch (iftype) {
+			case NCPA_IFTYPE_WLAN:
+				if (tmp->ifa_flags & IFF_UP) icl->appendItem(netitem, ico_ncpa_lan_txrx, ico_ncpa_lan);
+				else icl->appendItem(netitem, ico_ncpa_lan_down, ico_ncpa_lan);
+				break;
+
+			case NCPA_IFTYPE_DIAL:
+				if (tmp->ifa_flags & IFF_UP) icl->appendItem(netitem, ico_ncpa_dial_txrx, ico_ncpa_dial);
+				else icl->appendItem(netitem, ico_ncpa_lan_down, ico_ncpa_dial);
+				break;
+
+			default:
+			case NCPA_IFTYPE_LAN:
+				if (tmp->ifa_flags & IFF_UP) icl->appendItem(netitem, ico_ncpa_lan_txrx, ico_ncpa_lan);
+				else icl->appendItem(netitem, ico_ncpa_lan_down, ico_ncpa_lan);
+				break;
+		}
+next:
+	    tmp = tmp->ifa_next;
+	}
+
+	freeifaddrs(addrs);
+}
+
+
+long ControlPanel::switchFolder(int folder) {
+	switch(folder) {
+		case SHF_ID_EXPLORER:
+			saveWindowPosition();
+			getApp()->exit();
+			system("xfe / &");
+			usleep(1000 * 1000);
+			break;
+		case SHF_ID_CONTROL:
+			shellfolder = SHF_ID_CONTROL;
+			changeTitle();
+			controlPanelList(iconlist);
+			break;
+		case SHF_ID_NCPA:
+			shellfolder = SHF_ID_NCPA;
+			ncpaList(iconlist);
+			break;
+		case SHF_ID_FONTS:
+			shellfolder = SHF_ID_FONTS;
+			fontsList(iconlist);
+			break;
+		default:
+			fputs("Invalid shell folder!\n", stderr);
+			return 0;
+	}
+
+	return 1;
+}
+
+long ControlPanel::switchFolderHist(int folder) {
+	switchFolder(folder);
+
+	//if (historyval == sizeof(historyval)/sizeof(historyval[0])
+	//while (int i = 0
+	return 1;
+}
+
+
+long ControlPanel::onCmdUp(FXObject*,FXSelector,void*) {
+	switch (shellfolder) {
+		case SHF_ID_CONTROL:
+			switchFolder(SHF_ID_EXPLORER);
+			break;
+		case SHF_ID_NCPA:
+			switchFolder(SHF_ID_CONTROL);
+			break;
+		case SHF_ID_FONTS:
+			switchFolder(SHF_ID_CONTROL);
+			break;			
+		default:
+			break;
+	}
+	return 1;
+}
+
+long ControlPanel::onCmdBack(FXObject*,FXSelector,void*) {
+	if (historyval == 0) return 0;
+	switchFolder(history[--historyval]);
+
+	return 1;
+}
+
+long ControlPanel::onCmdForward(FXObject*,FXSelector,void*) {
+	if (historyval == sizeof(history)) return 0;
+
+	if (history[++historyval] == 0) {
+		--historyval;
+		return 0;
+	}
+	
+	switchFolder(history[historyval]);
+
+	return 1;
+}
+
+
+int ControlPanel::runCpl(int cpl) {
 	switch(cpl) {
 		case CPL_ID_APPWIZ:
-			system("pkexec synaptic &");
+			system("i2ksudox synaptic &");
 			break;
 		case CPL_ID_TIMEDATE:
-			system("~/.icewm/programs/control/cpls-bin/timedate/timedate &");
+			system("timedate.cpi &");
 			break;
 		case CPL_ID_JOY:
 			system("jstest-gtk &");
 			break;
 		case CPL_ID_FONTS:
-			system("yad --font --window-icon font-x-generic --title Fonts --borders=12 --no-buttons --width=500 --height=350 --center &");
+			//system("yad --font --window-icon font-x-generic --title Fonts --borders=12 --no-buttons --width=500 --height=350 --center &");
+			switchFolder(SHF_ID_FONTS);
 			break;
 		case CPL_ID_KEYB:
 			system("lxinput &");
@@ -542,19 +806,23 @@ int runCpl(int cpl) {
 			system("fxmixer &");
 			break;
 		case CPL_ID_NCPA:
-			system("~/.icewm/programs/control/cpls-bin/ncpa/ncpa &");
+			/*system("~/.icewm/programs/control/cpls-bin/ncpa/ncpa &");*/
+			switchFolder(SHF_ID_NCPA);
 			break;
 		case CPL_ID_POWERCFG:
 			system("batmeter &");
 			break;
 		case CPL_ID_SYSDM:
-			system("sysdmcpl &");
+			system("sysdm.cpi &");
 			break;		
 		case CPL_ID_DESK:
-			system("deskcpl &");
+			system("desk.cpi &");
 			break;
 		case CPL_ID_PRINTERS:
 			system("firefox localhost:631 &");
+			break;
+		case CPL_ID_DEVMGMT:
+			system("devmgmt&");
 			break;
 		default:
 			fputs("No action asociated!\n", stderr);
@@ -564,10 +832,39 @@ int runCpl(int cpl) {
 }
 
 long ControlPanel::onCplActivate(FXObject*,FXSelector,void* ptr) {
+	char ncpacmd[512];
+	char fontname[1024] = {0};
+
 	switch(shellfolder) {
 		case SHF_ID_CONTROL:
 			runCpl((int)(FXival)iconlist->getItemData((FXival)ptr));
 			break;
+		case SHF_ID_NCPA:
+			snprintf(ncpacmd, sizeof(ncpacmd), "%s %s &",
+					"ncpaprop",
+					iconlist->getItem((intptr_t)ptr)->getText().text());
+			//puts(ncpacmd);
+			system(ncpacmd);
+			break;
+		case SHF_ID_FONTS: {
+			sprintf(fontname, "%.*s", (int)sizeof(fontname)-1, iconlist->getItemText((unsigned)(FXuval)ptr).text());
+
+			char* coloffset = strchr(fontname, '\t');
+			if (coloffset != NULL) *coloffset = '\0';
+
+			pid_t pid = vfork();
+
+			if (pid < 0) {
+				perror("vfork");
+				exit(1);
+			} else if (pid == 0) {
+				execlp("i2kfontview", "i2kfontview", fontname, (char*)NULL);
+
+				perror("execlp");
+				exit(1);
+			}
+			break;
+		}
 		default:
 			fputs("Invalid shell folder!\n", stderr);
 			return 0;
@@ -576,65 +873,34 @@ long ControlPanel::onCplActivate(FXObject*,FXSelector,void* ptr) {
 	return 1;
 }
 
-void controlPanelList(FXIconList* icl) {
-	icl->appendHeader("Name", NULL, 150);
-	icl->appendHeader("Comment", NULL, 300);
 
-	icl->appendItem("Add/Remove\tInstalls and removes programs", ico_appwiz_32, ico_appwiz_16, (void*)CPL_ID_APPWIZ);
-	icl->appendItem("Controllers\tAdds, removes, and configures game controller hardware such as joysticks and gamepads", ico_joy_32, ico_joy_16, (void*)CPL_ID_JOY);
-	icl->appendItem("Date/Time\tSets the date, time, and time zone for your computer", ico_timedate_32, ico_timedate_16, (void*)CPL_ID_TIMEDATE);
-	icl->appendItem("Display\tCustomizes your desktop display and screen saver", ico_desk_32, ico_desk_16, (void*)CPL_ID_DESK);
-	icl->appendItem("Fonts\tDisplays and manages fonts on your computer", ico_fonts_32, ico_fonts_16, (void*)CPL_ID_FONTS);
-	icl->appendItem("Input\tCustomizes your keyboard and mouse settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
-	icl->appendItem("Internet\tCustomizes your Internet display and connections settings", ico_inetcpl_32, ico_inetcpl_16, (void*)CPL_ID_INETCPL);
-	icl->appendItem("Modems\tConfigures your modem properties", ico_modem_32, ico_modem_16, (void*)CPL_ID_MODEM);
-	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
-	icl->appendItem("Sound\tConfigures sound devices", ico_mmsys_32, ico_mmsys_16, (void*)CPL_ID_MMSYS);
-	icl->appendItem("Network Connections\tConnects to other computers, networks, and the Internet", ico_ncpa_32, ico_ncpa_16, (void*)CPL_ID_NCPA);
-	icl->appendItem("Power\tConfigures energy-saving settings for your computer", ico_powercfg_32, ico_powercfg_16, (void*)CPL_ID_POWERCFG);
-	icl->appendItem("System\tProvides system information and changes environment settings", ico_sysdm_32, ico_sysdm_16, (void*)CPL_ID_SYSDM);
+void ControlPanel::create() {
+	FXMainWindow::create();
+
+	changeTitle();
+
+	show(PLACEMENT_DEFAULT);
+	//position(winx+4, winy+23, winw, winh);
 }
 
-#define NCPA_IFTYPE_LAN 1
-#define NCPA_IFTYPE_WLAN 2
-#define NCPA_IFTYPE_DIAL 3
 
-void ncpaList(FXIconList* icl) {
-	struct ifaddrs *addrs, *tmp;
-	char netitem[64];
-	char nettype[256];
-
-	FXbool ifup = FALSE;
-	int iftype = NCPA_IFTYPE_LAN;
-
-	getifaddrs(&addrs);
-	tmp = addrs;
-
-	while (tmp) {
-	    if (tmp->ifa_addr == NULL) goto next;
-		if (tmp->ifa_addr->sa_family != AF_PACKET) goto next;
-		
-		if (!strcmp(tmp->ifa_name, "lo")) goto next;
-
-		if (tmp->ifa_flags & IFF_UP) {
-			ifup = TRUE;
-		} else {
-			ifup = FALSE;
-		}
+// hack to fix focusing issues on icewm
+//
+// fox toolkit calls setfocus on the main window one way or another
+// and the way fox focuses the window causes issues and right now
+// i'm too lazy to fork fox to fix it
+void ControlPanel::setFocus() { return; }
 
 
-		if (!strncmp(tmp->ifa_name, "wl", 2)) {
-			sprintf(netitem, "%.15s\tWireless", tmp->ifa_name);
-		} else {
-			sprintf(netitem, "%.15s\tLAN", tmp->ifa_name);
-		}
-next:
-	    tmp = tmp->ifa_next;
-	}
+ControlPanel::~ControlPanel() {
+	saveWindowPosition();
 
-	
-
-	freeifaddrs(addrs);
+	delete filemenu;
+	delete editmenu;
+	delete viewmenu;
+	delete favoritesmenu;
+	delete toolsmenu;
+	delete helpmenu;
 }
 
 
@@ -747,11 +1013,10 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 	FXHorizontalFrame* addresscont = new FXHorizontalFrame(adtoolbar, FRAME_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_Y, 0,0,0,0, 1,0,0,0, 1,0);
 	addresscont->setBackColor(app->getBackColor());
 
-	FXLabel* addressicon = new FXLabel(addresscont, "", ico_control, LAYOUT_CENTER_Y,0,0,0,0,0,0,0,0); 
+	addressicon = new FXLabel(addresscont, "", ico_control, LAYOUT_CENTER_Y,0,0,0,0,0,0,0,0); 
 	addressicon->setBackColor(app->getBackColor());
 
-
-	FXComboBox* address = new FXComboBox(addresscont, 10, NULL, 0, COMBOBOX_INSERT_LAST|JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_CENTER_Y, 0,0,0,0, 2,2,3,1);
+	address = new FXComboBox(addresscont, 10, NULL, 0, COMBOBOX_INSERT_LAST|JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_CENTER_Y, 0,0,0,0, 2,2,3,1);
 	address->setEditable(FALSE);
 	address->setText("Control Panel");
 
@@ -806,7 +1071,7 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 	iconlistframe = new FXPacker(this, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NORMAL, 0,0,0,0, 0,0,0,0);
 
 	iconlist = new FXIconList(iconlistframe, this, ID_CPL, LAYOUT_FILL_X|LAYOUT_FILL_Y|
-			ICONLIST_EXTENDEDSELECT|ICONLIST_BIG_ICONS|ICONLIST_COLUMNS);
+			ICONLIST_EXTENDEDSELECT|ICONLIST_BIG_ICONS|ICONLIST_COLUMNS|SCROLLERS_DONT_TRACK);
 
 
 	new FXMenuRadio(viewmenu,"&Details",iconlist,FXIconList::ID_SHOW_DETAILS);
@@ -902,6 +1167,38 @@ int main(int argc, char *argv[]) {
 
 		ico_control = loadPNGIcon(app, resico_xp_control);
 
+		ico_ncpa_dial = loadPNGIcon(app, resico_xp_ncpa_dial); ico_ncpa_dial->create();
+		ico_ncpa_dial_down = loadPNGIcon(app, resico_xp_ncpa_dial_down); ico_ncpa_dial_down->create();
+		ico_ncpa_dial_idle = loadPNGIcon(app, resico_xp_ncpa_dial_idle); ico_ncpa_dial_idle->create();
+		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_xp_ncpa_dial_nohw); ico_ncpa_dial_nohw->create();
+		ico_ncpa_dial_rx = loadPNGIcon(app, resico_xp_ncpa_dial_rx); ico_ncpa_dial_rx->create();
+		ico_ncpa_dial_tx = loadPNGIcon(app, resico_xp_ncpa_dial_tx); ico_ncpa_dial_tx->create();
+		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_xp_ncpa_dial_txrx); ico_ncpa_dial_txrx->create();
+		ico_ncpa_direct = loadPNGIcon(app, resico_xp_ncpa_direct); ico_ncpa_direct->create();
+		ico_ncpa_direct_down = loadPNGIcon(app, resico_xp_ncpa_direct_down); ico_ncpa_direct_down->create();
+		ico_ncpa_direct_idle = loadPNGIcon(app, resico_xp_ncpa_direct_idle); ico_ncpa_direct_idle->create();
+		ico_ncpa_direct_rx = loadPNGIcon(app, resico_xp_ncpa_direct_rx); ico_ncpa_direct_rx->create();
+		ico_ncpa_direct_tx = loadPNGIcon(app, resico_xp_ncpa_direct_tx); ico_ncpa_direct_tx->create();
+		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_xp_ncpa_direct_txrx); ico_ncpa_direct_txrx->create();
+		ico_ncpa_lan = loadPNGIcon(app, resico_xp_ncpa_lan); ico_ncpa_lan->create();
+		ico_ncpa_lan_down = loadPNGIcon(app, resico_xp_ncpa_lan_down); ico_ncpa_lan_down->create();
+		ico_ncpa_lan_idle = loadPNGIcon(app, resico_xp_ncpa_lan_idle); ico_ncpa_lan_idle->create();
+		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_xp_ncpa_lan_nohw); ico_ncpa_lan_nohw->create();
+		ico_ncpa_lan_rx = loadPNGIcon(app, resico_xp_ncpa_lan_rx); ico_ncpa_lan_rx->create();
+		ico_ncpa_lan_tx = loadPNGIcon(app, resico_xp_ncpa_lan_tx); ico_ncpa_lan_tx->create();
+		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_xp_ncpa_lan_txrx); ico_ncpa_lan_txrx->create();
+		ico_ncpa_vpn = loadPNGIcon(app, resico_xp_ncpa_vpn); ico_ncpa_vpn->create();
+		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_xp_ncpa_vpn_idle); ico_ncpa_vpn_idle->create();
+		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_xp_ncpa_vpn_rx); ico_ncpa_vpn_rx->create();
+		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_xp_ncpa_vpn_tx); ico_ncpa_vpn_tx->create();
+		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_xp_ncpa_vpn_txrx); ico_ncpa_vpn_txrx->create();
+
+
+		ico_bmpfont_16 = loadPNGIcon(app, resico_xp_bmpfont_16); ico_bmpfont_16->create();
+		ico_bmpfont_32 = loadPNGIcon(app, resico_xp_bmpfont_32); ico_bmpfont_32->create();
+		ico_ttffont_16 = loadPNGIcon(app, resico_xp_ttffont_16); ico_ttffont_16->create();
+		ico_ttffont_32 = loadPNGIcon(app, resico_xp_ttffont_32); ico_ttffont_32->create();
+
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "bigicons.png");
 		ico_exp_views = addTriangle(app, ico_exp_views2);
 
@@ -940,11 +1237,46 @@ int main(int argc, char *argv[]) {
 	
 		ico_control = loadPNGIcon(app, resico_2k_control);
 
+		ico_ncpa_dial = loadPNGIcon(app, resico_2k_ncpa_dial); ico_ncpa_dial->create();
+		ico_ncpa_dial_down = loadPNGIcon(app, resico_2k_ncpa_dial_down); ico_ncpa_dial_down->create();
+		ico_ncpa_dial_idle = loadPNGIcon(app, resico_2k_ncpa_dial_idle); ico_ncpa_dial_idle->create();
+		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_2k_ncpa_dial_nohw); ico_ncpa_dial_nohw->create();
+		ico_ncpa_dial_rx = loadPNGIcon(app, resico_2k_ncpa_dial_rx); ico_ncpa_dial_rx->create();
+		ico_ncpa_dial_tx = loadPNGIcon(app, resico_2k_ncpa_dial_tx); ico_ncpa_dial_tx->create();
+		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_2k_ncpa_dial_txrx); ico_ncpa_dial_txrx->create();
+		ico_ncpa_direct = loadPNGIcon(app, resico_2k_ncpa_direct); ico_ncpa_direct->create();
+		ico_ncpa_direct_down = loadPNGIcon(app, resico_2k_ncpa_direct_down); ico_ncpa_direct_down->create();
+		ico_ncpa_direct_idle = loadPNGIcon(app, resico_2k_ncpa_direct_idle); ico_ncpa_direct_idle->create();
+		ico_ncpa_direct_rx = loadPNGIcon(app, resico_2k_ncpa_direct_rx); ico_ncpa_direct_rx->create();
+		ico_ncpa_direct_tx = loadPNGIcon(app, resico_2k_ncpa_direct_tx); ico_ncpa_direct_tx->create();
+		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_2k_ncpa_direct_txrx); ico_ncpa_direct_txrx->create();
+		ico_ncpa_lan = loadPNGIcon(app, resico_2k_ncpa_lan); ico_ncpa_lan->create();
+		ico_ncpa_lan_down = loadPNGIcon(app, resico_2k_ncpa_lan_down); ico_ncpa_lan_down->create();
+		ico_ncpa_lan_idle = loadPNGIcon(app, resico_2k_ncpa_lan_idle); ico_ncpa_lan_idle->create();
+		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_2k_ncpa_lan_nohw); ico_ncpa_lan_nohw->create();
+		ico_ncpa_lan_rx = loadPNGIcon(app, resico_2k_ncpa_lan_rx); ico_ncpa_lan_rx->create();
+		ico_ncpa_lan_tx = loadPNGIcon(app, resico_2k_ncpa_lan_tx); ico_ncpa_lan_tx->create();
+		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_2k_ncpa_lan_txrx); ico_ncpa_lan_txrx->create();
+		ico_ncpa_vpn = loadPNGIcon(app, resico_2k_ncpa_vpn); ico_ncpa_vpn->create();
+		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_2k_ncpa_vpn_idle); ico_ncpa_vpn_idle->create();
+		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_2k_ncpa_vpn_rx); ico_ncpa_vpn_rx->create();
+		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_2k_ncpa_vpn_tx); ico_ncpa_vpn_tx->create();
+		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_2k_ncpa_vpn_txrx); ico_ncpa_vpn_txrx->create();
+
+		ico_bmpfont_16 = loadPNGIcon(app, resico_2k_bmpfont_16); ico_bmpfont_16->create();
+		ico_bmpfont_32 = loadPNGIcon(app, resico_2k_bmpfont_32); ico_bmpfont_32->create();
+		ico_ttffont_16 = loadPNGIcon(app, resico_2k_ttffont_16); ico_ttffont_16->create();
+		ico_ttffont_32 = loadPNGIcon(app, resico_2k_ttffont_32); ico_ttffont_32->create();
+
+
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "smallicons.png");
 		ico_exp_views = addTriangle(app, ico_exp_views2);
 
 		delete ico_exp_views2;
 	}
+
+	ico_devmgmt_32 = loadPNGIcon(app, resico_devmgmt_32);
+	ico_devmgmt_16 = loadPNGIcon(app, resico_devmgmt_16);
 
 	controlwin = new ControlPanel(app);
 	application.create();

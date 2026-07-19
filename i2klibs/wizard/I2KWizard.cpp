@@ -7,6 +7,8 @@ FXDEFMAP(I2KWizard) I2KWizardMap[] = {
 	FXMAPFUNC(SEL_COMMAND,I2KWizard::ID_BACK,   I2KWizard::onCmdBack),
 	FXMAPFUNC(SEL_COMMAND,I2KWizard::ID_NEXT,   I2KWizard::onCmdNext),
 	FXMAPFUNC(SEL_COMMAND,I2KWizard::ID_CANCEL, I2KWizard::onCmdCancel),
+
+	FXMAPFUNC(SEL_COMMAND,I2KWizard::ID_CANCEL, I2KWizard::onCmdCancel),
 };
 
 FXIMPLEMENT(I2KWizard, FXVerticalFrame, I2KWizardMap, ARRAYNUMBER(I2KWizardMap));
@@ -80,19 +82,38 @@ void I2KWizard::disable() {
 
 
 long I2KWizard::onCmdBack(FXObject* tgt,FXSelector,void* ptr) {
-	if(target) target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ABACK);	
+	if(target && target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ABACK)) return 1;
 
+	int current = switcher->getCurrent();
+
+	setCurrent(--current);
+	setFinish(FALSE);
+
+	if (current == 0) backbtn->disable();
 	return 1;
 }
 
 long I2KWizard::onCmdNext(FXObject* tgt,FXSelector,void* ptr) {
-	if(target) target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ANEXT);	
+	if(target && target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ANEXT)) return 1;
+
+	int current = switcher->getCurrent();
+
+	setCurrent(++current);
+	backbtn->enable();
+
+	if (current == switcher->numChildren()-1) {
+		setFinish(TRUE);
+	} else if (current == switcher->numChildren()) {
+		target->tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+	}
 
 	return 1;
 }
 
 long I2KWizard::onCmdCancel(FXObject* tgt,FXSelector,void* ptr) {
-	if(target) target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ACANCEL);	
+	if(target && target->tryHandle(this, FXSEL(SEL_COMMAND, selector), (void*)(FXuval)IWIZARD_ACANCEL)) return 1;
+
+	target->tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 
 	return 1;
 }

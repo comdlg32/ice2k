@@ -166,3 +166,13 @@ TigerVNC Viewer.icon: mstsc
 RunBox.icon: run
 
 Control.icon: control
+DesktopProperties.icon: desk
+
+Xmessage.xtimeout.dBorder: 0
+Xmessage.xtimeout.dTitleBar: 0
+Xmessage.xtimeout.ignoreWinList: 1
+Xmessage.xtimeout.ignoreQuickSwitch: 1
+Xmessage.xtimeout.ignoreTaskBar: 1
+Xmessage.xtimeout.startMinimized: 1
+Xmessage.xtimeout.layer: Desktop
+Xmessage.xtimeout.doNotFocus: 1

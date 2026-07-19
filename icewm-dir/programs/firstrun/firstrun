@@ -30,11 +30,7 @@ if [ "$firstrun" -eq 0 ]; then
 	icewm -c "$HOME/.icewm/preferences-firstrun" &
 	icewmpid="$!"
 	sleep 1
-	yad --no-buttons --skip-taskbar \
-	--class=personalizedSettings --name=personalizedSettings --borders=10 \
-	--title="Personalized Settings" --window-icon="" \
-	--on-top --geometry="280x0+26+28" --no-escape \
-	--text="Setting up personalized settings for:\n\nIce2K.sys\n\n" &
+	i2kfirstrundlg &
 	dialogpid="$!"
 	sleep 3
 

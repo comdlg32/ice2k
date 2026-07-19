@@ -349,12 +349,11 @@ rm "$HOME/.icewm/icons/desk/network.png"
 rm "$HOME/.icewm/icons/desk/recyclef.png"
 rm "$HOME/.icewm/icons/desk/recyclee.png"
 rm "$HOME/.icewm/icons/desk/notepad.png"
+rm "$HOME/.icewm/icons/desk/iexplore.png"
+rm "$HOME/.icewm/icons/desk/msimn.png"
 rm "$HOME/.icewm/icons/txt.png"
 rm "$HOME/.icewm/programs/volumecontrol/volume.png"
-rm "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
 rm "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
-rm "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
-rm "$HOME/.icewm/programs/ice2krun/run_icon.png"
 
 if [ "$xptheme" -eq 1 ]; then
 	iniset "$HOME/.foxrc/Desktop" ICE2K windows xp
@@ -364,15 +363,24 @@ if [ "$xptheme" -eq 1 ]; then
 	ln -s "$HOME/.icewm/programs/common/icons/network.png"    "$HOME/.icewm/icons/desk/network.png"
 	ln -s "$HOME/.icons/LinXP/places/32/trashcan_full.png"    "$HOME/.icewm/icons/desk/recyclef.png"
 	ln -s "$HOME/.icons/LinXP/places/32/trashcan_empty.png"   "$HOME/.icewm/icons/desk/recyclee.png"
-	ln -s "$HOME/.icons/LinXP/apps/32/mousepad.png"           "$HOME/.icewm/icons/desk/notepad.png"
+	#ln -s "$HOME/.icons/LinXP/apps/32/mousepad.png"           "$HOME/.icewm/icons/desk/notepad.png"
+
+	composite -gravity SouthWest \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/shorticon_32x32.png" \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/xpicons/xfw_32x32.png" \
+	"$HOME/.icewm/icons/desk/notepad.png"
+
+	ln -s "$HOME/.icewm/themes/Win2kmod-xpm-modcolors/xpicons/iexplore_32x32.png" "$HOME/.icewm/icons/desk/iexplore.png"
+	#ln -s "$HOME/.icewm/themes/Win2kmod-xpm-modcolors/xpicons/msimn_32x32.png" "$HOME/.icewm/icons/desk/msimn.png"
+
+	composite -gravity SouthWest \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/shorticon_32x32.png" \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/xpicons/msimn_32x32.png" \
+	"$HOME/.icewm/icons/desk/msimn.png"
 
 	ln -s "$HOME/.icewm/programs/volumecontrol/volume-xp.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
 
-	ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject.png" "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
 	ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
-
-	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_16_xp.png" "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
-	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_xp.png" "$HOME/.icewm/programs/ice2krun/run_icon.png"
 
 	ln -s "$HOME/.icons/LinXP/mimetypes/32/txt.png"           "$HOME/.icewm/icons/txt.png"
 
@@ -404,16 +412,23 @@ else
 	ln -s "$HOME/.icons/SE98/status/32/network-idle.png"      "$HOME/.icewm/icons/desk/network.png"
 	ln -s "$HOME/.icons/SE98/places/32/trashcan_full.png"     "$HOME/.icewm/icons/desk/recyclef.png"
 	ln -s "$HOME/.icons/SE98/places/32/trashcan_empty.png"    "$HOME/.icewm/icons/desk/recyclee.png"
-	ln -s "$HOME/.icons/SE98/apps/32/mousepad.png"            "$HOME/.icewm/icons/desk/notepad.png"
+	#ln -s "$HOME/.icons/SE98/apps/32/mousepad.png"            "$HOME/.icewm/icons/desk/notepad.png"
+	composite -gravity SouthWest \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/shorticon_32x32.png" \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/xfw_32x32.png" \
+	-type PaletteBilevelAlpha "$HOME/.icewm/icons/desk/notepad.png"
+
+	ln -s "$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/iexplore_32x32.png" "$HOME/.icewm/icons/desk/iexplore.png"
+	#ln -s "$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/msimn_32x32.png" "$HOME/.icewm/icons/desk/msimn.png"
+	composite -gravity SouthWest \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/shorticon_32x32.png" \
+	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/icons/msimn_32x32.png" \
+	-type PaletteBilevelAlpha "$HOME/.icewm/icons/desk/msimn.png"
 
 	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "type" "xpm"
 	iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "dir" "2k"
 
-	ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject.png" "$HOME/.icewm/programs/explorer/ejecttray/eject.png"
 	ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
-
-	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_16_2k.png" "$HOME/.icewm/programs/ice2krun/run_icon_16.png"
-	ln -s "$HOME/.icewm/programs/ice2krun/run_icon_2k.png" "$HOME/.icewm/programs/ice2krun/run_icon.png"
 
 	ln -s "$HOME/.icewm/programs/volumecontrol/volume-2k.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
 

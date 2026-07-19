@@ -2,9 +2,9 @@
 
 CC = g++
 
-CFLAGS = -Wall -c -fno-rtti -fno-exceptions
-CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions
-LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport
+CFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport -li2kbrand
 
 PREFIX=/usr/local
 

@@ -6434,6 +6434,16 @@ void FilePanel::updatePath()
 {
     pathlink->setPath(list->getDirectory());
     pathtext->setText(list->getDirectory());
+
+	/*char audiofile[PATH_MAX] = {0};
+	sprintf(audiofile, "%.*s", (int)sizeof(audiofile)-1, getApp()->reg().readStringEntry("SETTINGS", "nav_audio", ""));
+	audiofile[sizeof(audiofile)-1] = '\0';
+
+	if (audiofile[0] != '\0') {
+		setenv("ICE2K_NAVIGATION_SOUND_XFE", audiofile, 1);
+		system("aplay -q \"$ICE2K_NAVIGATION_SOUND_XFE\" >/dev/null 2>&1 &");
+		unsetenv("ICE2K_NAVIGATION_SOUND_XFE");
+	}*/
 }
 
 

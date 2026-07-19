@@ -57,7 +57,7 @@ I2KWizHeader::I2KWizHeader(FXComposite* p, FXImage* img,
 
 	//puts("End create font");
 
-	img->create();
+	if (img) img->create();
 
 }
 
@@ -96,7 +96,28 @@ long I2KWizHeader::onPaint(FXObject* sender, FXSelector sel, void* ptr) {
 
 	dc.setForeground(textColor);
 	dc.setFont(boldfont);
-	dc.drawText(textxoff,textyoff+tboldoff,txt);
+	
+	int pos = 0;
+	int start = 0;
+	int titleh = 0;
+
+	while(start < txt.length()) {
+		pos = txt.find('\n', start);
+		titleh += tboldoff;
+
+		if (pos == -1) {
+			int len = txt.length() - start;
+			dc.drawText(textxoff,textyoff+titleh,txt.text()+start,len);
+			break;
+		} else {
+			int len = pos - start;
+			dc.drawText(textxoff,textyoff+titleh,txt.text()+start,len);
+
+			start = pos + 1;
+			titleh += 3;
+			//titleh += tboldoff;
+		}
+	}
 
 	dc.setForeground(subtextColor);
 	dc.setFont(normalfont);

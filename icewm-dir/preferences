@@ -550,7 +550,8 @@ DesktopMenuButton=3 # [0-20]
 #  default number of tasks in taskbar
 #TaskbarButtonWidthDivisor=2
 #TaskbarButtonWidthDivisor=4
-TaskbarButtonWidthDivisor=9
+TaskbarButtonWidthDivisor=1
+TaskbarButtonWidthMax=163
 
 
 #  Task bar width as percentage of the screen width
@@ -611,7 +612,7 @@ LockCommand="xlock"
 #ClockCommand="yad --on-top --borders=0 --calendar --mouse --close-on-unfocus --undecorated --skip-taskbar --no-buttons"
 #ClockCommand="gsimplecal"
 #Decorated calendar
-ClockCommand="~/.icewm/programs/ice2kcal/ice2kcal"
+ClockCommand="i2kcal"
 
 #  WM_CLASS to allow runonce for ClockCommand
 # ClockClassHint="icewm.XClock"

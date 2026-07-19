@@ -24,25 +24,25 @@
 
 
 void formatnum(long unsigned num, char *buffer) {
-    char temp[1024];
-    sprintf(temp, "%lu", num / 1024);
+	char temp[1024];
+	sprintf(temp, "%lu", num / 1024);
 
-    int len = strlen(temp);
-    int commas = (len - 1) / 3;
-    int new_len = len + commas;
+	int len = strlen(temp);
+	int commas = (len - 1) / 3;
+	int new_len = len + commas;
 
-    buffer[new_len] = '\0';
-    int i = len - 1, j = new_len - 1;
+	buffer[new_len] = '\0';
+	int i = len - 1, j = new_len - 1;
 
-    int count = 0;
-    while (i >= 0) {
-        if (count == 3) {
-            buffer[j--] = ',';
-            count = 0;
-        }
-        buffer[j--] = temp[i--];
-        count++;
-    }
+	int count = 0;
+	while (i >= 0) {
+		if (count == 3) {
+			buffer[j--] = ',';
+			count = 0;
+		}
+		buffer[j--] = temp[i--];
+		count++;
+	}
 }
 
 
@@ -80,25 +80,24 @@ FXIMPLEMENT(Ice2KVer,FXDialogBox,ice2kverMap,ARRAYNUMBER(ice2kverMap))
 // change a window's _NET_WM_STATE property so that it can be kept on top.
 // @display: x11 display singleton.
 // @xid    : the window to set on top.
-Status setOnTop(Display* display, Window xid)
-{
-    XEvent event;
-    event.xclient.type = ClientMessage;
-    event.xclient.serial = 0;
-    event.xclient.send_event = True;
-    event.xclient.display = display;
-    event.xclient.window  = xid;
-    event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
-    event.xclient.format = 32;
+Status setOnTop(Display* display, Window xid) {
+	XEvent event;
+	event.xclient.type = ClientMessage;
+	event.xclient.serial = 0;
+	event.xclient.send_event = True;
+	event.xclient.display = display;
+	event.xclient.window  = xid;
+	event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
+	event.xclient.format = 32;
 
-    event.xclient.data.l[0] = _NET_WM_STATE_ADD;
-    event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_ABOVE", False);
-    event.xclient.data.l[2] = 0; //unused.
-    event.xclient.data.l[3] = 0;
-    event.xclient.data.l[4] = 0;
+	event.xclient.data.l[0] = _NET_WM_STATE_ADD;
+	event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_ABOVE", False);
+	event.xclient.data.l[2] = 0; //unused.
+	event.xclient.data.l[3] = 0;
+	event.xclient.data.l[4] = 0;
 
-    return XSendEvent (display, DefaultRootWindow(display), False,
-                       SubstructureRedirectMask|SubstructureNotifyMask, &event);
+	return XSendEvent(display, DefaultRootWindow(display), False,
+	                  SubstructureRedirectMask|SubstructureNotifyMask, &event);
 }
 
 
@@ -118,146 +117,145 @@ int endswith(char* str, char* suff) {
 
 
 int main(int argc, char *argv[]) {
-  int winver = 0;
-  if (endswith(argv[0], "winver"))
-    winver = 1; // for future use...
-		    // TODO: put ice2kver and winver in one binary. show windows larp when ran
-		    //       from the winver symlink, otherwise, show ice2k.sys version.
+	// for future use...
+	// TODO: put ice2kver and winver in one binary. show windows when ran
+	//       from the winver symlink, otherwise, show ice2k.sys version.
 
-  FXApp application("ice2kver", "Ice2KProj");
-  FXApp* ptrapp = &application;
+	int winver = 0;
+	if (endswith(argv[0], "winver")) winver = 1;
 
-  const unsigned char *banner = i2kBGetWinBrandingImage();
-  FXIcon* bannericon = new FXGIFIcon(&application, banner,0,IMAGE_OPAQUE);
+	FXApp application("ice2kver", "Ice2KProj");
+	FXApp* ptrapp = &application;
 
-  application.init(argc, argv);
-  // FXMainWindow *main=new FXMainWindow(&application, "About Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 413, 304);
-  FXMainWindow *main=new FXMainWindow(&application, "About Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0);
+	const unsigned char *banner = i2kBGetWinBrandingImage();
+	FXIcon* bannericon = new FXGIFIcon(&application, banner,0,IMAGE_OPAQUE);
 
-  new FXLabel(main, "", bannericon, LAYOUT_CENTER_X, 0, 0, 0, 0, 0, 0, 0);
-  char* windows = i2kBGetWinVersion();
+	application.init(argc, argv);
+	FXMainWindow *main=new FXMainWindow(&application, "About Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0);
 
-  if ( !(strcmp(windows, "srv03")) )
-    strcpy(windows, "xp");
+	new FXLabel(main, "", bannericon, LAYOUT_CENTER_X, 0, 0, 0, 0, 0, 0, 0);
+	char* windows = i2kBGetWinVersion();
 
-  FXVerticalFrame* winverinfo = new FXVerticalFrame(main, LAYOUT_FILL_X, 0, 0, 0, 0, 53, 9, 10, 0, 0, 0);
-  if ( !(strcmp(windows, "xp")) ) {
-    new FXLabel(winverinfo, "Microsoft ® Windows", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, "Version 5.2 (Build 3790.srv03_sp1_rtm.050324-1447 : Service Pack 1)", NULL, 0, 0, 0, 0, 0, 1, 0, 0, 2);
-    new FXLabel(winverinfo, "Copyright © 1985-2005 Microsoft Corporation", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-  } else {
-    new FXLabel(winverinfo, "Microsoft (R) Windows", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, "Version 5.0 (Build 2195: Service Pack 4)", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 2);
-    new FXLabel(winverinfo, "Copyright (C) 1981-1999 Microsoft Corp.", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-    new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-  }
+	if ( !(strcmp(windows, "srv03")) ) strcpy(windows, "xp");
 
-  FXFrame* eulaunderscore1;
-  FXFrame* eulaunderscore2;
+	FXVerticalFrame* winverinfo = new FXVerticalFrame(main, LAYOUT_FILL_X, 0, 0, 0, 0, 53, 9, 10, 0, 0, 0);
+	if ( !(strcmp(windows, "xp")) ) {
+		new FXLabel(winverinfo, "Microsoft ® Windows", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+		new FXLabel(winverinfo, "Version 5.2 (Build 3790.srv03_sp1_rtm.050324-1447 : Service Pack 1)", NULL, 0, 0, 0, 0, 0, 1, 0, 0, 2);
+		new FXLabel(winverinfo, "Copyright © 1985-2005 Microsoft Corporation", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+		new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+		new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+	} else {
+		new FXLabel(winverinfo, "Microsoft (R) Windows", NULL, 0, 0,0,0,0, 0,0,0,3);
+		new FXLabel(winverinfo, "Version 5.0 (Build 2195: Service Pack 4)", NULL, 0, 0,0,0,0, 0,0,0,2);
+		new FXLabel(winverinfo, "Copyright (C) 1981-1999 Microsoft Corp.", NULL, 0, 0,0,0,0, 0,0,0,3);
+		new FXLabel(winverinfo, " ", NULL, 0, 0,0,0,0, 0,0,0,3);
+		new FXLabel(winverinfo, " ", NULL, 0, 0,0,0,0, 0,0,0,1);
+	}
 
-  FXLabel* eulalink1;
-  FXLabel* eulalink2;
+	FXFrame* eulaunderscore1;
+	FXFrame* eulaunderscore2;
 
-  if ( !(strcmp(windows, "xp")) ) {  
-    FXHorizontalFrame* eulacont1 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
-    new FXLabel(eulacont1, "This product is licensed under the terms of the ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, -1);
-    eulalink1 = new FXLabel(eulacont1, "End-User", NULL, 0, 0, 0, 0, 0, 0, 0, 0, -1);
+	FXLabel* eulalink1;
+	FXLabel* eulalink2;
 
-    FXColor linkcolor;
+	if ( !(strcmp(windows, "xp")) ) {
+		FXHorizontalFrame* eulacont1 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
+		new FXLabel(eulacont1, "This product is licensed under the terms of the ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, -1);
+		eulalink1 = new FXLabel(eulacont1, "End-User", NULL, 0, 0, 0, 0, 0, 0, 0, 0, -1);
 
-    if ( ( ptrapp->getSelbackColor() == FXRGB(10,35,104)) || ( ptrapp->getSelbackColor() == FXRGB(0,0,123)) ) {
-      linkcolor = FXRGB(0,0,128);
-    } else {
-      linkcolor = ptrapp->getSelbackColor();
-    }
+		FXColor linkcolor;
 
-    eulaunderscore1 = new FXFrame(eulacont1, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_X|LAYOUT_FIX_Y, 0, 0, 1, 1, 0, 0, 0, 0);
-    eulalink1->setTextColor(linkcolor);
-    eulaunderscore1->setBackColor(linkcolor);
+		if ( ( ptrapp->getSelbackColor() == FXRGB(10,35,104)) || ( ptrapp->getSelbackColor() == FXRGB(0,0,123)) ) {
+			linkcolor = FXRGB(0,0,128);
+		} else {
+			linkcolor = ptrapp->getSelbackColor();
+		}
 
-    FXHorizontalFrame* eulacont2 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
-    eulalink2 = new FXLabel(eulacont2, "License Agreement", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 5);
-    new FXLabel(eulacont2, " to:", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 5);
+		eulaunderscore1 = new FXFrame(eulacont1, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_X|LAYOUT_FIX_Y, 0, 0, 1, 1, 0, 0, 0, 0);
+		eulalink1->setTextColor(linkcolor);
+		eulaunderscore1->setBackColor(linkcolor);
 
-    eulaunderscore2 = new FXFrame(eulacont2, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_X|LAYOUT_FIX_Y, 0, 0, 1, 1, 0, 0, 0, 0);
+		FXHorizontalFrame* eulacont2 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
+		eulalink2 = new FXLabel(eulacont2, "License Agreement", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 5);
+		new FXLabel(eulacont2, " to:", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 5);
 
-    eulalink2->setTextColor(linkcolor);
-    eulaunderscore2->setBackColor(linkcolor);
-  } else {
-    FXHorizontalFrame* eulacont1 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
-    new FXLabel(eulacont1, "This product is licensed to:", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 2);
-  }
+		eulaunderscore2 = new FXFrame(eulacont2, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_X|LAYOUT_FIX_Y, 0, 0, 1, 1, 0, 0, 0, 0);
 
-
-  // get hostname thank you https://stackoverflow.com/questions/5190553/linux-c-get-server-hostname
-  char hostname[HOST_NAME_MAX+1];
-  gethostname(hostname, HOST_NAME_MAX+1);
-
-  if ( !(strcmp(windows, "xp")) ) {  
-    new FXLabel(winverinfo, getlogin(), NULL, 0, 0, 0, 0, 0, 15, 0, 0, 2);
-    new FXLabel(winverinfo, hostname, NULL, 0, 0, 0, 0, 0, 15, 0, 0, 6);
-  } else {
-    new FXLabel(winverinfo, getlogin(), NULL, 0, 0, 0, 0, 0, 0, 0, 0, 2);
-    new FXLabel(winverinfo, hostname, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 7);
-  }
-
-  FXHorizontalFrame* headerspcont = new FXHorizontalFrame(winverinfo, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 58, 0, 2, 0, 1, 0, 0, 0, 0);
-  headerspcont->setBackColor(ptrapp->getHiliteColor());
-
-  FXHorizontalFrame* headerspline1 = new FXHorizontalFrame(headerspcont, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
-  headerspline1->setBackColor(ptrapp->getShadowColor());
+		eulalink2->setTextColor(linkcolor);
+		eulaunderscore2->setBackColor(linkcolor);
+	} else {
+		FXHorizontalFrame* eulacont1 = new FXHorizontalFrame(winverinfo, LAYOUT_MIN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1);
+		new FXLabel(eulacont1, "This product is licensed to:", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 2);
+	}
 
 
-  struct sysinfo sys_info;
+	// get hostname thank you https://stackoverflow.com/questions/5190553/linux-c-get-server-hostname
+	char hostname[HOST_NAME_MAX+1];
+	gethostname(hostname, HOST_NAME_MAX+1);
 
-  if( sysinfo(&sys_info) != 0)
-    perror("sysinfo");
+	if ( !(strcmp(windows, "xp")) ) {	
+		new FXLabel(winverinfo, getlogin(), NULL, 0, 0, 0, 0, 0, 15, 0, 0, 2);
+		new FXLabel(winverinfo, hostname, NULL, 0, 0, 0, 0, 0, 15, 0, 0, 6);
+	} else {
+		new FXLabel(winverinfo, getlogin(), NULL, 0, 0, 0, 0, 0, 0, 0, 0, 2);
+		new FXLabel(winverinfo, hostname, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 7);
+	}
 
-  char physmemtext[1024];
-  formatnum(sys_info.totalram, physmemtext);
+	FXHorizontalFrame* headerspcont = new FXHorizontalFrame(winverinfo, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 58, 0, 2, 0, 1, 0, 0, 0, 0);
+	headerspcont->setBackColor(ptrapp->getHiliteColor());
 
-  char *tmp = strdup(physmemtext);
-
-  strcpy(physmemtext, "Physical memory available to Windows:    ");
-  strcat(physmemtext, tmp);
-
-  free(tmp);
-
-  strcat(physmemtext, " KB");
-
-
-  if ( !(strcmp(windows, "xp")) )
-    new FXLabel(winverinfo, physmemtext, NULL, 0, 0, 0, 0, 0, 0, 0, 6, 6);
-  else
-    new FXLabel(winverinfo, physmemtext, NULL, 0, 0, 0, 0, 0, 0, 0, 5, 6);
-
-  FXPacker *okcont=new FXPacker(main,LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0, 0, 0, 0, 10, 8, 22, 10);
-
-  FXButton* okbutton = new FXButton(okcont, "OK", NULL, &application, FXApp::ID_QUIT, BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|BUTTON_DEFAULT, 0, 0, 75, 23, 3, 3, 2, 3);
-
-  okbutton->setFocus();
+	FXHorizontalFrame* headerspline1 = new FXHorizontalFrame(headerspcont, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+	headerspline1->setBackColor(ptrapp->getShadowColor());
 
 
+	struct sysinfo sys_info;
 
-  application.create();
+	if( sysinfo(&sys_info) != 0)
+		perror("sysinfo");
 
-  if ( !(strcmp(windows, "xp")) ) {
+	char physmemtext[1024];
+	formatnum(sys_info.totalram, physmemtext);
 
-    eulaunderscore1->setX(eulalink1->getX());
-    eulaunderscore1->setY(eulalink1->getY() +  eulalink1->getDefaultHeight() - 1);
-    eulaunderscore1->setWidth( eulalink1->getDefaultWidth() );
+	char *tmp = strdup(physmemtext);
 
-    eulaunderscore2->setX(eulalink2->getX());
-    eulaunderscore2->setY(eulalink2->getY() +  eulalink2->getDefaultHeight() - 7);
-    eulaunderscore2->setWidth( eulalink2->getDefaultWidth() );
-  }
+	strcpy(physmemtext, "Physical memory available to Windows:    ");
+	strcat(physmemtext, tmp);
 
-  main->show(PLACEMENT_SCREEN);
+	free(tmp);
 
-  setOnTop((Display*)ptrapp->getDisplay(), main->id());
-  
-  return application.run();
+	strcat(physmemtext, " KB");
+
+
+	if ( !(strcmp(windows, "xp")) )
+		new FXLabel(winverinfo, physmemtext, NULL, 0, 0, 0, 0, 0, 0, 0, 6, 6);
+	else
+		new FXLabel(winverinfo, physmemtext, NULL, 0, 0, 0, 0, 0, 0, 0, 5, 6);
+
+	FXPacker *okcont=new FXPacker(main,LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0, 0, 0, 0, 10, 8, 22, 10);
+
+	FXButton* okbutton = new FXButton(okcont, "OK", NULL, &application, FXApp::ID_QUIT, BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|BUTTON_DEFAULT, 0, 0, 75, 23, 3, 3, 2, 3);
+
+	okbutton->setFocus();
+
+
+
+	application.create();
+
+	if ( !(strcmp(windows, "xp")) ) {
+
+		eulaunderscore1->setX(eulalink1->getX());
+		eulaunderscore1->setY(eulalink1->getY() + eulalink1->getDefaultHeight() - 1);
+		eulaunderscore1->setWidth( eulalink1->getDefaultWidth() );
+
+		eulaunderscore2->setX(eulalink2->getX());
+		eulaunderscore2->setY(eulalink2->getY() + eulalink2->getDefaultHeight() - 7);
+		eulaunderscore2->setWidth( eulalink2->getDefaultWidth() );
+	}
+
+	main->show(PLACEMENT_SCREEN);
+
+	setOnTop((Display*)ptrapp->getDisplay(), main->id());
+	
+	return application.run();
 }

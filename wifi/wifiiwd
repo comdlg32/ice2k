@@ -1,0 +1,112 @@
+#!/bin/sh
+
+dbms() {
+	if ! test "$1"; then
+		return
+	fi
+
+	#if [ $1 -ge -6000 ]; then
+	#    echo "network-wireless-100"
+	#elif [ $1 -ge -6700 ]; then
+	#    echo "network-wireless-75"
+	#elif [ $1 -ge -7500 ]; then
+	#	echo "network-wireless-50"
+	#elif [ $1 -lt -7500 ]; then
+	#	echo "network-wireless-25"
+	#fi
+	val=$((($1+9000)*100/3000))
+
+	if [ $val -gt 100 ]; then
+		val=100
+	elif [ $val -lt 0 ]; then
+		val=0
+	fi
+
+	echo $val
+}
+
+if ! test "$1"; then
+	echo 'err: No interface specified!' >&2
+	exit 1
+fi
+
+if ! type iwctl >/dev/null 2>&1; then
+	echo 'err: IWD is not installed!' >&2;
+	exit 1
+fi
+
+isscanning() {
+	LC_ALL=C iwctl station "$1" show | grep "Scanning" | grep -q yes
+	return $?
+}
+
+scannow() {
+	LC_ALL=C iwctl station "$1" scan >/dev/null 2>&1
+}
+
+
+listnet() {
+	netlistcon="$(LC_ALL=C iwctl station "$1" get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	netlist="$(echo "$netlistcon" | cut -c 3- )"
+	netnumber="$(echo "$netlist" | wc -l)"
+
+	for i in $(seq -s " " 1 $netnumber); do
+		dbms "$(echo "$netlist" | awk 'NF>1{print $NF}' | sed -n "${i}p")"
+
+		echo "$netlistcon" | cut -c 1 | sed -n "${i}p"
+		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
+		echo "$netlist" | sed -n "${i}p" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' |  awk 'NF>1{print $NF}'
+	done
+}
+
+allnet() {
+	netlistcon="$(LC_ALL=C iwctl station "$1" get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	netlist="$(echo "$netlistcon" | cut -c 3- )"
+	netnumber="$(echo "$netlist" | wc -l)"
+
+	for i in $(seq -s " " 1 $netnumber); do
+		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
+	done
+}
+
+
+
+if [ "$2" = "scanning" ]; then
+	isscanning "$1"
+	exit $?
+elif [ "$2" = "scan" ]; then
+	scannow "$1"
+	exit 0
+elif [ "$2" = "scanwait" ]; then
+	scannow "$1"
+	
+	sleep 1
+
+	while isscanning "$1"; do
+		sleep 1
+	done
+
+	exit 0
+elif [ "$2" = "netexists" ]; then
+	allnet "$1" | (while read line; do
+		if [ "${line}x" = "${3}x" ]; then
+			exit 0
+		fi
+	done; exit 1)
+	exit $?
+elif [ "$2" = "connect" ]; then
+	if test "$WLAN_PSK"; then
+		iwctl --passphrase "$WLAN_PSK" station "$1" connect "$3" --dont-ask > /dev/null 2>&1
+	else
+		iwctl station "$1" connect "$3" --dont-ask >/dev/null 2>&1
+	fi
+	exit $?
+elif [ "$2" = "disconnect" ]; then
+	iwctl station "$1" disconnect >/dev/null 2>&1
+	exit $?
+elif [ "$2" = "list" ]; then
+	listnet "$1"
+	exit 0
+fi
+
+

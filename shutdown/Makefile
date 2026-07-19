@@ -6,8 +6,8 @@ C++ = g++
 OS = `uname -s | tr '[a-z]' '[A-Z]'`
 # OS = OPENBSD
 
-CFLAGS = -Wall -c --std=c99 -D "OS_$(OS)"
-CPPFLAGS = -Wall -c --std=c++98 -D "OS_$(OS)"
+CFLAGS = -Wall -c --std=c99 -D "OS_$(OS)" -O3 -g
+CPPFLAGS = -Wall -c --std=c++98 -D "OS_$(OS)" -O3 -g
 LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local

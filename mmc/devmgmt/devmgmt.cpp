@@ -1,6 +1,6 @@
 #include <fx.h>
 #include <ice2k/comctl32.h>
-//#include <ice2k/branding.h>
+#include <ice2k/branding.h>
 #include "res/foxres.h"
 #include <dirent.h>
 
@@ -33,7 +33,6 @@
 #include <fcntl.h>
 
 #include <libserialport.h>
-
 extern "C" {
 #include <pci/pci.h>
 }
@@ -41,90 +40,58 @@ extern "C" {
 FXApp* app;
 FXLabel* statuslbl;
 
+int xpmode = 0;
+
 #define _SYSFS_BLOCK "/sys/block"
 
 FXMainWindow* devmgmtwin;
 FXIcon* ico_devmgmt;
+FXIcon* ico_devmgmt_32;
 
 
+class AboutBox : public FXDialogBox {
+	FXDECLARE(AboutBox)
 
-// thank you https://en.wikipedia.org/wiki/CPUID#EAX=8000'0002h,8000'0003h,8000'0004h:_Processor_Brand_String
-/* int getCpuString(char* output) {
-#ifdef __x86_64__
-#define _CPUID
-#endif
+	private:
+		// Controls
+		FXHorizontalFrame *cont;                 // Container
 
-#ifdef __i386__
-#define _CPUID
-#endif
+		FXLabel           *icon;                 // About icon
+		FXLabel           *text;                 // About text
 
-#ifdef _CPUID
-unsigned int regs[12];      // i know i can use the linux apis for this...
-							// but that's boring and i want to have fun :P
-							__cpuid(0x80000000, regs[0], regs[1], regs[2], regs[3]);
+		FXButton          *okbtn;                // OK button
 
-							if (regs[0] < 0x80000004)
-							return 1;
+	protected:
+		AboutBox() {}
 
-							__cpuid(0x80000002, regs[0], regs[1], regs[2], regs[3]);
-							__cpuid(0x80000003, regs[4], regs[5], regs[6], regs[7]);
-							__cpuid(0x80000004, regs[8], regs[9], regs[10], regs[11]);
+	public:
+		AboutBox(FXWindow* owner) :
+		FXDialogBox(owner, "About Device Manager", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0,0,0,0,
+				10,10,10,10, 8,12) {
+			cont = new FXHorizontalFrame(this, LAYOUT_SIDE_TOP, 0,0,0,0, 4,4,4,4, 10,10);
+			icon = new FXLabel(cont, "", ico_devmgmt_32);
 
-							memcpy(output, regs, sizeof(regs));
-							output[sizeof(regs)] = '\0';
+			text = new FXLabel(cont,
+					"Device Manager\n"
+					"Written by xcomposite\n"
+					"\n"
+					"You can use Device Manager to view a list of\n"
+					"hardware devices installed on your computer.",
+					NULL, JUSTIFY_LEFT);
 
-							return 0;
-#else
-return 1;
-#endif
-} */ // might get useful at one point
+			okbtn = new FXButton(this, "OK", NULL, this, ID_ACCEPT,
+					BUTTON_DEFAULT|LAYOUT_RIGHT|BUTTON_NORMAL,
+					0,0,0,0, 27,27,2,3);
 
-void formatnum(long unsigned num, char *buffer) { // from ice2kver
-	char temp[1024];
-	sprintf(temp, "%lu", num / 1024);
-
-	int len = strlen(temp);
-	int commas = (len - 1) / 3;
-	int new_len = len + commas;
-
-	buffer[new_len] = '\0';
-	int i = len - 1, j = new_len - 1;
-
-	int count = 0;
-	while (i >= 0) {
-		if (count == 3) {
-			buffer[j--] = ',';
-			count = 0;
+			okbtn->setFocus();
 		}
-		buffer[j--] = temp[i--];
-		count++;
-	}
-}
 
+		virtual void create() { FXDialogBox::create(); }
+		void setFocus() {};
+		virtual ~AboutBox() {};
+};
 
-
-/* int checkAcpiSupport() {
-   DIR* dir;
-   dir = opendir("/sys/class/acpi");
-
-   if (dir) {
-   closedir(dir);
-   dir = opendir("/proc/acpi");
-
-   if (dir) {
-   closedir(dir);
-   dir = opendir("/sys/firmware/acpi");
-
-   if (dir) {
-   closedir(dir);
-   return 0;
-   }
-   }
-   }
-
-   return 1;
-   } */
-
+FXIMPLEMENT(AboutBox, FXDialogBox, NULL, 0);
 
 int checkAcpiSupport() {
 	int i = 0;
@@ -161,10 +128,7 @@ acpicheck:
 }
 
 int checkAmd64() {
-	// this ones easy...
-
 #ifdef __x86_64__
-	//puts("System is 64 bit");
 	return 0;
 #else
 	return 1;
@@ -336,8 +300,10 @@ class DeviceManager : public FXMainWindow {
 		FXToolBarShell*          mbshell;
 		FXMenuBar*               menubar;
 
+		FXMenuPane*              filemenu;
 		FXMenuPane*              actionmenu;
 		FXMenuPane*              viewmenu;
+		FXMenuPane*              helpmenu;
 
 		FXToolBarShell*          tbshell;
 		FXToolBarShell*          tb2shell;
@@ -403,11 +369,14 @@ class DeviceManager : public FXMainWindow {
 		DeviceManager(){}
 
 	public:
+		void setFocus() {};
 
 		// Message handlers
 		long onItemChange(FXObject*,FXSelector,void*);
 		long onStatus(FXObject*,FXSelector,void*);
 		long onChangeText(FXObject*,FXSelector,void*);
+		long onCmdAbout(FXObject*,FXSelector,void*);
+
 		long addDevices(FXObject*,FXSelector,void*);
 
 
@@ -418,6 +387,7 @@ class DeviceManager : public FXMainWindow {
 			ID_MAINWIN=FXMainWindow::ID_LAST,
 			ID_TREE,
 			ID_ADDDEV,
+			ID_ABOUT,
 		};
 
 	public:
@@ -435,6 +405,8 @@ FXDEFMAP(DeviceManager) DeviceManagerMap[] = {
 	FXMAPFUNC(SEL_UPDATE, 0, DeviceManager::onStatus),
 	FXMAPFUNC(SEL_COMMAND, DeviceManager::ID_SETSTRINGVALUE, DeviceManager::onChangeText),
 	FXMAPFUNC(SEL_COMMAND, DeviceManager::ID_ADDDEV, DeviceManager::addDevices),
+	FXMAPFUNC(SEL_COMMAND, DeviceManager::ID_ABOUT, DeviceManager::onCmdAbout),
+
 
 	FXMAPFUNC(SEL_CHANGED, DeviceManager::ID_TREE, DeviceManager::onItemChange),
 };
@@ -457,6 +429,13 @@ long DeviceManager::onStatus(FXObject* sender, FXSelector sel, void* ptr) {
 
 long DeviceManager::onChangeText(FXObject* sender, FXSelector sel, void* ptr) {
 	statuslbl->setText(*((FXString*)ptr));
+
+	return 1;
+}
+
+long DeviceManager::onCmdAbout(FXObject*, FXSelector, void*) {
+	AboutBox dlg(this);
+	dlg.execute(PLACEMENT_OWNER);
 
 	return 1;
 }
@@ -673,8 +652,7 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
 	if (XQueryExtension(dpy, "XInputExtension", &opcode, &event, &error)) {
 		if (XIQueryVersion(dpy, &major, &minor) == Success) {
-			if (major >=2)
-				xinput2 = 1;
+			if (major >=2) xinput2 = 1;
 		}
 	}
 
@@ -717,13 +695,11 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 	enum sp_return result = sp_list_ports(&portList);
 
 	if (result == SP_OK) {
-		int i;
-		for (i = 0; portList[i] != NULL; i++) {
+		for (int i = 0; portList[i] != NULL; i++) {
 			struct sp_port *port = portList[i];
 			tree->appendItem(devSerial, sp_get_port_name(port), ico_dev_serial, ico_dev_serial);
 		}
-	} else
-		puts("not ok");
+	}
 
 	sp_free_port_list(portList);
 
@@ -763,7 +739,6 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 	int i = 0;
 
 	while (loopthru) {
-
 		i++;
 
 		loopthruprev = loopthru;
@@ -771,16 +746,9 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
 		if (!loopthruprev->getNumChildren()) {
 			tree->removeItem(loopthruprev);
-			//delete loopthru;
-			//puts("No");
 		}
 
-		//printf("%d\n", i);
-		if (loopthruprev == top)
-			break;
-
-
-
+		if (loopthruprev == top) break;
 	}
 
 
@@ -790,6 +758,7 @@ long DeviceManager::addDevices(FXObject* sender, FXSelector sel, void* ptr) {
 
 //int main(int argc, char *argv[]) {
 DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico_devmgmt, NULL, DECOR_ALL, 0,0,520,380,  0,0,0,0,  0,0) {
+	int opts = 0;
 	topdock = new FXDockSite(this, FRAME_SUNKEN|DOCKSITE_NO_WRAP|LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
 
 	statusbarcont = new FXHorizontalFrame(this, JUSTIFY_LEFT|LAYOUT_FILL_X|LAYOUT_SIDE_BOTTOM, 0, 0, 0, 0, 0, 1, 2, 0, 2, 2);
@@ -799,21 +768,32 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 
 	mbshell = new FXToolBarShell(this,FRAME_SUNKEN);
 
+	if (xpmode) opts = LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|LAYOUT_FILL_X|FRAME_RAISED;
+	else opts = LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|FRAME_RAISED;
 
-	menubar = new FXMenuBar(topdock,mbshell,LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_Y|FRAME_RAISED,0,0,0,0,  2,6,2,2,  4,4);
-	new FXToolBarGrip(menubar,menubar,FXMenuBar::ID_TOOLBARGRIP,TOOLBARGRIP_SINGLE, 0,0,0,0, 0,2,0,0);
+	menubar = new FXMenuBar(topdock,mbshell,opts,0,0,0,0,  2,6,2,2,  4,4);
+	if (!xpmode) new FXToolBarGrip(menubar,menubar,FXMenuBar::ID_TOOLBARGRIP,TOOLBARGRIP_SINGLE, 0,0,0,0, 0,2,0,0);
 
 	actionmenu = new FXMenuPane(this);
 	viewmenu = new FXMenuPane(this);
 
 	FXMenuCommand* menucmd; FXMenuRadio* menurad; FXMenuCheck* menuchk;
-
+	if (xpmode) { 
+		filemenu = new FXMenuPane(this);
+		new FXMenuTitle(menubar, "&File", NULL, filemenu);
+		new FXMenuCommand(filemenu, "E&xit", NULL, getApp(), FXApp::ID_QUIT);
+	}
 	new FXMenuTitle(menubar, "&Action", NULL, actionmenu);
 	menucmd = new FXMenuCommand(actionmenu, "&Help"); menucmd->disable();
 	new FXMenuSeparator(actionmenu);
 	menucmd = new FXMenuCommand(actionmenu, "&Sc&an for hardware changes", NULL, this, ID_ADDDEV);
 
 	new FXMenuTitle(menubar, "&View", NULL, viewmenu);
+	if (xpmode) { 
+		helpmenu = new FXMenuPane(this);
+		new FXMenuTitle(menubar, "&Help", NULL, helpmenu);
+		menucmd = new FXMenuCommand(helpmenu, "A&bout Device Manager...", NULL, this, ID_ABOUT);
+	}
 
 	//menucmd = new FXMenuCommand(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menucmd->disable();
 	menurad = new FXMenuRadio(viewmenu, "D&evices by type\t\tDisplays devices by hardware type."); menurad->disable();
@@ -833,8 +813,10 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 
 	tbshell = new FXToolBarShell(this,FRAME_SUNKEN);
 
-	toolbar = new FXToolBar(topdock,tbshell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|FRAME_RAISED,0,0,0,0, 0,5,0,0,  1,1);
-	new FXToolBarGrip(toolbar, toolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+	if (xpmode) opts = LAYOUT_FILL_Y|LAYOUT_DOCK_NEXT|LAYOUT_FILL_X|LAYOUT_SIDE_TOP|FRAME_RAISED;
+	else opts = LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|FRAME_RAISED;
+	toolbar = new FXToolBar(topdock,tbshell,opts,0,0,0,0, 0,5,0,0,  1,1);
+	if (!xpmode) new FXToolBarGrip(toolbar, toolbar, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
 
 	ico_back = new FXGIFIcon(app, resico_mmc_back);
 	ico_forward = new FXGIFIcon(app, resico_mmc_forward);
@@ -869,15 +851,25 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 
 	tb2shell = new FXToolBarShell(this,FRAME_SUNKEN);
 
-	toolbar2 = new FXToolBar(topdock,tb2shell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_RAISED,0,0,0,0, 0,0,0,0,  1,1);
-	new FXToolBarGrip(toolbar2, toolbar2, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+	FXToolBar* scantb;
+	
+	if (!xpmode) {
+		toolbar2 = new FXToolBar(topdock,tb2shell,LAYOUT_FILL_Y|LAYOUT_DOCK_SAME|LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_RAISED,0,0,0,0, 0,0,0,0,  1,1);
+		new FXToolBarGrip(toolbar2, toolbar2, FXToolBar::ID_TOOLBARGRIP, TOOLBARGRIP_SINGLE,0,0,0,0,2,3,2,2);
+		scantb = toolbar2;
+	} else {
+		scantb = toolbar;
+		new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
+	}
 
-	btn = new FXButton(toolbar2,"\tScan for hardware changes",ico_scan,this,ID_ADDDEV,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(scantb,"\tScan for hardware changes",ico_scan,this,ID_ADDDEV,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
 
 	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,2); // semantics r cute  
 
-	treeframe = new FXPacker(this, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
-	tree = new FXTreeList(treeframe,this,ID_TREE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_SHOWS_BOXES|TREELIST_SHOWS_LINES|TREELIST_BROWSESELECT|TREELIST_ROOT_BOXES);
+	treeframe = new FXPacker(this, FRAME_NORMAL|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
+	tree = new FXTreeList(treeframe,this,ID_TREE,SCROLLERS_DONT_TRACK|FRAME_NORMAL|
+			LAYOUT_FILL_X|LAYOUT_FILL_Y|
+			TREELIST_SHOWS_BOXES|TREELIST_SHOWS_LINES|TREELIST_BROWSESELECT|TREELIST_ROOT_BOXES);
 
 	ico_dev_computer = new FXGIFIcon(app, resico_dev_computer, IMAGE_NEAREST); ico_dev_computer->create();
 	ico_dev_cdrom = new FXGIFIcon(app, resico_dev_cdrom, IMAGE_NEAREST); ico_dev_cdrom->create();
@@ -903,14 +895,15 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 
 
 int main(int argc,char *argv[]) {
-
-
-	FXApp application("sysdm", "Ice2KProj");
+	FXApp application("DeviceManager", "Ice2KProj");
 	app = &application;
 
 	application.init(argc,argv);
+	xpmode = !!i2kBGetWinVersionInt();
 
 	ico_devmgmt = new FXGIFIcon(app, resico_devmgmt);
+	ico_devmgmt_32 = new FXGIFIcon(app, resico_devmgmt_32);
+
 
 	devmgmtwin = new DeviceManager(&application);
 

@@ -1,53 +1,41 @@
 .PHONY: clean uninstall install
 
 CC = gcc
-CXX = g++
+C++ = g++
 
-CFLAGS = -Wall -c
-CXXFLAGS = -Wall -c
+CFLAGS = -g -Wall -c --std=c99
+CPPFLAGS = -g -Wall -c --std=c++98
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbatmeter
 
-PREFIX = /usr/local
+PREFIX=/usr/local
 
-
-# for non developers, do not touch this
-CFLAGS += -D UHEXE_VERSION="0.0.1" -c --std=c99
-CXXFLAGS += `fox-config --cflags` -D UHEXE_VERSION="\"0.0.1\"" -c --std=c++98
-LDFLAGS += `fox-config --libs | sed 's/-lGLU//g' | sed 's/-lGL//g' `
-
-ICONS = res/ico/bat/*.gif res/ico/*.gif
+SOURCES = batmeter.cpp
+OBJECTS = batmeter.o res/foxres.o
+ICONS = res/*.gif
 EXECUTABLE = batmeter
-VERSION = 0.0.1
 
-#COBJECTS = $(CSOURCES:.c=.o)
-
-CXXSOURCES = foxutils.cpp main.cpp BatMeter.cpp Battery.cpp basecontrols.cpp
-CXXOBJECTS = $(CXXSOURCES:.cpp=.o)
-
-
-OBJECTS = $(CXXOBJECTS) $(COBJECTS)
+CPPFLAGS += `fox-config --cflags`
 
 all: $(EXECUTABLE)
 
-$(OBJECTS): res/foxres.h
+$(OBJECTS): res/foxres.h res/foxres.cpp
 
 # generate icon resources
 res/foxres.h: $(ICONS)
-	reswrap -s -p resico_ -z -d -o res/foxres.h $(ICONS)
+	reswrap -i -d -p resico_ -o res/foxres.h $(ICONS)
+
+res/foxres.cpp: res/foxres.h $(ICONS)
+	reswrap -e -d -p resico_ -o res/foxres.cpp $(ICONS)
 
 # link executable
 $(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(C++) $(OBJECTS) -o $@ $(LDFLAGS)
 
 clean:
-	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
+	rm -f res/foxres.h res/foxres.cpp $(OBJECTS) $(EXECUTABLE)
 
-install: all
+install: $(EXECUTABLE)
 	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(EXECUTABLE)
-
-BatMeter.o: foxutils.h BatMeter.h common.h
-foxutils.o: foxutils.h common.h res/foxres.h
-main.o: foxutils.h BatMeter.h common.h
-Battery.o: Battery.h

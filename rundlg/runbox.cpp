@@ -134,6 +134,8 @@ public:
 	long onMap(FXObject*, FXSelector, void*);
 	long onCmdBrowse(FXObject*, FXSelector, void*);
 	long onKeyPress(FXObject*, FXSelector, void*);
+
+	void setFocus() {};
 public:
 	// Messages for our class
 	enum {

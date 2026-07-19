@@ -32,147 +32,152 @@ FXTreeItem* noneitem;
 
 class DesktopProperties : public FXMainWindow {
 
-  // Macro for class hierarchy declarations
-  FXDECLARE(DesktopProperties)
+	// Macro for class hierarchy declarations
+	FXDECLARE(DesktopProperties)
 
-private:
-  // gui
-  FXDockSite*              topdock;
-  
-  FXHorizontalFrame*       statusbarcont;
-  FXLabel*                 statuslbl;
+	private:
+		// gui
+		FXDockSite*              topdock;
 
-  FXToolBarShell*          mbshell;
-  FXMenuBar*               menubar;
-  
-  FXMenuPane*              actionmenu;
-  FXMenuPane*              viewmenu;
+		FXHorizontalFrame*       statusbarcont;
+		FXLabel*                 statuslbl;
 
-  FXToolBarShell*          tbshell;
-  FXToolBarShell*          tb2shell;
-  
-  FXToolBar*               toolbar;
-  FXToolBar*               toolbar2;
+		FXToolBarShell*          mbshell;
+		FXMenuBar*               menubar;
 
-  FXSpinner*               waitspin;
-  FXCheckButton*           passchk;
+		FXMenuPane*              actionmenu;
+		FXMenuPane*              viewmenu;
 
-  FXTreeList* tree;
+		FXToolBarShell*          tbshell;
+		FXToolBarShell*          tb2shell;
+
+		FXToolBar*               toolbar;
+		FXToolBar*               toolbar2;
+
+		FXSpinner*               waitspin;
+		FXCheckButton*           passchk;
+
+		FXTreeList* tree;
 
 
-protected:
-  DesktopProperties(){}
+	protected:
+		DesktopProperties(){}
 
-public:
+	public:
 
-  // Message handlers
-  long onItemChange(FXObject*,FXSelector,void*);
-  long onStatus(FXObject*,FXSelector,void*);
-  long onChangeText(FXObject*,FXSelector,void*);
-  long addDevices(FXObject*,FXSelector,void*);
-  long onTimeoutScr(FXObject*,FXSelector,void*);
-  long onTabChange(FXObject*,FXSelector,void*);
-  long onScrChange(FXObject*,FXSelector,void*);
+		// Message handlers
+		long onItemChange(FXObject*,FXSelector,void*);
+		long onStatus(FXObject*,FXSelector,void*);
+		long onChangeText(FXObject*,FXSelector,void*);
+		long addDevices(FXObject*,FXSelector,void*);
+		long onTimeoutScr(FXObject*,FXSelector,void*);
+		long onTabChange(FXObject*,FXSelector,void*);
+		long onScrChange(FXObject*,FXSelector,void*);
 
-  long onClose(FXObject*,FXSelector,void*);
-  long onPreview(FXObject*,FXSelector,void*);
+		long onClose(FXObject*,FXSelector,void*);
+		long onPreview(FXObject*,FXSelector,void*);
 
-  long onCmdOk(FXObject*,FXSelector,void*);
-  long onCmdCancel(FXObject*,FXSelector,void*);
-  long onCmdApply(FXObject*,FXSelector,void*);
+		long onCmdOk(FXObject*,FXSelector,void*);
+		long onCmdCancel(FXObject*,FXSelector,void*);
+		long onCmdApply(FXObject*,FXSelector,void*);
 
-  long onChange(FXObject*,FXSelector,void*);
-  long onImageChange(FXObject*,FXSelector,void*);
-  long onColorChange(FXObject*,FXSelector,void*);
+		long onChange(FXObject*,FXSelector,void*);
+		long onImageChange(FXObject*,FXSelector,void*);
+		long onColorChange(FXObject*,FXSelector,void*);
 
-  long onColorChangeCmd(FXObject*,FXSelector,void*);
-  
-  long onCloseCmd(FXObject*,FXSelector,void*);
-  long onCmdBrowse(FXObject*,FXSelector,void*);
-  
+		long onColorChangeCmd(FXObject*,FXSelector,void*);
 
-  long onResSliderChange(FXObject*,FXSelector,void*);
+		long onCloseCmd(FXObject*,FXSelector,void*);
+		long onCmdBrowse(FXObject*,FXSelector,void*);
 
-public:
 
-  // Messages for our class
-  enum {
-    ID_MAINWIN=FXMainWindow::ID_LAST,
-    ID_TREE,
-    ID_ADDDEV,
-    ID_SCR,
-    ID_TABBOOK,
-    ID_LISTBOX,
-    ID_PREVIEW,
+		long onResSliderChange(FXObject*,FXSelector,void*);
 
-    ID_DLG_OK,
-    ID_DLG_CANCEL,
-    ID_DLG_APPLY,
+	public:
 
-    ID_CHANGE,
-    ID_IMAGECHANGE,
-    ID_COLORCHANGE,
+		// Messages for our class
+		enum {
+			ID_MAINWIN=FXMainWindow::ID_LAST,
+			ID_TREE,
+			ID_ADDDEV,
+			ID_SCR,
+			ID_TABBOOK,
+			ID_LISTBOX,
+			ID_PREVIEW,
 
-    ID_RESSLIDER,
+			ID_DLG_OK,
+			ID_DLG_CANCEL,
+			ID_DLG_APPLY,
 
-    ID_BROWSE
-  };
+			ID_CHANGE,
+			ID_IMAGECHANGE,
+			ID_COLORCHANGE,
 
-public:
+			ID_RESSLIDER,
 
-  // CtrlAltDelWindow's constructor
-  DesktopProperties(FXApp* a);
+			ID_BROWSE
+		};
 
-  // Initialize
-  virtual void create();
+	public:
 
-  virtual ~DesktopProperties();
+		// CtrlAltDelWindow's constructor
+		DesktopProperties(FXApp* a);
+
+		// Initialize
+		virtual void create();
+
+		virtual ~DesktopProperties();
 };
 
 FXDEFMAP(DesktopProperties) DesktopPropertiesMap[] = {
-  /* FXMAPFUNC(SEL_UPDATE, 0, DesktopProperties::onStatus),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_SETSTRINGVALUE, DesktopProperties::onChangeText),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_ADDDEV, DesktopProperties::addDevices),
+	/* FXMAPFUNC(SEL_UPDATE, 0, DesktopProperties::onStatus),
+	   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_SETSTRINGVALUE, DesktopProperties::onChangeText),
+	   FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_ADDDEV, DesktopProperties::addDevices),
 
-  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_TREE, DesktopProperties::onItemChange), */
-//  FXMAPFUNC(SEL_TIMEOUT, DesktopProperties::ID_SCR, DesktopProperties::onTimeoutScr),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_TABBOOK, DesktopProperties::onTabChange),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_PREVIEW, DesktopProperties::onPreview),
+	   FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_TREE, DesktopProperties::onItemChange), */
+	//  FXMAPFUNC(SEL_TIMEOUT, DesktopProperties::ID_SCR, DesktopProperties::onTimeoutScr),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_TABBOOK, DesktopProperties::onTabChange),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_PREVIEW, DesktopProperties::onPreview),
 
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_LISTBOX, DesktopProperties::onScrChange),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_LISTBOX, DesktopProperties::onScrChange),
 
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_OK, DesktopProperties::onCmdOk),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_CANCEL, DesktopProperties::onCmdCancel),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_APPLY, DesktopProperties::onCmdApply),
-
-
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_CHANGE, DesktopProperties::onChange),
-  
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_IMAGECHANGE, DesktopProperties::onImageChange),
-  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChange),
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChangeCmd),
-
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
-  FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
-
-  FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_BROWSE, DesktopProperties::onCmdBrowse),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_OK, DesktopProperties::onCmdOk),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_CANCEL, DesktopProperties::onCmdCancel),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_DLG_APPLY, DesktopProperties::onCmdApply),
 
 
-  FXMAPFUNC(SEL_CLOSE, 0, DesktopProperties::onClose),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_CHANGE, DesktopProperties::onChange),
+
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_IMAGECHANGE, DesktopProperties::onImageChange),
+	FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChange),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChangeCmd),
+
+	FXMAPFUNC(SEL_LEFTBUTTONPRESS, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+	FXMAPFUNC(SEL_MIDDLEBUTTONPRESS, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+	FXMAPFUNC(SEL_RIGHTBUTTONPRESS, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+
+	FXMAPFUNC(SEL_LEFTBUTTONRELEASE, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+	FXMAPFUNC(SEL_MIDDLEBUTTONRELEASE, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+	FXMAPFUNC(SEL_RIGHTBUTTONRELEASE, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
+
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_BROWSE, DesktopProperties::onCmdBrowse),
+
+
+	FXMAPFUNC(SEL_CLOSE, 0, DesktopProperties::onClose),
 
 };
 
 FXIMPLEMENT(DesktopProperties,FXMainWindow,DesktopPropertiesMap,ARRAYNUMBER(DesktopPropertiesMap))
 
 
-FXColorWell* colorwell;
+	FXColorWell* colorwell;
 
 
-void DesktopProperties::create() {
-	FXMainWindow::create();
+	void DesktopProperties::create() {
+		FXMainWindow::create();
 
-	tree->makeItemVisible(tree->getCurrentItem());
-}
+		tree->makeItemVisible(tree->getCurrentItem());
+	}
 
 DesktopProperties::~DesktopProperties() {
 }
@@ -230,7 +235,7 @@ int inihandle(void* udata, const char* section, const char* name, const char* va
 
 
 void handleChildProcess(int sig) {
-    waitpid(-1, NULL, WNOHANG); 
+	waitpid(-1, NULL, WNOHANG); 
 }
 
 char** getModes(int* count) { // probably the first time i learned how to parse something complex
@@ -238,7 +243,7 @@ char** getModes(int* count) { // probably the first time i learned how to parse 
 
 	int   found=0;
 	int   skip=0;
-	
+
 	int   cap=10;
 	int   mcount=0;
 
@@ -262,7 +267,7 @@ char** getModes(int* count) { // probably the first time i learned how to parse 
 
 	if (access(pathbuf, X_OK) != 0) return NULL;
 
-	
+
 	FILE* fp = popen("xlock . 2>&1", "r");
 
 	if (!fp) {
@@ -308,7 +313,7 @@ freemodes:
 				if (!modes[mcount]) {
 					goto freemodes;
 				}
-				
+
 				mcount++;
 
 				token = strtok(NULL, "[ |\n");
@@ -341,35 +346,29 @@ endloop:
 
 pid_t pid = -1;
 void previewScr(int x, int y, int w, int h, FXWindow* window, const char* scr) {
+	char geometry[32];
+	char windowid[16];
+	sprintf(geometry, "%dx%d+%d+%d", w,h,x,y);
+	sprintf(windowid, "%u", (unsigned int)window->id());
+
 	pid = vfork();
 
 	if (pid < 0) {
 		perror("vfork");
 		exit(1);
 	} else if (pid == 0) {
-		char geometry[32];
-		sprintf(geometry, "%dx%d+%d+%d", w,h,x,y);
-		//puts(geometry);
-
-		char windowid[16];
-		sprintf(windowid, "%u", (unsigned int)window->id());
-
 		execlp("xlock", "xlock",
-                   "-mode", scr,
-                   "-startCmd", " ",
-                   "-endCmd", " ",
-                   "-inwindow",
-                   "-geometry", geometry,
-                   "-parent", windowid,
-                   (char*)NULL);
+				"-mode", scr,
+				"-startCmd", " ",
+				"-endCmd", " ",
+				"-inwindow",
+				"-geometry", geometry,
+				"-parent", windowid,
+				(char*)NULL);
 
 		perror("execlp");
 		exit(1);
-	//} else {
-		//printf("PID: %d\n", pid);
 	}
-
-	//wait(NULL);
 }
 
 long DesktopProperties::onClose(FXObject* obj,FXSelector sel,void* ptr) {
@@ -384,7 +383,7 @@ long DesktopProperties::onClose(FXObject* obj,FXSelector sel,void* ptr) {
 }
 
 long DesktopProperties::onResSliderChange(FXObject* obj,FXSelector sel,void* ptr) {
-	FXSlider* slider = (FXSlider*)obj;
+	/*FXSlider* slider = (FXSlider*)obj;
 
 	int min;
 	int max;
@@ -393,7 +392,7 @@ long DesktopProperties::onResSliderChange(FXObject* obj,FXSelector sel,void* ptr
 
 	//printf("%d\n", max);
 
-	slider->setValue(max);
+	slider->setValue(max);*/
 
 	return 1;
 }
@@ -405,8 +404,10 @@ int valuesChanged = 0;
 
 long DesktopProperties::onChange(FXObject* obj,FXSelector sel,void* ptr) {
 	//puts("test");
-	applybtn->enable();
-	valuesChanged = 1;
+	if (applybtn) {
+		applybtn->enable();
+		valuesChanged = 1;
+	}
 
 	return 0;
 }
@@ -432,7 +433,14 @@ I2KListBox* scrsel;
 FXButton* previewbtn;
 FXLabel* prvlbl;
 
-FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img2, FXColor col) {
+#if 0
+#define _IMGMODE_TILED   0
+#define _IMGMODE_CENTER  1
+#define _IMGMODE_STRETCH 2
+#define _IMGMODE_FILL    3
+#endif
+
+FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img2, FXColor col, int mode = _IMGMODE_FILL) {
 	//img = loadImage(app, wallcfg.image);
 
 	//if (!img)
@@ -448,7 +456,36 @@ FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img2, FXColor col
 	FXDCWindow prvdc(output);
 
 	if (img != NULL) {
-		img->scale(152, 112, 1);
+		int imgw = img->getWidth();
+		int imgh = img->getHeight();
+
+		long long c1;
+		long long c2;
+
+		int w;
+		int h; 
+
+		switch(mode) {
+			case _IMGMODE_FILL:
+				c1 = (long long)152 * imgh;
+				c2 = (long long)112 * imgw;
+
+				if (c1 > c2) {
+					w = imgw;
+					h = (int)(c2 / 152);
+				} else {
+					w = (int)(c1 / 112);
+					h = imgh;
+				}
+
+				img->crop( (imgw-w)/2, (imgh-h)/2, w, h);
+				img->scale(152, 112, 1);
+				break;
+			case _IMGMODE_STRETCH:
+			default:
+				img->scale(152, 112, 1);
+		}
+
 		img->create();
 	}
 
@@ -473,7 +510,6 @@ FXIcon* genMonitorPreview(FXApp* app, FXIcon* output, FXImage* img2, FXColor col
 
 	output->restore();
 	output->render();
-
 
 
 	//img->detach();
@@ -508,7 +544,7 @@ long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr)
 
 		genMonitorPreview(getApp(), monitorimage, previewsource, deskcol);
 		genMonitorPreview(getApp(), monitornopimage, NULL, deskcol);
-	
+
 		if (udata == NULL) {
 			prvimage->detach();
 			prvimage->release();
@@ -529,16 +565,16 @@ long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr)
 // Patterns
 // from fox imageviewer example
 const FXchar patterns[] =
-	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
-	"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
-	"\nBitmap Image (*.bmp)"
-	"\nPNG Image  (*.png)"
-	"\nJPEG Image (*.jpg,*.jpeg)"
-	"\nGIF Image (*.gif)"
-	"\nTARGA Image  (*.tga)"
-	"\nPPM/PBM/PGM Image  (*.ppm,*.pbm,*.pgm)"
-	"\nTIFF Image (*.tif,*.tiff)"
-	"\nAll Files (*)"
+"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
+"All Images (*.bmp,*.png,*.jpg,*.jpeg,*.gif,*.tga,*.ppm,*.pbm,*.pgm,*.tif,*.tiff)"
+"\nBitmap Image (*.bmp)"
+"\nPNG Image  (*.png)"
+"\nJPEG Image (*.jpg,*.jpeg)"
+"\nGIF Image (*.gif)"
+"\nTARGA Image  (*.tga)"
+"\nPPM/PBM/PGM Image  (*.ppm,*.pbm,*.pgm)"
+"\nTIFF Image (*.tif,*.tiff)"
+"\nAll Files (*)"
 ;
 
 const char* imageExtensions[] = {
@@ -582,9 +618,9 @@ FXImage* loadImage(FXApp* app, const char* path) {
 	}
 
 	//puts("Not supported");
-	
+
 	return NULL;
-		
+
 }
 
 int isImageFormat(const char* ext) {
@@ -606,7 +642,6 @@ int isImageFormat(const char* ext) {
 
 long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 	//puts("test");
-
 	char* udata = (char*)tree->getItemData(tree->getCurrentItem());
 
 	onChange(obj, sel, ptr);
@@ -616,8 +651,7 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 	FXImage* img;
 
-	if (udata)
-		img = loadImage(getApp(), udata);
+	if (udata) img = loadImage(getApp(), udata);
 	//else
 	//	img = loadImage(getApp(), NULL);
 
@@ -625,11 +659,11 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 	prvimage->detach();
 	prvimage->release();
 
-
-	if (udata && img)
+	if (udata && img) {
 		genMonitorPreview(getApp(), prvimage, img, deskcol);
-	else
+	} else {
 		genMonitorPreview(getApp(), prvimage, NULL, deskcol);
+	}
 
 
 	if (udata && img) {
@@ -641,7 +675,7 @@ long DesktopProperties::onImageChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 	prvlbl->setIcon(NULL);
 	prvlbl->setIcon(prvimage);
-	
+
 	return 1;
 }
 
@@ -696,7 +730,7 @@ long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 		}
 
 		//if (tree->findItemByData(filepath)) {
-		
+
 
 		FXImage* img = loadImage(getApp(), filepath);
 
@@ -707,7 +741,7 @@ long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 			delete img;
 		} else {
 			FXMessageBox::error(getApp(),MBOX_OK,"Error",
-				"Could not load image!");
+					"Could not load image!");
 
 			return 1;
 		}
@@ -726,9 +760,8 @@ long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 
 		tree->makeItemVisible(newitem);
 		tree->setCurrentItem(newitem, TRUE);
-			//tree->hitItem(newitem, 10,10);
+
 		tree->handle(this, FXSEL(SEL_COMMAND,0),(void*)newitem);
-		//}
 	}
 
 	return 1;
@@ -742,7 +775,7 @@ void changeScr(const char* scr) {
 		scrmonitor->translateCoordinatesTo(absx, absy, controlwin, 0, 0);
 
 		previewbtn->enable();
-	
+
 		previewScr(absx+16, absy+17, 152, 112, controlwin, scr);
 	} else {
 		previewbtn->disable();
@@ -769,20 +802,20 @@ long DesktopProperties::onScrChange(FXObject* obj,FXSelector sel,void* ptr) {
 
 
 /* long DesktopProperties::onPreview(FXObject* obj,FXSelector sel,void* ptr) {
-	int index = scrsel->getCurrentItem();
+   int index = scrsel->getCurrentItem();
 
-	if (pid >= 0) {
-		kill(pid, SIGTERM);
-		pid = -1;
-	}
+   if (pid >= 0) {
+   kill(pid, SIGTERM);
+   pid = -1;
+   }
 
-	char previewcmd[128];
+   char previewcmd[128];
 
-	snprintf(previewcmd, sizeof(previewcmd), "xlock -nolock -mode %s", scrsel->getItemText(index).text());
+   snprintf(previewcmd, sizeof(previewcmd), "xlock -nolock -mode %s", scrsel->getItemText(index).text());
 
-	system(previewcmd);
-	changeScr(scrsel->getItemText(index).text());
-} */
+   system(previewcmd);
+   changeScr(scrsel->getItemText(index).text());
+   } */
 
 
 
@@ -802,17 +835,17 @@ long DesktopProperties::onPreview(FXObject* obj,FXSelector sel,void* ptr) {
 		exit(1);
 	} else if (previewpid == 0) {
 		execlp("xlock", "xlock",
-                   "-mode", scrsel->getItemText(index).text(),
-                   "-nolock",
-                   (char*)NULL);
-		
+				"-mode", scrsel->getItemText(index).text(),
+				"-nolock",
+				(char*)NULL);
+
 		perror("execlp"); 
 
 		exit(1);
 	}
 
 	waitpid(previewpid, NULL, 0);
-		
+
 
 	changeScr(scrsel->getItemText(index).text());
 
@@ -848,14 +881,14 @@ int makeDirectory(const char *dir) {
 
 	snprintf(tmp, sizeof(tmp), "%s", dir);
 	len = strlen(tmp);
-	
+
 	if (tmp[len - 1] == '/')
 		tmp[len - 1] = 0;
 
 	for (p = tmp + 1; *p; p++) {
 		if (*p == '/') {
 			*p = 0;
-			
+
 			if (mkdir(tmp, S_IRWXU) == -1) {
 				if (errno != EEXIST)
 					return -1;
@@ -890,7 +923,7 @@ int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=
 	}
 
 	FILE* fp = fopen(cfgpath, "w");
-	
+
 	fputs("[Wallpaper]\n", fp);
 
 	if (imgmode == _IMGMODE_TILED) {
@@ -906,7 +939,7 @@ int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=
 	char hex[8];
 
 	//color = ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
-	
+
 	unsigned char r = FXREDVAL(color);
 	unsigned char g = FXGREENVAL(color);
 	unsigned char b = FXBLUEVAL(color);
@@ -917,11 +950,11 @@ int writeWallpaperConfig(char* image, int imgmode, FXColor color, void* pattern=
 
 	char* img = (char*)image;
 	if (img)
-	//	fprintf(fp, "Image=\n")else
+		//	fprintf(fp, "Image=\n")else
 		fprintf(fp, "Image=%s\n", image);
 
 	//fprintf(stdout, 
-	
+
 	fclose(fp);
 
 	return 1;
@@ -934,7 +967,7 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 		return 1;
 
 	applybtn->disable();
-	
+
 	char xrdbPath[PATH_MAX];
 	snprintf(xrdbPath, sizeof(xrdbPath), "%s/.icewm/xrdb", getHomeDir());
 	makeDirectory(xrdbPath);
@@ -1081,550 +1114,412 @@ FXColor hex2FXColor(const char* hex) {
 wallConfiguration wallcfg;
 
 DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Properties", ico_mainico, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
-  int xp = 0;
-//writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
+	int xp = 0;
+	//writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 
-  const char* homedir = getHomeDir();
+	const char* homedir = getHomeDir();
 
-  char cfgpath[256] = {0};  // if your username is 230 characters, wtf are you doing?
+	char cfgpath[PATH_MAX] = {0};
 
-  snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
+	snprintf(cfgpath, sizeof(cfgpath), "%s/%s", homedir, ".icewm/cfg/backmgr.ini");
 
-  wallcfg.image = "";
-  wallcfg.color = strdup("#000000");
+	wallcfg.image = "";
+	wallcfg.color = strdup("#000000");
 
-  ini_parse(cfgpath, inihandle, &wallcfg);
-  //puts("test");
+	ini_parse(cfgpath, inihandle, &wallcfg);
+	//puts("test");
 
-  deskcol = hex2FXColor(wallcfg.color);
-  //puts("test");
+	deskcol = hex2FXColor(wallcfg.color);
+	//puts("test");
 
-  // create monitor images
+	// create monitor images
 
-  char* windows = i2kBGetWinVersion();
+	char* windows = i2kBGetWinVersion();
 
-  if ( !(strcmp(windows, "srv03")) )
-    strcpy(windows, "xp");
+	if ( !(strcmp(windows, "srv03")) )
+		strcpy(windows, "xp");
 
-  if ( !(strcmp(windows, "xp")) ) {
-    xp = 1;
-    monitorsource = new FXGIFIcon(app, resico_monitorxp); monitorsource->create();
-    previewsource = new FXGIFIcon(app, resico_previewxp); previewsource->create();
-  } else {
-    monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
-    previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
-  }
+	if ( !(strcmp(windows, "xp")) ) {
+		xp = 1;
+		monitorsource = new FXGIFIcon(app, resico_monitorxp); monitorsource->create();
+		previewsource = new FXGIFIcon(app, resico_previewxp); previewsource->create();
+	} else {
+		monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
+		previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
+	}
 
 
 
-  monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-  //monitorimage->create();
-  genMonitorPreview(app, monitorimage, previewsource, deskcol);
+	monitorimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	//monitorimage->create();
+	genMonitorPreview(app, monitorimage, previewsource, deskcol);
 
-  /* FXDCWindow mondc(monitorimage);
+	prvimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
 
-  mondc.clipChildren(FALSE);
+	genMonitorPreview(app, monitorimage, previewsource, deskcol);
+	genMonitorPreview(app, monitornopimage, NULL, deskcol);
 
-  mondc.setForeground(app->getBaseColor());
-  mondc.fillRectangle(0, 0, 184, 170);
-  mondc.drawIcon(monitorsource, 0, 0);
 
-  mondc.setForeground(FXRGB(128,0,0));
-  mondc.fillRectangle(16, 17, 152, 112);
-  mondc.drawIcon(previewsource, 16, 17);
+	FXIcon* ico_nobg;
 
-  monitorimage->restore();
-  monitorimage->render(); */
+	if (xp) {
+		ico_nobg = new FXBMPIcon(app, resico_nobg_xp);
+		ico_nobg->blend(app->getBackColor());
+		ico_bmp = new FXBMPIcon(app, resico_bmp_xp);
+		ico_bmp->blend(app->getBackColor());
+	} else {
+		ico_nobg = new FXGIFIcon(app, resico_nobg);
+		ico_bmp = new FXGIFIcon(app, resico_bmp);
+	}
 
-  prvimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	ico_bmp->create();
+	ico_nobg->create();
 
-  //FXIcon* monitorimage = NEW FXIcon(A
+	// background tab
+	FXVerticalFrame* tabframe = new FXVerticalFrame(this,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0);
+	FXTabBook* tabbook = new FXTabBook(tabframe,this,ID_TABBOOK,LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_RIGHT, 0,0,0,0, 6,6,7,6);
 
-  /* prvimage->create();
-  FXDCWindow prvdc(prvimage);
+	new FXTabItem(tabbook,"Background",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+	FXVerticalFrame* bgframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
+	prvlbl = new FXLabel(bgframe, "", prvimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,30);
 
-  prvdc.setForeground(app->getBaseColor());
-  prvdc.fillRectangle(0, 0, 184, 170);
-  prvdc.drawIcon(monitorsource, 0, 0);
+	new FXLabel(bgframe, "&Select a background picture or HTML document as Wallpaper:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
 
-  prvdc.setForeground(FXRGB(128,0,0));
-  prvdc.fillRectangle(16, 17, 152, 112); */
+	FXHorizontalFrame* setbgframe = new FXHorizontalFrame(bgframe,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 10,0); 
 
+	//FXFrame* bglist = new FXFrame(setbgframe, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
+	//bglist->setBackColor(app->getBackColor());
 
+	FXPacker* treeframe = new FXPacker(setbgframe, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
+	tree = new FXTreeList(treeframe,this,ID_IMAGECHANGE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_BROWSESELECT);
 
-  monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-  /* monitornopimage->create();
-  FXDCWindow monndc(monitornopimage);
+	//FXTreeItem* ogselect = tree->appendItem(0,basename,ico_bmp,ico_bmp,ogpath);
 
-  monndc.clipChildren(FALSE);
+	int count = 0;
 
-  monndc.setForeground(app->getBaseColor());
-  monndc.fillRectangle(0, 0, 184, 170);
-  monndc.drawIcon(monitorsource, 0, 0);
+	char wallpaperpath[PATH_MAX] = "";
+	snprintf(wallpaperpath, sizeof(wallpaperpath), "%s/%s", getHomeDir(), "Pictures");
 
-  monndc.setForeground(FXRGB(128,0,0));
-  monndc.fillRectangle(16, 17, 152, 112);
 
-  monitornopimage->restore();
-  monitornopimage->render(); */
 
-  genMonitorPreview(app, monitorimage, previewsource, deskcol);
-  genMonitorPreview(app, monitornopimage, NULL, deskcol);
-  
+	char** wallpapers = getWallpapers(wallpaperpath, &count);
+	char* wallname;
+	char wallnamecurr[PATH_MAX] = "";
+	char* wallnamecur = wallnamecurr;
+	FXTreeItem* newitem = NULL;
 
-  FXIcon* ico_nobg;
+	if (wallcfg.image[0] != '\0') {
+		char* imgpath = strdup(wallcfg.image);
 
-  if (xp) {
-    ico_nobg = new FXBMPIcon(app, resico_nobg_xp);
-    ico_nobg->blend(app->getBackColor());
-    ico_bmp = new FXBMPIcon(app, resico_bmp_xp);
-    ico_bmp->blend(app->getBackColor());
-  } else {
-    ico_nobg = new FXGIFIcon(app, resico_nobg);
-    ico_bmp = new FXGIFIcon(app, resico_bmp);
-  }
+		wallnamecur = strrchr(imgpath, '/');
+		wallnamecur++;
 
-  ico_bmp->create();
-  ico_nobg->create();
+		newitem = tree->appendItem(0, wallnamecur, ico_bmp, ico_bmp, imgpath);
+		tree->handle(this, FXSEL(SEL_COMMAND,0),(void*)newitem);
+	} else {
+		genMonitorPreview(app, prvimage, NULL, deskcol);
+	}
 
-  //char buf[256] = {0};
+	noneitem = tree->appendItem(0,"(None)",ico_nobg,ico_nobg,NULL);
+	tree->selectItem(noneitem);
 
-  /* iniString config;
 
-  config.buffer = buf;
-  config.size = sizeof(buf); */
+	for (int i = 0; i < count; i++) {
+		wallname = strrchr(wallpapers[i], '/');
+		wallname++;
 
-  // https://stackoverflow.com/questions/2910377/get-home-directory-in-linux
+		if (strcmp(wallname, wallnamecur) != 0) {
+			tree->appendItem(0, wallname, ico_bmp, ico_bmp, strdup(wallpapers[i]));
+		}
+	
+		free(wallpapers[i]);
+	}
 
-  /* const char *homedir;
 
-  if ((homedir = getenv("HOME")) == NULL) {
-    homedir = getpwuid(getuid())->pw_dir;
-  } */
+	//new FXImageFrame(bgframe, prvimage, FRAME_NONE);
 
 
+	free(wallpapers);
 
+	//puts(wallname);
 
 
+	tree->setSortFunc(FXTreeList::ascendingCase);
+	tree->sortItems();
 
-  //puts("a");
+	tree->moveItem(tree->getFirstItem(), 0, noneitem);
 
+	tree->selectItem(newitem);
 
 
 
-  /* int buflen = strlen(config.buffer);
-  config.buffer[buflen-1] = '\0';
-  buflen--;
 
-  //puts(config.buffer);
 
-  int i;
+	FXVerticalFrame* setbgcontrols = new FXVerticalFrame(setbgframe,LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,2,0, 0,0); 
+	FXButton* btn;
+	new FXButton(setbgcontrols, "&Browse...", NULL, this, ID_BROWSE, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
+	new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9); // i could use a fxframe, but semantics r cute
+	new FXLabel(setbgcontrols, "Picture &Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
+	picdisplay = new I2KListBox(setbgcontrols,this,ID_CHANGE,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+	new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9);
+	new FXLabel(setbgcontrols, "Color:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
 
-  if (config.buffer[0] == '"') {
-    for (i = 1; i < buflen; i++) {
-      config.buffer[i-1] = config.buffer[i];
-    }
+	//btn = new FXButton(setbgcontrols, "&Pattern...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
+	//btn->disable();
 
-    config.buffer[buflen-1] = '\0';
-  }
-  //puts(config.buffer);
 
-  char* ogpath = strdup(config.buffer);
+	colorwell = new FXColorWell(setbgcontrols,deskcol,this,ID_COLORCHANGE,COLORWELL_OPAQUEONLY|LAYOUT_FIX_WIDTH|LAYOUT_FILL_Y, 0,0,75,0, 0,0,0,0);
 
-  char buf2[sizeof(buf)] = {0};
-  memcpy(buf2, buf, sizeof(buf2));
+	deskcol = colorwell->getRGBA();
 
-  char *basename = strrchr(buf2, '/');
+	//colorwell->setRGBA(FXRGB(59, 110, 165));
 
-  if (basename == NULL) {
-    basename = strdup(config.buffer);
-  }
 
-  if (basename[0] == '/') {
-    for (i = 1; i < buflen; i++) {
-      basename[i-1] = basename[i];
-    }
-  } */
+	picdisplay->insertItem(0, "Center", NULL, (void*)_IMGMODE_CENTER);
+	picdisplay->insertItem(1, "Tile", NULL, (void*)_IMGMODE_TILED);
+	picdisplay->insertItem(2, "Stretch", NULL, (void*)_IMGMODE_STRETCH);
+	picdisplay->insertItem(3, "Fill", NULL, (void*)_IMGMODE_FILL);
 
-  
+	picdisplay->setNumVisible(picdisplay->getNumItems());
 
-  //printf("%s\n",basename);
+	if (wallcfg.mode == _IMGMODE_CENTER) picdisplay->setCurrentItem(0);
+	if (wallcfg.mode == _IMGMODE_TILED) picdisplay->setCurrentItem(1);
+	if (wallcfg.mode == _IMGMODE_STRETCH) picdisplay->setCurrentItem(2);
+	if (wallcfg.mode == _IMGMODE_FILL) picdisplay->setCurrentItem(3);
 
-  //puts(config.buffer);
 
+	// !! SCREENSAVER TAB
+	// i think it should be obvious but i somehow get confused on what is what sometimes
+	new FXTabItem(tabbook,"Screen Saver",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+	FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0);
+	scrmonitor = new FXLabel(scrframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
 
+	FXGroupBox* scrgrp = new FXGroupBox(scrframe, "Screen Saver", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,12,-1,5);
 
-  // background tab
-  FXVerticalFrame* tabframe = new FXVerticalFrame(this,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0);
-  FXTabBook* tabbook = new FXTabBook(tabframe,this,ID_TABBOOK,LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_RIGHT, 0,0,0,0, 6,6,7,6);
+	FXHorizontalFrame* scrgrptop = new FXHorizontalFrame(scrgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
 
-  new FXTabItem(tabbook,"Background",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  FXVerticalFrame* bgframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-  prvlbl = new FXLabel(bgframe, "", prvimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,30);
 
-  new FXLabel(bgframe, "&Select a background picture or HTML document as Wallpaper:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
+	scrsel = new I2KListBox(scrgrptop,this,ID_LISTBOX,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
 
-  FXHorizontalFrame* setbgframe = new FXHorizontalFrame(bgframe,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 10,0); 
+	int modec=0;
+	char** modes = getModes(&modec);
 
-  //FXFrame* bglist = new FXFrame(setbgframe, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
-  //bglist->setBackColor(app->getBackColor());
- 
-  FXPacker* treeframe = new FXPacker(setbgframe, FRAME_THICK|FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0,  0,0,0,0);
-  tree = new FXTreeList(treeframe,this,ID_IMAGECHANGE,SCROLLERS_DONT_TRACK|FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|TREELIST_BROWSESELECT);
+	/*if (modes == NULL) {
+		puts("whoops!");
+	} */
 
-  //FXTreeItem* ogselect = tree->appendItem(0,basename,ico_bmp,ico_bmp,ogpath);
+	scrsel->insertItem(0, "(None)");
 
-  int count = 0;
+	Display* dpy = (Display*)app->getDisplay();
+	char* resmgr = XResourceManagerString(dpy);
+	XrmDatabase db;
+	XrmValue value;
 
-  char wallpaperpath[PATH_MAX] = "";
-  snprintf(wallpaperpath, sizeof(wallpaperpath), "%s/%s", getHomeDir(), "Pictures");
+	char* type;
 
-  
 
-  char** wallpapers = getWallpapers(wallpaperpath, &count);
-  char* wallname;
-  char wallnamecurr[PATH_MAX] = "";
-  char* wallnamecur = wallnamecurr;
-  FXTreeItem* ogselect = NULL;
+	if (resmgr) {
+		XrmInitialize();
+		db = XrmGetStringDatabase(resmgr);
 
-  // if you are going to question my order of adding treelist items
-  // you're right
-  //
-  // i have to do this otherwise theres some item thats like selected
-  // and not selected at the same time for some reason, even if i select
-  // it in the code...
-  //
-  // the first item added becomes "semi selected"
-  //
-  // its really weird, i know
+		if (XrmGetResource(db, "XLock.mode", "Xlock.mode", &type, &value)) {
+			scrvalue = value.addr;
+		}
 
-  FXImage* img;
+		if (XrmGetResource(db, "XIdle.delay", "Xidle.delay", &type, &value)) {
+			scrdelay = atoi(value.addr) / 60;
+		}
 
-  if (wallcfg.image[0] != '\0') {
-    char* imgpath = strdup(wallcfg.image);
+		if (XrmGetResource(db, "XIdle.program", "Xidle.program", &type, &value)) {
+			char* token = strtok(value.addr, " ");
 
-    wallnamecur = strrchr(imgpath, '/');
-    wallnamecur++;
+			while (token != NULL) {
+				if (!strcmp(token, "-nolock")) {
+					scrpassword = 0;
+				}
 
-    img = loadImage(app, wallcfg.image);
-    //createPreviewImage
-    //prvimage = genMonitorPreview(app, img);
-    genMonitorPreview(app, prvimage, img, deskcol);
-    //prvimage->create();
+				//puts(token);
+				token = strtok(NULL, " ");
+			}
+		}
+	}
 
-    ogselect = tree->appendItem(0, wallnamecur, ico_bmp, ico_bmp, imgpath);
-  } else {
-    genMonitorPreview(app, prvimage, NULL, deskcol);
-  }
-	  
-  noneitem = tree->appendItem(0,"(None)",ico_nobg,ico_nobg,NULL);
 
+	if (!modes || modec == 0) {
+		puts("whoops!");
+	} else {
+		for (int i = 0; i < modec; ++i) {
+			scrsel->insertItem(i+1, modes[i]);
+			if (!strcmp(modes[i], scrvalue))
+				scrsel->setCurrentItem(i+1);
+		}
 
-  for (int i = 0; i < count; i++) {
-    wallname = strrchr(wallpapers[i], '/');
-    wallname++;
+		//free(modes[i]);
+	}
 
-    if (strcmp(wallname, wallnamecur) == 0)
-      continue;
+	if (modec < 12) {
+		scrsel->setNumVisible(scrsel->getNumItems());
+	} else {
+		scrsel->setNumVisible(12);
+	}
 
-    tree->appendItem(0, wallname, ico_bmp, ico_bmp, strdup(wallpapers[i]));
-    free(wallpapers[i]);
-  }
+	free(modes);
 
+	new FXSeparator(scrgrptop, SEPARATOR_NONE|LAYOUT_FIX_WIDTH, 0,0,5,0);
 
-  //new FXImageFrame(bgframe, prvimage, FRAME_NONE);
+	btn = new FXButton(scrgrptop, "Se&ttings...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
+	btn->disable();
+	new FXSeparator(scrgrptop, SEPARATOR_NONE|LAYOUT_FIX_WIDTH, 0,0,6,0);
 
+	previewbtn = new FXButton(scrgrptop, "Pre&view", NULL, this, ID_PREVIEW, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
+	//btn->disable();
 
-  free(wallpapers);
 
-  //puts(wallname);
+	FXHorizontalFrame* scrgrpbot = new FXHorizontalFrame(scrgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,7,0, 0,0); 
 
+	FXCheckButton* chk;
+	// fix checkbox paddings eventually
+	// too chopped to do comctl jawn
+	passchk = new FXCheckButton(scrgrpbot, "&Password protected", this, ID_CHANGE, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
 
-  tree->setSortFunc(FXTreeList::ascendingCase);
-  tree->sortItems();
+	passchk->setCheck(scrpassword);
 
+	FXHorizontalFrame* waitcont = new FXHorizontalFrame(scrgrpbot,LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
 
+	new FXLabel(waitcont, "Wait  ", NULL, LABEL_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0,  0,0,0,0);
+	waitspin = new FXSpinner(waitcont,4,this,ID_CHANGE,SPIN_NORMAL|LAYOUT_CENTER_Y|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 0,0,1,1);
+	waitspin->setValue(scrdelay);
+	new FXLabel(waitcont, "  minutes", NULL, LABEL_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0,  0,0,0,0);
 
-  if (ogselect) {
-    tree->selectItem(ogselect);
 
-  }
+	// !! EFFECTS TAB
+	new FXTabItem(tabbook,"Effects",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
 
-  tree->moveItem(tree->getFirstItem(), 0, noneitem);
+	// coffee spelt backwards is eeffoc
+	// because when i dont have my morning coffee
+	// i dont give eeffoc
 
+	FXVerticalFrame* effxframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
 
+	FXGroupBox* effxbotgrp = new FXGroupBox(effxframe, "Visual effects", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,8,4,6);
+	//FXHorizontalFrame* fxbotgrp = new FXHorizontalFrame(effxbotgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
 
+	chk = new FXCheckButton(effxbotgrp, "&Smooth edges of screen fonts", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
+	chk->disable();
+	chk = new FXCheckButton(effxbotgrp, "Show &window contents while dragging", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
+	chk->disable();
 
 
-  FXVerticalFrame* setbgcontrols = new FXVerticalFrame(setbgframe,LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,2,0, 0,0); 
-  FXButton* btn;
-  new FXButton(setbgcontrols, "&Browse...", NULL, this, ID_BROWSE, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9); // i could use a fxframe, but semantics r cute
-  new FXLabel(setbgcontrols, "Picture &Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
-  picdisplay = new I2KListBox(setbgcontrols,this,ID_CHANGE,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
-  new FXSeparator(setbgcontrols, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9);
-  new FXLabel(setbgcontrols, "Color:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  0,0,0,2);
-  
-  //btn = new FXButton(setbgcontrols, "&Pattern...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  //btn->disable();
+	// !! SETTINGS TAB
 
+	Window root = DefaultRootWindow(dpy);
 
-  colorwell = new FXColorWell(setbgcontrols,deskcol,this,ID_COLORCHANGE,COLORWELL_OPAQUEONLY|LAYOUT_FIX_WIDTH|LAYOUT_FILL_Y, 0,0,75,0, 0,0,0,0);
+	XWindowAttributes attr;
 
-  deskcol = colorwell->getRGBA();
+	XGetWindowAttributes(dpy, root, &attr);
+	//printf("depth: %d\n", attr.depth);
 
-  //colorwell->setRGBA(FXRGB(59, 110, 165));
+	int evbase, errbase;
+	char xcomposite;
 
+	if (XCompositeQueryExtension(dpy, &evbase, &errbase)) {
+		xcomposite = 1;
+	} else {
+		xcomposite = 0;
+	}
 
-  picdisplay->insertItem(0, "Center", NULL, (void*)_IMGMODE_CENTER);
-  picdisplay->insertItem(1, "Tile", NULL, (void*)_IMGMODE_TILED);
-  picdisplay->insertItem(2, "Stretch", NULL, (void*)_IMGMODE_STRETCH);
-  picdisplay->insertItem(3, "Fill", NULL, (void*)_IMGMODE_FILL);
 
-  picdisplay->setNumVisible(picdisplay->getNumItems());
+	new FXTabItem(tabbook,"Settings",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+	FXVerticalFrame* settingsframe = new FXVerticalFrame(tabbook,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
+	new FXLabel(settingsframe, "", monitorimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,18);
 
-  if (wallcfg.mode == _IMGMODE_CENTER) picdisplay->setCurrentItem(0);
-  if (wallcfg.mode == _IMGMODE_TILED) picdisplay->setCurrentItem(1);
-  if (wallcfg.mode == _IMGMODE_STRETCH) picdisplay->setCurrentItem(2);
-  if (wallcfg.mode == _IMGMODE_FILL) picdisplay->setCurrentItem(3);
+	new FXLabel(settingsframe, "Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
+	new FXLabel(settingsframe, "Default Monitor on Cirrus Logic 5446 Compatible Graphics Adapter", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,13);
 
+	// bottom groupboxes
+	//FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
+	FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,PACK_UNIFORM_WIDTH|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X, 0,0,0,0, 0,1,0,0, 10,0);
 
-  // !! SCREENSAVER TAB
-  // i think it should be obvious but i somehow get confused on what is what sometimes
-  new FXTabItem(tabbook,"Screen Saver",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0);
-  scrmonitor = new FXLabel(scrframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
 
-  FXGroupBox* scrgrp = new FXGroupBox(scrframe, "Screen Saver", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,12,-1,5);
+	FXGroupBox* settingsgrpcol = new FXGroupBox(settingsgrpc, "Colors", LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,7,0,7, 8,8);
+	I2KListBox* moncolsel = new I2KListBox(settingsgrpcol,NULL,0,LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
 
-  FXHorizontalFrame* scrgrptop = new FXHorizontalFrame(scrgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
 
+	FXImage* img_hicolor = new FXGIFImage(app, resico_hicolor, IMAGE_OPAQUE);
+	FXImage* img_medcolor = new FXGIFImage(app, resico_medcolor, IMAGE_OPAQUE);
 
-  scrsel = new I2KListBox(scrgrptop,this,ID_LISTBOX,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
+	if (attr.depth <= 4) {
+		moncolsel->appendItem("16 Color", NULL, (void*)4);
+		new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
+	} else if (attr.depth <= 8) {
+		moncolsel->appendItem("256 Colors", NULL, (void*)8);
+		new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
+	} else if (attr.depth <= 16) {
+		moncolsel->appendItem("High Color (16 bit)", NULL, (void*)16);
+		new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
+	} else if (attr.depth <= 24) {
+		// there isnt really a concept of 32 bit color in X
+		// so i think the closest thing would be checking if
+		// the x server is 24 bit color and checking if xcomposite
+		// is supported
 
-  int modec=0;
-  char** modes = getModes(&modec);
+		if (xcomposite) moncolsel->appendItem("True Color (32 bit)", NULL, (void*)32);
+		else moncolsel->appendItem("True Color (24 bit)", NULL, (void*)24);
 
-  if (modes == NULL) {
-    puts("whoops!");
-  }
+		new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
+	}
 
-  scrsel->insertItem(0, "(None)");
+	moncolsel->setNumVisible(moncolsel->getNumItems());
+	moncolsel->disable();
 
-  Display* dpy = (Display*)app->getDisplay();
-  char* resmgr = XResourceManagerString(dpy);
-  XrmDatabase db;
-  XrmValue value;
 
-  char* type;
+	FXGroupBox* settingsgrpcr = new FXGroupBox(settingsgrpc, "Screen area", LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,12,-1,5);
+	FXHorizontalFrame* settingsgrpres = new FXHorizontalFrame(settingsgrpcr,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
 
 
-  if (resmgr) {
-    XrmInitialize();
-    db = XrmGetStringDatabase(resmgr);
+	//I2KListBox* reslistbox = new I2KListBox(settingsgrpcr,NULL,NULL,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
 
-    if (XrmGetResource(db, "XLock.mode", "Xlock.mode", &type, &value)) {
-      scrvalue = value.addr;
-    }
+	FXLabel* lbl;
+	lbl = new FXLabel(settingsgrpres, "Less", NULL, LABEL_NORMAL, 0,0,0,0, 1,0,1,0);
+	lbl->disable();
 
-    if (XrmGetResource(db, "XIdle.delay", "Xidle.delay", &type, &value)) {
-      scrdelay = atoi(value.addr) / 60;
-    }
+	FXSlider* resslider = new FXSlider(settingsgrpres, this, ID_RESSLIDER, SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN|LAYOUT_FIX_HEIGHT|SLIDER_NORMAL|LAYOUT_FILL_X, 0,0,0,29,  16,15,3,0);
+	resslider->setRange(0, 3);
+	resslider->setHeadSize(11);
+	resslider->setSlotSize(4);
 
-    if (XrmGetResource(db, "XIdle.program", "Xidle.program", &type, &value)) {
-      char* token = strtok(value.addr, " ");
+	//resslider->setTickDelta(4);
 
-      while (token != NULL) {
-        if (!strcmp(token, "-nolock")) {
-          scrpassword = 0;
-        }
+	lbl = new FXLabel(settingsgrpres, "More", NULL, LABEL_NORMAL, 0,0,0,0, 1,0,1,0);
+	lbl->disable();
 
-	  //puts(token);
-	  token = strtok(NULL, " ");
-      }
-    }
-  }
+	/* FXWindow* fxroot = app->getRootWindow();
 
-  
-  if (!modes || modec == 0) {
-    puts("whoops!");
-  } else {
-    for (int i = 0; i < modec; ++i) {
-      scrsel->insertItem(i+1, modes[i]);
-      if (!strcmp(modes[i], scrvalue))
-        scrsel->setCurrentItem(i+1);
-    }
-    
-    //free(modes[i]);
-  }
+	   int rwidth = fxroot->getWidth();
+	   int rheight = fxroot->getHeight(); */
 
-  if (modec < 12) {
-    scrsel->setNumVisible(scrsel->getNumItems());
-  } else {
-    scrsel->setNumVisible(12);
-  }
+	char restext[32];
 
-  free(modes);
+	snprintf(restext, sizeof(restext), "%d by %d pixels", attr.width, attr.height);
 
-  new FXSeparator(scrgrptop, SEPARATOR_NONE|LAYOUT_FIX_WIDTH, 0,0,5,0);
-  
-  btn = new FXButton(scrgrptop, "Se&ttings...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  btn->disable();
-  new FXSeparator(scrgrptop, SEPARATOR_NONE|LAYOUT_FIX_WIDTH, 0,0,6,0);
+	lbl = new FXLabel(settingsgrpcr, restext, NULL, LAYOUT_CENTER_X|LABEL_NORMAL, 0,0,0,0, 2,0,0,0);
+	lbl->disable();
 
-  previewbtn = new FXButton(scrgrptop, "Pre&view", NULL, this, ID_PREVIEW, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23,  0,0,0,0);
-  //btn->disable();
 
-  
-  FXHorizontalFrame* scrgrpbot = new FXHorizontalFrame(scrgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,7,0, 0,0); 
+	//FXHorizontalFrame* rescolgrpbot = new FXHorizontalFrame(resgrpcc,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,7,0, 0,0); 
 
-  FXCheckButton* chk;
-  // fix checkbox paddings eventually
-  // too chopped to do comctl jawn
-  passchk = new FXCheckButton(scrgrpbot, "&Password protected", this, ID_CHANGE, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
 
-  passchk->setCheck(scrpassword);
 
-  FXHorizontalFrame* waitcont = new FXHorizontalFrame(scrgrpbot,LAYOUT_RIGHT|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
-  
-  new FXLabel(waitcont, "Wait  ", NULL, LABEL_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0,  0,0,0,0);
-  waitspin = new FXSpinner(waitcont,4,this,ID_CHANGE,SPIN_NORMAL|LAYOUT_CENTER_Y|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 0,0,1,1);
-  waitspin->setValue(scrdelay);
-  new FXLabel(waitcont, "  minutes", NULL, LABEL_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0,  0,0,0,0);
 
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(tabframe, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 6, 0, 7, 6, 0);
 
-  // !! EFFECTS TAB
-  new FXTabItem(tabbook,"Effects",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
+	new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
 
-  // coffee spelt backwards is eeffoc
-  // because when i dont have my morning coffee
-  // i dont give eeffoc
 
-  FXVerticalFrame* effxframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-
-  FXGroupBox* effxbotgrp = new FXGroupBox(effxframe, "Visual effects", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,8,4,6);
-  //FXHorizontalFrame* fxbotgrp = new FXHorizontalFrame(effxbotgrp,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
-
-  chk = new FXCheckButton(effxbotgrp, "&Smooth edges of screen fonts", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
-  chk->disable();
-  chk = new FXCheckButton(effxbotgrp, "Show &window contents while dragging", NULL, 0, CHECKBUTTON_NORMAL,0,0,0,0,  0,1,1,1);
-  chk->disable();
-
-
-  // !! SETTINGS TAB
-
-  Window root = DefaultRootWindow(dpy);
-
-  XWindowAttributes attr;
-
-  XGetWindowAttributes(dpy, root, &attr);
-	  //printf("depth: %d\n", attr.depth);
-
-  int evbase, errbase;
-  char xcomposite;
-
-  if (XCompositeQueryExtension(dpy, &evbase, &errbase)) {
-    xcomposite = 1;
-  } else {
-    xcomposite = 0;
-  }
-
-
-  new FXTabItem(tabbook,"Settings",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-  FXVerticalFrame* settingsframe = new FXVerticalFrame(tabbook,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0); 
-  new FXLabel(settingsframe, "", monitorimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,18);
-
-  new FXLabel(settingsframe, "Display:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
-  new FXLabel(settingsframe, "Default Monitor on Cirrus Logic 5446 Compatible Graphics Adapter", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,13);
-
-  // bottom groupboxes
-  //FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
-  FXHorizontalFrame* settingsgrpc = new FXHorizontalFrame(settingsframe,PACK_UNIFORM_WIDTH|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X, 0,0,0,0, 0,1,0,0, 10,0);
-
-
-  FXGroupBox* settingsgrpcol = new FXGroupBox(settingsgrpc, "Colors", LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,7,0,7, 8,8);
-  I2KListBox* moncolsel = new I2KListBox(settingsgrpcol,NULL,0,LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
-
-
-  FXImage* img_hicolor = new FXGIFImage(app, resico_hicolor, IMAGE_OPAQUE);
-  FXImage* img_medcolor = new FXGIFImage(app, resico_medcolor, IMAGE_OPAQUE);
-
-  if (attr.depth <= 4) {
-    moncolsel->appendItem("16 Color", NULL, (void*)4);
-    new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
-  } else if (attr.depth <= 8) {
-    moncolsel->appendItem("256 Colors", NULL, (void*)8);
-    new FXImageFrame(settingsgrpcol, img_medcolor, FRAME_SUNKEN);
-  } else if (attr.depth <= 16) {
-    moncolsel->appendItem("High Color (16 bit)", NULL, (void*)16);
-    new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
-  } else if (attr.depth <= 24) {
-    // there isnt really a concept of 32 bit color in X
-    // so i think the closest thing would be checking if
-    // the x server is 24 bit color and checking if xcomposite
-    // is supported
-
-    if (xcomposite) moncolsel->appendItem("True Color (32 bit)", NULL, (void*)32);
-    else moncolsel->appendItem("True Color (24 bit)", NULL, (void*)24);
-
-    new FXImageFrame(settingsgrpcol, img_hicolor, FRAME_SUNKEN);
-  }
-
-  moncolsel->setNumVisible(moncolsel->getNumItems());
-  moncolsel->disable();
-
-
-  FXGroupBox* settingsgrpcr = new FXGroupBox(settingsgrpc, "Screen area", LAYOUT_FILL_X|FRAME_THICK, 0,0,0,0, 7,12,-1,5);
-  FXHorizontalFrame* settingsgrpres = new FXHorizontalFrame(settingsgrpcr,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0); 
-
-
-  //I2KListBox* reslistbox = new I2KListBox(settingsgrpcr,NULL,NULL,LAYOUT_BOTTOM|COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 3, 0, 2, 1);
-  
-  FXLabel* lbl;
-  lbl = new FXLabel(settingsgrpres, "Less", NULL, LABEL_NORMAL, 0,0,0,0, 1,0,1,0);
-  lbl->disable();
-
-  FXSlider* resslider = new FXSlider(settingsgrpres, this, ID_RESSLIDER, SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN|LAYOUT_FIX_HEIGHT|SLIDER_NORMAL|LAYOUT_FILL_X, 0,0,0,29,  16,15,3,0);
-  resslider->setRange(0, 3);
-  resslider->setHeadSize(11);
-  resslider->setSlotSize(4);
-  
-  //resslider->setTickDelta(4);
-
-  lbl = new FXLabel(settingsgrpres, "More", NULL, LABEL_NORMAL, 0,0,0,0, 1,0,1,0);
-  lbl->disable();
-
-  /* FXWindow* fxroot = app->getRootWindow();
-
-  int rwidth = fxroot->getWidth();
-  int rheight = fxroot->getHeight(); */
-
-  char restext[32];
-
-  snprintf(restext, sizeof(restext), "%d by %d pixels", attr.width, attr.height);
-
-  lbl = new FXLabel(settingsgrpcr, restext, NULL, LAYOUT_CENTER_X|LABEL_NORMAL, 0,0,0,0, 2,0,0,0);
-  lbl->disable();
-
-
-  //FXHorizontalFrame* rescolgrpbot = new FXHorizontalFrame(resgrpcc,LAYOUT_FILL_X|FRAME_NONE, 0,0,0,0, 0,0,7,0, 0,0); 
-
-
-
-
-  FXHorizontalFrame* btncont = new FXHorizontalFrame(tabframe, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 6, 0, 7, 6, 0);
-
-  new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-  new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-  applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-
-  if (!ogselect) {
-    tree->selectItem(noneitem);
-  }
-
-
-
-  applybtn->disable();
+	applybtn->disable();
 }
 
 int main(int argc, char *argv[]) {
@@ -1639,7 +1534,7 @@ int main(int argc, char *argv[]) {
 	ico_mainico = new FXGIFIcon(app, resico_mainico, IMAGE_NEAREST);
 
 	controlwin = new DesktopProperties(app);
-	
+
 	application.create();
 	controlwin->show(PLACEMENT_OWNER);
 

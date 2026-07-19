@@ -1,0 +1,29 @@
+#!/bin/sh
+
+OLDPATH="$PATH"
+NEWPATH="$(sudo -l < /dev/null | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n\nUser .*/\n/' | tr ',' '\n' | sed -n 's/^ *secure_path=//p' | tail -n 1 | sed 's/\\\\/\n/g; s/\\//g; s/\n/\\/g')"
+export WHICHPROG="Unknown"
+
+if test "$NEWPATH"; then
+	PATH="$NEWPATH"
+fi
+
+for i in "$@"; do
+	case "$i" in
+		-* ) continue ;;
+	esac
+
+	WHICHPROG="$(which "$i")"
+
+	if ! test $WHICHPROG; then
+		WHICHPROG="$i"
+	fi
+
+	break
+done
+
+PATH="$OLDPATH"
+
+SUDO_ASKPASS="PUTPREFIXHERE/libexec/ice2k/i2ksudo-askpass" SUDO_PROMPT='%h\%p' SUDO_COMMAND="Program: $WHICHPROG
+Command: $*" XAUTHORITY="$(xauth info | head -n 1 | cut -c 23-)" sudo -A "$@"
+

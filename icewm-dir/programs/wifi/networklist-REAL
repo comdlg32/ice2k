@@ -1,5 +1,20 @@
 #!/bin/sh
 
+dbms() {
+	if ! test "$1"; then
+		return
+	fi
+
+	if [ $1 -ge -6000 ]; then
+	    echo "network-wireless-100"
+	elif [ $1 -ge -6700 ]; then
+	    echo "network-wireless-75"
+	elif [ $1 -ge -7500 ]; then
+		echo "network-wireless-50"
+	elif [ $1 -lt -7500 ]; then
+		echo "network-wireless-25"
+	fi
+}
 
 # does system use iwd?
 if type iwctl >/dev/null 2>&1
@@ -14,25 +29,10 @@ then
 	netlistcon="$(iwctl station $@ get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
 	netlist="$(echo "$netlistcon" | cut -c 3- )"
 	netnumber="$(echo "$netlist" | wc -l)"
-	#echo "$netlistcon"
-	#echo
-	#echo "$netlist" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' | sed 's/..... *$//' | sed 's/[[:blank:]]*$//'
-
-	dbms() {
-		if [ $dbms -ge -6000 ]; then
-		        echo "network-wireless-100"
-		elif [ $dbms -ge -6700 ]; then
-		        echo "network-wireless-75"
-		elif [ $dbms -ge -7500 ]; then
-		        echo "network-wireless-50"
-		elif [ $dbms -lt -7500 ]; then
-			        echo "network-wireless-25"
-		fi
-	}
 
 	for i in $(seq -s " " 1 $netnumber); do
-		export dbms="$(echo "$netlist" | awk 'NF>1{print $NF}' | sed -n "${i}p")"
-		dbms
+		dbms "$(echo "$netlist" | awk 'NF>1{print $NF}' | sed -n "${i}p")"
+
 		echo "$netlistcon" | cut -c 1 | sed -n "${i}p"
 		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
 		echo "$netlist" | sed -n "${i}p" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' |  awk 'NF>1{print $NF}'

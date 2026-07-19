@@ -1,0 +1,30 @@
+#!/bin/sh
+if ! test "$1"; then
+	echo 'Please put hostname in first parameter!' >&2
+	exit 2
+fi
+
+isHostnameValid() {
+	if test `echo $1 | awk '{if($0 !~ /^\./ &&  $0 !~ /\.$/ && $0 !~ /^[[:digit:]]/ && $0 !~ /^-/ && $0 !~ /-$/ && $0 !~ /[[:space:]]/ && $0 !~ /[[:cntrl:]]/){num=split($0, A,".");if(num<=3){for(i=1;i<=num;i++){if(length(A)>63){exit};Q=Q?Q+length(A):length(A)};if(length(Q)<=189){print 1}}}}'`; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+if ! isHostnameValid "$1"; then
+	echo 'Hostname is invalid!' >&2
+	exit 3
+fi
+
+set -e
+
+DOMAINNAME="$(hostname -d)"
+
+if test $DOMAINNAME; then
+	echo "127.0.1.1 $1.$DOMAINNAME $1" >> /etc/hosts
+else
+	echo "127.0.1.1 $1" >> /etc/hosts
+fi
+
+echo "$1" > /etc/hostname

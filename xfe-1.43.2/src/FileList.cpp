@@ -3789,6 +3789,7 @@ void FileList::setDirectory(const FXString& pathname, const FXbool histupdate, F
 
     //addressicon->setIcon(minifolderopenicon);
     }
+
 }
 
 

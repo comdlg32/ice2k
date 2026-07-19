@@ -61,6 +61,7 @@ simplebuild()
 simplebuild i2klibs/ini
 simplebuild i2klibs/branding
 simplebuild i2klibs/comctl32
+simplebuild i2klibs/fxextra
 simplebuild games/winmine
 simplebuild mmc/devmgmt
 simplebuild ice2kver
@@ -69,9 +70,14 @@ simplebuild shutdown
 simplebuild msgina
 simplebuild shell/hotplug
 simplebuild shell/backmgr
+simplebuild control/control
+simplebuild control/ncpaprop
 simplebuild control/sysdm
+simplebuild control/timedate
 simplebuild control/desk
 simplebuild rundlg
+simplebuild calendar
+simplebuild i2ksudo
 
 # (
 # cd icewm-dir/programs/ice2krun

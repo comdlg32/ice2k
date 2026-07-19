@@ -11,7 +11,7 @@ PREFIX=/usr/local
 ICONS = res/*.gif res/*.bmp
 SOURCES = desk.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = deskcpl
+EXECUTABLE = desk.cpi
 
 CPPFLAGS += `fox-config --cflags`
 

@@ -352,12 +352,10 @@ int mines;
 #define CLICKEDBOMB 3
 
 struct Cell {
-	BOOL mine;
-	BOOL revealed;
-
-	CELLSTATE state;
-	
-	int neighbors;
+	unsigned char mine;
+	unsigned char state;
+	unsigned char revealed;
+	unsigned char neighbors;
 };
 
 Cell** board;
@@ -1079,7 +1077,7 @@ public:
 		_BUTTONVAL(MINEBUTTON_UNKNOWN_PRESSED, 6),
 
 		_BUTTONVAL(MINEBUTTON_EIGHT, 7),
-		_BUTTONVAL(MINEBUTTON_SEVEN, 8), // six sevennnnn
+		_BUTTONVAL(MINEBUTTON_SEVEN, 8),
 		_BUTTONVAL(MINEBUTTON_SIX, 9),
 		_BUTTONVAL(MINEBUTTON_FIVE, 10),
 		_BUTTONVAL(MINEBUTTON_FOUR, 11),

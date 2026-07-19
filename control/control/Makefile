@@ -2,13 +2,13 @@
 
 CC = g++
 
-CFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
-CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+CFLAGS = -Wall -c -fno-rtti -fno-exceptions -g -O2
+CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -g -O2
 LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*.png res/items/*.png res/xpitems/*.png
+ICONS = res/*.png res/items/*.png res/xpitems/*.png res/ncpa/*.png res/xpncpa/*.png res/fonts/*.png
 SOURCES = control.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = control

@@ -36,7 +36,7 @@ PATH="$scriptdir:$PATH"
 KillPID animbg
 xrefresh
 #icewmbg -r
-backmgr
+backmgr &
 
 if [ -f "$HOME/.icewm/cfg/animdesk/enabled" ]; then
 	if [ "$(cat "$HOME/.icewm/cfg/animdesk/enabled")" -eq "1" ]; then

@@ -2,16 +2,16 @@
 
 CC = g++
 
-CFLAGS = -Wall -c
-CPPFLAGS = -Wall -c
-LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
-
 PREFIX=/usr/local
+
+CFLAGS = -Wall -c -DINSTPREFIX=\"$(PREFIX)\"
+CPPFLAGS = -Wall -c -DINSTPREFIX=\"$(PREFIX)\"
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 ICONS = res/*.gif res/*.bmp
 SOURCES = sysdm.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = sysdmcpl
+EXECUTABLE = sysdm.cpi
 
 CPPFLAGS += `fox-config --cflags`
 
@@ -31,7 +31,11 @@ clean:
 	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
 
 install:
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/libexec/ice2k
 	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
+	cp sethostname $(PREFIX)/libexec/ice2k/sethostname
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(EXECUTABLE)
+	rm -f $(PREFIX)/libexec/ice2k/sethostname

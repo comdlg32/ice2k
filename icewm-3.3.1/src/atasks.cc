@@ -1133,9 +1133,21 @@ void TaskPane::relayoutNow(bool force) {
         return;
     tc = max(tc, taskBarButtonWidthDivisor);
 
-    const int wid = (width() - 2) / tc;
-    const int rem = (width() - 2) % tc;
-    int x = 0;
+	int widthmax = 0;
+	if (taskBarButtonWidthMax == 0) widthmax = width();
+	else widthmax = taskBarButtonWidthMax;
+
+	const int wid2 = (width() - 2) / tc;
+    const int wid = min(wid2, widthmax);
+	int rem = 0;
+	
+    if (wid == widthmax) {
+		rem = 0;
+	} else {
+		rem = (width() - 2) % tc;
+	}
+    //const int rem = 0;
+	int x = 0;
     int lc = 0;
 
     for (TaskButton* task : fTasks) {

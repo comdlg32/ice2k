@@ -587,7 +587,7 @@ YXTray::YXTray(YXTrayNotifier *notifier,
     addStyle(wsNoExpose);
     setTitle("YXTray");
     setParentRelative();
-    setSize(1, trayIconMaxHeight + fDrawBevel);
+    setSize(1, trayIconMaxHeight + fDrawBevel*2);
     fTrayProxy = new YXTrayProxy(atom, this);
     regainTrayWindows();
 }
@@ -671,7 +671,7 @@ bool YXTray::trayRequestDock(Window win, mstring title) {
         tlog("systray docked window  0x%08lx at %d", win, iter.where());
 
     unsigned w = max(width(), 2U * fDrawBevel) + ww;
-    unsigned h = max(height(), hh + fDrawBevel);
+    unsigned h = max(height(), hh + 2U * fDrawBevel);
     trayUpdateGeometry(w, h, true);
     relayout(true);
     return true;
@@ -780,7 +780,7 @@ void YXTray::relayout(bool enforced) {
 
     int aw = 0;
     int countVisible = 0;
-    const unsigned h = trayIconMaxHeight + fDrawBevel;
+    const unsigned h = trayIconMaxHeight + 2U*fDrawBevel;
     XWindowAttributes attr;
 
     for (IterType ec = fDocked.reverseIterator(); ++ec; ) {
@@ -803,7 +803,7 @@ void YXTray::relayout(bool enforced) {
             // skip
         }
         else if (ec->client()->getWindowAttributes(&attr)) {
-            int eh = h - fDrawBevel;
+            int eh = h - 2U*fDrawBevel;
             int ew = ec->width();
             int ay = fDrawBevel;
             aw = max(int(fDrawBevel), aw);

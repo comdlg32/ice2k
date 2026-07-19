@@ -39,6 +39,8 @@ data (unlikely. however you are most likely to lose dotfiles)
 MAIN AUTHORS
 xcomposite (me)
 https://johnconnection.neocities.org/ (https://github.com/johnconnection )
+(he worked on some things, but I rewritten his code when I moved
+majority of Ice2K.sys to FOX toolkit)
 
 CREDITS
 Thanks to enfaun and PixelOCDGuy for base of IceWM theme
@@ -51,7 +53,8 @@ http://roland65.free.fr/xfe/
 Thanks to nestoris for SE98 icon theme
 Thanks to b00merang for linxp icon theme
 Thanks to the FOX toolkit contributors for contributing to the FOX project,
-some code of it is being used here.
+some code of it is being used here, and it's the main GUI toolkit of this
+project.
 Thanks to https://github.com/travy-patty for logo and branding
 
 Thanks to the cbatticon authors for their program
@@ -59,11 +62,10 @@ Thanks to the yad authors for their program
 Thanks to the developers of the IceWM project
 Thanks to https://sillycycle.com/xlockmore.html for working on xlockmore
 all these years
-Thanks to Microsoft for their icons/assets/design :P
-
-And thanks to YOU for being here! :^)
+Thanks to Microsoft for their icons/assets/design
 
 If I forgot to credit someone, let me know.
 
-Anything that I haven't put a license file in is licensed in the GPLv2.
+Any of my code that I haven't put a license file in is licensed in the
+GPLv2.
 ```

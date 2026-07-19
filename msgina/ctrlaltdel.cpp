@@ -375,13 +375,14 @@ long CtrlAltDelWindow::onCmdTaskManager(FXObject* sender,FXSelector sel,void*) {
 }
 
 long CtrlAltDelWindow::onCmdShutDown(FXObject* sender,FXSelector sel,void*) {
-  system("{ sleep 0.1; ~/.icewm/programs/shutdown/shutdown; } &");
+  system("{ sleep 0.5; shutdlg; } &");
   getApp()->exit();
   return 1;
 }
 
 long CtrlAltDelWindow::onCmdLogOff(FXObject* sender,FXSelector sel,void* voidptr) {
-  onCmdShutDown(sender, sel, voidptr);
+  system("{ sleep 0.5; i2klogoff; } &");
+  getApp()->exit();
   return 1;
 }
 
@@ -563,7 +564,7 @@ int main(int argc,char *argv[]) {
     printf(taskid);
 
     if (currentwksp == -1 || workspaces == -1) {
-      fprintf(stderr, "whoopsie, couldn't retrieve workspace information. are you running this on icewm?\n");
+      fputs("Could not retrieve workspace information. Are you running this on IceWM?\n", stderr);
       ptrapp->exit();
       exit(1);
       return 0;

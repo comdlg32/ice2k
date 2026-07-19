@@ -49,6 +49,7 @@ XIV(bool, taskBarShowWindows,                   true)
 XIV(int, taskBarShowShowDesktopButton,          1)
 
 XIV(int, taskBarButtonWidthDivisor,             3)
+XIV(int, taskBarButtonWidthMax,                 163)
 XIV(int, taskBarWidthPercentage,                100)
 XSV(const char *, taskBarJustify,               "left")
 XIV(bool, taskBarEnableSystemTray,              true)
@@ -414,6 +415,7 @@ cfoption icewm_preferences[] = {
     OIV("TaskBarNetSamples",                    &taskBarNetSamples, 2, 1000,    "The width of the Net Monitor applet in pixels"),
     OIV("TaskBarNetDelay",                      &taskBarNetDelay, 10, (60*60*1000),    "Delay between Net Monitor samples in ms"),
     OIV("TaskbarButtonWidthDivisor",            &taskBarButtonWidthDivisor, 1, 50, "default number of tasks in taskbar"),
+    OIV("TaskbarButtonWidthMax",                &taskBarButtonWidthMax,     0, 999999, "maximum width of task in taskbar"),
     OIV("TaskBarWidthPercentage",               &taskBarWidthPercentage, 0, 100, "Task bar width as percentage of the screen width"),
     OSV("TaskBarJustify",                       &taskBarJustify, "Taskbar justify left, right or center"),
     OIV("TaskBarApmGraphWidth",                 &taskBarApmGraphWidth, 1, 1000,  "Width of battery Monitor"),

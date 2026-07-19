@@ -8,8 +8,8 @@ CXXFLAGS = -Wall -c
 
 PREFIX = /usr/local
 
-CFLAGS += -c --std=c99
-CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic
+CFLAGS += -c --std=c99 -g
+CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic -g
 LDFLAGS += `fox-config --libs` -lctl32
 
 OUTPUT = libiwiz97.so

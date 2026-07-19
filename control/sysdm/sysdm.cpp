@@ -21,7 +21,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <ctype.h>
-
+#include <sys/wait.h>
 FXMainWindow* sysdmwin;
 
 
@@ -183,6 +183,8 @@ class ChangeHostnameBox : public FXDialogBox {
 
 		// Message handlers
 		long onSetFocus(FXObject*,FXSelector,void*);
+		long onCmdAccept(FXObject*,FXSelector,void*);
+
 
 
 		void setFocus();
@@ -192,6 +194,8 @@ class ChangeHostnameBox : public FXDialogBox {
 		// Messages for our class
 		enum {
 			ID_MAINWIN=FXMainWindow::ID_LAST,
+			ID_ACCEPT,
+			ID_LAST
 			//ID_SETFOCUS_T
 		};
 
@@ -210,70 +214,114 @@ class ChangeHostnameBox : public FXDialogBox {
 
 // Change computer name window
 FXDEFMAP(ChangeHostnameBox) ChangeHostnameBoxMap[] = {
-	//  FXMAPFUNC(SEL_TIMEOUT, ChangeHostnameBox::ID_SETFOCUS_T, ChangeHostnameBox::onSetFocus),
+	FXMAPFUNC(SEL_COMMAND, ChangeHostnameBox::ID_ACCEPT, ChangeHostnameBox::onCmdAccept),
 };
 
-FXIMPLEMENT(ChangeHostnameBox,FXDialogBox,ChangeHostnameBoxMap,ARRAYNUMBER(ChangeHostnameBoxMap))
+FXIMPLEMENT(ChangeHostnameBox,FXDialogBox,ChangeHostnameBoxMap,ARRAYNUMBER(ChangeHostnameBoxMap));
 
-	// hack to fix focusing issues on icewm
-	//
-	// fox toolkit calls setfocus on the main window one way or another
-	// and the way fox focuses the window causes issues and right now
-	// i'm too lazy to fork fox to fix it
-	void ChangeHostnameBox::setFocus() { return; }
+// hack to fix focusing issues on icewm
+//
+// fox toolkit calls setfocus on the main window one way or another
+// and the way fox focuses the window causes issues and right now
+// i'm too lazy to fork fox to fix it
+void ChangeHostnameBox::setFocus() { return; }
 
-	ChangeHostnameBox::ChangeHostnameBox(FXWindow* owner):
+long ChangeHostnameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
+	int status;
+	char newhostname[HOST_NAME_MAX+1] = {0};
+	
+	strncpy(newhostname, compfield->getText().text(), sizeof(newhostname)-1);
+	newhostname[sizeof(newhostname)-1] = '\0';
 
-		FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0, 0, 0, 0,
-				11, 12, 11, 11, 0, 0) {
-			new FXLabel(this, "You can change the name of this computer. You must install", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,-1);
-			new FXLabel(this, "networking before you can change this computer's domain", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,-1);
-			new FXLabel(this, "membership.", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
-			new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,19);
+	if (fork() == 0) {
+		char* cmd = (char*)"i2ksudo";
+		char* args[] = { (char*)"i2ksudo", (char*)INSTPREFIX "/libexec/ice2k/sethostname", (char*)newhostname, (char*)NULL};
+		execvp(cmd, args);
+	} else {
+		wait(&status);
+		if (WIFEXITED(status)) {
+			int exitcode = WEXITSTATUS(status);
 
-			char hostname[HOST_NAME_MAX+1];
-			gethostname(hostname, HOST_NAME_MAX+1);
-
-			new FXLabel(this, "&Computer name:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
-
-			compfield = new FXTextField(this, 49,NULL,0,FRAME_SUNKEN|FRAME_THICK);
-			//compfield->setFocus();
-
-			compfield->setText(hostname);
-			compfield->selectAll();
-
-			new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,86); // why so much whitespace?
-																			   //
-			FXGroupBox* membergrp = new FXGroupBox(this, "Member of", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 12,12,2,12);
-			FXRadioButton* domainrad = new FXRadioButton(membergrp, "&Domain:", NULL, 0, RADIOBUTTON_NORMAL, 0,0,0,0,  2,0,2,0);
-			domainrad->disable();
-			FXTextField* domaintxt = new FXTextField(membergrp, 41, NULL, 0, LAYOUT_FIX_X|TEXTFIELD_NORMAL, 31,0,0,0,  2,2,2,1);
-			domaintxt->disable();
-			FXRadioButton* workgrad = new FXRadioButton(membergrp, "&Workgroup:", NULL, 0, RADIOBUTTON_NORMAL, 0,0,0,0,  2,0,4,0);
-			workgrad->setCheck(TRUE);
-			workgrad->disable();
-			FXTextField* worktxt = new FXTextField(membergrp, 41, NULL, 0, LAYOUT_FIX_X|TEXTFIELD_NORMAL, 31,0,0,0,  2,2,2,1);
-			worktxt->setText("WORKGROUP");
-			worktxt->setTextColor(getApp()->getShadowColor());
-			worktxt->disable();
-			membergrp->disable();
-
-
-			new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9);
-
-			//membergrp->disable();
-
-			FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
-
-			okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT,
-					BUTTON_DEFAULT|BUTTON_INITIAL|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-					0, 0, 75, 23, 3, 3, 2, 3);
-
-			cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL,
-					BUTTON_DEFAULT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-					0, 0, 75, 23, 3, 3, 2, 3);
-			//okbtn->setFocus();
+			switch (exitcode) {
+				case 0:
+					FXMessageBox::information(this, MBOX_OK, "Identification Changes",
+							"Successfully changed your hostname. Please reboot for changes to take effect.");
+					break;
+				case 2:
+					FXMessageBox::error(this, MBOX_OK, "Identification Changes",
+							"No hostname was filled in!");
+					break;
+				case 3:
+					FXMessageBox::error(this, MBOX_OK, "Identification Changes",
+							"Hostname is invalid!");
+					break;
+				default:
+					FXMessageBox::error(this, MBOX_OK, "Identification Changes",
+							"There was an error changing your hostname.");	
+			}
+		} else {
+			FXMessageBox::error(this, MBOX_OK, "Identification Changes",
+				"There was an error changing your hostname.");	
 		}
+	}
+
+	FXDialogBox::onCmdAccept(obj, sel, ptr);
+
+	return 1;
+}
+
+ChangeHostnameBox::ChangeHostnameBox(FXWindow* owner):
+
+FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0, 0, 0, 0,
+		11, 12, 11, 11, 0, 0) {
+	new FXLabel(this, "You can change the name of this computer. You must install", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
+	new FXLabel(this, "networking before you can change this computer's domain", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
+	new FXLabel(this, "membership.", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
+	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,19);
+
+	char hostname[HOST_NAME_MAX+1];
+	gethostname(hostname, HOST_NAME_MAX+1);
+
+	new FXLabel(this, "&Computer name:", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,2);
+
+	compfield = new FXTextField(this, 49,NULL,0,FRAME_SUNKEN|FRAME_THICK);
+	//compfield->setFocus();
+
+	compfield->setText(hostname);
+	compfield->selectAll();
+
+	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,86); // why so much whitespace?
+
+	FXGroupBox* membergrp = new FXGroupBox(this, "Member of", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 12,12,2,12);
+	FXRadioButton* domainrad = new FXRadioButton(membergrp, "&Domain:", NULL, 0, RADIOBUTTON_NORMAL, 0,0,0,0,  2,0,2,0);
+	domainrad->disable();
+	FXTextField* domaintxt = new FXTextField(membergrp, 41, NULL, 0, LAYOUT_FIX_X|TEXTFIELD_NORMAL, 31,0,0,0,  2,2,2,1);
+	domaintxt->disable();
+	FXRadioButton* workgrad = new FXRadioButton(membergrp, "&Workgroup:", NULL, 0, RADIOBUTTON_NORMAL, 0,0,0,0,  2,0,4,0);
+	workgrad->setCheck(TRUE);
+	workgrad->disable();
+	FXTextField* worktxt = new FXTextField(membergrp, 41, NULL, 0, LAYOUT_FIX_X|TEXTFIELD_NORMAL, 31,0,0,0,  2,2,2,1);
+	worktxt->setText("WORKGROUP");
+	worktxt->setTextColor(getApp()->getShadowColor());
+	worktxt->disable();
+	membergrp->disable();
+
+
+	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,9);
+
+	//membergrp->disable();
+
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
+
+	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT,
+			BUTTON_DEFAULT|BUTTON_INITIAL|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+			0, 0, 75, 23, 3, 3, 2, 3);
+
+	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL,
+			BUTTON_DEFAULT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+			0, 0, 75, 23, 3, 3, 2, 3);
+	//okbtn->setFocus();
+}
 
 
 ChangeHostnameBox::~ChangeHostnameBox() {
@@ -394,11 +442,11 @@ long SystemPropertiesWindow::onCmdEnvVars(FXObject* sender, FXSelector sel, void
 long SystemPropertiesWindow::onCmdNtldr(FXObject* sender, FXSelector sel, void* ptr) {
 	//getApp()->beginWaitCursor();
 	if (access("/boot/extlinux/extlinux.conf", F_OK) == 0)
-		system("xfw /boot/extlinux/extlinux.conf &");
+		system("i2ksudox -E xfw /boot/extlinux/extlinux.conf &");
 	else if (access("/boot/efi/loader/loader.conf", F_OK) == 0)
-		system("xfw /boot/efi/loader/loader.conf &");
+		system("i2ksudox -E xfw /boot/efi/loader/loader.conf &");
 	else
-		system("xfw /etc/default/grub &");
+		system("i2ksudox -E xfw /etc/default/grub &");
 
 	/* if (access("/boot/extlinux/extlinux.conf", F_OK) == 0)
 	   system("xfw /boot/extlinux/extlinux.conf &");
@@ -628,8 +676,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	/* new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed\n"
 	   "on your computer. Use the Device Manager to change the\n"
 	   "properties of any device.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0); */
-	new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,-1);
-	new FXLabel(devmgmtgrp, "on your computer. Use the Device Manager to change the", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,-1);
+	new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	new FXLabel(devmgmtgrp, "on your computer. Use the Device Manager to change the", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 	new FXLabel(devmgmtgrp, "properties of any device.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 
 	btn = new FXButton(devmgmtgrp, "&Device Manager...", NULL, this, ID_DEVMGMT, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
@@ -664,7 +712,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	}
 
 
-	FXPacker* infocont = new FXPacker(userframe,FRAME_NONE,0,0,0,0,  0,0,0,25, 26,-1);
+	FXPacker* infocont = new FXPacker(userframe,FRAME_NONE,0,0,0,0,  0,0,0,25, 26,0);
 	new FXLabel(infocont, "", userproficon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT, 0,0,0,0,  0,0,0,0);
 	new FXLabel(infocont, "User profiles contain desktop settings and other information", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 	new FXLabel(infocont, "related to your logon.  A different profile can be created on", NULL, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
@@ -766,7 +814,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	/* new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed\n"
 	   "on your computer. Use the Device Manager to change the\n"
 	   "properties of any device.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0); */
-	new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,-1);
+	new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 	new FXLabel(envvarsgrp, "certain types of information.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 
 	btn = new FXButton(envvarsgrp, "&Environment Variables...", NULL, this, ID_ENVVARS, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
