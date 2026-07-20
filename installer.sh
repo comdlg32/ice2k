@@ -62,11 +62,15 @@ simplebuild i2klibs/ini
 simplebuild i2klibs/branding
 simplebuild i2klibs/comctl32
 simplebuild i2klibs/fxextra
+simplebuild i2klibs/wizard
+simplebuild i2klibs/batmeter
+
 simplebuild games/winmine
 simplebuild mmc/devmgmt
 simplebuild ice2kver
 simplebuild batmeter
 simplebuild shutdown
+simplebuild logoff
 simplebuild msgina
 simplebuild shell/hotplug
 simplebuild shell/backmgr
@@ -75,9 +79,12 @@ simplebuild control/ncpaprop
 simplebuild control/sysdm
 simplebuild control/timedate
 simplebuild control/desk
+simplebuild control/fontview
+simplebuild control/powercfg
 simplebuild rundlg
 simplebuild calendar
 simplebuild i2ksudo
+simplebuild firstrun
 
 # (
 # cd icewm-dir/programs/ice2krun
@@ -116,15 +123,15 @@ sudo make install
 set +e
 ) || exit
 
-(
-cd xlockmore-*
-set -e
-./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
-make clean
-make -j$(nproc)
-sudo make install
-set +e
-) || exit
+#(
+#cd xlockmore-*
+#set -e
+#./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
+#make clean
+#make -j$(nproc)
+#sudo make install
+#set +e
+#) || exit
 
 
 (
@@ -156,6 +163,7 @@ sudo make install
 mv ~/.icewm ~/.icewm-old
 cp -rf icewm-dir ~/.icewm
 cp -rf .config ~/
+cp -rf dunstcfg ~/.config/dunst
 cp -rf .foxrc ~/
 cp -rf .idesktop ~/
 cp -rf .icons ~/

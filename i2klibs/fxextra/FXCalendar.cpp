@@ -48,7 +48,7 @@
 #include "FXArrowButton.h"
 #include "FXMenuButton.h"
 #include "FXToolTip.h"
-#include "ice2k/FXExtra/FXOptionMenu.h"
+//#include "ice2k/FXExtra/FXOptionMenu.h"
 #include "FXHorizontalFrame.h"
 #include "FXDCWindow.h"
 #include "FXFont.h"

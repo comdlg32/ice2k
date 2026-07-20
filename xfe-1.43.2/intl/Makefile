@@ -70,7 +70,7 @@ AR = ar
 CC = gcc
 LIBTOOL = @LIBTOOL@
 RANLIB = ranlib
-YACC = bison -y -d
+YACC = : -y -d
 YFLAGS = --name-prefix=__gettext
 
 # -DBUILDING_LIBINTL: Change expansion of LIBINTL_DLL_EXPORTED macro.
@@ -303,7 +303,7 @@ libintl.h: $(srcdir)/libgnuintl.h.in
 	  < $(srcdir)/libgnuintl.h.in > libintl.h
 
 charset.alias: $(srcdir)/config.charset
-	$(SHELL) $(srcdir)/config.charset 'x86_64-pc-linux-gnu' > t-$@
+	$(SHELL) $(srcdir)/config.charset 'i686-pc-linux-gnu' > t-$@
 	mv t-$@ $@
 
 check: all

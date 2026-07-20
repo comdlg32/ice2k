@@ -4,3 +4,11 @@
 Thumbs.db
 desktop.ini
 *.swp
+
+core
+core.*
+*.dmp
+*.stackdump
+
+*.o
+*.obj

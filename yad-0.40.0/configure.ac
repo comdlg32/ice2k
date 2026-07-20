@@ -1,10 +1,10 @@
-AC_INIT([YAD], [0.40.0], [https://sourceforge.net/p/yad-dialog/tickets/], yad, [https://sourceforge.net/projects/yad-dialog/])
+AC_INIT([YAD],[0.40.0],[https://sourceforge.net/p/yad-dialog/tickets/],[yad],[https://sourceforge.net/projects/yad-dialog/])
 AC_CONFIG_AUX_DIR([build])
 
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip])
 AM_SILENT_RULES([yes])
 
-AC_PREREQ([2.59])
+AC_PREREQ([2.71])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src])

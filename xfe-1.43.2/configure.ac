@@ -3,7 +3,7 @@
 #
 
 # Initialize
-AC_INIT([xfe], [1.43.2])
+AC_INIT([xfe],[1.43.2])
 AC_CONFIG_SRCDIR([src/XFileExplorer.cpp])
 AM_INIT_AUTOMAKE([subdir-objects -Wall])
 AM_CONFIG_HEADER([config.h])
@@ -43,7 +43,15 @@ AM_GNU_GETTEXT
 AC_PATH_X
 AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
-AC_HEADER_STDC
+m4_warn([obsolete],
+[The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])dnl
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([fcntl.h mntent.h stdlib.h string.h sys/ioctl.h sys/statfs.h sys/time.h unistd.h utime.h])
 
@@ -57,7 +65,20 @@ AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_CHECK_MEMBERS([struct stat.st_rdev])
-AC_HEADER_TIME
+m4_warn([obsolete],
+[Update your code to rely only on HAVE_SYS_TIME_H,
+then remove this warning and the obsolete code below it.
+All current systems provide time.h; it need not be checked for.
+Not all systems provide sys/time.h, but those that do, all allow
+you to include it and time.h simultaneously.])dnl
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+# End of obsolete code.
+
 AC_STRUCT_TM
 
 
@@ -87,8 +108,16 @@ AC_CHECK_LIB(FOX-1.6,fxfindfox,,AC_MSG_ERROR("libFOX-1.6 not found"))
 
 
 # Check for FOX 1.6 header files
-AC_HEADER_STDC
-AC_LANG_CPLUSPLUS
+m4_warn([obsolete],
+[The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])dnl
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
+AC_LANG([C++])
 AC_CHECK_HEADER(fox-1.6/fx.h,,AC_MSG_ERROR("fox-1.6/fx.h not found"))
 
 
@@ -249,11 +278,12 @@ fi
 
 
 # Output
-AC_OUTPUT(Makefile intl/Makefile m4/Makefile po/Makefile.in xfe.spec xferc xfe.desktop.in xfi.desktop.in
+AC_CONFIG_FILES([Makefile intl/Makefile m4/Makefile po/Makefile.in xfe.spec xferc xfe.desktop.in xfi.desktop.in
           xfw.desktop.in xfp.desktop.in src/Makefile
           icons/Makefile icons/xfe-theme/Makefile icons/gnome-theme/Makefile
           icons/gnomeblue-theme/Makefile icons/windows-theme/Makefile icons/windowsxp-theme/Makefile
-		  icons/tango-theme/Makefile icons/kde-theme/Makefile)
+		  icons/tango-theme/Makefile icons/kde-theme/Makefile])
+AC_OUTPUT
 
 
 # Display CXXFLAGS, CFLAGS and LIBS

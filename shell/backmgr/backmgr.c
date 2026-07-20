@@ -133,7 +133,7 @@ int main() {
 
 	if (!strcmp(image, "")) {
 		snprintf(imgbg, sizeof(imgbg), "--image-bg=%s", wallcfg.color);
-		puts(imgbg);
+		//puts(imgbg);
 		snprintf(path, sizeof(path), "%s/.icewm/clear.png", getHomeDir());
 	} else {
 		snprintf(imgbg, sizeof(imgbg), "--image-bg=%s", wallcfg.color);

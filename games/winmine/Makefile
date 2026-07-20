@@ -8,6 +8,7 @@ C++ = g++
 CFLAGS = -Wall -c --std=c99
 CPPFLAGS = -Wall -c --std=c++98
 LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
+# LDFLAGS = `fox-config --libs`
 
 PREFIX=/usr/local
 

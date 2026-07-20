@@ -1250,7 +1250,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
 	tree->moveItem(tree->getFirstItem(), 0, noneitem);
 
-	tree->selectItem(newitem);
+	if (newitem) tree->selectItem(newitem);
 
 
 
