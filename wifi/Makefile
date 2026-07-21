@@ -3,11 +3,11 @@
 CC = gcc
 C++ = g++
 
-CFLAGS = -g -Wall -c --std=c99
-CPPFLAGS = -g -Wall -c --std=c++98
-LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand -liwiz97
-
 PREFIX=/usr/local
+
+CFLAGS = -g -Wall -c --std=c99 -DPREFIX='"$(PREFIX)"'
+CPPFLAGS = -g -Wall -c --std=c++98 -DPREFIX='"$(PREFIX)"'
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand -liwiz97
 
 SOURCES = i2kwlan.cpp
 OBJECTS = i2kwlan.o   res/foxres.o
@@ -35,7 +35,11 @@ clean:
 	rm -f res/foxres.h res/foxres.cpp $(OBJECTS) $(EXECUTABLE)
 
 install: $(EXECUTABLE)
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/libexec/ice2k
 	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
+	cp wifiiwd $(PREFIX)/libexec/ice2k/wifiiwd
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(EXECUTABLE)
+	rm -f $(PREFIX)/libexec/ice2k/wifiiwd

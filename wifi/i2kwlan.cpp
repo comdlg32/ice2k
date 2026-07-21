@@ -7,6 +7,7 @@
 #include <ice2k/wizard/I2KWizHeader.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <limits.h>
 
 #define ANIM_CONNECTING_WIDTH 104
 #define ANIM_CONNECTING_HEIGHT 34
@@ -46,6 +47,8 @@ FXIcon* ico_info;
 FXImage* img_connectanim;
 FXImage* img_scananim;
 
+char netiface[32];
+
 
 // window class
 class WLANWizard : public FXMainWindow {
@@ -70,6 +73,8 @@ private:
 
 	FXLabel* waitlbl;
 
+	FXTextField* keyfield;
+	FXTextField* confirmkeyfield;
 
 public:
 	// class functions
@@ -83,9 +88,14 @@ public:
 	long onPaintAnimateScanning(FXObject*, FXSelector, void*);
 	long onTimeoutScanning(FXObject*, FXSelector, void*);
 	long onTimeoutConnecting(FXObject*, FXSelector, void*);
+	long onTimeoutConnectingPassword(FXObject*, FXSelector, void*);
 
 	long onListSelect(FXObject*, FXSelector, void*);
 	long onListDeselect(FXObject*, FXSelector, void*);
+	
+	long onVerifyKeyfield(FXObject*, FXSelector, void*);
+	long onChangedKeyfield(FXObject*, FXSelector, void*);
+
 
 	char* getSelectedNetwork();
 
@@ -105,6 +115,8 @@ public:
 		ID_SCAN,
 		ID_LISTVIEW,
 		ID_CONNECTING,
+		ID_CONNECTING_PASSWORD,
+		ID_KEYFIELD,
 		ID_LAST
 	};
 
@@ -128,10 +140,14 @@ FXDEFMAP(WLANWizard) WLANWizardMap[] = {
 
 
 	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_WIZARD,  WLANWizard::onPageChange),
+	FXMAPFUNC(SEL_VERIFY,           WLANWizard::ID_KEYFIELD,  WLANWizard::onVerifyKeyfield),
+	FXMAPFUNC(SEL_CHANGED,           WLANWizard::ID_KEYFIELD,  WLANWizard::onChangedKeyfield),
+
 
 	FXMAPFUNC(SEL_TIMEOUT,           WLANWizard::ID_ANIMATE_CONNECTING,  WLANWizard::onTimeoutAnimateConnecting),
 	FXMAPFUNC(SEL_TIMEOUT,           WLANWizard::ID_SCAN,  WLANWizard::onTimeoutScanning),
 	FXMAPFUNC(SEL_TIMEOUT,           WLANWizard::ID_CONNECTING,  WLANWizard::onTimeoutConnecting),
+	FXMAPFUNC(SEL_TIMEOUT,           WLANWizard::ID_CONNECTING_PASSWORD,  WLANWizard::onTimeoutConnectingPassword),
 
 
 	FXMAPFUNC(SEL_PAINT,             WLANWizard::ID_ANIMATE_CONNECTING,  WLANWizard::onPaintAnimateConnecting),
@@ -155,8 +171,8 @@ void connectNetwork(const char* ssid, const char* key) {
 		perror("vfork");
 		exit(1);
 	} else if (connect_pid == 0) {
-		execlp("./wifiiwd", "./wifiiwd",
-				"wlan0", "connect",
+		execlp(PREFIX"/libexec/ice2k/wifiiwd", PREFIX"/libexec/ice2k/wifiiwd",
+				netiface, "connect",
 				ssid,
 				(char*)NULL);
 
@@ -180,31 +196,69 @@ char* WLANWizard::getSelectedNetwork() {
 }
 
 
+long WLANWizard::onVerifyKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
+	return (strlen((char*)ptr) > 63);
+}
+
+long WLANWizard::onChangedKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
+	int len = strlen(keyfield->getText().text());
+	if (strcmp(keyfield->getText().text(), confirmkeyfield->getText().text()) == 0
+			&& len >= 7 && len <= 63) {
+		wiz->getNextButton()->enable();
+	} else {
+		wiz->getNextButton()->disable();
+	}
+
+	return 1;
+}
+
+
 long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 	FXuval action = (int)(FXuval)ptr;
 	//printf("%lu	\n", action);
 	int current = wiz->getCurrent();
 
 	if (action == IWIZARD_ABACK) {
-		//puts("Go back!!!");
-		wiz->setCurrent(--current);
-		wiz->setFinish(FALSE);
-
-		if (current == 0) {
+		if (current == 2) {
+			connecting_horframe = 0;
+			connecting_verframe = 0;
+			wiz->setCurrent(0);
 			wiz->getBackButton()->disable();
+			wiz->getNextButton()->enable();
+
+			keyfield->setText("");
+			confirmkeyfield->setText("");
+		} else {
+			wiz->setCurrent(--current);
+			wiz->setFinish(FALSE);
+
+			if (current == 0) {
+				wiz->getBackButton()->disable();
+			}
 		}
 	} else if (action == IWIZARD_ANEXT) {
-		wiz->setCurrent(++current);
-		wiz->getBackButton()->enable();
-
-		if (current == wiz->getSwitcher()->numChildren()-1) {
-			//puts("Go forward!!!");
-			wiz->setFinish(TRUE);
-		} else if (current == wiz->getSwitcher()->numChildren()) {
-			getApp()->exit(0);
-			//puts("Finished");
+		if (current == 2) {
+			connecting_horframe = 0;
+			connecting_verframe = 0;
+			connectNetwork(getSelectedNetwork(), keyfield->getText().text());
+			wiz->setCurrent(1);
+			getApp()->addTimeout(this, ID_CONNECTING_PASSWORD, 100);
+			wiz->getBackButton()->disable();
+			wiz->getNextButton()->disable();
+			getApp()->addTimeout(this, ID_ANIMATE_CONNECTING, ANIM_CONNECTING_DELAY);
 		} else {
-			//puts("Go forward!!!");
+			wiz->setCurrent(++current);
+			wiz->getBackButton()->enable();
+
+			if (current == wiz->getSwitcher()->numChildren()-1) {
+				//puts("Go forward!!!");
+				wiz->setFinish(TRUE);
+			} else if (current == wiz->getSwitcher()->numChildren()) {
+				getApp()->exit(0);
+				//puts("Finished");
+			} else {
+				//puts("Go forward!!!");
+			}
 		}
 
 	} else {
@@ -222,7 +276,9 @@ long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 		getApp()->addTimeout(this, ID_ANIMATE_CONNECTING, ANIM_CONNECTING_DELAY);
 		connectNetwork(getSelectedNetwork(), NULL);
 		getApp()->addTimeout(this, ID_CONNECTING, 100);
-	} else {
+		wiz->getBackButton()->disable();
+		wiz->getNextButton()->disable();
+	} else if (current != 2) {
 		getApp()->removeTimeout(this, ID_ANIMATE_CONNECTING);
 	}
 
@@ -239,7 +295,10 @@ long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 void WLANWizard::wifiList() {
-	FILE* fp = popen("./wifiiwd wlan0 list", "r");
+	char command[PATH_MAX+sizeof(netiface)+8];
+	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s list", netiface);
+
+	FILE* fp = popen(command, "r");
 
 	char item[48];
 	char line[32+2];
@@ -295,8 +354,10 @@ void WLANWizard::wifiList() {
 }
 
 long WLANWizard::onTimeoutScanning(FXObject* obj,FXSelector sel, void* ptr) {
-	//puts("Hello!");
-	if (system("./wifiiwd wlan0 scanning")) {
+	char command[PATH_MAX+sizeof(netiface)+16];
+	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s scanning", netiface);
+
+	if (system(command)) {
 		switcher->setCurrent(1);
 		scanbtn->enable();
 		//wiz->getNextButton()->enable();
@@ -313,16 +374,69 @@ long WLANWizard::onTimeoutScanning(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 long WLANWizard::onTimeoutConnecting(FXObject* obj,FXSelector sel, void* ptr) {
+	char infotext[256];
+	snprintf(infotext, sizeof(infotext),
+			"The network '%s' requires a network key (also called a WEP key or WPA key). "
+			"A network key helps prevent unknown intruders from connecting to this network.\n"
+			"\n"
+			"Type the key, and then click Next.", getSelectedNetwork());
+
+	if (!connecting) {
+		if (connect_err == 0) {
+			getApp()->exit();
+		} else if (connect_err == 5) {
+			getApp()->removeTimeout(this, ID_ANIMATE_CONNECTING);
+			wiz->setCurrent(2);
+			keyfield->setFocus();
+			nettext->setText(infotext);
+			wiz->getBackButton()->enable();
+			wiz->getNextButton()->disable();
+		} else {
+			char errmsg[256] = {0};
+
+			snprintf(errmsg, sizeof(errmsg),
+					"Failed to connect to the '%s' network.",
+					getSelectedNetwork());
+			
+			FXMessageBox::error(this, MBOX_OK, "Error",
+					errmsg);
+
+			wiz->setCurrent(0);
+			wiz->getBackButton()->disable();
+			wiz->getNextButton()->enable();
+		}
+	} else {
+		getApp()->addTimeout(this, ID_CONNECTING, 1000);
+	}
+
+
+	return 1;
+}
+
+long WLANWizard::onTimeoutConnectingPassword(FXObject* obj,FXSelector sel, void* ptr) {
 	//puts("Hello!");
 	if (!connecting) {
 		if (connect_err == 0) {
 			getApp()->exit();
 		} else {
 			getApp()->removeTimeout(this, ID_ANIMATE_CONNECTING);
+
+			char errmsg[256] = {0};
+
+			snprintf(errmsg, sizeof(errmsg),
+					"Failed to connect to the '%s' network. Make sure you typed the password\n"
+					"correctly, then try again.", getSelectedNetwork());
+			
+			FXMessageBox::error(this, MBOX_OK, "Error",
+					errmsg);
+
 			wiz->setCurrent(2);
+			keyfield->setFocus();
+			wiz->getBackButton()->enable();
+			wiz->getNextButton()->enable();
 		}
 	} else {
-		getApp()->addTimeout(this, ID_CONNECTING, 1000);
+		getApp()->addTimeout(this, ID_CONNECTING_PASSWORD, 1000);
 	}
 
 
@@ -336,7 +450,11 @@ long WLANWizard::onCmdRefresh(FXObject* obj,FXSelector sel, void* ptr) {
 	scanbtn->disable();
 	wiz->getNextButton()->disable();
 	getApp()->addTimeout(this, ID_ANIMATE_SCANNING, ANIM_SCANNING_DELAY);
-	system("./wifiiwd wlan0 scan");
+
+	char command[PATH_MAX+sizeof(netiface)+8];
+	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s scan", netiface);
+
+	system(command);
 	getApp()->addTimeout(this, ID_SCAN, 1000);
 	return 1;
 }
@@ -449,9 +567,9 @@ WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network"
 	FXMatrix* keymtx = new FXMatrix(cont, 2, MATRIX_BY_COLUMNS|LAYOUT_FILL_X, 0,0,0,0, 0,24,10,0, 20, 4);
 
 	new FXLabel(keymtx,"Network key: ",	NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
-	new FXTextField(keymtx, 10, NULL, 0, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
+	keyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
 	new FXLabel(keymtx,"Confirm network key: ",	NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
-	new FXTextField(keymtx, 10, NULL, 0, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
+	confirmkeyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
 }
 
 // deconstructs window
@@ -582,10 +700,19 @@ void sigchld_handler(int sig) {
 int main(int argc, char *argv[]) {
 	signal(SIGCHLD, sigchld_handler);
 
-	//printf("%d\n", !system("./wifiiwd wlan0 netexists Oliebol"));
+	//printf("%d\n", !system(PREFIX"/libexec/ice2k/wifiiwd wlan0 netexists Oliebol"));
 
 	FXApp application("WLAN", "I2KProject");
 	application.init(argc, argv);
+
+	if (argv[1] == NULL) {
+		application.create();
+		FXMessageBox::error(&application, MBOX_OK, "Error", "Please specify interface name in argument!");
+		return 1;
+	}
+
+	strncpy(netiface, argv[1], sizeof(netiface)-1);
+	netiface[sizeof(netiface)-1] = '\0';
 
 	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
 	wizIcon = new FXGIFImage(&application, resico_wizicon, 0, IMAGE_OPAQUE);

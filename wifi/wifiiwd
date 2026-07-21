@@ -69,6 +69,45 @@ allnet() {
 	done
 }
 
+returnerr() {
+	if echo "$1" | grep -q -F -- "Operation failed"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "No Agent registered"; then
+		exit 5
+	elif echo "$1" | grep -q -F -- "Operation aborted"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Operation already in progress"; then
+		exit 2
+	elif echo "$1" | grep -q -F -- "Operation not available"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Argument type is wrong"; then
+		exit 3
+	elif echo "$1" | grep -q -F -- "Argument format is invalid"; then
+		exit 3
+	elif echo "$1" | grep -q -F -- "Object already exists"; then
+		exit 4
+	elif echo "$1" | grep -q -F -- "Object not found"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Operation not supported"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Not connected"; then
+		exit 2
+	elif echo "$1" | grep -q -F -- "Not configured"; then
+		exit 6
+	elif echo "$1" | grep -q -F -- "Not implemented"; then
+		exit 7
+	elif echo "$1" | grep -q -F -- "Service set overlap"; then
+		exit 8
+	elif echo "$1" | grep -q -F -- "Already provisioned"; then
+		exit 9
+	elif echo "$1" | grep -q -F -- "Not hidden"; then
+		exit 10
+	elif echo "$1" | grep -q -- "Invalid network name"; then
+		exit 11
+	else
+		exit 1
+	fi
+}
 
 
 if [ "$2" = "scanning" ]; then
@@ -96,9 +135,21 @@ elif [ "$2" = "netexists" ]; then
 	exit $?
 elif [ "$2" = "connect" ]; then
 	if test "$WLAN_PSK"; then
-		iwctl --passphrase "$WLAN_PSK" station "$1" connect "$3" --dont-ask > /dev/null 2>&1
+		IWCTL_MSG="$(iwctl --passphrase "$WLAN_PSK" station "$1" connect "$3" --dont-ask 2>&1)"
+
+		if [ "$?" -eq "0" ]; then
+			exit 0
+		else
+			returnerr "$IWCTL_MSG"
+		fi
 	else
-		iwctl station "$1" connect "$3" --dont-ask >/dev/null 2>&1
+		IWCTL_MSG="$(iwctl station "$1" connect "$3" --dont-ask 2>&1)"
+
+		if [ "$?" -eq "0" ]; then
+			exit 0
+		else
+			returnerr "$IWCTL_MSG"
+		fi
 	fi
 	exit $?
 elif [ "$2" = "disconnect" ]; then
