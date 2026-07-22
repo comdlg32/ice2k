@@ -30,15 +30,17 @@ cd "$HOME"
 # animated background manager
 backmgr
 ~/.icewm/programs/animbg/animbg &
-sleep 0.5
-
+while ! icesh -T id >/dev/null 2>&1; do
+	sleep 0.5
+done
+sleep 1
 # restart icewm to fix frozen tray icons
 icewm -r
 
 # play startup sound
-aplay $ICE2KSYS_SOUND_LOGON &
+aplay "$ICE2KSYS_SOUND_LOGON" &
 ~/.icewm/programs/welcome/welcomewrap &
 
-setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us
+#setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us
 
 sleep 1
