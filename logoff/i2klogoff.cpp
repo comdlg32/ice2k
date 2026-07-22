@@ -315,6 +315,7 @@ long FadeWindow::onTimeoutFade(FXObject* sender, FXSelector sel, void* ptr) {
 
 void FadeWindow::create() {
 	satur = 17;
+	chunky = 0;
 
 	FXMainWindow::create();
 
@@ -389,7 +390,6 @@ int main(int argc,char *argv[]) {
 
 	xdisplay = (Display*)ptrapp->getDisplay();
 	chkwindow = new FadeWindow(ptrapp);
-
 	cadwindow = new LogoffDialog(chkwindow);
 
 	application.create();
@@ -397,7 +397,15 @@ int main(int argc,char *argv[]) {
 	chkwindow->show();
 	setOnTop(xdisplay, chkwindow->id());
 
-	cadwindow->execute(PLACEMENT_SCREEN);
+	//cadwindow->create();
+	cadwindow->position(
+			(cadwindow->getRoot()->getWidth() - cadwindow->getWidth())/2,
+			((cadwindow->getRoot()->getHeight()+40) - cadwindow->getHeight())/3,
+			(cadwindow->getWidth()),
+			(cadwindow->getHeight()) );
+	cadwindow->show();
+
+	application.runModalFor(cadwindow);
 
 	return application.run();
 }

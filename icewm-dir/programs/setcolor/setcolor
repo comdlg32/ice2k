@@ -355,6 +355,8 @@ rm "$HOME/.icewm/icons/txt.png"
 rm "$HOME/.icewm/programs/volumecontrol/volume.png"
 rm "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
 
+rm "$HOME/.icewm/sounds"
+
 if [ "$xptheme" -eq 1 ]; then
 	iniset "$HOME/.foxrc/Desktop" ICE2K windows xp
 
@@ -389,6 +391,8 @@ if [ "$xptheme" -eq 1 ]; then
 
 	ln -s "$icewmtheme/icons/app_16x16_xp.xpm" "$icewmtheme/icons/app_16x16.xpm"
 	ln -s "$icewmtheme/icons/app_32x32_xp.xpm" "$icewmtheme/icons/app_32x32.xpm"
+
+	ln -s "$HOME/.icewm/xpsounds" "$HOME/.icewm/sounds"
 
         cp -RfT "$icewmtheme/xpicons/" "$icewmtheme/icons/"
         #rm -rf "$icewmtheme/xpicons"
@@ -433,6 +437,8 @@ else
 	ln -s "$HOME/.icewm/programs/volumecontrol/volume-2k.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
 
 	ln -s "$HOME/.icons/SE98/mimes/32/txt.png"                "$HOME/.icewm/icons/txt.png"
+
+	ln -s "$HOME/.icewm/xpsounds" "$HOME/.icewm/sounds"
 
 	rm "$icewmtheme/icons/app_16x16.xpm"
 	rm "$icewmtheme/icons/app_32x32.xpm"

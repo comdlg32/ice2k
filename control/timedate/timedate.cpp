@@ -108,7 +108,7 @@ public:
 	};
 
 private:
-	int drawBigHand(FXDCWindow*);
+	void drawBigHand(FXDCWindow*);
 	
 public:
 	I2KClock(FXComposite* parent, FXuint opts=FRAME_NONE, FXint x=0, FXint y=0, FXint w=0, FXint h=0,
@@ -193,7 +193,7 @@ public:
 
 	FXint getValue() { return timeval; }
 
-	int drawBigHand(FXDCWindow* dc, int ang, float mainlen, float sidelen, float taillen) {
+	void drawBigHand(FXDCWindow* dc, int ang, float mainlen, float sidelen, float taillen) {
 		FXPoint points[4];
 	
 		float rad = (90.0 - ang) * M_PI / 180.0;
@@ -251,7 +251,7 @@ public:
 		}
 	}
 
-	int drawHands(FXDCWindow* dc) {
+	void drawHands(FXDCWindow* dc) {
 		long long skiptime = 0;
 		
 		days = timeval / 86400;
@@ -495,21 +495,21 @@ public:
 	}
 private:
 
-	int setSecVal(int sval) {
+	void setSecVal(int sval) {
 		char numval[4];
 		seconds = sval;
 		sprintf(numval, "%02hhu", seconds);
 		secondbox->setText(numval);
 	}
 
-	int setMinVal(int sval) {
+	void setMinVal(int sval) {
 		char numval[4];
 		minutes = sval;
 		sprintf(numval, "%02hhu", minutes);
 		minutebox->setText(numval);
 	}
 
-	int setHourVal(int sval) {
+	void setHourVal(int sval) {
 		char numval[4];
 		hours = sval;
 		sprintf(numval, "%02hhu", hours);
@@ -518,9 +518,7 @@ private:
 public:
 
 	void setValue(FXint val) {
-		if (val != timeval) {
-			char numval[4];
-			
+		if (val != timeval) {			
 			timeval = val;
 			splitUnix(val);
 
@@ -650,6 +648,7 @@ public:
 		timeval = getUnix();
 
 		if (target) target->tryHandle(this, FXSEL(SEL_CHANGED,message), (void*)&timeval);
+		return 1;
 	}
 
 	long onCommandSecBox(FXObject* obj,FXSelector sel,void* ptr) {
@@ -667,6 +666,8 @@ public:
 		timeval = getUnix();
 
 		if (target) target->tryHandle(this, FXSEL(SEL_CHANGED,message), (void*)&timeval);
+		
+		return 1;
 	}
 
 	long onCommandHourBox(FXObject* obj,FXSelector sel,void* ptr) {
@@ -684,6 +685,8 @@ public:
 		timeval = getUnix();
 
 		if (target) target->tryHandle(this, FXSEL(SEL_CHANGED,message), (void*)&timeval);
+
+		return 1;
 	}
 
 
@@ -837,7 +840,6 @@ long TimeDateCPL::onTimer(FXObject*,FXSelector,void* ptr){
 }
 
 time_t TimeDateCPL::calcDate() {
-	char cmd[4096];
 	FXDate date = calview->getCurrentDate();
 	int year = date.year();
 	int month = date.month()-1;
@@ -904,7 +906,6 @@ long TimeDateCPL::onCommandMonth(FXObject*,FXSelector,void* ptr){
 }
 
 long TimeDateCPL::onChangeTimebox(FXObject*,FXSelector,void* ptr){
-	char cmd[512];
 	time_t time = *(time_t*)ptr;
 	/*sprintf(cmd, "date -d @%llu", time - getLocalTimeOffset(NULL));
 	system(cmd);*/

@@ -87,12 +87,12 @@ fi
 
 while true
 do
-	upstatus=`cat /sys/class/net/$1/operstate`
-        R1=`cat /sys/class/net/$1/statistics/rx_packets`
-        T1=`cat /sys/class/net/$1/statistics/tx_packets`
+	read upstatus < /sys/class/net/$1/operstate
+        read R1 < /sys/class/net/$1/statistics/rx_packets
+        read T1 < /sys/class/net/$1/statistics/tx_packets
         sleep 0.5
-        R2=`cat /sys/class/net/$1/statistics/rx_packets`
-        T2=`cat /sys/class/net/$1/statistics/tx_packets`
+        read R2 < /sys/class/net/$1/statistics/rx_packets
+        read T2 < /sys/class/net/$1/statistics/tx_packets
         TXPPS="$(($T2 - $T1))"
         RXPPS="$(($R2 - $R1))"
 	if [ "$upstatus" = "up" ]; then

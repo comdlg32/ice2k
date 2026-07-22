@@ -235,7 +235,7 @@ CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security",
   bannericon->create();
 
   // FXIcon* bannericon = new FXGIFIcon(&application, banner2k,0,IMAGE_OPAQUE);
-  FXLabel* bannerlbl = new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
+  new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
 
   cont = new FXVerticalFrame(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, ZERO4, 11, 10, 8, 11);
 

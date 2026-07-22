@@ -74,6 +74,8 @@ returnerr() {
 		exit 1
 	elif echo "$1" | grep -q -F -- "No Agent registered"; then
 		exit 5
+	elif echo "$1" | grep -q -- "Type the network passphrase for "; then
+		exit 5
 	elif echo "$1" | grep -q -F -- "Operation aborted"; then
 		exit 1
 	elif echo "$1" | grep -q -F -- "Operation already in progress"; then
@@ -143,11 +145,12 @@ elif [ "$2" = "connect" ]; then
 			returnerr "$IWCTL_MSG"
 		fi
 	else
-		IWCTL_MSG="$(iwctl station "$1" connect "$3" --dont-ask 2>&1)"
+		IWCTL_MSG="$(echo | iwctl station "$1" connect "$3" 2>&1)"
 
 		if [ "$?" -eq "0" ]; then
 			exit 0
 		else
+			IWCTL_MSG="$(echo "$IWCTL_MSG" | head -n 1)"
 			returnerr "$IWCTL_MSG"
 		fi
 	fi

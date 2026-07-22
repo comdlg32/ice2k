@@ -416,6 +416,7 @@ long FadeWindow::onTimeoutFade(FXObject* sender, FXSelector sel, void* ptr) {
 
 void FadeWindow::create() {
 	satur = 17;
+	chunky = 0;
 	FXMainWindow::create();
 
 	FXApp* ptrapp = getApp();
@@ -439,6 +440,7 @@ void FadeWindow::create() {
 	int imgwidth = image->getWidth();
 	int imgheight = image->getHeight();
 	int startx;
+	int xp = 0;
 
 	if (i2kBGetWinVersionInt() == ICE2K_BRAND_WIN2K) {
 		for (int y = 0; y < imgheight; y++) {
@@ -450,8 +452,7 @@ void FadeWindow::create() {
 			}
 		}
 	} else {
-		//XPFade(imgdata, imgwidth, imgheight, 0);
-		getApp()->addTimeout(this, ID_FADE, 20);
+		xp = 1;
 	}
 
 	image->render();
@@ -463,6 +464,7 @@ void FadeWindow::create() {
 	imgframe->create();
 
 	FXMainWindow::create();
+	if (xp) getApp()->addTimeout(this, ID_FADE, 20);
 }
 
 #define CHECKER_SIZE 512
@@ -536,8 +538,8 @@ FXIMPLEMENT(FadeWindow,FXMainWindow,FadeWindowMap,ARRAYNUMBER(FadeWindowMap))
 		chkwindow->show();
 		setOnTop(xdisplay, chkwindow->id());
 
-		cadwindow->create();
-		application.refresh();
+		//cadwindow->create();
+		//application.refresh();
 		cadwindow->position(
 				(cadwindow->getRoot()->getWidth() - cadwindow->getWidth())/2,
 				((cadwindow->getRoot()->getHeight()+40) - cadwindow->getHeight())/3,

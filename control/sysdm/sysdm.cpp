@@ -79,7 +79,7 @@ int getIPAddress(char* str) // taken from hostname utility, slightly modified
 }
 
 // thank you https://en.wikipedia.org/wiki/CPUID#EAX=8000'0002h,8000'0003h,8000'0004h:_Processor_Brand_String
-int getCpuString(char* output) {
+/*int getCpuString(char* output) {
 #ifdef __x86_64__
 #define _CPUID
 #endif
@@ -107,6 +107,27 @@ int getCpuString(char* output) {
 #else
 	return 1;
 #endif
+}*/
+
+int getCpuString(char* output) {
+	FILE* fp;
+	char line[1024];
+
+	output[0] = '\0';
+	fp = fopen("/proc/cpuinfo", "r");
+
+	if (fp == NULL) return 0;
+
+	while(fgets(line, sizeof(line), fp)) {
+		if (strncmp(line, "model name", sizeof("model name")-1) != 0) continue;
+		line[strcspn(line, "\n")] = '\0';
+		strcpy(output, line+13);
+		break;
+	}
+
+	fclose(fp);
+
+	return 1;
 }
 
 // https://stackoverflow.com/questions/22582989/word-wrap-program-c
@@ -548,8 +569,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	new FXLabel(vercont, "Computer:", NULL, LABEL_NORMAL, 0,0,0,0,          0,0, 0,0);
 	//new FXLabel(vercont,    "Intel (R) Xeon(R) CPU", NULL, LABEL_NORMAL, 0,0,0,0,          18,0, 0,0);
 
-	char cpubrand[49];
-	if (!getCpuString(cpubrand)) {
+	char cpubrand[1024];
+	if (getCpuString(cpubrand)) {
 		wrap(cpubrand, 28); //https://stackoverflow.com/questions/2351744/insert-line-breaks-in-long-string-word-wrap
 
 		char* curLine = cpubrand;

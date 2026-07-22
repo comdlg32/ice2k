@@ -149,6 +149,7 @@ private:
 	FXLabel*           iconlbl;
 
 	FXButton*          disablebtn;
+	FXButton*          wlanbtn;
 
 	FXLabel*           conlbl;
 
@@ -157,6 +158,8 @@ private:
 public:
 	long onCmdAccept(FXObject*, FXSelector, void*);
 	long onCmdDisable(FXObject*, FXSelector, void*);
+	long onCmdWLAN(FXObject*, FXSelector, void*);
+
 
 	long onTimeout(FXObject*, FXSelector, void*);
 
@@ -166,6 +169,7 @@ public:
 	enum {
 		ID_ACCEPT = FXMainWindow::ID_LAST,
 		ID_DISABLE,
+		ID_WLAN,
 		ID_TIMEOUT,
 		ID_LAST
 	};
@@ -180,6 +184,8 @@ public:
 FXDEFMAP(NCPAPropWindow) NCPAPropWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           NCPAPropWindow::ID_ACCEPT,  NCPAPropWindow::onCmdAccept),
 	FXMAPFUNC(SEL_COMMAND,           NCPAPropWindow::ID_DISABLE,  NCPAPropWindow::onCmdDisable),
+	FXMAPFUNC(SEL_COMMAND,           NCPAPropWindow::ID_WLAN,     NCPAPropWindow::onCmdWLAN),
+
 
 	FXMAPFUNC(SEL_TIMEOUT,           NCPAPropWindow::ID_TIMEOUT,  NCPAPropWindow::onTimeout),
 
@@ -225,6 +231,7 @@ NCPAPropWindow::NCPAPropWindow(FXApp *a) : FXMainWindow(a, "Network Properties",
 	FXHorizontalSeparator* horsep;
 	FXVerticalSeparator*   vertp;
 	FXHorizontalFrame*     horfrm;
+	FXHorizontalFrame*     horleftfrm;
 	
 	cont = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 6,6,6,6, 8,8);
 
@@ -316,17 +323,30 @@ NCPAPropWindow::NCPAPropWindow(FXApp *a) : FXMainWindow(a, "Network Properties",
 	sprintf(tmpstr, "%llu", ifvalues.sent);
 	txlbl = new FXLabel(activitymtx, tmpstr, NULL, LAYOUT_RIGHT);
 
-	horfrm = new FXHorizontalFrame(generalcont, PACK_UNIFORM_WIDTH,
+	horfrm = new FXHorizontalFrame(generalcont, LAYOUT_FILL_X,
 			0,0,0,0, 0,0,4,4, 4,4);
 
-	new FXButton(horfrm, "&Properties", NULL, this,
+	FXHorizontalFrame* btnleftcont = new FXHorizontalFrame(horfrm,
+			PACK_UNIFORM_WIDTH,
+			0,0,0,0, 0,0,0,0, 4,4);
+
+
+	new FXButton(btnleftcont, "&Properties", NULL, this,
 			FXDialogBox::ID_ACCEPT,
 			BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL,
 			0,0,0,0, 12, 12);
-	disablebtn = new FXButton(horfrm, "&Disable", NULL, this,
+	disablebtn = new FXButton(btnleftcont, "&Disable", NULL, this,
 			ID_DISABLE,
 			BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL,
 			0,0,0,0, 12, 12);
+	
+	wlanbtn = new FXButton(horfrm, "&View Wireless Networks", NULL, this, ID_WLAN,
+			BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_FILL_X,
+			0,0,0,0, 12, 12);
+
+	if (!(ifvalues.ifname[0] == 'w' && ifvalues.ifname[1] == 'l')) {
+		wlanbtn->hide();
+	}
 
 	showicon = new FXCheckButton(generalcont, "Sho&w icon in notification area when connected");
 	showicon->setCheck(ifvalues.trayshown);
@@ -404,6 +424,21 @@ long NCPAPropWindow::onCmdDisable(FXObject*, FXSelector, void*) {
 }
 
 
+long NCPAPropWindow::onCmdWLAN(FXObject*, FXSelector, void*) {
+	pid_t pid = vfork();
+
+	if (pid < 0) {
+		perror("vfork");
+		exit(1);
+	} else if (pid == 0) {
+		execlp("i2kwlan", "i2kwlan", ifvalues.ifname, (char*)NULL);
+
+		perror("execlp");
+		exit(1);
+	}
+
+	return 1;
+}
 
 
 

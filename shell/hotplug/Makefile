@@ -9,7 +9,7 @@ LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport -li2kbran
 PREFIX=/usr/local
 
 ICONS = res/*/*.gif res/*.gif res/*.bmp
-SOURCES = devmgmt.cpp
+SOURCES = ejtray.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = ejtray
 

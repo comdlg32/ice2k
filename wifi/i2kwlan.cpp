@@ -92,6 +92,8 @@ public:
 
 	long onListSelect(FXObject*, FXSelector, void*);
 	long onListDeselect(FXObject*, FXSelector, void*);
+	long onListDoubleClk(FXObject*, FXSelector, void*);
+
 	
 	long onVerifyKeyfield(FXObject*, FXSelector, void*);
 	long onChangedKeyfield(FXObject*, FXSelector, void*);
@@ -136,7 +138,9 @@ FXDEFMAP(WLANWizard) WLANWizardMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_HELLO,  WLANWizard::onCmdHello),
 	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_REFRESH,  WLANWizard::onCmdRefresh),
 	FXMAPFUNC(SEL_SELECTED,          WLANWizard::ID_LISTVIEW,  WLANWizard::onListSelect),
-	FXMAPFUNC(SEL_DESELECTED,          WLANWizard::ID_LISTVIEW,  WLANWizard::onListDeselect),
+	FXMAPFUNC(SEL_DESELECTED,        WLANWizard::ID_LISTVIEW,  WLANWizard::onListDeselect),
+	FXMAPFUNC(SEL_DOUBLECLICKED,     WLANWizard::ID_LISTVIEW,  WLANWizard::onListDoubleClk),
+
 
 
 	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_WIZARD,  WLANWizard::onPageChange),
@@ -203,7 +207,7 @@ long WLANWizard::onVerifyKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
 long WLANWizard::onChangedKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
 	int len = strlen(keyfield->getText().text());
 	if (strcmp(keyfield->getText().text(), confirmkeyfield->getText().text()) == 0
-			&& len >= 7 && len <= 63) {
+			&& len >= 8 && len <= 63) {
 		wiz->getNextButton()->enable();
 	} else {
 		wiz->getNextButton()->disable();
@@ -295,10 +299,7 @@ long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 void WLANWizard::wifiList() {
-	char command[PATH_MAX+sizeof(netiface)+8];
-	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s list", netiface);
-
-	FILE* fp = popen(command, "r");
+	FILE* fp = popen(PREFIX"/libexec/ice2k/wifiiwd \"$WLAN_IFACE\" list", "r");
 
 	char item[48];
 	char line[32+2];
@@ -354,10 +355,7 @@ void WLANWizard::wifiList() {
 }
 
 long WLANWizard::onTimeoutScanning(FXObject* obj,FXSelector sel, void* ptr) {
-	char command[PATH_MAX+sizeof(netiface)+16];
-	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s scanning", netiface);
-
-	if (system(command)) {
+	if (system(PREFIX"/libexec/ice2k/wifiiwd \"$WLAN_IFACE\" scanning")) {
 		switcher->setCurrent(1);
 		scanbtn->enable();
 		//wiz->getNextButton()->enable();
@@ -447,15 +445,17 @@ long WLANWizard::onTimeoutConnectingPassword(FXObject* obj,FXSelector sel, void*
 long WLANWizard::onCmdRefresh(FXObject* obj,FXSelector sel, void* ptr) {
 	switcher->setCurrent(0);
 	iconlist->clearItems();
+	iconlist->setListStyle(ICONLIST_DETAILED|ICONLIST_SINGLESELECT);
 	scanbtn->disable();
 	wiz->getNextButton()->disable();
 	getApp()->addTimeout(this, ID_ANIMATE_SCANNING, ANIM_SCANNING_DELAY);
 
-	char command[PATH_MAX+sizeof(netiface)+8];
-	snprintf(command, sizeof(command), PREFIX"/libexec/ice2k/wifiiwd %s scan", netiface);
-
-	system(command);
+	system(PREFIX"/libexec/ice2k/wifiiwd \"$WLAN_IFACE\" scan");
 	getApp()->addTimeout(this, ID_SCAN, 1000);
+	return 1;
+}
+long WLANWizard::onListDoubleClk(FXObject* obj,FXSelector sel, void* ptr) {
+	tryHandle(this, FXSEL(SEL_COMMAND, ID_WIZARD), (void*)(FXuval)IWIZARD_ANEXT);
 	return 1;
 }
 
@@ -611,6 +611,7 @@ long WLANWizard::onListDeselect(FXObject*, FXSelector, void*) {
 
 long WLANWizard::onListSelect(FXObject*, FXSelector, void*) {
 	wiz->getNextButton()->enable();
+	iconlist->setListStyle(ICONLIST_DETAILED|ICONLIST_BROWSESELECT);
 	return 1;
 }
 
@@ -713,6 +714,8 @@ int main(int argc, char *argv[]) {
 
 	strncpy(netiface, argv[1], sizeof(netiface)-1);
 	netiface[sizeof(netiface)-1] = '\0';
+
+	setenv("WLAN_IFACE", netiface, 1);
 
 	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
 	wizIcon = new FXGIFImage(&application, resico_wizicon, 0, IMAGE_OPAQUE);

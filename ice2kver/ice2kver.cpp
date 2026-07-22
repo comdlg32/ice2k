@@ -101,7 +101,7 @@ Status setOnTop(Display* display, Window xid) {
 }
 
 
-int endswith(char* str, char* suff) {
+int endswith(char* str, const char* suff) {
 	char* p;
 
 	if ( (p = strstr(str, suff)) != NULL) {
