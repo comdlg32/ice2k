@@ -2,6 +2,7 @@
 
 # apply xresources
 xrdb -merge ~/.icewm/xrescolors
+xrdb -merge ~/.icewm/xrdb/xlock
 xrdb -merge ~/.Xresources
 
 ~/.icewm/programs/volumecontrol/volume &

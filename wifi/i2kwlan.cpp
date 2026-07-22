@@ -279,7 +279,7 @@ long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 		connecting_verframe = 0;
 		getApp()->addTimeout(this, ID_ANIMATE_CONNECTING, ANIM_CONNECTING_DELAY);
 		connectNetwork(getSelectedNetwork(), NULL);
-		getApp()->addTimeout(this, ID_CONNECTING, 100);
+		getApp()->addTimeout(this, ID_CONNECTING, 500);
 		wiz->getBackButton()->disable();
 		wiz->getNextButton()->disable();
 	} else if (current != 2) {
