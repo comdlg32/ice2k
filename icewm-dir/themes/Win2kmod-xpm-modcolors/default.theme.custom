@@ -145,5 +145,6 @@ MenuButtonIconVertOffset=-1
 #TaskBarEdgeTop=5
 #TaskBarEdgeBottom=5
 
-TitleBarHorzOffset=1
+TitleBarHorzOffset=0
+TitleBarHorzOffsetNoIcon=2
 TitleBarVertOffset=0

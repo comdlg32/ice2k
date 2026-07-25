@@ -33,3 +33,6 @@ extern const unsigned char resico_wizicon[];
 /* created by reswrap from file res/wizicon2.gif */
 extern const unsigned char resico_wizicon2[];
 
+/* created by reswrap from file res/infoxp.png */
+extern const unsigned char resico_infoxp[];
+

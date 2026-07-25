@@ -194,6 +194,7 @@ public:
 
   // Initialize
   virtual void create();
+  void setFocus() {};
 
   virtual ~CtrlAltDelWindow();
 };
@@ -226,7 +227,7 @@ FXIMPLEMENT(CtrlAltDelWindow,FXMainWindow,CtrlAltDelWindowMap,ARRAYNUMBER(CtrlAl
 //int workspaces;
 
 // Construct a CtrlAltDelWindow
-CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
+CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
   const unsigned char *banner = i2kBGetWinShutBrandingImage();
 
   FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);

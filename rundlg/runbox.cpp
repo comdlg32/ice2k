@@ -280,7 +280,7 @@ long RunBox::onCmdBrowse(FXObject*,FXSelector,void*){
 }
 
 // Construct a RunBox
-RunBox::RunBox(FXApp *a) : FXMainWindow(a, "Run", mainIcon, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,0,0, 11,11,18,17, 11, 10) {
+RunBox::RunBox(FXApp *a) : FXMainWindow(a, "Run", mainIcon, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,0,0, 11,11,18,17, 11, 10) {
 	FXPacker* infocont = new FXPacker(this,FRAME_NONE, 0,0,0,0, 0,0,0,0, 11,0); 
 
 

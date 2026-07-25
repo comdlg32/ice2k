@@ -34,7 +34,7 @@ backmgr
 while ! icesh -T id >/dev/null 2>&1; do
 	sleep 0.5
 done
-sleep 1
+sleep 2
 # restart icewm to fix frozen tray icons
 icewm -r
 

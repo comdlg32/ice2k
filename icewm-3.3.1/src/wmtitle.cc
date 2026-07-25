@@ -687,7 +687,11 @@ void YFrameTitleBar::paint(Graphics &g, const YRect &/*r*/) {
     }
 
     if (title != null && tlen && onLeft + 16 < onRight) {
-        stringOffset += titleBarHorzOffset;
+        if (menuButton() || titleBarHorzOffsetNoIcon == -128) {
+			stringOffset += titleBarHorzOffset;
+		} else {
+			stringOffset += titleBarHorzOffsetNoIcon;
+		}
 
         if (lstr && llen) {
             if (titleBarShadowText[0]) {

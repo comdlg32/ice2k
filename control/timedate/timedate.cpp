@@ -916,7 +916,7 @@ long TimeDateCPL::onChangeTimebox(FXObject*,FXSelector,void* ptr){
 	return 1;
 }
 
-TimeDateCPL::TimeDateCPL(FXApp *a) : FXMainWindow(a, "Date and Time Properties", mainIcon, NULL, DECOR_TITLE|DECOR_CLOSE|DECOR_BORDER|DECOR_MENU, 0,0,0,0) {
+TimeDateCPL::TimeDateCPL(FXApp *a) : FXMainWindow(a, "Date and Time Properties", mainIcon, NULL, DECOR_TITLE|DECOR_CLOSE|DECOR_BORDER, 0,0,0,0) {
 	getApp()->addTimeout(this, ID_TIMER, 1000);
 	int timeval = getLocalTime(NULL);
 

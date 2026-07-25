@@ -1,8 +1,10 @@
 #include <fx.h>
+#include <FXPNGIcon.h>
 #include <ice2k/comctl32.h>
 
 
 #include "res/foxres.h"
+#include <ice2k/branding.h>
 #include <ice2k/wizard/I2KWizard.h>
 #include <ice2k/wizard/I2KWizHeader.h>
 #include <unistd.h>
@@ -97,6 +99,8 @@ public:
 	
 	long onVerifyKeyfield(FXObject*, FXSelector, void*);
 	long onChangedKeyfield(FXObject*, FXSelector, void*);
+	long onCommandKeyfield(FXObject*, FXSelector, void*);
+
 
 
 	char* getSelectedNetwork();
@@ -146,6 +150,8 @@ FXDEFMAP(WLANWizard) WLANWizardMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_WIZARD,  WLANWizard::onPageChange),
 	FXMAPFUNC(SEL_VERIFY,           WLANWizard::ID_KEYFIELD,  WLANWizard::onVerifyKeyfield),
 	FXMAPFUNC(SEL_CHANGED,           WLANWizard::ID_KEYFIELD,  WLANWizard::onChangedKeyfield),
+	FXMAPFUNC(SEL_COMMAND,           WLANWizard::ID_KEYFIELD,  WLANWizard::onCommandKeyfield),
+
 
 
 	FXMAPFUNC(SEL_TIMEOUT,           WLANWizard::ID_ANIMATE_CONNECTING,  WLANWizard::onTimeoutAnimateConnecting),
@@ -216,6 +222,17 @@ long WLANWizard::onChangedKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
 	return 1;
 }
 
+long WLANWizard::onCommandKeyfield(FXObject* obj,FXSelector sel, void* ptr) {
+	int len = strlen(keyfield->getText().text());
+	if (strcmp(keyfield->getText().text(), confirmkeyfield->getText().text()) == 0
+			&& len >= 8 && len <= 63) {
+		tryHandle(this, FXSEL(SEL_COMMAND, ID_WIZARD), (void*)(FXuval)IWIZARD_ANEXT);
+	//} else {
+	//	wiz->getNextButton()->disable();
+	}
+
+	return 1;
+}
 
 long WLANWizard::onPageChange(FXObject* obj,FXSelector sel, void* ptr) {
 	FXuval action = (int)(FXuval)ptr;
@@ -460,12 +477,14 @@ long WLANWizard::onListDoubleClk(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 
-WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0,0,497,360) {
+WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,497,360) {
 	wiz = new I2KWizard(this, this, ID_WIZARD);
 	wiz->getNextButton()->disable();
 
 	FXVerticalFrame* cont;
 	FXPacker* scananimcont;
+
+	int scrollbarsize = getApp()->getScrollBarSize();
 
 	/* FXLabel* lbl = new FXLabel(wiz->getSwitcher(),"This is some text");
 	new FXLabel(wiz->getSwitcher(),"This is some other text"); */
@@ -509,8 +528,8 @@ WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network"
 	//scanbtn->disable();
 
 	iconlist->appendHeader("Present",NULL,16+18);
-	iconlist->appendHeader("Network",NULL,335);
-	iconlist->appendHeader("Security",NULL,65);
+	iconlist->appendHeader("Network",NULL,351-scrollbarsize);
+	iconlist->appendHeader("Security",NULL,66);
 
 	iconlist->getHeader()->setPadTop(0);
 	iconlist->getHeader()->setPadBottom(-1000);
@@ -567,9 +586,15 @@ WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network"
 	FXMatrix* keymtx = new FXMatrix(cont, 2, MATRIX_BY_COLUMNS|LAYOUT_FILL_X, 0,0,0,0, 0,24,10,0, 20, 4);
 
 	new FXLabel(keymtx,"Network key: ",	NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
-	keyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
+	keyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y|TEXTFIELD_ENTER_ONLY,
+			0,0,0,0, 3,2,1,1);
+	
 	new FXLabel(keymtx,"Confirm network key: ",	NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
-	confirmkeyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0, 3,2,1,1);
+
+	confirmkeyfield = new FXTextField(keymtx, 10, this, ID_KEYFIELD,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|TEXTFIELD_PASSWD|FRAME_NORMAL|LAYOUT_CENTER_Y|TEXTFIELD_ENTER_ONLY,
+			0,0,0,0, 3,2,1,1);
 }
 
 // deconstructs window
@@ -726,7 +751,12 @@ int main(int argc, char *argv[]) {
 	ico_wifi3 = new FXGIFIcon(&application, resico_wifi3, 0, IMAGE_NEAREST); ico_wifi3->create();
 	ico_wifi4 = new FXGIFIcon(&application, resico_wifi4, 0, IMAGE_NEAREST); ico_wifi4->create();
 
-	ico_info = new FXGIFIcon(&application, resico_info, 0, IMAGE_NEAREST);
+	if (i2kBGetWinVersionInt() == ICE2K_BRAND_WIN2K) {
+		ico_info = new FXGIFIcon(&application, resico_info, 0, IMAGE_NEAREST);
+	} else {
+		ico_info = new FXPNGIcon(&application, resico_infoxp, 0, IMAGE_NEAREST);
+		ico_info->blend(application.getBaseColor());
+	}
 
 
 	img_connectanim = new FXGIFImage(&application, resico_connect, IMAGE_NEAREST);

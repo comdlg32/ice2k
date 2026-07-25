@@ -11,7 +11,7 @@ LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand -liwiz97
 
 SOURCES = i2kwlan.cpp
 OBJECTS = i2kwlan.o   res/foxres.o
-ICONS = res/*.gif
+ICONS = res/*.gif res/*.png
 EXECUTABLE = i2kwlan
 
 CPPFLAGS += `fox-config --cflags`

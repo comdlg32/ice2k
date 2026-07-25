@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
 	FXIcon* bannericon = new FXGIFIcon(&application, banner,0,IMAGE_OPAQUE);
 
 	application.init(argc, argv);
-	FXMainWindow *main=new FXMainWindow(&application, "About Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0);
+	FXMainWindow *main=new FXMainWindow(&application, "About Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0);
 
 	new FXLabel(main, "", bannericon, LAYOUT_CENTER_X, 0, 0, 0, 0, 0, 0, 0);
 	char* windows = i2kBGetWinVersion();
@@ -141,8 +141,14 @@ int main(int argc, char *argv[]) {
 	FXVerticalFrame* winverinfo = new FXVerticalFrame(main, LAYOUT_FILL_X, 0, 0, 0, 0, 53, 9, 10, 0, 0, 0);
 	if ( !(strcmp(windows, "xp")) ) {
 		new FXLabel(winverinfo, "Microsoft ® Windows", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+#ifdef __x86_64__
 		new FXLabel(winverinfo, "Version 5.2 (Build 3790.srv03_sp1_rtm.050324-1447 : Service Pack 1)", NULL, 0, 0, 0, 0, 0, 1, 0, 0, 2);
 		new FXLabel(winverinfo, "Copyright © 1985-2005 Microsoft Corporation", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+#else
+		new FXLabel(winverinfo, "Version 5.1 (Build 2600.xpsp_sp2_gdr.050301-1519 : Service Pack 2)", NULL, 0, 0, 0, 0, 0, 1, 0, 0, 2);
+		new FXLabel(winverinfo, "Copyright © 1985-2001 Microsoft Corporation", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+#endif
+		
 		new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 3);
 		new FXLabel(winverinfo, " ", NULL, 0, 0, 0, 0, 0, 0, 0, 0, 1);
 	} else {

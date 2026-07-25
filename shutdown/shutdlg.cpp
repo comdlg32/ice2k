@@ -187,7 +187,7 @@ long ShutdownDialog::onRealUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 FXIMPLEMENT(ShutdownDialog,FXDialogBox,ShutdownDialogMap,ARRAYNUMBER(ShutdownDialogMap))
 
 	// Construct a ShutdownDialog
-	ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Windows", DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
+	ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Windows", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
 		const unsigned char *banner = i2kBGetWinShutBrandingImage();
 
 
@@ -361,7 +361,7 @@ class FadeWindow : public FXMainWindow {
 };
 
 
-FadeWindow::FadeWindow(FXApp* a):FXMainWindow(a, "Shut Down Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
+FadeWindow::FadeWindow(FXApp* a):FXMainWindow(a, "Shut Down Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
 }
 
 FadeWindow::~FadeWindow() {

@@ -29,6 +29,12 @@ FXIcon* ico_two;
 #define MINEBTN_ONE            (14*16)
 #define MINEBTN_NORMAL_PRESSED (15*16)
 
+#define SMILEBTN_PRESSED        (0*24)
+#define SMILEBTN_WIN            (1*24)
+#define SMILEBTN_LOST           (2*24)
+#define SMILEBTN_WATCHOUT       (3*24)
+#define SMILEBTN_NORMAL         (4*24)
+
 //typedef unsigned char CELL;
 typedef struct {
 	unsigned char mine:1;
@@ -60,6 +66,23 @@ FXbool minesplaced = FALSE;
 FXbool color = TRUE;
 
 FXbool disfield = FALSE;
+
+/*int checkRect(FXEvent* ev, int x, int y, int w, int h) {
+	if ( (x < ev->rect.x + ev->rect.w) &&
+	     (x +          w > ev->rect.x) &&
+		 (y < ev->rect.y + ev->rect.h) &&
+		 (y +          h > ev->rect.y) ) {
+		return 1;
+	}
+
+	return 0;
+}*/
+
+#define CHECKRECT(ev, rx, ry, rw, rh) \
+	( (rx < ev->rect.x + ev->rect.w) && \
+	  (rx +         rw > ev->rect.x) && \
+	  (ry < ev->rect.y + ev->rect.h) && \
+	  (ry +         rh > ev->rect.y) )
 
 void initBoard(int w, int h) {
 	boardw = w;
@@ -145,6 +168,7 @@ public:
 	int paintBoard(FXWindow*, FXEvent*);
 	int paintBoardBorders(FXWindow*, FXEvent*);
 	int paintBorders(FXWindow* win, FXEvent* ev);
+	int drawNumber(FXWindow* win, FXEvent* ev, int x, int y, int num2);
 
 public:
 	enum {
@@ -354,19 +378,15 @@ int Minesweeper::paintBoard(FXWindow* win, FXEvent* ev) {
 
 	FXDCWindow dc(win, ev);
 
+
+	//((ev->rect.x>>4)-boardx, (r>>4)-boardy, 16, 16)
+	//printf("x: %d\n", ev->rect.y>>4);
 	for (int cy = 0; cy < boardh; ++cy) {
 		for (int cx = 0; cx < boardw; ++cx) {
-			FXRectangle rect;
-			rect.x = boardx+cx*16;
-			rect.y = boardy+cy*16;
-			rect.w = 16;
-			rect.h = 16;
-			
+			int rx = boardx+cx*16;
+			int ry = boardy+cy*16;
 
-			if ( (rect.x < ev->rect.x + ev->rect.w) &&
-			     (rect.x +     rect.w > ev->rect.x) &&
-				 (rect.y < ev->rect.y + ev->rect.h) &&
-				 (rect.y +     rect.h > ev->rect.y) ) {
+			if (CHECKRECT(ev, boardx+cx*16, boardy+cy*16, 16, 16)) {
 				//printf("painted: %d\n", ++paintamount);
 				int cell = cy*boardw+cx;
 				int pressedcell = pressedy*boardw+pressedx;
@@ -374,31 +394,31 @@ int Minesweeper::paintBoard(FXWindow* win, FXEvent* ev) {
 				if (board[cell].shown) {
 					if (board[cell].mine) {
 						if ((int)pressedx == cx && (int)pressedy == cy) {
-							dc.drawArea(img_coolmine, 0, MINEBTN_MINE_PRESSED, 16,16, rect.x,rect.y);
+							dc.drawArea(img_coolmine, 0, MINEBTN_MINE_PRESSED, 16,16, rx,ry);
 						} else {
-							dc.drawArea(img_coolmine, 0, MINEBTN_MINE, 16,16, rect.x,rect.y);
+							dc.drawArea(img_coolmine, 0, MINEBTN_MINE, 16,16, rx,ry);
 						}
 					} else {
 						int img;
 						if (board[cell].neigh) img = MINEBTN_ONE-(board[cell].neigh-1)*16;
 						else img = MINEBTN_NORMAL_PRESSED;
-						dc.drawArea(img_coolmine, 0, img, 16,16, rect.x,rect.y);
+						dc.drawArea(img_coolmine, 0, img, 16,16, rx,ry);
 					}
 				} else {
 					switch(board[cell].state) {
 					case FLAG:
-						dc.drawArea(img_coolmine, 0, MINEBTN_FLAG, 16,16, rect.x,rect.y);
+						dc.drawArea(img_coolmine, 0, MINEBTN_FLAG, 16,16, rx,ry);
 						break;
 					case UNKNOWN:
-						if (cell == pressedcell) dc.drawArea(img_coolmine, 0, MINEBTN_UNKNOWN_PRESSED, 16,16, rect.x,rect.y);
-						else dc.drawArea(img_coolmine, 0, MINEBTN_UNKNOWN, 16,16, rect.x,rect.y);
+						if (cell == pressedcell) dc.drawArea(img_coolmine, 0, MINEBTN_UNKNOWN_PRESSED, 16,16, rx,ry);
+						else dc.drawArea(img_coolmine, 0, MINEBTN_UNKNOWN, 16,16, rx,ry);
 						break;
 					case INVALIDFLAG:
-						dc.drawArea(img_coolmine, 0, MINEBTN_NOTMINE, 16,16, rect.x,rect.y);
+						dc.drawArea(img_coolmine, 0, MINEBTN_NOTMINE, 16,16, rx,ry);
 						break;
 					default:
-						if (cell == pressedcell) dc.drawArea(img_coolmine, 0, MINEBTN_NORMAL_PRESSED, 16,16, rect.x,rect.y);
-						else dc.drawArea(img_coolmine, 0, MINEBTN_NORMAL, 16,16, rect.x,rect.y);
+						if (cell == pressedcell) dc.drawArea(img_coolmine, 0, MINEBTN_NORMAL_PRESSED, 16,16, rx,ry);
+						else dc.drawArea(img_coolmine, 0, MINEBTN_NORMAL, 16,16, rx,ry);
 					}
 				}
 			}
@@ -415,21 +435,15 @@ int Minesweeper::paintBoard(FXWindow* win, FXEvent* ev) {
 int Minesweeper::paintBorders(FXWindow* win, FXEvent* ev) {
 	FXDCWindow dc(win, ev);
 
-	if ( (0 < ev->rect.x + ev->rect.w) &&
-	              (width > ev->rect.x) &&
-		 (0 < ev->rect.y + ev->rect.h) &&
-		              (3 > ev->rect.y) ) {
+	if (CHECKRECT(ev, 0, 0, width, 3)) {
 		dc.setForeground(FXRGB(255,255,255));
 		dc.fillRectangle(0, 0, width, 3);
 	}
 
 
-	if ( (0 < ev->rect.x + ev->rect.w) &&
-	                  (3 > ev->rect.x) &&
-		 (3 < ev->rect.y + ev->rect.h) &&
-		         (height > ev->rect.y) ) {
+	if (CHECKRECT(ev, 0, 3, 3, height)) {
 		dc.setForeground(FXRGB(255,255,255));
-		dc.fillRectangle(0, 0, 3, height);
+		dc.fillRectangle(0, 3, 3, height);
 	}
 
 	dc.end();
@@ -440,21 +454,78 @@ int Minesweeper::paintBorders(FXWindow* win, FXEvent* ev) {
 int Minesweeper::paintBoardBorders(FXWindow* win, FXEvent* ev) {
 	FXDCWindow dc(win, ev);
 
-	if ( (0 < ev->rect.x + ev->rect.w) &&
-	              (width > ev->rect.x) &&
-		 (0 < ev->rect.y + ev->rect.h) &&
-		              (3 > ev->rect.y) ) {
+	if (CHECKRECT(ev, 0, 0, width, 3)) {
 		dc.setForeground(FXRGB(255,255,255));
 		dc.fillRectangle(0, 0, width, 3);
 	}
 
 
-	if ( (0 < ev->rect.x + ev->rect.w) &&
-	                  (3 > ev->rect.x) &&
-		 (3 < ev->rect.y + ev->rect.h) &&
-		         (height > ev->rect.y) ) {
+	if (CHECKRECT(ev, 0, 3, 3, height)) {
 		dc.setForeground(FXRGB(255,255,255));
 		dc.fillRectangle(0, 3, 3, height);
+	}
+
+	dc.end();
+
+	return 1;
+}
+
+int Minesweeper::drawNumber(FXWindow* win, FXEvent* ev, int x, int y, int num2) {
+	int num;
+	char numstr[4];
+	int segbmph = img_segment->getHeight();
+
+	if (num2 > 999) {
+		num = 999;
+	} else if (num2 < -99) {
+		num = -99;
+	} else {
+		num = num2;
+	}
+
+	sprintf(numstr, "%03d", num);
+
+	FXDCWindow dc(win, ev);
+
+	if (CHECKRECT(ev, x, y, (13*3)+1, 1)) {
+		dc.setForeground(FXRGB(128,128,128));
+		dc.fillRectangle(x, y, (13*3)+1, 1);
+	}
+
+	if (CHECKRECT(ev, x, y, 1, 23+1)) {
+		dc.setForeground(FXRGB(128,128,128));
+		dc.fillRectangle(x, y, 1, 23+1);
+	}
+
+	if (CHECKRECT(ev, (13*3)+x+1, y+1, 1, 23+1)) {
+		dc.setForeground(FXRGB(255,255,255));
+		dc.fillRectangle((13*3)+x+1, y+1, 1, 23+1);
+	}
+
+	if (CHECKRECT(ev, x+1, y+23+1, (13*3), 1)) {
+		dc.setForeground(FXRGB(255,255,255));
+		dc.fillRectangle(x+1, y+23+1, (13*3), 1);
+	}
+
+	int c = 0;
+	while (c < 3) {
+		if (CHECKRECT(ev, x+(13*c)+1, y+1, 13, 23)) {
+			switch(numstr[c]) {
+				case '0': dc.drawArea(img_segment, 0, 23*11, 13,23, 1+x+(13*c),1+y); break;
+				case '1': dc.drawArea(img_segment, 0, 23*10, 13,23, 1+x+(13*c),1+y); break;
+				case '2': dc.drawArea(img_segment, 0, 23* 9, 13,23, 1+x+(13*c),1+y); break;
+				case '3': dc.drawArea(img_segment, 0, 23* 8, 13,23, 1+x+(13*c),1+y); break;
+				case '4': dc.drawArea(img_segment, 0, 23* 7, 13,23, 1+x+(13*c),1+y); break;
+				case '5': dc.drawArea(img_segment, 0, 23* 6, 13,23, 1+x+(13*c),1+y); break;
+				case '6': dc.drawArea(img_segment, 0, 23* 5, 13,23, 1+x+(13*c),1+y); break;
+				case '7': dc.drawArea(img_segment, 0, 23* 4, 13,23, 1+x+(13*c),1+y); break;
+				case '8': dc.drawArea(img_segment, 0, 23* 3, 13,23, 1+x+(13*c),1+y); break;
+				case '9': dc.drawArea(img_segment, 0, 23* 2, 13,23, 1+x+(13*c),1+y); break;
+				case '-': dc.drawArea(img_segment, 0,     0, 13,23, 1+x+(13*c),1+y); break;
+				default:  dc.drawArea(img_segment, 0, 23* 1, 13,23, 1+x+(13*c),1+y);
+			}
+		}
+		++c;
 	}
 
 	dc.end();
@@ -472,11 +543,15 @@ long Minesweeper::onPaint(FXObject* obj, FXSelector sel, void* ptr) {
 	dc.setForeground(FXRGB(192,192,192));
 	dc.fillRectangle(ev->rect.x, ev->rect.y, ev->rect.w, ev->rect.h);
 
+	dc.drawArea(img_coolsmil, 0, SMILEBTN_NORMAL, 24,24, 16,16);
+
 	dc.end();
 
 	paintBorders     (win, ev);
 	paintBoardBorders(win, ev);
 	paintBoard       (win, ev);
+
+	drawNumber(win, ev, 16, 15, boardm);
 
 	return 1;
 }
@@ -486,7 +561,9 @@ int main(int argc, char *argv[]) {
 	application.init(argc, argv);
 	ico_main_16 = new FXGIFIcon(&application, res_ico_main_16, 0, IMAGE_OPAQUE);
 	img_segment = new FXGIFImage(&application, res_img_segment);
+	img_segment->create();
 	img_coolsmil = new FXGIFImage(&application, res_img_coolsmil);
+	img_coolsmil->create();
 	img_coolmine = new FXGIFImage(&application, res_img_coolmine, IMAGE_KEEP);
 	img_coolmine->create();
 

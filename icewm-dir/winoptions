@@ -176,3 +176,11 @@ Xmessage.xtimeout.ignoreTaskBar: 1
 Xmessage.xtimeout.startMinimized: 1
 Xmessage.xtimeout.layer: Desktop
 Xmessage.xtimeout.doNotFocus: 1
+
+claws-mail.icon: msimn
+netsurf-gtk2.icon: iexplore
+netsurf-gtk.icon: iexplore
+netsurf-fb.icon: iexplore
+netsurf.icon: iexplore
+
+

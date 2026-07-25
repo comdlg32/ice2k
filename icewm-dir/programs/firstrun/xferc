@@ -187,6 +187,7 @@ filecomparator=xdiff
 mount=~/.icewm/programs/mount2k/mount2k
 
 [SETTINGS]
+nav_audio=REPLACEWITHHOMEFOLDER/.icewm/sounds/nav.wav
 listforecolor=#000000
 iconpath=/usr/local/share/xfe/icons/windows-theme
 hilitecolor=#ffffff

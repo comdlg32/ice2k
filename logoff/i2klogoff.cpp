@@ -164,7 +164,7 @@ long LogoffDialog::onRealUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 FXIMPLEMENT(LogoffDialog,FXDialogBox,LogoffDialogMap,ARRAYNUMBER(LogoffDialogMap));
 
 // Construct a LogoffDialog
-LogoffDialog::LogoffDialog(FXWindow* owner):FXDialogBox(owner, "Log Off Windows", DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,0,0, 12,12,10,13, 20,20) {
+LogoffDialog::LogoffDialog(FXWindow* owner):FXDialogBox(owner, "Log Off Windows", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,0,0, 12,12,10,13, 20,20) {
 	cont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 8,8);
 	new FXLabel(cont, "", logoffIcon, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
 	new FXLabel(cont, "Are you sure you want to log off?", NULL, LAYOUT_BOTTOM, 0,0,0,0, 22,34,0,4);
@@ -259,7 +259,7 @@ class FadeWindow : public FXMainWindow {
 };
 
 
-FadeWindow::FadeWindow(FXApp* a):FXMainWindow(a, "Log Off Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
+FadeWindow::FadeWindow(FXApp* a):FXMainWindow(a, "Log Off Windows", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
 }
 
 FadeWindow::~FadeWindow() {

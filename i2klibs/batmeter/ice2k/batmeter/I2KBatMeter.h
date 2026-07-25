@@ -41,6 +41,7 @@ private:
 	FXLabel* powerdurationleft;
 	FXLabel* powerduration;
 	FXLabel* iconlbl;
+	FXLabel* powerremaininfo;
 
 	FXSwitcher* switcher;
 	FXVerticalFrame* simplecont;

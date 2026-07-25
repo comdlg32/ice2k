@@ -222,7 +222,7 @@ int getDefaultGateway(char* ip, int len, char* iface) {
 }
 
 NCPAPropWindow::NCPAPropWindow(FXApp *a) : FXMainWindow(a, "Network Properties", mainIcon, NULL,
-		DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,338,0) {
+		DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,338,0) {
 	char ip[sizeof("255.255.255.255")] = {0};
 	char ipmask[sizeof("255.255.255.255")] = {0};
 

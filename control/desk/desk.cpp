@@ -1113,7 +1113,7 @@ FXColor hex2FXColor(const char* hex) {
 
 wallConfiguration wallcfg;
 
-DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Properties", ico_mainico, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
+DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Properties", ico_mainico, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,398,423,  0,0,0,0,  0,0) {
 	int xp = 0;
 	//writeWallpaperConfig("/home/tf/image.png", _IMGMODE_TILED, app->getBaseColor());
 

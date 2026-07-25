@@ -56,7 +56,11 @@ const unsigned char *i2kBGetWinBrandingImage(size_t *size) {
 
 	if (!wbanner) {	  
 		if (windows == ICE2K_BRAND_WINXP) {
+#ifdef __x86_64__
 			wbanner = banner;
+#else
+			wbanner = bannerx86;
+#endif
 		} else if (windows == ICE2K_BRAND_WINSRV03) {
 			wbanner = banner03;
 		} else {
@@ -75,7 +79,11 @@ const unsigned char *i2kBGetWinShutBrandingImage(size_t *size) {
 
 	if (!wbanner) {
 		if (windows == ICE2K_BRAND_WINXP) {
+#ifdef __x86_64__
 			wbanner = banner;
+#else
+			wbanner = bannerx86;
+#endif
 		} else if (windows == ICE2K_BRAND_WINSRV03) {
 			wbanner = banner03;
 		} else {

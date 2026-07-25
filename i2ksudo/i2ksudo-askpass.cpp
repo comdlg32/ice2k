@@ -40,7 +40,7 @@ class CommandBox : public FXDialogBox {
 	public:
 		void setFocus() { return; }
 
-		CommandBox(FXWindow* owner) : FXDialogBox(owner, "Command", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0, 0, 320, 240,
+		CommandBox(FXWindow* owner) : FXDialogBox(owner, "Command", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 320, 240,
                                   8,8,8,8, 8, 8) {
 			okbtn = new FXButton(this, "OK", NULL, this, ID_ACCEPT,
 					BUTTON_DEFAULT|LAYOUT_RIGHT|LAYOUT_SIDE_BOTTOM|FRAME_NORMAL,
@@ -195,7 +195,7 @@ int checkPassword(const char* pw) {
 
 
 
-SudoWindow::SudoWindow(FXApp *a) : FXMainWindow(a, "Run as root", userIcon, NULL, DECOR_BORDER|DECOR_TITLE|DECOR_CLOSE|DECOR_MENU, 0,0,0,0) {
+SudoWindow::SudoWindow(FXApp *a) : FXMainWindow(a, "Run as root", userIcon, NULL, DECOR_BORDER|DECOR_TITLE|DECOR_CLOSE, 0,0,0,0) {
 	/*new FXButton(this, "Hello World!", NULL, this, ID_HELLO, BUTTON_NORMAL);*/
 
 	int padtop;

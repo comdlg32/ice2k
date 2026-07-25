@@ -128,6 +128,18 @@ void I2KBatMeter::refreshInfo() {
 			POWER_PSU_TYPE_BATTERY);
 
 	if (amount != 0) {
+		if (switcher->getCurrent() == 2) {
+			showdetailschk->enable();
+
+			powerremaininfo->setTextColor(getApp()->getForeColor());
+			powerremain->setTextColor(getApp()->getForeColor());
+
+			if (showdetailschk->getCheck()) {
+				switcher->setCurrent(1);
+			} else {
+				switcher->setCurrent(0);
+			}
+		}
 		int i = 0;
 		I2KBatButton* batbtn = batbtn1;
 
@@ -171,6 +183,13 @@ void I2KBatMeter::refreshInfo() {
 			batbtn->setUserData((void*)(batteries+(i*POWER_PSU_NAME_MAX)));
 
 			++i;
+		}
+	} else {
+		if (switcher->getCurrent() != 2) {
+			switcher->setCurrent(2);
+			showdetailschk->disable();
+			powerremaininfo->setTextColor(getApp()->getBaseColor());
+			powerremain->setTextColor(getApp()->getBaseColor());
 		}
 	}
 }
@@ -226,7 +245,7 @@ I2KBatMeter::I2KBatMeter(FXComposite* p, FXuint opts, FXint x, FXint y, FXint w,
 	new FXLabel(powerinfomtx, "Current power source:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
 	powersrc = new FXLabel(powerinfomtx, "POWERSOURCE", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
 
-	new FXLabel(powerinfomtx, "Total battery power remaining:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
+	powerremaininfo = new FXLabel(powerinfomtx, "Total battery power remaining:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
 	powerremain = new FXLabel(powerinfomtx, "POWERREMAIN", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
 	powerdurationleft = new FXLabel(powerinfomtx, "Total time remaining:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
 	powerduration = new FXLabel(powerinfomtx, "POWERDURATION", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
@@ -262,6 +281,12 @@ I2KBatMeter::I2KBatMeter(FXComposite* p, FXuint opts, FXint x, FXint y, FXint w,
 	batbtn8 = new I2KBatButton(batbtnmtx, "#8", ico_batcrit, this, ID_BATBUTTON, LAYOUT_FILL_COLUMN|LAYOUT_FILL_ROW|LAYOUT_CENTER_X);
 
 	new FXLabel(detailedcont, "Click an individual battery icon for more information.", NULL, LAYOUT_FILL_X, 0,0,0,0, 40,40,37,13);
+	FXLabel* dislbl = new FXLabel(switcher, "No batteries have been found!", NULL,
+			LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,30);
+
+	dislbl->disable();
+
+
 	//batbtn8->hideOnScreen();
 
 	//new FXFrame(batbtnmtx, FRAME_NONE, 0,0,0,0, 0,0,0,0);

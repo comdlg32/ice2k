@@ -316,18 +316,23 @@ FilePanel::FilePanel(FXWindow* owner, const char* nm, FXComposite* p, DirPanel* 
         screenres2 = 96;
     }
 
-    int szstatwidth = (float)76 / (float)96 * (float)screenres2;
+    //int szstatwidth = (float)76 / (float)96 * (float)screenres2;
+    //int szstatwidth = (80 * screenres2);
+
+	int szstatwidth = (((76 << 8) * screenres2) / 96) >> 8;
+
 
     // sizestatusct = new FXHorizontalFrame(hframe, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_FILL_X|FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0, 0, 76, 0, 0, 0, 0, 0);
     sizestatusct = new FXLabel(hframe, _(" "), NULL, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_FILL_X|FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0, 0, szstatwidth, 0, 1, 0, 0, 0);
 
-    int locationwidth = (float)153 / (float)96 * (float)screenres2;
+    //int locationwidth = (float)153 / (float)96 * (float)screenres2;
+	int locationwidth = (((153 << 8) * screenres2) / 96) >> 8;
 
     FXHorizontalFrame* locationstatusct = new FXHorizontalFrame(hframe, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_FILL_X|FRAME_SUNKEN|LAYOUT_FIX_WIDTH, 0, 0, locationwidth, 0, 0, 0, 0, 0);
 
     //FXLabel* locationstatusic = new FXLabel(locationstatusct, "", tbcomputericon, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_X, 2, 0, 0, 0, 0, 0, 0, 0);
-    FXLabel* locationstatusic = new FXLabel(locationstatusct, "", tbcomputericon, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_X, 2, 0, 0, 0, 0, 0, 0, 0);
-    FXLabel* locationstatuslb = new FXLabel(locationstatusct, "My Computer", NULL, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_X, 22, 0, 0, 0, 0, 0, 0, 0);
+    new FXLabel(locationstatusct, "", tbcomputericon, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_X, 2, 0, 0, 0, 0, 0, 0, 0);
+    new FXLabel(locationstatusct, "My Computer", NULL, JUSTIFY_LEFT|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_X, 22, 0, 0, 0, 0, 0, 0, 0);
 
     filterlabel = new FXLabel(hframe, "", NULL, JUSTIFY_LEFT|LAYOUT_LEFT, 0, 0, 0, 0, 4, 17, 0, 0);
     filterlabel->hide();
@@ -6435,15 +6440,15 @@ void FilePanel::updatePath()
     pathlink->setPath(list->getDirectory());
     pathtext->setText(list->getDirectory());
 
-	/*char audiofile[PATH_MAX] = {0};
+	char audiofile[PATH_MAX] = {0};
 	sprintf(audiofile, "%.*s", (int)sizeof(audiofile)-1, getApp()->reg().readStringEntry("SETTINGS", "nav_audio", ""));
 	audiofile[sizeof(audiofile)-1] = '\0';
 
 	if (audiofile[0] != '\0') {
 		setenv("ICE2K_NAVIGATION_SOUND_XFE", audiofile, 1);
-		system("aplay -q \"$ICE2K_NAVIGATION_SOUND_XFE\" >/dev/null 2>&1 &");
+		system("aplay -q -- \"$ICE2K_NAVIGATION_SOUND_XFE\" >/dev/null 2>&1 &");
 		unsetenv("ICE2K_NAVIGATION_SOUND_XFE");
-	}*/
+	}
 }
 
 

@@ -10,6 +10,7 @@ firstrunactions()
 	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.icewm/preferences"
 	mkdir -p "$HOME/.config/xfe"
 	cp xferc ~/.config/xfe
+	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.config/xfe"
 	cp xres ~/.icewm
 	sed -i 's/REPLACEWITHHOMEFOLDER/'"$(echo "$HOME" | sed 's#/#\\/#g')"'/g' "$HOME/.icewm/xres"
 

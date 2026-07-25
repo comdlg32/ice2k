@@ -293,7 +293,7 @@ long ChangeHostnameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
 
 ChangeHostnameBox::ChangeHostnameBox(FXWindow* owner):
 
-FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|DECOR_MENU, 0, 0, 0, 0,
+FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0,
 		11, 12, 11, 11, 0, 0) {
 	new FXLabel(this, "You can change the name of this computer. You must install", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
 	new FXLabel(this, "networking before you can change this computer's domain", NULL, LABEL_NORMAL|JUSTIFY_LEFT, 0,0,0,0,  1,0,0,0);
@@ -490,7 +490,7 @@ int xp = 0;
 int srv03 = 0;
 
 //int main(int argc, char *argv[]) {
-SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE, 0,0,404,436,  0,0,0,0,  0,0) {
+SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,404,436,  0,0,0,0,  0,0) {
 	this->changeFocus((FXWindow*)0);
 	this->killFocus();
 	char* windows = i2kBGetWinVersion();
@@ -513,7 +513,7 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 
 	//application.init(argc, argv);
-	//FXDialogBox *main=new FXDialogBox(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_MENU|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0);
+	//FXDialogBox *main=new FXDialogBox(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,404,436,  0,0,0,0,  0,0);
 	generalframe = new FXVerticalFrame(this,LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_NONE, 0,0,0,0, 0,0,0,0, 0,0);
 	tabbook = new FXTabBook(generalframe,NULL,0,LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_RIGHT, 0,0,0,0, 6,6,7,6);
 
@@ -531,13 +531,6 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	FXHorizontalFrame* horcont = new FXHorizontalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,380,361, 24,24,15,16); 
 	new FXLabel(horcont, "", monitorimage, LABEL_NORMAL, 0,0,0,0,  20,29,24,20);
 
-
-#ifdef __x86_64__
-#define PROFSTR "Professional x64 Edition"
-#else
-#define PROFSTR "Professional"
-#endif
-
 	//new FXLabel(a, "", NULL,LAYOUT_FIX_X|LAYOUT_FIX_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 380, 361);
 	//new FXLabel(a, "a", NULL, LAYOUT_FILL_X|LAYOUT_FILL_Y,0, 0, 380, 361);
 	//new FXLabel(a, "", monitoricon);
@@ -545,9 +538,15 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	new FXLabel(vercont, "System:",                    NULL, LABEL_NORMAL,              0,0,0,0,   0,0, 0,0);
 	new FXLabel(vercont,    i2kBGetFullOSName(),       NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
 	if (xp) {
-		new FXLabel(vercont,    PROFSTR,               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+#ifdef __x86_64__
+		new FXLabel(vercont,    "Professional x64 Edition",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
 		new FXLabel(vercont,    "Version 2003",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
 		new FXLabel(vercont,    "Service Pack 1",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+#else
+		new FXLabel(vercont,    "Professional",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+		new FXLabel(vercont,    "Version 2002",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+		new FXLabel(vercont,    "Service Pack 2",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
+#endif
 	} else {
 		new FXLabel(vercont,    "5.00.2195",               NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);
 		new FXLabel(vercont,    "Service Pack 4",          NULL, LABEL_NORMAL,              0,0,0,0,  18,0, 0,0);

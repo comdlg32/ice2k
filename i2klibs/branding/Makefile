@@ -12,7 +12,7 @@ CFLAGS += -c --std=c99
 CXXFLAGS += `fox-config --cflags` -c --std=c++98 -fpic
 LDFLAGS += `fox-config --libs`
 
-ICONS = res/banner.gif res/banner2k.gif res/banner03.gif res/banner2kshut.gif
+ICONS = res/banner.gif res/bannerx86.gif res/banner2k.gif res/banner03.gif res/banner2kshut.gif
 
 OUTPUT = libi2kbrand.so
 VERSION = 0.0.1
