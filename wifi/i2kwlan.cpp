@@ -505,6 +505,12 @@ WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network"
 	iconlist = new FXIconList(switcher, this, ID_LISTVIEW,
 			LAYOUT_FILL_X|LAYOUT_FILL_Y|ICONLIST_DETAILED|ICONLIST_SINGLESELECT|SCROLLERS_DONT_TRACK);
 
+	FXLabel* nonetlbl = new FXLabel(switcher, "No networks available");
+	nonetlbl->setBackColor(getApp()->getBackColor());
+	nonetlbl->setTextColor(getApp()->getShadowColor());
+
+	//nonetlbl->setTextColor(getApp()->getShadowColor());
+
 	switcher->setCurrent(1);
 
 	FXHorizontalFrame* scanbtm = new FXHorizontalFrame(cont, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 4,4);

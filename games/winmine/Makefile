@@ -3,39 +3,39 @@
 CC = gcc
 C++ = g++
 
-# OS = OPENBSD
-
-CFLAGS = -Wall -c --std=c99
-CPPFLAGS = -Wall -c --std=c++98
+CFLAGS = -g -Wall -c --std=c89 -O2
+CPPFLAGS = -g -Wall -c --std=c++98 -O2
 LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
-# LDFLAGS = `fox-config --libs`
 
 PREFIX=/usr/local
 
 SOURCES = winmine.cpp
-OBJECTS = winmine.o
-ICONS = res/*.gif res/segment.bmp res/coolmine.bmp res/coolsmil.bmp
+OBJECTS = winmine.o res/foxres.o
+ICONS = res/*.png res/*.gif
 EXECUTABLE = winmine
 
 CPPFLAGS += `fox-config --cflags`
 
 all: $(EXECUTABLE)
 
-$(OBJECTS): res/foxres.h
+$(OBJECTS): res/foxres.h res/foxres.cpp
 
 # generate icon resources
 res/foxres.h: $(ICONS)
-	reswrap -d -p resico_ -o res/foxres.h $(ICONS)
+	reswrap -i -d -p res_ -o res/foxres.h $(ICONS)
+
+res/foxres.cpp: res/foxres.h $(ICONS)
+	reswrap -e -d -p res_ -o res/foxres.cpp $(ICONS)
 
 # link executable
 $(EXECUTABLE): $(OBJECTS)
 	$(C++) $(OBJECTS) -o $@ $(LDFLAGS)
 
 clean:
-	rm -f res/foxres.h $(OBJECTS) $(EXECUTABLE)
+	rm -f res/foxres.h res/foxres.cpp $(OBJECTS) $(EXECUTABLE)
 
 install: $(EXECUTABLE)
-	cp winmine $(PREFIX)/bin/winmine
+	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
 
 uninstall:
-	rm -f $(PREFIX)/bin/winmine
+	rm -f $(PREFIX)/bin/$(EXECUTABLE)
