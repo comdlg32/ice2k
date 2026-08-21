@@ -491,8 +491,8 @@ genicon()
 	fontsize="$(pt_to_px "$(echo -n "$font" | grep -Eo '[0-9]+$' || echo -n "8")" )"
 
 	label="$(echo "$1" | tr [:lower:] [:upper:])"
-        mkdir -p "/tmp/kbswitch"
-        convert -background "$bgcolor" -fill "$fgcolor" -size 16x16 -gravity center -font "$typeface" -pointsize "$fontsize" label:$label "$1.xpm"
+    #mkdir -p "/tmp/kbswitch"
+	convert -background "$bgcolor" -fill "$fgcolor" -size 16x16 -gravity center -font "$typeface" -pointsize "$fontsize" label:$label "$1.xpm"
 }
 
 (
@@ -506,7 +506,7 @@ done
 
 getpid()
 {
-        local process="i2knettray"
+        local process="$1"
 
         local pids="$(pidof -x "$process")"
 
@@ -562,6 +562,7 @@ s/activetitlebarmiddle/$activetitlebarmiddle/gI" | tee "$HOME/.config/qt6ct/colo
 
 if [ "$firstrun" -ne 0 ]; then
 	kill -15 $(getpid i2knettray)
+	kill -15 $(getpid i2kbattray)
 	kill -15 $(getejecttray)
 fi
 
@@ -621,5 +622,7 @@ if [ "$firstrun" -ne 0 ]; then
 	)
 	
 	i2kejtray &
+
+	i2kbattray &
 fi
 #xxkb &

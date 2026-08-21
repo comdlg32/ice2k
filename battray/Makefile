@@ -12,7 +12,7 @@ PREFIX=/usr/local
 SOURCES = battray.cpp
 OBJECTS = battray.o res/foxres.o
 ICONS = res/*.gif
-EXECUTABLE = battray
+EXECUTABLE = i2kbattray
 
 CPPFLAGS += `fox-config --cflags`
 
