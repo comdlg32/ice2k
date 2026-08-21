@@ -1,0 +1,174 @@
+#!/bin/sh
+
+dbms() {
+	if ! test "$1"; then
+		return
+	fi
+
+	#if [ $1 -ge -6000 ]; then
+	#    echo "network-wireless-100"
+	#elif [ $1 -ge -6700 ]; then
+	#    echo "network-wireless-75"
+	#elif [ $1 -ge -7500 ]; then
+	#	echo "network-wireless-50"
+	#elif [ $1 -lt -7500 ]; then
+	#	echo "network-wireless-25"
+	#fi
+	val=$((($1+9000)*100/3000))
+
+	if [ $val -gt 100 ]; then
+		val=100
+	elif [ $val -lt 0 ]; then
+		val=0
+	fi
+
+	echo $val
+}
+
+if ! test "$1"; then
+	echo 'err: No interface specified!' >&2
+	exit 1
+fi
+
+if ! type iwctl >/dev/null 2>&1; then
+	echo 'err: IWD is not installed!' >&2;
+	exit 1
+fi
+
+isscanning() {
+	LC_ALL=C iwctl station "$1" show | grep "Scanning" | grep -q yes
+	return $?
+}
+
+scannow() {
+	LC_ALL=C iwctl station "$1" scan >/dev/null 2>&1
+}
+
+
+listnet() {
+	if ! iwctl station wlan0 show > /dev/null 2>&1; then
+		return 1
+	fi
+	netlistcon="$(LC_ALL=C iwctl station "$1" get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	if [ " networks available" = "$netlistcon" ]; then
+		return 1
+	fi
+	netlist="$(echo "$netlistcon" | cut -c 3- )"
+	netnumber="$(echo "$netlist" | wc -l)"
+
+	for i in $(seq -s " " 1 $netnumber); do
+		dbms "$(echo "$netlist" | awk 'NF>1{print $NF}' | sed -n "${i}p")"
+
+		echo "$netlistcon" | cut -c 1 | sed -n "${i}p"
+		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
+		echo "$netlist" | sed -n "${i}p" | sed 's/..... *$//' | sed 's/[[:blank:]]*$//' |  awk 'NF>1{print $NF}'
+	done
+
+	return 0
+}
+
+allnet() {
+	netlistcon="$(LC_ALL=C iwctl station "$1" get-networks rssi-dbms | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	netlist="$(echo "$netlistcon" | cut -c 3- )"
+	netnumber="$(echo "$netlist" | wc -l)"
+
+	for i in $(seq -s " " 1 $netnumber); do
+		echo "$netlist" | sed -n "${i}p" | sed 's/......................... *$//' | sed 's/[[:blank:]]*$//' | cut -c 3-
+	done
+}
+
+returnerr() {
+	if echo "$1" | grep -q -F -- "Operation failed"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "No Agent registered"; then
+		exit 5
+	elif echo "$1" | grep -q -- "Type the network passphrase for "; then
+		exit 5
+	elif echo "$1" | grep -q -F -- "Operation aborted"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Operation already in progress"; then
+		exit 2
+	elif echo "$1" | grep -q -F -- "Operation not available"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Argument type is wrong"; then
+		exit 3
+	elif echo "$1" | grep -q -F -- "Argument format is invalid"; then
+		exit 3
+	elif echo "$1" | grep -q -F -- "Object already exists"; then
+		exit 4
+	elif echo "$1" | grep -q -F -- "Object not found"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Operation not supported"; then
+		exit 1
+	elif echo "$1" | grep -q -F -- "Not connected"; then
+		exit 2
+	elif echo "$1" | grep -q -F -- "Not configured"; then
+		exit 6
+	elif echo "$1" | grep -q -F -- "Not implemented"; then
+		exit 7
+	elif echo "$1" | grep -q -F -- "Service set overlap"; then
+		exit 8
+	elif echo "$1" | grep -q -F -- "Already provisioned"; then
+		exit 9
+	elif echo "$1" | grep -q -F -- "Not hidden"; then
+		exit 10
+	elif echo "$1" | grep -q -- "Invalid network name"; then
+		exit 11
+	else
+		exit 1
+	fi
+}
+
+
+if [ "$2" = "scanning" ]; then
+	isscanning "$1"
+	exit $?
+elif [ "$2" = "scan" ]; then
+	scannow "$1"
+	exit 0
+elif [ "$2" = "scanwait" ]; then
+	scannow "$1"
+	
+	sleep 1
+
+	while isscanning "$1"; do
+		sleep 1
+	done
+
+	exit 0
+elif [ "$2" = "netexists" ]; then
+	allnet "$1" | (while read line; do
+		if [ "${line}x" = "${3}x" ]; then
+			exit 0
+		fi
+	done; exit 1)
+	exit $?
+elif [ "$2" = "connect" ]; then
+	if test "$WLAN_PSK"; then
+		IWCTL_MSG="$(iwctl --passphrase "$WLAN_PSK" station "$1" connect "$3" --dont-ask 2>&1)"
+
+		if [ "$?" -eq "0" ]; then
+			exit 0
+		else
+			returnerr "$IWCTL_MSG"
+		fi
+	else
+		IWCTL_MSG="$(echo | iwctl station "$1" connect "$3" 2>&1)"
+
+		if [ "$?" -eq "0" ]; then
+			exit 0
+		else
+			IWCTL_MSG="$(echo "$IWCTL_MSG" | head -n 1)"
+			returnerr "$IWCTL_MSG"
+		fi
+	fi
+	exit $?
+elif [ "$2" = "disconnect" ]; then
+	iwctl station "$1" disconnect >/dev/null 2>&1
+	exit $?
+elif [ "$2" = "list" ]; then
+	listnet "$1"
+	exit $?
+fi
+
+

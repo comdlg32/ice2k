@@ -33,7 +33,7 @@ void I2KButton::drawBorderRectangle(FXDCWindow& dc,FXint x,FXint y,FXint w,FXint
 
 // from fox src
 // Handle repaint
-long I2KButton::onPaint(FXObject*,FXSelector,void* ptr){
+long I2KButton::onPaint(FXObject* obj,FXSelector sel,void* ptr){
   FXint tw=0,th=0,iw=0,ih=0,tx,ty,ix,iy;
   FXEvent *ev=(FXEvent*)ptr;
 
@@ -81,7 +81,7 @@ long I2KButton::onPaint(FXObject*,FXSelector,void* ptr){
     else {
 
       // Default
-      if(isDefault() && hasFocus()){
+      if(isDefault()){
 
         // Draw in up state if disabled or up
         if(!isEnabled() || (state==STATE_UP)){
@@ -122,15 +122,15 @@ long I2KButton::onPaint(FXObject*,FXSelector,void* ptr){
 
         // Draw sunken if enabled and either checked or pressed
         else{
-          /* if(state==STATE_ENGAGED) dc.setForeground(hiliteColor); else dc.setForeground(backColor);
+          if(state==STATE_ENGAGED) dc.setForeground(hiliteColor); else dc.setForeground(backColor);
           dc.fillRectangle(border,border,width-border*2,height-border*2);
           if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
-          else drawSunkenRectangle(dc,0,0,width,height); */
+          else drawSunkenRectangle(dc,0,0,width,height);
 
-          dc.setForeground(shadowColor);
+          /*dc.setForeground(shadowColor);
           dc.drawRectangle(0,0,width-1,height-1);
           if(state==STATE_ENGAGED) dc.setForeground(hiliteColor); else dc.setForeground(backColor);
-          dc.fillRectangle(1,1,width-2,height-2);
+          dc.fillRectangle(1,1,width-2,height-2);*/
 
           }
         }

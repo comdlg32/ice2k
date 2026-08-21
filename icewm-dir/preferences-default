@@ -606,7 +606,7 @@ LockCommand=xlock
 #ClockCommand="yad --on-top --borders=0 --calendar --mouse --close-on-unfocus --undecorated --skip-taskbar --no-buttons"
 #ClockCommand="gsimplecal"
 #Decorated calendar
-ClockCommand="~/.icewm/programs/ice2kcal/ice2kcal"
+ClockCommand="i2kcal"
 
 #  WM_CLASS to allow runonce for ClockCommand
 # ClockClassHint="icewm.XClock"

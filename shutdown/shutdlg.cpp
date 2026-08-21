@@ -442,7 +442,7 @@ void FadeWindow::create() {
 	int startx;
 	int xp = 0;
 
-	if (i2kBGetWinVersionInt() == ICE2K_BRAND_WIN2K) {
+	if (i2kBGetWinVersionInt() < ICE2K_BRAND_WINXP) {
 		for (int y = 0; y < imgheight; y++) {
 			if (y & 1) startx = 1;
 			else startx = 0;

@@ -1,0 +1,21 @@
+#!/bin/sh
+listknown() {
+	netlistcon="$(iwctl known-networks list | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | cut -c 3- | tail -n +5 | head -n -1 )"
+	netlist="$(echo "$netlistcon")"
+	netnumber="$(echo "$netlist" | wc -l)"
+
+	echo "$netlist" | while read line; do
+		if [ "$(echo "${line%????????????????}" | sed 's/[[:blank:]]*$//'  | cut -c 44- | sed 's/[[:blank:]]*$//')" = "yes" ]; then
+			echo 1
+		else
+			echo 0
+		fi
+		echo "${line%????????????????????????????????????????}" | sed 's/[[:blank:]]*$//'
+	done
+}
+
+if [ "$1" = "known" ]; then
+	listknown
+elif [ "$1" = "forget" ]; then
+	iwctl known-networks "$2" forget >/dev/null 2>&1
+fi

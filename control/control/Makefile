@@ -33,6 +33,8 @@ clean:
 install:
 	cp $(EXECUTABLE) $(PREFIX)/bin/$(EXECUTABLE)
 	strip $(PREFIX)/bin/$(EXECUTABLE)
+	ln -sf $(PREFIX)/bin/$(EXECUTABLE) $(PREFIX)/bin/ncpa.cpi
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(EXECUTABLE)
+	rm -f $(PREFIX)/bin/ncpa.cpi

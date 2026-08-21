@@ -7,6 +7,7 @@
 #include "res/foxres.h"
 #include "ice2k/comctl32.h"
 
+
 FXDEFMAP(I2KBatMeter) I2KBatMeterMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           I2KBatMeter::ID_BATBUTTON,  I2KBatMeter::onCmdBattery),
 	FXMAPFUNC(SEL_COMMAND,           I2KBatMeter::ID_DETAILED,  I2KBatMeter::onChkDetailed),
@@ -304,6 +305,14 @@ void I2KBatMeter::create() {
 }
 
 long I2KBatMeter::onChkDetailed(FXObject*, FXSelector, void* ptr) {
+	if (target != NULL) {
+		if (ptr == 0) {
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)BATMETER_DETAILED_OFF);
+		} else {
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)BATMETER_DETAILED_ON);
+		}
+	}
+	
 	if (ptr == 0) switcher->setCurrent(0);
 	else switcher->setCurrent(1);
 	return 1;

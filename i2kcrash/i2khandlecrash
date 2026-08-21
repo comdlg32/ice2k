@@ -1,0 +1,25 @@
+#!/bin/sh
+#cat > /dev/null
+(
+PREFIX="REPLACETHISWITHPREFIX"
+PROGPATH="$PREFIX/libexec/ice2k/REPLACETHISWITHPROGRAM"
+
+
+if ! (pidof Xorg || pidof X || pidof Xephyr || pidof Xnest || 
+	pidof XFree86 || pgrep -l '^XF86_' ) > /dev/null 2>&1; then # should be all of them :^)
+	exit
+fi
+
+if ! test "$RUNASROOT"; then
+	exec su "$(id -un $1)" -c "RUNASROOT=1 "$(readlink -f -- $0)" "$2"" < /dev/null
+else
+	export DISPLAY="$(who | awk '$1 == "'"$(id -un)"'"' | grep -o '(:[0-9].*)' | tr -d '()' | head -n 1)"
+	if ! test "$DISPLAY"; then
+		export DISPLAY="$(find /tmp/.X11-unix -maxdepth 1 -type s -user "$(id -un)" | sed 's#/tmp/.X11-unix/##' | tr 'X' ':')"
+	fi
+
+	if test "$DISPLAY"; then
+		"$PROGPATH" "$1"
+	fi
+fi
+)

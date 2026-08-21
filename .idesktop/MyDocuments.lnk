@@ -4,6 +4,5 @@ table Icon
   X: 21
   Y: 2
   Command[0]: xfe
-  Command[1]: yad --entry --undecorated --no-buttons --borders=0 --mouse --entry-text "My Documents" --close-on-unfocus --skip-taskbar
 end
 

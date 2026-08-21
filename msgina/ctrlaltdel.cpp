@@ -64,9 +64,6 @@ Status setOnTop (Display* display, Window xid) {
                      SubstructureRedirectMask|SubstructureNotifyMask, &event);
 }
 
-#define ZERO4 0, 0, 0, 0
-
-
 #ifdef _SEC_DESKTOP
   void setWorkspace(Display *display, Window root, long desktop) {
     XClientMessageEvent event = {0};
@@ -236,13 +233,13 @@ CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security",
   bannericon->create();
 
   // FXIcon* bannericon = new FXGIFIcon(&application, banner2k,0,IMAGE_OPAQUE);
-  new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
+  new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0,0,411,0, 0,0,0,2);
 
-  cont = new FXVerticalFrame(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, ZERO4, 11, 10, 8, 11);
+  cont = new FXVerticalFrame(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 11,10,8,11);
 
   // .-- Logon Information -------------------.
-  logongrp = new FXGroupBox(cont, "Logon Information", GROUPBOX_TITLE_LEFT|FRAME_GROOVE|LAYOUT_FILL_X, ZERO4, ZERO4, 0, 0);
-  logongrpc = new FXVerticalFrame(logongrp, LAYOUT_FILL_X|LAYOUT_FILL_Y, ZERO4, 10, 10, 3, 3, 0, 0);
+  logongrp = new FXGroupBox(cont, "Logon Information", GROUPBOX_TITLE_LEFT|FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0 ,0,0);
+  logongrpc = new FXVerticalFrame(logongrp, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 10,10,3,3, 0,0);
 
   // Get hostname
   char hostname[HOST_NAME_MAX+1];
@@ -252,7 +249,7 @@ CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security",
 
   while (*upper) {
     *upper = toupper((unsigned char) *upper);
-    upper++;
+    ++upper;
   }
 
   //toupper(hostname);
@@ -290,42 +287,39 @@ CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security",
     int seconds = uptime % 60;
     snprintf(uptimetxt, 200, "System Uptime:        %d days, %02d:%02d:%02d", days, hours, minutes, seconds);
   } else {
+    perror("sysinfo");
     strcpy(uptimetxt, "System Uptime:        Unknown");
     //sprintf(uptimetxt, "System Uptime:        Unknown");
-    perror("sysinfo");
   }
   #else
     strcpy(uptimetxt, "System Uptime:        Unknown");
   #endif
 
-  // new FXLabel(logongrpc, "Logon Date:       PLACEHOLDER", NULL, LABEL_NORMAL, ZERO4, 0, 0, 0, 12);
   new FXLabel(logongrpc, uptimetxt, NULL, LABEL_NORMAL, ZERO4, 0, 0, 0, 12);
-  // '----------------------------------------'
 
   new FXLabel(cont, "Use the Task Manager to close an application that is not responding.", NULL, LABEL_NORMAL, ZERO4, 0, 0, 6, 6);
 
-  /* int dpi = getApp()->reg().readIntEntry("SETTINGS", "screenres", 100);
-
-  if (dpi == 96) {
-    dpi = 100;
-  } */
-
-  //printf("%d\n", dpi);
-  // int btnwidth = (float)126 / (float)100 * (float)dpi;
-  //int btnwidth = (float)126 / (float)100 * (float)dpi;
-  //printf("%d\n", btnwidth);
 
   buttons = new FXMatrix(cont, 2, MATRIX_BY_ROWS|PACK_UNIFORM_WIDTH|LAYOUT_FILL_COLUMN|LAYOUT_FILL_ROW|LAYOUT_FILL_X, 0, 0, 0, 0, ZERO4, 6, 6);
 
-  FXButton* lockbtn = new FXButton(buttons, "Loc&k Computer", NULL, this, ID_LOCKCOMPUTER, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL, 0, 0, 0, 0, 2, 2, 2, 3);
-  lockbtn->setFocus();
-  //lockbtn->setDefault();
+  FXButton* lockbtn = new FXButton(buttons, "Loc&k Computer", NULL, this, ID_LOCKCOMPUTER,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL, 0,0,0,0, 2,2,2,3);
 
-  new FXButton(buttons, "&Change Password...", NULL, getApp(), FXApp::ID_QUIT, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, ZERO4, 2, 2, 2, 3);
-  new FXButton(buttons, "&Log Off...", NULL, this, ID_LOGOFF, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, ZERO4, 2, 2, 2, 3);
-  new FXButton(buttons, "&Task Manager", NULL, this, ID_TASKMANAGER, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, ZERO4, 2, 2, 2, 3);
-  new FXButton(buttons, "&Shut Down...", NULL, this, ID_SHUTDOWN, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, ZERO4, 2, 2, 2, 3);
-  new FXButton(buttons, "Cancel", NULL, getApp(), FXApp::ID_QUIT, LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, ZERO4, 2, 2, 2, 3);
+  lockbtn->setFocus();
+
+  new FXButton(buttons, "&Change Password...", NULL, getApp(), FXApp::ID_QUIT,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+  
+  new FXButton(buttons, "&Log Off...", NULL, this, ID_LOGOFF,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+
+  new FXButton(buttons, "&Task Manager", NULL, this, ID_TASKMANAGER,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+  new FXButton(buttons, "&Shut Down...", NULL, this, ID_SHUTDOWN,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+
+  new FXButton(buttons, "Cancel", NULL, getApp(), FXApp::ID_QUIT,
+		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
 
 }
 

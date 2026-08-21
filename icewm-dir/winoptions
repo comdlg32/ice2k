@@ -2,6 +2,8 @@ cbatticon.order: +1
 
 volumeicon.order: +3
 wpa_gui.order: +2
+NetTray.order: 0
+EjectTray.order: -5
 gmrun.Gmrun.layer: AboveDock
 gmrun.Gmrun.ignoreWinList: 0
 gmrun.Gmrun.ignoreQuickSwitch: 0
@@ -184,3 +186,4 @@ netsurf-fb.icon: iexplore
 netsurf.icon: iexplore
 
 WinMine.icon: winmine
+CrashHandler.I2KProject.ignoreTaskBar: 1

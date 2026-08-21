@@ -57,8 +57,6 @@ some code of it is being used here, and it's the main GUI toolkit of this
 project.
 Thanks to https://github.com/travy-patty for logo and branding
 
-Thanks to the cbatticon authors for their program
-Thanks to the yad authors for their program
 Thanks to the developers of the IceWM project
 Thanks to https://sillycycle.com/xlockmore.html for working on xlockmore
 all these years

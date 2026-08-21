@@ -9,9 +9,9 @@ LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport -li2kbran
 PREFIX=/usr/local
 
 ICONS = res/*/*.gif res/*.gif res/*.bmp
-SOURCES = ejtray.cpp
+SOURCES = hotplug.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = ejtray
+EXECUTABLE = i2khotplug
 
 CPPFLAGS += `fox-config --cflags`
 

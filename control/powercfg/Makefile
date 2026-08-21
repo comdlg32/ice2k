@@ -5,14 +5,14 @@ C++ = g++
 
 CFLAGS = -g -Wall -c --std=c99
 CPPFLAGS = -g -Wall -c --std=c++98
-LDFLAGS = `fox-config --libs` -lctl32 -li2kbatmeter
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbatmeter -li2kbrand
 
 PREFIX=/usr/local
 
 SOURCES = powercfg.cpp
 OBJECTS = powercfg.o res/foxres.o
-ICONS = res/*.gif
-EXECUTABLE = powercfg
+ICONS = res/*.png
+EXECUTABLE = powercfg.cpi
 
 CPPFLAGS += `fox-config --cflags`
 

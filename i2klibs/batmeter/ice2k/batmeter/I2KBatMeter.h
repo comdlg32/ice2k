@@ -3,6 +3,10 @@
 #include <fx.h>
 #include "I2KBatButton.h"
 
+
+#define BATMETER_DETAILED_ON 1
+#define BATMETER_DETAILED_OFF 2
+
 class I2KBatMeter : public FXVerticalFrame {
 	FXDECLARE(I2KBatMeter);
 

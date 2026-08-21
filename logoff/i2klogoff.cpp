@@ -341,7 +341,7 @@ void FadeWindow::create() {
 	int imgheight = image->getHeight();
 	int startx;
 
-	if (i2kBGetWinVersionInt() == ICE2K_BRAND_WIN2K) {
+	if (i2kBGetWinVersionInt() < ICE2K_BRAND_WINXP) {
 		for (int y = 0; y < imgheight; y++) {
 			if (y & 1) startx = 1;
 			else startx = 0;
@@ -381,10 +381,10 @@ int main(int argc,char *argv[]) {
 
 	application.init(argc,argv);
 
-	if (i2kBGetWinVersionInt() != ICE2K_BRAND_WIN2K) {
-		logoffIcon = new FXPNGIcon(ptrapp, resico_xp_logoff);
-	} else {
+	if (i2kBGetWinVersionInt() < ICE2K_BRAND_WINXP) {
 		logoffIcon = new FXPNGIcon(ptrapp, resico_2k_logoff);
+	} else {
+		logoffIcon = new FXPNGIcon(ptrapp, resico_xp_logoff);
 	}
 	logoffIcon->blend(ptrapp->getBaseColor());
 

@@ -899,7 +899,7 @@ int main(int argc,char *argv[]) {
 	app = &application;
 
 	application.init(argc,argv);
-	xpmode = !!i2kBGetWinVersionInt();
+	xpmode = (i2kBGetWinVersionInt() >= ICE2K_BRAND_WINXP);
 
 	ico_devmgmt = new FXGIFIcon(app, resico_devmgmt);
 	ico_devmgmt_32 = new FXGIFIcon(app, resico_devmgmt_32);

@@ -64,6 +64,8 @@ simplebuild i2klibs/comctl32
 simplebuild i2klibs/fxextra
 simplebuild i2klibs/wizard
 simplebuild i2klibs/batmeter
+simplebuild i2klibs/tray
+
 
 simplebuild games/winmine
 simplebuild mmc/devmgmt
@@ -74,6 +76,9 @@ simplebuild logoff
 simplebuild msgina
 simplebuild shell/hotplug
 simplebuild shell/backmgr
+simplebuild shell/nettray
+simplebuild shell/ejtray
+
 simplebuild control/control
 simplebuild control/ncpaprop
 simplebuild control/sysdm
@@ -85,6 +90,14 @@ simplebuild rundlg
 simplebuild calendar
 simplebuild i2ksudo
 simplebuild firstrun
+simplebuild battray
+simplebuild wlan
+simplebuild wlanprof
+simplebuild welcome
+simplebuild i2kcrash
+simplebuild badapp
+
+
 
 # (
 # cd icewm-dir/programs/ice2krun
@@ -132,32 +145,6 @@ set +e
 #sudo make install
 #set +e
 #) || exit
-
-
-(
-cd yad-*
-
-aclocal
-autoheader
-autoupdate
-automake --add-missing --force-missing --copy --foreign
-autoreconf
-set -e
-./configure --with-gtk=gtk2
-make clean
-make -j$(nproc)
-sudo make install
-set +e
-) || exit
-
-(
-cd cbatticon
-
-make clean
-make
-sudo make install
-) || exit
-
 
 
 mv ~/.icewm ~/.icewm-old

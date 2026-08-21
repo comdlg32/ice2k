@@ -336,12 +336,9 @@ int main(int argc, char *argv[]) {
 	FXApp application("RunBox", "Ice2KProj");
 	FXApp* app = &application;
 
-	char* windows = i2kBGetWinVersion();
+	int windows = i2kBGetWinVersionInt();
 
-	if ( !(strcmp(windows, "srv03")) )
-		strcpy(windows, "xp");
-
-	if ( !(strcmp(windows, "xp")) ) {
+	if (windows >= ICE2K_BRAND_WINXP) {
 		mainIcon = new FXBMPIcon(&application, resico_run16xp);
 		mainIcon->blend(app->getBaseColor());
 

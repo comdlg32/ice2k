@@ -1,0 +1,49 @@
+This is I2KTray which is based on FOXTray. Big thanks to the original
+author, Hendrik Rittich.
+
+---------------------------
+
+FoxTray -- A system tray icon for FOX Toolkit
+
+Table of Contents
+  1. Installation
+  2. Warning
+  3. Usage
+
+
+1. Installation
+    
+    To install FoxTray just copy the contents of the src directory into
+    your project an compile the file x11/FXTrayIcon.cpp or 
+    win32/FXTrayIcon.cpp, depending on the platform you are targeting,
+    into your program. Use the usual compiler settings, to compile a 
+    FOX application.
+
+    Microsoft Windows Issue
+
+    If you are installing FXTrayIcon, when targeting Windows, you have
+    to change the file fxicon.h!
+
+    Add the following line to the FXIcon class
+        
+        friend class FXTrayIcon;
+
+    This is needed, because FOX doesn't let you access the Windows 
+    specific representation of an icon.
+
+2. Warning
+    
+    DO NOT RELY on the icon to be displayed. Make sure the application
+    works without the tray icon. The icon is displayed as soon as a
+    tray is detected, but there may be no tray at all.
+
+3. Usage
+
+    First you need to create a class of the type FX::FXTrayApp class 
+    instead of FX::FXApp. If you forget this step, some Messages will not
+    be processed an the icon may not display at all.
+
+    Include the file FXTrayIcon.h to use the 
+    FX::FXTrayIcon class. See documentation for details.
+
+

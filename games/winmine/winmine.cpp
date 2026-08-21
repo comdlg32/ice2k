@@ -150,8 +150,8 @@ AboutBox::AboutBox(FXWindow* owner): FXDialogBox(owner,"About Minesweeper",DECOR
 	NULL, JUSTIFY_LEFT|LAYOUT_FILL_X);
 
 	FXButton* okbtn = new FXButton(this, "OK", NULL, this, ID_ACCEPT,
-	BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_RIGHT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-	0,0,75,23, 3,3,2,3);
+	BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_RIGHT|FRAME_THICK|FRAME_RAISED,
+	0,0,0,0, 28,29,2,3);
 
 	okbtn->setFocus();
 }
@@ -190,9 +190,15 @@ void initBoard(int w, int h) {
 	boardw = w;
 	boardh = h;
 
+	//printf("boardw: %d, boardh: %d\n", boardw, boardh);
+	//printf("boardh: %d, MAXWIDTH: %d\n", boardh, MAXHEIGHT);
+
 	if (boardw > MAXWIDTH)  boardw = MAXWIDTH;
 	if (boardh > MAXHEIGHT) boardh = MAXHEIGHT;
-	
+
+	//printf("boardw: %d, boardh: %d\n", boardw, boardh);
+
+
 	memset(board, 0x00, (boardw*boardh)*sizeof(board[0]));
 
 	srand(time(NULL));
@@ -331,8 +337,8 @@ HighScoreBox::HighScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Mine Sw
 
 	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X, 0,0,0,0, 22,37,0,0, 0,0);
 
-	new FXButton(btncont, "&Reset Scores", NULL, this, ID_CLEAR, LAYOUT_LEFT|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,20, 0,0,0,0);
-	FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_RIGHT|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,45,20, 0,0,0,0);
+	new FXButton(btncont, "&Reset Scores", NULL, this, ID_CLEAR, LAYOUT_LEFT|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 4,4,1,1);
+	FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_RIGHT|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 13,14,1,1);
 	this->show();
 	this->setFocus();
 	okbtn->setFocus();
@@ -408,11 +414,13 @@ long CustomGameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
 
 	int nrows = atoi(heighttfield->getText().text());
 	if (nrows < 9) nrows = 9;
-	else if (nrows > 24) nrows = 24;
+	else if (nrows > MAXHEIGHT) nrows = MAXHEIGHT;
+
+	//printf("nrows: %d\n", nrows);
 
 	int ncols = atoi(widthtfield->getText().text());
 	if (ncols < 9) ncols = 9;
-	else if (ncols > 30) ncols = 30;
+	else if (ncols > MAXWIDTH) ncols = MAXWIDTH;
 
 	int totsize = ncols * nrows;
 
@@ -424,6 +432,8 @@ long CustomGameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
 	boardh = nrows;
 	boardm = nmines;
 
+
+	//printf("early boardw: %d, boardh: %d\n", boardw, boardh);
 	customaccept = 1;
 
 	FXDialogBox::onCmdAccept(obj, sel, ptr);
@@ -444,21 +454,21 @@ CustomGameBox::CustomGameBox(FXWindow* owner): FXDialogBox(owner, "Custom Field"
 
 
 	heighttfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
-	snprintf(fieldstr, sizeof(fieldstr), "%d", boardw);
+	snprintf(fieldstr, sizeof(fieldstr), "%d", boardh);
 	heighttfield->setText(fieldstr);
 
 	widthtfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
-	snprintf(fieldstr, sizeof(fieldstr), "%d", boardh);
+	snprintf(fieldstr, sizeof(fieldstr), "%d", boardw);
 	widthtfield->setText(fieldstr);
 
 	minestfield = new FXTextField(scoregrid, 5,this,ID_ACCEPT,TEXTFIELD_INTEGER|TEXTFIELD_LIMITED|TEXTFIELD_ENTER_ONLY|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 1,1,1,1);
 	snprintf(fieldstr, sizeof(fieldstr), "%d", boardm);
 	minestfield->setText(fieldstr);
 
-	FXVerticalFrame* btncont = new FXVerticalFrame(this, LAYOUT_SIDE_RIGHT|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0, 0,0);
+	FXVerticalFrame* btncont = new FXVerticalFrame(this, LAYOUT_SIDE_RIGHT|LAYOUT_FILL_Y|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,0,0,0, 0,0);
 
-	new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_TOP|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,60,23, 0,0,0,0);
-	new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, LAYOUT_BOTTOM|BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,60,23, 0,0,0,0);
+	new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, LAYOUT_TOP|BUTTON_NORMAL|BUTTON_INITIAL|BUTTON_DEFAULT, 0,0,0,0, 12,12,2,3);
+	new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, LAYOUT_BOTTOM|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 12,12,2,3);
 	this->show();
 	//this->setFocus();
 }
@@ -515,16 +525,16 @@ FXDEFMAP(NewScoreBox) NewScoreBoxMap[] = {
 FXIMPLEMENT(NewScoreBox, FXDialogBox, NewScoreBoxMap, ARRAYNUMBER(NewScoreBoxMap));
 
 NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Time", DECOR_BORDER, 0,0,0,0, 9,9,6,22, 0,0) {
-	new FXLabel(this, "You have the fastest time", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+	new FXLabel(this, "You have the fastest time", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
 	if (gf.difficulty == DIFF_BEGINNER) {
 		name = strdup(getApp()->reg().readStringEntry("Names", "Beginner", "Anonymous"));
-		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+		new FXLabel(this, "for beginner level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
 	} else if (gf.difficulty == DIFF_INTERMEDIATE) {
 		name = strdup(getApp()->reg().readStringEntry("Names", "Intermediate", "Anonymous"));
-		new FXLabel(this, "for intermediate level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+		new FXLabel(this, "for intermediate level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
 	} else {
 		name = strdup(getApp()->reg().readStringEntry("Names", "Expert", "Anonymous"));
-		new FXLabel(this, "for expert level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,-1);
+		new FXLabel(this, "for expert level.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
 	}
 
 	new FXLabel(this, "Please enter your name.", NULL, LAYOUT_CENTER_X, 0,0,0,0, 0,0,0,0);
@@ -536,7 +546,7 @@ NewScoreBox::NewScoreBox(FXWindow* owner): FXDialogBox(owner, "Fastest Time", DE
 
 
 	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH, 0,0,132,12);
-	new FXButton(this, "OK", NULL, this, ID_ACCEPT, LAYOUT_CENTER_X|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,54,26, 0,0,0,0);
+	new FXButton(this, "OK", NULL, this, ID_ACCEPT, LAYOUT_CENTER_X|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL, 0,0,0,0, 18,18,4,4);
 }
 
 
@@ -729,7 +739,7 @@ long Minesweeper::changeDifficultyExpert(FXObject* obj, FXSelector sel, void* pt
 }
 
 long Minesweeper::changeDifficultyCustom(FXObject* obj, FXSelector sel, void* ptr) {
-	cusradio->setCheck(FALSE);
+	if (gf.difficulty != DIFF_CUSTOM) cusradio->setCheck(FALSE);
 
 	CustomGameBox customgamebox(mainwin);
 	customgamebox.execute(PLACEMENT_OWNER);
@@ -737,7 +747,7 @@ long Minesweeper::changeDifficultyCustom(FXObject* obj, FXSelector sel, void* pt
 	if (customaccept) {
 		customaccept = 0;
 		
-		changeDifficulty(boardh, boardw, boardm);
+		changeDifficulty(boardw, boardh, boardm);
 
 		begradio->setCheck(FALSE);
 		intradio->setCheck(FALSE);
@@ -836,6 +846,20 @@ Minesweeper::Minesweeper(FXApp *a) : FXMainWindow(a, "Minesweeper", ico_main_16,
 }
 
 Minesweeper::~Minesweeper() {
+	int writesettings = 0;
+	if (getApp()->reg().readIntEntry("Settings", "Color", 1) != gf.color) {
+		writesettings = 1;
+		getApp()->reg().writeIntEntry("Settings", "Color", gf.color);
+	}
+
+	if (getApp()->reg().readIntEntry("Settings", "Marks", 1) != gf.marks) {
+		writesettings = 1;
+		getApp()->reg().writeIntEntry("Settings", "Marks", gf.marks);
+	}
+
+
+	if (writesettings) getApp()->reg().write();
+
 	delete gamemenu;
 	delete helpmenu;
 }
@@ -1630,14 +1654,20 @@ int main(int argc, char *argv[]) {
 	img_monomine = new FXGIFImage(&application, res_img_monomine);
 	img_monomine->create();
 
-	if (gf.color) {
+	if (application.reg().readIntEntry("Settings", "Color", 1)) {
+		gf.color = 1;
 		img_seg  = img_coolseg;
 		img_smil = img_coolsmil;
 		img_mine = img_coolmine;
 	} else {
+		gf.color = 0;
 		img_seg  = img_monoseg;
 		img_smil = img_monosmil;
 		img_mine = img_monomine;
+	}
+
+	if (application.reg().readIntEntry("Settings", "Marks", 1) == 0) {
+		gf.marks = 0;
 	}
 
 

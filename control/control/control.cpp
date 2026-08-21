@@ -144,7 +144,7 @@ int winsaved = 0;
 
 int shellfolder = SHF_ID_CONTROL;
 
-unsigned int history[16] = {0};
+unsigned int history[32] = {0};
 int historyval = 0;
 
 class ControlPanel : public FXMainWindow {
@@ -181,6 +181,11 @@ class ControlPanel : public FXMainWindow {
 		FXToolBar*               adtoolbar;
 		FXToolBar*               throbtoolbar;
 
+		FXButton* backbtn;
+		FXButton* backarr;
+		FXButton* forwardbtn;
+		FXButton* forwardarr;
+
 		FXPacker*                iconlistframe;
 
 	protected:
@@ -213,6 +218,8 @@ class ControlPanel : public FXMainWindow {
 	public:
 		enum {
 			ID_MAINWIN=FXMainWindow::ID_LAST,
+			ID_BACK,
+			ID_FORWARD,
 			ID_CPL,
 			ID_OPEN,
 			ID_ABOUT,
@@ -242,6 +249,10 @@ FXDEFMAP(ControlPanel) ControlPanelMap[] = {
 	FXMAPFUNC(SEL_RIGHTBUTTONPRESS, ControlPanel::ID_CPL, ControlPanel::onRightClick),
 	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_OPEN, ControlPanel::doOpen),
 	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_ABOUT, ControlPanel::onCmdAbout),
+
+	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_BACK, ControlPanel::onCmdBack),
+	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_FORWARD, ControlPanel::onCmdForward),
+
 
 	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_SELECTALL, ControlPanel::onCmdSelectAll),
 	FXMAPFUNC(SEL_COMMAND, ControlPanel::ID_INVERTSELECT, ControlPanel::onCmdInvertSelection),
@@ -474,6 +485,7 @@ FXIcon* loadPNGIcon(FXApp* app, const void* pix=NULL,
 	}
 
 	icon->blend(blendclr);
+	icon->create();
 
 	return(icon);
 }
@@ -733,9 +745,27 @@ long ControlPanel::switchFolder(int folder) {
 
 long ControlPanel::switchFolderHist(int folder) {
 	switchFolder(folder);
+	backbtn->enable();
+	backarr->enable();
+	forwardbtn->disable();
+	forwardarr->disable();
 
-	//if (historyval == sizeof(historyval)/sizeof(historyval[0])
-	//while (int i = 0
+	if (historyval == (sizeof(history)/sizeof(history[0])-1)) {
+		memmove(history, &history[1], sizeof(history)-sizeof(history[0]));
+		history[sizeof(history)/sizeof(history[0])-1] = 0;
+	} else {
+		++historyval;
+	}
+
+	history[historyval] = folder;
+
+	if (historyval+1 != (sizeof(history)/sizeof(history[0])-1)) {
+		history[historyval+1] = 0;
+	}
+
+	//printf("historyval: %d\n", historyval);
+
+
 	return 1;
 }
 
@@ -743,13 +773,13 @@ long ControlPanel::switchFolderHist(int folder) {
 long ControlPanel::onCmdUp(FXObject*,FXSelector,void*) {
 	switch (shellfolder) {
 		case SHF_ID_CONTROL:
-			switchFolder(SHF_ID_EXPLORER);
+			switchFolderHist(SHF_ID_EXPLORER);
 			break;
 		case SHF_ID_NCPA:
-			switchFolder(SHF_ID_CONTROL);
+			switchFolderHist(SHF_ID_CONTROL);
 			break;
 		case SHF_ID_FONTS:
-			switchFolder(SHF_ID_CONTROL);
+			switchFolderHist(SHF_ID_CONTROL);
 			break;			
 		default:
 			break;
@@ -759,20 +789,39 @@ long ControlPanel::onCmdUp(FXObject*,FXSelector,void*) {
 
 long ControlPanel::onCmdBack(FXObject*,FXSelector,void*) {
 	if (historyval == 0) return 0;
+	if (historyval == 1) {
+		backbtn->disable();
+		backarr->disable();
+	}
+
 	switchFolder(history[--historyval]);
+	forwardbtn->enable();
+	forwardarr->enable();
+	//printf("back historyval: %d\n", historyval);
 
 	return 1;
 }
 
 long ControlPanel::onCmdForward(FXObject*,FXSelector,void*) {
-	if (historyval == sizeof(history)) return 0;
+	if (historyval == sizeof(history)/sizeof(history[0])) return 0;
 
 	if (history[++historyval] == 0) {
+		forwardbtn->disable();
+		forwardarr->disable();
 		--historyval;
 		return 0;
 	}
+
+	if (historyval+1 == sizeof(history)/sizeof(history[0]) || history[historyval+1] == 0) {
+		forwardbtn->disable();
+		forwardarr->disable();
+	}
+
+	backbtn->enable();
+	backarr->enable();
 	
 	switchFolder(history[historyval]);
+	//printf("forward historyval: %d\n", historyval);
 
 	return 1;
 }
@@ -791,7 +840,7 @@ int ControlPanel::runCpl(int cpl) {
 			break;
 		case CPL_ID_FONTS:
 			//system("yad --font --window-icon font-x-generic --title Fonts --borders=12 --no-buttons --width=500 --height=350 --center &");
-			switchFolder(SHF_ID_FONTS);
+			switchFolderHist(SHF_ID_FONTS);
 			break;
 		case CPL_ID_KEYB:
 			system("lxinput &");
@@ -807,10 +856,10 @@ int ControlPanel::runCpl(int cpl) {
 			break;
 		case CPL_ID_NCPA:
 			/*system("~/.icewm/programs/control/cpls-bin/ncpa/ncpa &");*/
-			switchFolder(SHF_ID_NCPA);
+			switchFolderHist(SHF_ID_NCPA);
 			break;
 		case CPL_ID_POWERCFG:
-			system("batmeter &");
+			system("powercfg.cpi &");
 			break;
 		case CPL_ID_SYSDM:
 			system("sysdm.cpi &");
@@ -841,7 +890,7 @@ long ControlPanel::onCplActivate(FXObject*,FXSelector,void* ptr) {
 			break;
 		case SHF_ID_NCPA:
 			snprintf(ncpacmd, sizeof(ncpacmd), "%s %s &",
-					"ncpaprop",
+					"ncpastat",
 					iconlist->getItem((intptr_t)ptr)->getText().text());
 			//puts(ncpacmd);
 			system(ncpacmd);
@@ -1031,14 +1080,15 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 	FXButton* btn;
 
 
-    btn = new FXButton(toolbar, "Back", ico_exp_back, NULL, 0, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_FILL_Y,0,0,0,0,5,3,2,2);
-	btn->disable();
-	btn = new FXButton(toolbar, "", ico_arrow, NULL, 0, LAYOUT_FILL_Y,0,0,0,0, 4,3,2,0);
-	btn->disable();
-    btn = new FXButton(toolbar, "", ico_exp_forward, NULL, 0, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_FILL_Y,0,0,0,0,3,2,2,2);
-	btn->disable();
-	btn = new FXButton(toolbar, "", ico_arrow, NULL, 0, LAYOUT_FILL_Y,0,0,0,0,4,3,2,0);
-	btn->disable();
+    backbtn = new FXButton(toolbar, "Back", ico_exp_back, this, ID_BACK, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_FILL_Y,0,0,0,0,5,3,2,2);
+	backbtn->disable();
+	backarr = new FXButton(toolbar, "", ico_arrow, NULL, 0, LAYOUT_FILL_Y,0,0,0,0, 4,3,2,0);
+	backarr->disable();
+    forwardbtn = new FXButton(toolbar, "", ico_exp_forward, this, ID_FORWARD, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_FILL_Y,0,0,0,0,3,2,2,2);
+	forwardbtn->disable();
+	//btn->disable();
+	forwardarr = new FXButton(toolbar, "", ico_arrow, NULL, 0, LAYOUT_FILL_Y,0,0,0,0,4,3,2,0);
+	forwardarr->disable();
     btn = new FXButton(toolbar, "", ico_exp_up, this, ID_UP, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_FILL_Y,0,0,0,0,3,3,2,2);
 
 	new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0, 0, 0, 0, 1, 2, 2, 2);
@@ -1083,13 +1133,16 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 
 	iconlist->setItemSpace(76);
 
-	switch(shellfolder) {
+	/*switch(shellfolder) {
 		case SHF_ID_CONTROL:
 			controlPanelList(iconlist);
 			break;
 		default:
 			fputs("Invalid shell folder!\n", stderr);
-	}
+	}*/
+
+	switchFolder(shellfolder);
+	history[0] = shellfolder;
 }
 
 int main(int argc, char *argv[]) {
@@ -1167,37 +1220,37 @@ int main(int argc, char *argv[]) {
 
 		ico_control = loadPNGIcon(app, resico_xp_control);
 
-		ico_ncpa_dial = loadPNGIcon(app, resico_xp_ncpa_dial); ico_ncpa_dial->create();
-		ico_ncpa_dial_down = loadPNGIcon(app, resico_xp_ncpa_dial_down); ico_ncpa_dial_down->create();
-		ico_ncpa_dial_idle = loadPNGIcon(app, resico_xp_ncpa_dial_idle); ico_ncpa_dial_idle->create();
-		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_xp_ncpa_dial_nohw); ico_ncpa_dial_nohw->create();
-		ico_ncpa_dial_rx = loadPNGIcon(app, resico_xp_ncpa_dial_rx); ico_ncpa_dial_rx->create();
-		ico_ncpa_dial_tx = loadPNGIcon(app, resico_xp_ncpa_dial_tx); ico_ncpa_dial_tx->create();
-		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_xp_ncpa_dial_txrx); ico_ncpa_dial_txrx->create();
-		ico_ncpa_direct = loadPNGIcon(app, resico_xp_ncpa_direct); ico_ncpa_direct->create();
-		ico_ncpa_direct_down = loadPNGIcon(app, resico_xp_ncpa_direct_down); ico_ncpa_direct_down->create();
-		ico_ncpa_direct_idle = loadPNGIcon(app, resico_xp_ncpa_direct_idle); ico_ncpa_direct_idle->create();
-		ico_ncpa_direct_rx = loadPNGIcon(app, resico_xp_ncpa_direct_rx); ico_ncpa_direct_rx->create();
-		ico_ncpa_direct_tx = loadPNGIcon(app, resico_xp_ncpa_direct_tx); ico_ncpa_direct_tx->create();
-		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_xp_ncpa_direct_txrx); ico_ncpa_direct_txrx->create();
-		ico_ncpa_lan = loadPNGIcon(app, resico_xp_ncpa_lan); ico_ncpa_lan->create();
-		ico_ncpa_lan_down = loadPNGIcon(app, resico_xp_ncpa_lan_down); ico_ncpa_lan_down->create();
-		ico_ncpa_lan_idle = loadPNGIcon(app, resico_xp_ncpa_lan_idle); ico_ncpa_lan_idle->create();
-		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_xp_ncpa_lan_nohw); ico_ncpa_lan_nohw->create();
-		ico_ncpa_lan_rx = loadPNGIcon(app, resico_xp_ncpa_lan_rx); ico_ncpa_lan_rx->create();
-		ico_ncpa_lan_tx = loadPNGIcon(app, resico_xp_ncpa_lan_tx); ico_ncpa_lan_tx->create();
-		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_xp_ncpa_lan_txrx); ico_ncpa_lan_txrx->create();
-		ico_ncpa_vpn = loadPNGIcon(app, resico_xp_ncpa_vpn); ico_ncpa_vpn->create();
-		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_xp_ncpa_vpn_idle); ico_ncpa_vpn_idle->create();
-		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_xp_ncpa_vpn_rx); ico_ncpa_vpn_rx->create();
-		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_xp_ncpa_vpn_tx); ico_ncpa_vpn_tx->create();
-		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_xp_ncpa_vpn_txrx); ico_ncpa_vpn_txrx->create();
+		ico_ncpa_dial = loadPNGIcon(app, resico_xp_ncpa_dial);
+		ico_ncpa_dial_down = loadPNGIcon(app, resico_xp_ncpa_dial_down);
+		ico_ncpa_dial_idle = loadPNGIcon(app, resico_xp_ncpa_dial_idle);
+		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_xp_ncpa_dial_nohw);
+		ico_ncpa_dial_rx = loadPNGIcon(app, resico_xp_ncpa_dial_rx);
+		ico_ncpa_dial_tx = loadPNGIcon(app, resico_xp_ncpa_dial_tx);
+		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_xp_ncpa_dial_txrx);
+		ico_ncpa_direct = loadPNGIcon(app, resico_xp_ncpa_direct);
+		ico_ncpa_direct_down = loadPNGIcon(app, resico_xp_ncpa_direct_down);
+		ico_ncpa_direct_idle = loadPNGIcon(app, resico_xp_ncpa_direct_idle);
+		ico_ncpa_direct_rx = loadPNGIcon(app, resico_xp_ncpa_direct_rx);
+		ico_ncpa_direct_tx = loadPNGIcon(app, resico_xp_ncpa_direct_tx);
+		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_xp_ncpa_direct_txrx);
+		ico_ncpa_lan = loadPNGIcon(app, resico_xp_ncpa_lan);
+		ico_ncpa_lan_down = loadPNGIcon(app, resico_xp_ncpa_lan_down);
+		ico_ncpa_lan_idle = loadPNGIcon(app, resico_xp_ncpa_lan_idle); 
+		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_xp_ncpa_lan_nohw);
+		ico_ncpa_lan_rx = loadPNGIcon(app, resico_xp_ncpa_lan_rx);
+		ico_ncpa_lan_tx = loadPNGIcon(app, resico_xp_ncpa_lan_tx);
+		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_xp_ncpa_lan_txrx);
+		ico_ncpa_vpn = loadPNGIcon(app, resico_xp_ncpa_vpn);
+		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_xp_ncpa_vpn_idle);
+		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_xp_ncpa_vpn_rx);
+		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_xp_ncpa_vpn_tx);
+		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_xp_ncpa_vpn_txrx);
 
 
-		ico_bmpfont_16 = loadPNGIcon(app, resico_xp_bmpfont_16); ico_bmpfont_16->create();
-		ico_bmpfont_32 = loadPNGIcon(app, resico_xp_bmpfont_32); ico_bmpfont_32->create();
-		ico_ttffont_16 = loadPNGIcon(app, resico_xp_ttffont_16); ico_ttffont_16->create();
-		ico_ttffont_32 = loadPNGIcon(app, resico_xp_ttffont_32); ico_ttffont_32->create();
+		ico_bmpfont_16 = loadPNGIcon(app, resico_xp_bmpfont_16);
+		ico_bmpfont_32 = loadPNGIcon(app, resico_xp_bmpfont_32);
+		ico_ttffont_16 = loadPNGIcon(app, resico_xp_ttffont_16);
+		ico_ttffont_32 = loadPNGIcon(app, resico_xp_ttffont_32);
 
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "bigicons.png");
 		ico_exp_views = addTriangle(app, ico_exp_views2);
@@ -1237,36 +1290,36 @@ int main(int argc, char *argv[]) {
 	
 		ico_control = loadPNGIcon(app, resico_2k_control);
 
-		ico_ncpa_dial = loadPNGIcon(app, resico_2k_ncpa_dial); ico_ncpa_dial->create();
-		ico_ncpa_dial_down = loadPNGIcon(app, resico_2k_ncpa_dial_down); ico_ncpa_dial_down->create();
-		ico_ncpa_dial_idle = loadPNGIcon(app, resico_2k_ncpa_dial_idle); ico_ncpa_dial_idle->create();
-		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_2k_ncpa_dial_nohw); ico_ncpa_dial_nohw->create();
-		ico_ncpa_dial_rx = loadPNGIcon(app, resico_2k_ncpa_dial_rx); ico_ncpa_dial_rx->create();
-		ico_ncpa_dial_tx = loadPNGIcon(app, resico_2k_ncpa_dial_tx); ico_ncpa_dial_tx->create();
-		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_2k_ncpa_dial_txrx); ico_ncpa_dial_txrx->create();
-		ico_ncpa_direct = loadPNGIcon(app, resico_2k_ncpa_direct); ico_ncpa_direct->create();
-		ico_ncpa_direct_down = loadPNGIcon(app, resico_2k_ncpa_direct_down); ico_ncpa_direct_down->create();
-		ico_ncpa_direct_idle = loadPNGIcon(app, resico_2k_ncpa_direct_idle); ico_ncpa_direct_idle->create();
-		ico_ncpa_direct_rx = loadPNGIcon(app, resico_2k_ncpa_direct_rx); ico_ncpa_direct_rx->create();
-		ico_ncpa_direct_tx = loadPNGIcon(app, resico_2k_ncpa_direct_tx); ico_ncpa_direct_tx->create();
-		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_2k_ncpa_direct_txrx); ico_ncpa_direct_txrx->create();
-		ico_ncpa_lan = loadPNGIcon(app, resico_2k_ncpa_lan); ico_ncpa_lan->create();
-		ico_ncpa_lan_down = loadPNGIcon(app, resico_2k_ncpa_lan_down); ico_ncpa_lan_down->create();
-		ico_ncpa_lan_idle = loadPNGIcon(app, resico_2k_ncpa_lan_idle); ico_ncpa_lan_idle->create();
-		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_2k_ncpa_lan_nohw); ico_ncpa_lan_nohw->create();
-		ico_ncpa_lan_rx = loadPNGIcon(app, resico_2k_ncpa_lan_rx); ico_ncpa_lan_rx->create();
-		ico_ncpa_lan_tx = loadPNGIcon(app, resico_2k_ncpa_lan_tx); ico_ncpa_lan_tx->create();
-		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_2k_ncpa_lan_txrx); ico_ncpa_lan_txrx->create();
-		ico_ncpa_vpn = loadPNGIcon(app, resico_2k_ncpa_vpn); ico_ncpa_vpn->create();
-		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_2k_ncpa_vpn_idle); ico_ncpa_vpn_idle->create();
-		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_2k_ncpa_vpn_rx); ico_ncpa_vpn_rx->create();
-		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_2k_ncpa_vpn_tx); ico_ncpa_vpn_tx->create();
-		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_2k_ncpa_vpn_txrx); ico_ncpa_vpn_txrx->create();
+		ico_ncpa_dial = loadPNGIcon(app, resico_2k_ncpa_dial);
+		ico_ncpa_dial_down = loadPNGIcon(app, resico_2k_ncpa_dial_down);
+		ico_ncpa_dial_idle = loadPNGIcon(app, resico_2k_ncpa_dial_idle);
+		ico_ncpa_dial_nohw = loadPNGIcon(app, resico_2k_ncpa_dial_nohw);
+		ico_ncpa_dial_rx = loadPNGIcon(app, resico_2k_ncpa_dial_rx);
+		ico_ncpa_dial_tx = loadPNGIcon(app, resico_2k_ncpa_dial_tx);
+		ico_ncpa_dial_txrx = loadPNGIcon(app, resico_2k_ncpa_dial_txrx);
+		ico_ncpa_direct = loadPNGIcon(app, resico_2k_ncpa_direct);
+		ico_ncpa_direct_down = loadPNGIcon(app, resico_2k_ncpa_direct_down);
+		ico_ncpa_direct_idle = loadPNGIcon(app, resico_2k_ncpa_direct_idle); 
+		ico_ncpa_direct_rx = loadPNGIcon(app, resico_2k_ncpa_direct_rx); 
+		ico_ncpa_direct_tx = loadPNGIcon(app, resico_2k_ncpa_direct_tx); 
+		ico_ncpa_direct_txrx = loadPNGIcon(app, resico_2k_ncpa_direct_txrx); 
+		ico_ncpa_lan = loadPNGIcon(app, resico_2k_ncpa_lan); 
+		ico_ncpa_lan_down = loadPNGIcon(app, resico_2k_ncpa_lan_down);
+		ico_ncpa_lan_idle = loadPNGIcon(app, resico_2k_ncpa_lan_idle);
+		ico_ncpa_lan_nohw = loadPNGIcon(app, resico_2k_ncpa_lan_nohw);
+		ico_ncpa_lan_rx = loadPNGIcon(app, resico_2k_ncpa_lan_rx);
+		ico_ncpa_lan_tx = loadPNGIcon(app, resico_2k_ncpa_lan_tx);
+		ico_ncpa_lan_txrx = loadPNGIcon(app, resico_2k_ncpa_lan_txrx);
+		ico_ncpa_vpn = loadPNGIcon(app, resico_2k_ncpa_vpn);
+		ico_ncpa_vpn_idle = loadPNGIcon(app, resico_2k_ncpa_vpn_idle);
+		ico_ncpa_vpn_rx = loadPNGIcon(app, resico_2k_ncpa_vpn_rx);
+		ico_ncpa_vpn_tx = loadPNGIcon(app, resico_2k_ncpa_vpn_tx);
+		ico_ncpa_vpn_txrx = loadPNGIcon(app, resico_2k_ncpa_vpn_txrx);
 
-		ico_bmpfont_16 = loadPNGIcon(app, resico_2k_bmpfont_16); ico_bmpfont_16->create();
-		ico_bmpfont_32 = loadPNGIcon(app, resico_2k_bmpfont_32); ico_bmpfont_32->create();
-		ico_ttffont_16 = loadPNGIcon(app, resico_2k_ttffont_16); ico_ttffont_16->create();
-		ico_ttffont_32 = loadPNGIcon(app, resico_2k_ttffont_32); ico_ttffont_32->create();
+		ico_bmpfont_16 = loadPNGIcon(app, resico_2k_bmpfont_16);
+		ico_bmpfont_32 = loadPNGIcon(app, resico_2k_bmpfont_32);
+		ico_ttffont_16 = loadPNGIcon(app, resico_2k_ttffont_16);
+		ico_ttffont_32 = loadPNGIcon(app, resico_2k_ttffont_32);
 
 
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "smallicons.png");
@@ -1275,8 +1328,23 @@ int main(int argc, char *argv[]) {
 		delete ico_exp_views2;
 	}
 
-	ico_devmgmt_32 = loadPNGIcon(app, resico_devmgmt_32);
-	ico_devmgmt_16 = loadPNGIcon(app, resico_devmgmt_16);
+	//ico_devmgmt_32 = loadPNGIcon(app, resico_devmgmt_32);
+	//ico_devmgmt_16 = loadPNGIcon(app, resico_devmgmt_16);
+	
+	char* ncpastr;
+
+	if (argv[0] != NULL) {
+		ncpastr = strstr(argv[0], "ncpa.cpi");
+		if (ncpastr != NULL && strlen(ncpastr) == sizeof("ncpa.cpi")-1) {
+			shellfolder = SHF_ID_NCPA;
+		}
+	}
+
+	if (argv[1] != NULL) {
+		if (strcmp(argv[1], "fonts") == 0) {
+			shellfolder = SHF_ID_FONTS;
+		}
+	}
 
 	controlwin = new ControlPanel(app);
 	application.create();

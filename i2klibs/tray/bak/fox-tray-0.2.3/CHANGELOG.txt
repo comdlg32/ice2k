@@ -1,0 +1,26 @@
+0.2.3 - 2008-10-18:
+
+Fixed some issues with less known tray managers.
+
+Added size hints, for better sizing behavior.
+
+0.2.2 - 2008-09-21:
+
+Fixed a bug with a metaClass wich could crash the 
+application.
+
+0.2.1 - 2008-09-21:
+
+The icon is now recreated if the tray is restarted. Also the
+icon is shown, if the tray was not started on application 
+launch.
+
+0.2 - 2008-08-29:
+
+Added FXTrayIcon::setIcon
+Added FXTrayIcon::getIcon
+Added FXTrayIcon::setText
+Added FXTrayIcon::getText
+
+Fixed X11 icon alignment
+
