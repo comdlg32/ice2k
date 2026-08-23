@@ -90,10 +90,10 @@ FXDEFMAP(PowerCfgWindow) PowerCfgWindowMap[] = {
 FXIMPLEMENT(PowerCfgWindow, FXMainWindow, PowerCfgWindowMap, ARRAYNUMBER(PowerCfgWindowMap));
 
 
-#define GOVERNOR_PERFORMANCE 0
-#define GOVERNOR_POWERSAVE 1
-#define GOVERNOR_SCHEDUTIL 2
-#define GOVERNOR_ONDEMAND 3
+#define GOVERNOR_PERFORMANCE 1
+#define GOVERNOR_POWERSAVE 2
+#define GOVERNOR_SCHEDUTIL 3
+#define GOVERNOR_ONDEMAND 4
 
 long PowerCfgWindow::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
 	onCmdDialogApply(obj, sel, ptr);
@@ -108,22 +108,23 @@ long PowerCfgWindow::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) 
 }
 
 long PowerCfgWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
-	unsigned gov = (int)(FXuval)powerbox->getItemData(powerbox->getCurrentItem());
-	switch (gov) {
-		case GOVERNOR_PERFORMANCE:
-			system("i2ksudo cpupower frequency-set -g performance > /dev/null &");
-			break;
-		case GOVERNOR_POWERSAVE:
-			system("i2ksudo cpupower frequency-set -g powersave > /dev/null &");
-			break;
-		case GOVERNOR_SCHEDUTIL:
-			system("i2ksudo cpupower frequency-set -g schedutil > /dev/null &");
-			break;
-		case GOVERNOR_ONDEMAND:
-			system("i2ksudo cpupower frequency-set -g ondemand > /dev/null &");
-			break;
-		default:
-			return 0;
+	int index = powerbox->getCurrentItem();
+	if (index != 0) {
+		unsigned gov = (unsigned)(FXuval)powerbox->getItemData(index);
+		switch (gov) {
+			case GOVERNOR_PERFORMANCE:
+				system("i2ksudo cpupower frequency-set -g performance > /dev/null &");
+				break;
+			case GOVERNOR_POWERSAVE:
+				system("i2ksudo cpupower frequency-set -g powersave > /dev/null &");
+				break;
+			case GOVERNOR_SCHEDUTIL:
+				system("i2ksudo cpupower frequency-set -g schedutil > /dev/null &");
+				break;
+			case GOVERNOR_ONDEMAND:
+				system("i2ksudo cpupower frequency-set -g ondemand > /dev/null &");
+				break;
+		}
 	}
 
 	FXString desktopfile = FXSystem::getHomeDirectory()+PATHSEPSTRING+".foxrc"+PATHSEPSTRING+"Desktop";
@@ -191,17 +192,19 @@ void addPowerSchemes(FXListBox* lb) {
 	int govschedutil = 0;
 	int govondemand = 0;
 
-	if (lb == NULL) return;
+	int anyadded = 0;
+
+	if (lb == NULL) goto fail;
 	
 	fp = fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors", "r");
 	if (fp == NULL) return;
 	fgets(buf, sizeof(buf), fp);
 	fclose(fp);
 
-	if (buf[0] == '\0') return;
+	if (buf[0] == '\0') goto fail;
 
 	fpcur = fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "r");
-	if (fpcur == NULL) return;
+	if (fpcur == NULL) goto fail;
 	fgets(curbuf, sizeof(curbuf), fpcur);
 	fclose(fpcur);
 
@@ -212,12 +215,16 @@ void addPowerSchemes(FXListBox* lb) {
 	while (token != NULL) {
 		if (strcmp(token, "performance") == 0) {
 			govperformance = 1;
+			anyadded = 1;
 		} else if (strcmp(token, "ondemand") == 0) {
 			govondemand = 1;
+			anyadded = 1;
 		} else if (strcmp(token, "schedutil") == 0) {
 			govschedutil = 1;
+			anyadded = 1;
 		} else if (strcmp(token, "powersave") == 0) {
 			govpowersave = 1;
+			anyadded = 1;
 		}
 
 		token = strtok(NULL, " \n");
@@ -261,7 +268,12 @@ void addPowerSchemes(FXListBox* lb) {
 
 	lb->setNumVisible(lb->getNumItems());
 
-	return;
+	if (anyadded) return;
+
+fail:
+	lb->disable();
+	lb->clearItems();
+	lb->appendItem("(Unknown)", NULL, 0);
 }
 
 PowerCfgWindow::PowerCfgWindow(FXApp *a) : FXMainWindow(a, "Power Options Properties", ico_powercfg_16, NULL, DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,3,3, 0,6) {
