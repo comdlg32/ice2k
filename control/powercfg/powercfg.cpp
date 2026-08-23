@@ -197,7 +197,7 @@ void addPowerSchemes(FXListBox* lb) {
 	if (lb == NULL) goto fail;
 	
 	fp = fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors", "r");
-	if (fp == NULL) return;
+	if (fp == NULL) goto fail;
 	fgets(buf, sizeof(buf), fp);
 	fclose(fp);
 
