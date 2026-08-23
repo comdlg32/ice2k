@@ -79,7 +79,7 @@ I2KListBox::I2KListBox(FXComposite *p,FXObject* tgt,FXSelector sel,FXuint opts,F
   field=new FXButton(this," ",NULL,this,I2KListBox::ID_FIELD,ICON_BEFORE_TEXT|JUSTIFY_LEFT, 0,0,0,0, pl,pr,pt,pb);
   field->setBackColor(getApp()->getBackColor());
   pane=new FXPopup(this,FRAME_LINE);
-  list=new FXList(pane,this,I2KListBox::ID_LIST,LIST_BROWSESELECT|LIST_AUTOSELECT|LAYOUT_FILL_X|LAYOUT_FILL_Y|SCROLLERS_TRACK|HSCROLLING_OFF);
+  list=new FXList(pane,this,I2KListBox::ID_LIST,LIST_BROWSESELECT|LIST_AUTOSELECT|LAYOUT_FILL_X|LAYOUT_FILL_Y|SCROLLERS_DONT_TRACK|HSCROLLING_OFF);
   button=new I2KMenuButton(this,FXString::null,NULL,pane,FRAME_RAISED|FRAME_THICK|MENUBUTTON_DOWN|MENUBUTTON_ATTACH_RIGHT, 0,0,0,0, 0,0,0,0);
   button->setXOffset(border);
   button->setYOffset(border);

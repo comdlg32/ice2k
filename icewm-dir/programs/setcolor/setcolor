@@ -349,8 +349,8 @@ rm -f "$HOME/.icewm/icons/desk/notepad.png"
 rm -f "$HOME/.icewm/icons/desk/iexplore.png"
 rm -f "$HOME/.icewm/icons/desk/msimn.png"
 rm -f "$HOME/.icewm/icons/txt.png"
-rm -f "$HOME/.icewm/programs/volumecontrol/volume.png"
-rm -f "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+#rm -f "$HOME/.icewm/programs/volumecontrol/volume.png"
+#rm -f "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
 
 rm "$HOME/.icewm/sounds"
 
@@ -377,9 +377,9 @@ if [ "$xptheme" -eq 1 ]; then
 	"$HOME/.icewm/themes/Win2kmod-xpm-modcolors/xpicons/msimn_32x32.png" \
 	"$HOME/.icewm/icons/desk/msimn.png"
 
-	ln -s "$HOME/.icewm/programs/volumecontrol/volume-xp.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
+	#ln -s "$HOME/.icewm/programs/volumecontrol/volume-xp.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
 
-	ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+	#ln -s "$HOME/.icewm/programs/explorer/ejecttray/xp_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
 
 	ln -s "$HOME/.icons/LinXP/mimetypes/32/txt.png"           "$HOME/.icewm/icons/txt.png"
 
@@ -429,9 +429,9 @@ else
 	#iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "type" "xpm"
 	#iniset "$HOME/.icewm/programs/nettray/scheme.ini" "general" "dir" "2k"
 
-	ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
+	#ln -s "$HOME/.icewm/programs/explorer/ejecttray/2k_eject_mini.png" "$HOME/.icewm/programs/explorer/ejecttray/eject_mini.png"
 
-	ln -s "$HOME/.icewm/programs/volumecontrol/volume-2k.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
+	#ln -s "$HOME/.icewm/programs/volumecontrol/volume-2k.png" "$HOME/.icewm/programs/volumecontrol/volume.png"
 
 	ln -s "$HOME/.icons/SE98/mimes/32/txt.png"                "$HOME/.icewm/icons/txt.png"
 
@@ -579,12 +579,6 @@ fi
 #s/white/$lightcolor/gI; \
 #s/#0a2368/$selbackcolor/gI" $icewmtheme/taskbar/*.xpm $icewmtheme/frame*.xpm
 
-(echo "$basecolor"
-echo "$textcolor"
-echo "$lightshadowcolor"
-echo "$shadowcolor"
-echo "$lightcolor"
-echo "$backcolor") > ~/.icewm/programs/volumecontrol/colors
 
 (echo '*background: '"$basecolor"
 echo '*foreground: '"$textcolor"
@@ -600,7 +594,7 @@ if [ "$firstrun" -ne 0 ]; then
 		rm "/tmp/ice2k-$USER/volume.pid"
 	fi
 
-	~/.icewm/programs/volumecontrol/volume &
+	#~/.icewm/programs/volumecontrol/volume &
 	sleep 3
 	#killall xxkb
 	icewm -r

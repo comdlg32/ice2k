@@ -26,6 +26,7 @@
 
 FXIcon*                  ico_mainico;
 FXIcon*                  prvimage;
+FXIcon*                  ico_energy;
 
 FXTreeItem* noneitem;
 
@@ -59,6 +60,8 @@ class DesktopProperties : public FXMainWindow {
 
 		FXTreeList* tree;
 
+		FXText* energy_box;
+
 
 	protected:
 		DesktopProperties(){}
@@ -89,6 +92,8 @@ class DesktopProperties : public FXMainWindow {
 
 		long onCloseCmd(FXObject*,FXSelector,void*);
 		long onCmdBrowse(FXObject*,FXSelector,void*);
+		long onCmdPower(FXObject*,FXSelector,void*);
+
 
 
 		long onResSliderChange(FXObject*,FXSelector,void*);
@@ -114,6 +119,7 @@ class DesktopProperties : public FXMainWindow {
 			ID_COLORCHANGE,
 
 			ID_RESSLIDER,
+			ID_POWER,
 
 			ID_BROWSE
 		};
@@ -125,6 +131,7 @@ class DesktopProperties : public FXMainWindow {
 
 		// Initialize
 		virtual void create();
+		void setFocus() {};
 
 		virtual ~DesktopProperties();
 };
@@ -151,6 +158,8 @@ FXDEFMAP(DesktopProperties) DesktopPropertiesMap[] = {
 	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_IMAGECHANGE, DesktopProperties::onImageChange),
 	FXMAPFUNC(SEL_CHANGED, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChange),
 	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_COLORCHANGE, DesktopProperties::onColorChangeCmd),
+	FXMAPFUNC(SEL_COMMAND, DesktopProperties::ID_POWER, DesktopProperties::onCmdPower),
+
 
 	FXMAPFUNC(SEL_LEFTBUTTONPRESS, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
 	FXMAPFUNC(SEL_MIDDLEBUTTONPRESS, DesktopProperties::ID_RESSLIDER, DesktopProperties::onResSliderChange),
@@ -175,6 +184,7 @@ FXIMPLEMENT(DesktopProperties,FXMainWindow,DesktopPropertiesMap,ARRAYNUMBER(Desk
 
 	void DesktopProperties::create() {
 		FXMainWindow::create();
+		energy_box->setHeight(energy_box->getContentHeight());
 
 		tree->makeItemVisible(tree->getCurrentItem());
 	}
@@ -693,6 +703,12 @@ const char* getHomeDir() {
 	return homedir;
 }
 
+long DesktopProperties::onCmdPower(FXObject*,FXSelector,void*) {
+	system("powercfg.cpi &");
+	return 1;
+}
+
+
 // from fox imageviewer example
 long DesktopProperties::onCmdBrowse(FXObject*,FXSelector,void*){
 	char* filepath = (char*)tree->getCurrentItem()->getData();
@@ -1151,9 +1167,11 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 		xp = 1;
 		monitorsource = new FXGIFIcon(app, resico_monitorxp); monitorsource->create();
 		previewsource = new FXGIFIcon(app, resico_previewxp); previewsource->create();
+		ico_energy = new FXGIFIcon(app, resico_energyxp, 0, IMAGE_ALPHAGUESS); ico_energy->create();
 	} else {
 		monitorsource = new FXGIFIcon(app, resico_monitor); monitorsource->create();
 		previewsource = new FXGIFIcon(app, resico_preview); previewsource->create();
+		ico_energy = new FXGIFIcon(app, resico_energy2k, 0, IMAGE_ALPHAGUESS); ico_energy->create();
 	}
 
 
@@ -1303,7 +1321,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	// !! SCREENSAVER TAB
 	// i think it should be obvious but i somehow get confused on what is what sometimes
 	new FXTabItem(tabbook,"Screen Saver",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
-	FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0);
+	FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 2,2);
 	scrmonitor = new FXLabel(scrframe, "", monitorscrimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
 
 	FXGroupBox* scrgrp = new FXGroupBox(scrframe, "Screen Saver", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,12,-1,5);
@@ -1415,7 +1433,16 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 
 	FXGroupBox* mongrp = new FXGroupBox(scrframe, "Monitor power", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,10,-1,6);
 
-	new FXButton(mongrp, "P&ower...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_RIGHT|LAYOUT_BOTTOM, 0,0,0,0, 14,15,2,3);
+	new FXLabel(mongrp, "", ico_energy, LAYOUT_SIDE_LEFT, 0,0,0,0, 0,0,4,0);
+
+	energy_box = new FXText(mongrp, NULL, 0, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT|TEXT_WORDWRAP|VSCROLLER_NEVER, 0,0,0,0, 4,0,0,0);
+	energy_box->setText("To adjust monitor power settings and save energy, click Power.");
+	energy_box->disable();
+	energy_box->setBackColor(getApp()->getBaseColor());
+	energy_box->setDefaultCursor(getApp()->getDefaultCursor(DEF_ARROW_CURSOR));
+
+	//FXHorizontalFrame* powerfrm	= 
+	new FXButton(mongrp, "P&ower...", NULL, this, ID_POWER, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_RIGHT|LAYOUT_BOTTOM, 0,0,0,0, 14,15,2,3);
 
 
 
