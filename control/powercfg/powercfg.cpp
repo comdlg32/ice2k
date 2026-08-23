@@ -5,9 +5,11 @@
 #include <ice2k/batmeter/I2KBatMeter.h>
 #include "res/foxres.h"
 
-
+FXSettings settings;
 FXIcon* ico_powercfg_32;
 FXIcon* ico_powercfg_16;
+
+int bat_detailed = 0;
 
 class PowerCfgWindow : public FXMainWindow {
 	FXDECLARE(PowerCfgWindow);
@@ -30,13 +32,14 @@ private:
 	FXPacker*               batmetercont;
 	I2KBatMeter*            batmeter;
 
-	FXPacker*               advancedcont;
-	FXHorizontalFrame*      advancedtopcont;
+	FXPacker*               advanced_frm;
+	FXHorizontalFrame*      advanced_top_frm;
 
-	FXGroupBox* optionsgrp;
-	FXGroupBox* powerbtngrp;
-	FXVerticalFrame* powerbtncont;
-	FXListBox* powerbtnbox;
+	FXGroupBox* options_grp;
+	FXGroupBox* powerbtn_grp;
+	FXVerticalFrame* powerbtn_frm;
+	FXListBox* powerbtn_box;
+	FXCheckButton* showicon_chk;
 
 
 	FXButton*               okbtn;
@@ -45,6 +48,8 @@ private:
 public:
 	long onCmdPowerBox(FXObject*,FXSelector,void*);
 	long onCmdShowIcon(FXObject*,FXSelector,void*);
+	long onCmdBatMeter(FXObject*,FXSelector,void*);
+
 
 	long onCmdDialogOK(FXObject*,FXSelector,void*);
 	long onCmdDialogApply(FXObject*,FXSelector,void*);
@@ -55,6 +60,7 @@ public:
 	enum {
 		ID_POWERBOX = FXMainWindow::ID_LAST,
 		ID_SHOWICON,
+		ID_BATMETER,
 		ID_DLG_OK,
 		ID_DLG_CANCEL,
 		ID_DLG_APPLY,
@@ -75,6 +81,8 @@ FXDEFMAP(PowerCfgWindow) PowerCfgWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND, PowerCfgWindow::ID_POWERBOX, PowerCfgWindow::onCmdPowerBox),
 
 	FXMAPFUNC(SEL_COMMAND, PowerCfgWindow::ID_SHOWICON, PowerCfgWindow::onCmdShowIcon),
+	FXMAPFUNC(SEL_COMMAND, PowerCfgWindow::ID_BATMETER, PowerCfgWindow::onCmdBatMeter),
+
 
 
 };
@@ -118,10 +126,38 @@ long PowerCfgWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
 			return 0;
 	}
 
+	FXString desktopfile = FXSystem::getHomeDirectory()+PATHSEPSTRING+".foxrc"+PATHSEPSTRING+"Desktop";
+	if (FXStat::exists(desktopfile)) {
+		settings.parseFile(desktopfile, TRUE);
+	}
+
+
+
+	settings.writeIntEntry("BatMeter", "AlwaysShow", showicon_chk->getCheck());
+	settings.writeIntEntry("BatMeter", "Detailed", bat_detailed);
+
+
+	settings.unparseFile(desktopfile);
+	settings.clear();
+
+
 	applybtn->disable();
 	return 1;
 }
 
+long PowerCfgWindow::onCmdBatMeter(FXObject* obj,FXSelector sel, void* ptr) {
+	switch((unsigned)(FXuval)ptr) {
+		case BATMETER_DETAILED_ON:
+			bat_detailed = 1;
+			break;
+		case BATMETER_DETAILED_OFF:
+			bat_detailed = 0;
+			break;
+	}
+
+	applybtn->enable();
+	return 1;
+}
 
 long PowerCfgWindow::onCmdPowerBox(FXObject* obj,FXSelector sel, void* ptr) {
 	//obj->handle(this, FXSEL(SEL_COMMAND,ID_ENABLE), NULL);
@@ -279,29 +315,34 @@ PowerCfgWindow::PowerCfgWindow(FXApp *a) : FXMainWindow(a, "Power Options Proper
 	new FXTabItem(tabbook, "Power Meter", NULL, TAB_TOP_NORMAL, 0,0,0,0, 4,4,1,2);
 	batmetercont = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 6,8,9,8, 0,0);
 	batmeter = new I2KBatMeter(batmetercont, LAYOUT_FILL);
+	batmeter->setTarget(this);
+	batmeter->setSelector(ID_BATMETER);
 	batmeter->hideAlwaysShowChk();
 
 	new FXTabItem(tabbook, "Advanced", NULL, TAB_TOP_NORMAL, 0,0,0,0, 4,4,1,2);
 
-	advancedcont = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,15,11,30, 8,8);
-	advancedtopcont = new FXHorizontalFrame(advancedcont, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,4, 16,16);
-	new FXLabel(advancedtopcont, "", ico_powercfg_32, FRAME_NONE, 0,0,0,0, 0,0,0,0);
-	new FXLabel(advancedtopcont, "Select the power-saving settings you want to use.", NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
+	advanced_frm = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,15,11,30, 8,8);
+	advanced_top_frm = new FXHorizontalFrame(advanced_frm, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,4, 16,16);
+	new FXLabel(advanced_top_frm, "", ico_powercfg_32, FRAME_NONE, 0,0,0,0, 0,0,0,0);
+	new FXLabel(advanced_top_frm, "Select the power-saving settings you want to use.", NULL, LAYOUT_CENTER_Y, 0,0,0,0, 0,0,0,0);
 
-	optionsgrp = new FXGroupBox(advancedcont, "Options", GROUPBOX_NORMAL|FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 6,7, 2,60);
-	new FXCheckButton(optionsgrp, "Alway&s show icon on the taskbar", this, ID_SHOWICON);
-	powerbtngrp = new FXGroupBox(advancedcont, "Power buttons", GROUPBOX_NORMAL|FRAME_GROOVE|LAYOUT_FILL, 0,0,0,0, 6,7, 2,20);
-	powerbtncont = new FXVerticalFrame(powerbtngrp, LAYOUT_CENTER_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 4,4);
+	options_grp = new FXGroupBox(advanced_frm, "Options", GROUPBOX_NORMAL|FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 6,7, 2,60);
+	showicon_chk = new FXCheckButton(options_grp, "Alway&s show icon on the taskbar", this, ID_SHOWICON);
+	showicon_chk->setCheck(getApp()->reg().readIntEntry("BatMeter", "AlwaysShow", FALSE));
+	powerbtn_grp = new FXGroupBox(advanced_frm, "Power buttons", GROUPBOX_NORMAL|FRAME_GROOVE|LAYOUT_FILL, 0,0,0,0, 6,7, 2,20);
+	powerbtn_frm = new FXVerticalFrame(powerbtn_grp, LAYOUT_CENTER_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 4,4);
 	
-	new FXLabel(powerbtncont, "Wh&en I press the power button on my computer:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
-	powerbtnbox = new FXListBox(powerbtncont, NULL, 0, FRAME_NORMAL|LISTBOX_NORMAL|LAYOUT_FILL_X, 0,0,0,0, 3,3,2,1);
-	powerbtnbox->appendItem("Performance");
-	powerbtnbox->appendItem("Power Saving");
-	powerbtnbox->appendItem("Balanced");
-	powerbtnbox->disable();
+	new FXLabel(powerbtn_frm, "Wh&en I press the power button on my computer:", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,0);
+	powerbtn_box = new FXListBox(powerbtn_frm, NULL, 0, FRAME_NORMAL|LISTBOX_NORMAL|LAYOUT_FILL_X, 0,0,0,0, 3,3,2,1);
+	powerbtn_box->appendItem("Performance");
+	powerbtn_box->appendItem("Power Saving");
+	powerbtn_box->appendItem("Balanced");
+	powerbtn_box->disable();
 
 
 	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT, 0,0,0,0, 0,6,1,4, 6,0);
+
+	bat_detailed = getApp()->reg().readIntEntry("BatMeter", "Detailed", FALSE);
 	
 	okbtn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
 	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);

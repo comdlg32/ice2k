@@ -286,11 +286,23 @@ void drawBar(FXEvent* ev, FXDC *dc, FXint width, FXint which, FXint hover, const
 	//puts("hi");
 }
 long WelcomeWindow::onClick(FXObject* obj, FXSelector, void* ptr) {
+	FXEvent* ev = (FXEvent*)ptr;
+	int fontheight = boldfont->getFontHeight();
+
+	if (hoveredbar != 255) {
+		int hoveredbar2 = (ev->win_y / (10+fontheight+1))+1;
+		if (hoveredbar2 != hoveredbar && hoveredbar2 <= (AMOUNTBARS+1)) {
+			hoveredbar = hoveredbar2;
+			leftcanvas->update();
+			rightcanvas->update();
+		}
+	}
+
 	switch (hoveredbar) {
 		case 1:
 		case 2:
-			*(int*)0 = 0;
-			//FXMessageBox::error(this, MBOX_OK, "Error", "Not implemented!");
+			//*(int*)0 = 0;
+			FXMessageBox::error(this, MBOX_OK, "Error", "Not implemented!");
 			break;
 		case 3:
 			system("ncpa.cpi &");

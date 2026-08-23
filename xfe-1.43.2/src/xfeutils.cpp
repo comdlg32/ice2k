@@ -1822,7 +1822,7 @@ FXIcon* loadiconfile(FXApp* app, const FXString iconpath, const FXString iconnam
 //		if ( trim(iconname.text()) == "iconsmenu.png" ) {
 
 	FXColor iconforecolor = app->getForeColor();
-if (arrow = 1) {
+if (arrow) {
 if (icon->getWidth() == 23) {
 	icon->setPixel(18, 7, iconforecolor);
 	icon->setPixel(19, 7, iconforecolor);
@@ -1943,6 +1943,8 @@ gresizecorner->setPixel(9, 11, app->getShadowColor());
 gresizecorner->setPixel(10, 11, app->getShadowColor());
 
 gresizecorner->create();
+
+return gresizecorner;
 }
 
 // Load a XBM icon from a file in the icon path

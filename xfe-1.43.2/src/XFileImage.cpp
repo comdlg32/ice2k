@@ -292,7 +292,7 @@ XFileImage::XFileImage(FXApp* a, FXbool smoothscroll) : FXMainWindow(a, "Xfi ", 
 
     // Sites where to dock
     //FXDockSite* topdock = new FXDockSite(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|FRAME_SUNKEN);
-    FXDockSite* topdock = new FXDockSite(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
+    new FXDockSite(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X);
     new FXDockSite(this, LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X);
     new FXDockSite(this, LAYOUT_SIDE_LEFT|LAYOUT_FILL_Y);
     new FXDockSite(this, LAYOUT_SIDE_RIGHT|LAYOUT_FILL_Y);
@@ -2134,8 +2134,8 @@ long XFileImage::onCmdZoomIn(FXObject*, FXSelector, void*)
 {
     zoomwin = 0;
 
-    imgvwidth = NULL;
-    imgvheight = NULL;
+    imgvwidth = 0;
+    imgvheight = 0;
     //getApp()->removeTimeout(this,ID_ZOOM_WIN);
 
     // getApp()->removeTimeout(this,ID_ZOOM_WIN);
@@ -2195,8 +2195,8 @@ long XFileImage::onCmdZoomOut(FXObject*, FXSelector, void*)
 {
     zoomwin = 0;
 
-    imgvwidth = NULL;
-    imgvheight = NULL;
+    imgvwidth = 0;
+    imgvheight = 0;
     //getApp()->removeTimeout(this,ID_ZOOM_WIN);
 
     //getApp()->removeTimeout(this,ID_ZOOM_WIN);
@@ -2244,8 +2244,8 @@ long XFileImage::onCmdZoom100(FXObject*, FXSelector, void*)
 {
     zoomwin = 0;
 
-    imgvwidth = NULL;
-    imgvheight = NULL;
+    imgvwidth = 0;
+    imgvheight = 0;
     //getApp()->removeTimeout(this,ID_ZOOM_WIN);
 
     getApp()->beginWaitCursor();
@@ -2372,7 +2372,7 @@ long XFileImage::onConfigureZoomWin(FXObject* sender, FXSelector sel, void* ptr)
     if ( zoomwin == 1 ) {
     	//printf("test3\n");
     	if (winw != imgvwidth || winh != imgvheight) {
-   		if (imgvwidth != 0 || imgvheight != 0 || imgvwidth != NULL || imgvheight != NULL) {
+   		if (imgvwidth != 0 || imgvheight != 0) {
     		    //printf("test\n");
 		    getApp()->removeTimeout(this,ID_ZOOM_WIN);
 		    getApp()->addTimeout(this,ID_ZOOM_WIN,75);

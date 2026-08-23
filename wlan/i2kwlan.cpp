@@ -437,6 +437,7 @@ long WLANWizard::onTimeoutConnecting(FXObject* obj,FXSelector sel, void* ptr) {
 			wiz->setCurrent(2);
 			keyfield->setFocus();
 			nettext->setText(infotext);
+			nettext->setHeight(nettext->getContentHeight());
 			wiz->getBackButton()->enable();
 			wiz->getNextButton()->disable();
 		} else {

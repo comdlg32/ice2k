@@ -985,7 +985,7 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 	helpmenu = new FXMenuPane(this);
 
 
-	FXMenuCommand* menucmd; FXMenuRadio* menurad; FXMenuCheck* menuchk;
+	FXMenuCommand* menucmd;
 	
 	new FXMenuTitle(menubar, "&File", NULL, filemenu);
 	new FXMenuCommand(filemenu,"&Open",NULL,this,ID_OPEN);

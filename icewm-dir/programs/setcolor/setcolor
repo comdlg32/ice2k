@@ -563,6 +563,8 @@ s/activetitlebarmiddle/$activetitlebarmiddle/gI" | tee "$HOME/.config/qt6ct/colo
 if [ "$firstrun" -ne 0 ]; then
 	kill -15 $(getpid i2knettray)
 	kill -15 $(getpid i2kbattray)
+	kill -15 $(getpid i2kvolume)
+
 	kill -15 $(getejecttray)
 fi
 
@@ -624,5 +626,6 @@ if [ "$firstrun" -ne 0 ]; then
 	i2kejtray &
 
 	i2kbattray &
+	i2kvolume &
 fi
 #xxkb &

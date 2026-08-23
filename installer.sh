@@ -38,7 +38,7 @@ bc alsa-utils xfonts-cronyx* idesk gtk2-engines libxt-dev xidle \
 || exit
 
 
-if [ "$ONLYTOOLS" -eq 1 ]; then
+if test "$ONLYTOOLS"; then
 	exit
 fi
 
@@ -80,7 +80,7 @@ simplebuild shell/nettray
 simplebuild shell/ejtray
 
 simplebuild control/control
-simplebuild control/ncpaprop
+simplebuild control/ncpastat
 simplebuild control/sysdm
 simplebuild control/timedate
 simplebuild control/desk
@@ -136,15 +136,15 @@ sudo make install
 set +e
 ) || exit
 
-#(
-#cd xlockmore-*
-#set -e
-#./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
-#make clean
-#make -j$(nproc)
-#sudo make install
-#set +e
-#) || exit
+(
+cd xlockmore-*
+set -e
+./configure --disable-mb --without-motif --without-xaw --without-xaw3d --without-gtk --without-gtk2 --disable-pam
+make clean
+make -j$(nproc)
+sudo make install
+set +e
+) || exit
 
 
 mv ~/.icewm ~/.icewm-old

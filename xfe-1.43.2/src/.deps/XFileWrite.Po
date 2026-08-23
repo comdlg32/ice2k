@@ -305,7 +305,7 @@ XFileWrite.o: XFileWrite.cpp /usr/include/stdc-predef.h ../config.h \
  /usr/include/X11/extensions/render.h /usr/include/X11/Xdefs.h \
  /usr/include/X11/Xft/XftCompat.h /usr/include/X11/extensions/Xrandr.h \
  /usr/include/X11/extensions/randr.h \
- /usr/include/fox-1.6/FXComposeContext.h clearlooks.cpp comboarrow.xbm
+ /usr/include/fox-1.6/FXComposeContext.h clearlooks.cpp
 /usr/include/stdc-predef.h:
 ../config.h:
 ../i18n.h:
@@ -761,4 +761,3 @@ foxhacks.cpp:
 /usr/include/X11/extensions/randr.h:
 /usr/include/fox-1.6/FXComposeContext.h:
 clearlooks.cpp:
-comboarrow.xbm:

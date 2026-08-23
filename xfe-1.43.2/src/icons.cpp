@@ -259,7 +259,7 @@ FXbool loadAppIcons(FXApp* app)
     // success = ((closeicon = loadiconfile(app, iconpath, "close" + ext, backcolor)) != NULL) & success;
     success = ((throbicon = loadiconfile(app, iconpath, "throb" + ext, backcolor)) != NULL) & success;
     success = ((throbanimicon = loadiconfile(app, iconpath, "throbanim" + ext, backcolor)) != NULL) & success;
-    success = ((webviewbgicon = loadiconfile(app, iconpath, "webviewbg" + ext, backcolor)) != NULL) ; success;
+    success = ((webviewbgicon = loadiconfile(app, iconpath, "webviewbg" + ext, backcolor)) != NULL);
 
     success = ((tbarchaddicon = loadiconfile(app, iconpath, "archadd" + ext, basecolor)) != NULL) & success;
     success = ((tbarchexticon = loadiconfile(app, iconpath, "archext" + ext, basecolor)) != NULL) & success;
@@ -430,7 +430,7 @@ FXbool loadAppIcons(FXApp* app)
     success = ((tbthrobanimicon = loadiconfile(app, iconpath, "throbanim" + ext, basecolor)) != NULL) & success;
     // success = ((tbwebviewbgicon = loadiconfile(app, iconpath, "webviewbg" + ext, basecolor)) != NULL) & success;
     // ((tbwebviewbgicon = loadiconfile(app, iconpath, "webviewbg" + ext, basecolor)) != NULL);
-    ((webviewxp = loadiconfile(app, iconpath, "xpwv" + ext, basecolor)) != NULL);
+    webviewxp = loadiconfile(app, iconpath, "xpwv" + ext, basecolor);
 
 
 //resizecorner = new FXIcon(app, NULL, IMAGE_KEEP, 13, 13);

@@ -230,7 +230,6 @@ NCPAStatWindow::NCPAStatWindow(FXApp *a) : FXMainWindow(a, "Network Properties",
 	FXHorizontalSeparator* horsep;
 	FXVerticalSeparator*   vertp;
 	FXHorizontalFrame*     horfrm;
-	FXHorizontalFrame*     horleftfrm;
 	
 	cont = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 6,6,6,6, 8,8);
 

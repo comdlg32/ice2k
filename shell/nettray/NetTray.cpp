@@ -95,6 +95,11 @@ int ifexist(struct interfaceValues* ifv, char* name) {
 	getifaddrs(&addrs);
 	tmp = addrs;
 
+	if (ifv != NULL) {
+		ifv->up = 0;
+		ifv->running = 0;
+	}
+
 	while (tmp) {
 	    if (tmp->ifa_addr == NULL) goto next;
 		if (tmp->ifa_addr->sa_family != AF_PACKET && tmp->ifa_addr->sa_family != AF_INET) goto next;
@@ -157,6 +162,8 @@ public:
 		ID_FORGET,
 		ID_ENABLE,
 		ID_DISABLE,
+		ID_DISCONNECT,
+		ID_STATUS,
 		ID_TIMEOUT,
         ID_LAST
     };
@@ -164,7 +171,11 @@ public:
     NetTray(FXApp* app);
 
     long onCmdConnect(FXObject* sender, FXSelector sel, void*);
+    long onCmdStatus(FXObject* sender, FXSelector sel, void*);
+
     long onCmdForget(FXObject* sender, FXSelector sel, void*);
+    long onCmdDisconnect(FXObject* sender, FXSelector sel, void*);
+
     long onCmdEnable(FXObject* sender, FXSelector sel, void*);
     long onCmdDisable(FXObject* sender, FXSelector sel, void*);
 
@@ -181,7 +192,11 @@ private:
 
 FXDEFMAP(NetTray) NetTrayMap[] = {
 	FXMAPFUNC(SEL_COMMAND, NetTray::ID_CONNECT, NetTray::onCmdConnect),
+	FXMAPFUNC(SEL_COMMAND, NetTray::ID_STATUS, NetTray::onCmdStatus),
+
 	FXMAPFUNC(SEL_COMMAND, NetTray::ID_FORGET,  NetTray::onCmdForget),
+	FXMAPFUNC(SEL_COMMAND, NetTray::ID_DISCONNECT, NetTray::onCmdDisconnect),
+
 	FXMAPFUNC(SEL_COMMAND, NetTray::ID_ENABLE,  NetTray::onCmdEnable),
 	FXMAPFUNC(SEL_COMMAND, NetTray::ID_DISABLE, NetTray::onCmdDisable),
 
@@ -196,6 +211,7 @@ FXIcon* getNetIcon(struct interfaceValues* ovalues, struct interfaceValues* nval
 	int wireless = (nvalues->ifname[0] == 'w');
 	int up = (nvalues->up && nvalues->running);
 
+	//printf("up: %d, running: %d\n" , nvalues->up,  nvalues->running);
 	if (!up) {
 		//puts("not up!");
 		if (wireless) {
@@ -267,21 +283,44 @@ NetTray::NetTray(FXApp* a) :
 	strcpy(ifname, nifvalues.ifname);
 	ifexist(&nifvalues, ifname);
 	
+	FXFont* normalfont = a->getNormalFont();
+
+	FXString fname = normalfont->getFont();
+	FXuint fsize = normalfont->getSize()/10;
+	FXuint fslant = normalfont->getSlant();
+	FXuint fencoding = normalfont->getEncoding();
+	FXuint fsetwidth = normalfont->getSetWidth();
+	FXuint fhints = normalfont->getHints();
+
+	FXFont* boldfont = new FXFont(a, fname, fsize, FXFont::Bold, fslant, fencoding, fsetwidth, fhints);
+	if (boldfont == NULL) {
+		boldfont = normalfont;
+	} else {
+		boldfont->create();
+	}
+
+
 	if (wireless) {
 	    tray = new I2KTrayIcon(app, ifname, ico_wlan_down, 0, this, ID_CONNECT, TRAY_CMD_ON_LEFT|TRAY_MENU_ON_RIGHT);
 	} else {
-	    tray = new I2KTrayIcon(app, ifname, ico_lan_down, 0, NULL, 0, TRAY_CMD_ON_LEFT|TRAY_MENU_ON_RIGHT);
+	    tray = new I2KTrayIcon(app, ifname, ico_lan_down, 0, this, ID_STATUS, TRAY_CMD_ON_LEFT|TRAY_MENU_ON_RIGHT);
 	}
 
     popup = new FXPopup(tray);
+	FXMenuCommand* status_cmd = new FXMenuCommand(popup, "Status", NULL, this, NetTray::ID_STATUS);
 
+	if (!wireless) status_cmd->setFont(boldfont);
+    new FXMenuSeparator(popup);
     new FXMenuCommand(popup, "Enable", NULL, this, NetTray::ID_ENABLE);
     new FXMenuCommand(popup, "Disable", NULL, this, NetTray::ID_DISABLE);
 
 	if (wireless) {
 	    new FXMenuSeparator(popup);
+		new FXMenuCommand(popup, "Disconnect", NULL, this, NetTray::ID_DISCONNECT);
+	    new FXMenuSeparator(popup);
 
-		new FXMenuCommand(popup, "Connect", NULL, this, NetTray::ID_CONNECT);
+		FXMenuCommand* connect_cmd = new FXMenuCommand(popup, "Connect", NULL, this, NetTray::ID_CONNECT);
+		connect_cmd->setFont(boldfont);
 		new FXMenuCommand(popup, "Forget", NULL, this, NetTray::ID_FORGET);
 	}
 		
@@ -306,11 +345,22 @@ long NetTray::onCmdConnect(FXObject*, FXSelector, void*) {
     return 1;
 }
 
+long NetTray::onCmdStatus(FXObject*, FXSelector, void*) {
+	system("ncpastat \"$IFNAME\" &");
+	return 1;
+}
+
+
 long NetTray::onCmdForget(FXObject*, FXSelector, void*) {
-	system("i2kwlan \"$IFNAME\" &");
+	system("i2kwlanprof \"$IFNAME\" &");
     return 1;
 }
 
+
+long NetTray::onCmdDisconnect(FXObject*, FXSelector, void*) {
+	system("iwctl station \"$IFNAME\" disconnect &");
+    return 1;
+}
 
 long NetTray::onTimeout(FXObject*, FXSelector, void*) {
 	char ifname[16];

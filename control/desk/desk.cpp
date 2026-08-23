@@ -424,7 +424,8 @@ FXColor lastColor;
 FXIcon* monitorsource;
 FXIcon* previewsource;
 FXIcon* monitorimage;
-FXIcon* monitornopimage;
+FXIcon* monitorscrimage;
+//FXIcon* monitornopimage;
 
 
 FXLabel* scrmonitor;
@@ -543,7 +544,8 @@ long DesktopProperties::onColorChangeCmd(FXObject* obj,FXSelector sel,void* ptr)
 		onChange(obj, sel, ptr);
 
 		genMonitorPreview(getApp(), monitorimage, previewsource, deskcol);
-		genMonitorPreview(getApp(), monitornopimage, NULL, deskcol);
+		//genMonitorPreview(getApp(), monitorscrimage, NULL, FXRGB(0,0,0));
+		//genMonitorPreview(getApp(), monitornopimage, NULL, deskcol);
 
 		if (udata == NULL) {
 			prvimage->detach();
@@ -987,7 +989,13 @@ long DesktopProperties::onCmdApply(FXObject* obj,FXSelector sel,void* ptr) {
 
 	//printf("XLock.mode: %s\n", scrvalue);
 
-	fprintf(fptr, "XLock.mode: %s\n", scrvalue);
+	if (strcmp(scrvalue, "(None)") == 0 ) {
+		fprintf(fptr, "XLock.mode: blank\n");
+		fprintf(fptr, "XLock.modeNone: 1\n");
+	} else {
+		fprintf(fptr, "XLock.mode: %s\n", scrvalue);
+		fprintf(fptr, "XLock.modeNone: 0\n");
+	}
 	fprintf(fptr, "XIdle.delay: %d\n", scrdelay * 60);
 	fprintf(fptr, "XIdle.timeout: %d\n", scrdelay * 60);
 
@@ -1155,10 +1163,13 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	genMonitorPreview(app, monitorimage, previewsource, deskcol);
 
 	prvimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
-	monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	//monitornopimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
+	monitorscrimage = new FXIcon(app, NULL, 0, IMAGE_OPAQUE, 184, 170);
 
 	genMonitorPreview(app, monitorimage, previewsource, deskcol);
-	genMonitorPreview(app, monitornopimage, NULL, deskcol);
+	//genMonitorPreview(app, monitornopimage, NULL, deskcol);
+	genMonitorPreview(app, monitorscrimage, NULL, FXRGB(0,0,0));
+
 
 
 	FXIcon* ico_nobg;
@@ -1293,7 +1304,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	// i think it should be obvious but i somehow get confused on what is what sometimes
 	new FXTabItem(tabbook,"Screen Saver",NULL,TAB_TOP_NORMAL,0,0,0,0,4,4,1,3);
 	FXVerticalFrame* scrframe = new FXVerticalFrame(tabbook,FRAME_THICK|FRAME_RAISED, 0,0,0,0, 13,12,13,13, 0,0);
-	scrmonitor = new FXLabel(scrframe, "", monitornopimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
+	scrmonitor = new FXLabel(scrframe, "", monitorscrimage, LABEL_NORMAL|LAYOUT_CENTER_X, 0,0,0,0,  0,0,0,0);
 
 	FXGroupBox* scrgrp = new FXGroupBox(scrframe, "Screen Saver", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,12,-1,5);
 
@@ -1317,6 +1328,7 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	XrmValue value;
 
 	char* type;
+	int modenone = 0;
 
 
 	if (resmgr) {
@@ -1326,6 +1338,12 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 		if (XrmGetResource(db, "XLock.mode", "Xlock.mode", &type, &value)) {
 			scrvalue = value.addr;
 		}
+
+		if (XrmGetResource(db, "XLock.modeNone", "Xlock.modeNone", &type, &value)) {
+			if (*value.addr == '1') modenone = 1;
+			//scrvalue = value.addr;
+		}
+
 
 		if (XrmGetResource(db, "XIdle.delay", "Xidle.delay", &type, &value)) {
 			scrdelay = atoi(value.addr) / 60;
@@ -1351,8 +1369,11 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	} else {
 		for (int i = 0; i < modec; ++i) {
 			scrsel->insertItem(i+1, modes[i]);
-			if (!strcmp(modes[i], scrvalue))
-				scrsel->setCurrentItem(i+1);
+			if (!modenone) {
+				if (!strcmp(modes[i], scrvalue)) {
+					scrsel->setCurrentItem(i+1);
+				}
+			}
 		}
 
 		//free(modes[i]);
@@ -1391,6 +1412,11 @@ DesktopProperties::DesktopProperties(FXApp *app):FXMainWindow(app, "Desktop Prop
 	waitspin = new FXSpinner(waitcont,4,this,ID_CHANGE,SPIN_NORMAL|LAYOUT_CENTER_Y|FRAME_SUNKEN|FRAME_THICK, 0,0,0,0, 0,0,1,1);
 	waitspin->setValue(scrdelay);
 	new FXLabel(waitcont, "  minutes", NULL, LABEL_NORMAL|LAYOUT_CENTER_Y, 0,0,0,0,  0,0,0,0);
+
+	FXGroupBox* mongrp = new FXGroupBox(scrframe, "Monitor power", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 7,10,-1,6);
+
+	new FXButton(mongrp, "P&ower...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_RIGHT|LAYOUT_BOTTOM, 0,0,0,0, 14,15,2,3);
+
 
 
 	// !! EFFECTS TAB

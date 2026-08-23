@@ -172,7 +172,7 @@ PropertiesBox::PropertiesBox(FXWindow* win, FXString file, FXString path) : Dial
     FXString    type = "", extension, extension2, fileassoc;
     FXbool      isLink, isBrokenLink;
     FXString    pathname, referredpath;
-    char        mnttype[64], used[64], avail[64], pctr[64], size[64];
+    char        mnttype[64], used[64], avail[64], pctr[64], size[128];
     char        buf[MAXPATHLEN+1];
     FXString    hsize;
     FILE*       p;

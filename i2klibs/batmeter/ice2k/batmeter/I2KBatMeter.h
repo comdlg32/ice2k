@@ -4,8 +4,10 @@
 #include "I2KBatButton.h"
 
 
-#define BATMETER_DETAILED_ON 1
-#define BATMETER_DETAILED_OFF 2
+#define BATMETER_DETAILED_ON 0
+#define BATMETER_DETAILED_OFF 1
+#define BATMETER_SHOWICON_ON 2
+#define BATMETER_SHOWICON_OFF 3
 
 class I2KBatMeter : public FXVerticalFrame {
 	FXDECLARE(I2KBatMeter);
@@ -71,6 +73,8 @@ private:
 public:
 	void refreshInfo();
 	long onChkDetailed(FXObject*, FXSelector, void*);
+	long onChkShowIcon(FXObject*, FXSelector, void*);
+
 	long onCmdBattery(FXObject*, FXSelector, void*);
 
 	long onTimeout(FXObject*, FXSelector, void*);
@@ -80,6 +84,7 @@ public:
 public:
 	enum {
 		ID_DETAILED = FXSwitcher::ID_LAST,
+		ID_SHOWICON,
 		ID_BATBUTTON,
 		ID_TIMEOUT,
 		ID_LAST

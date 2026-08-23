@@ -173,16 +173,17 @@ FXDEFMAP(FilePanel) FilePanelMap[] =
 FXIMPLEMENT(FilePanel, FXVerticalFrame, FilePanelMap, ARRAYNUMBER(FilePanelMap))
 
 // Function to draw header on webview
-static void xpWebviewHeader(FXPacker* tb, const char* txt, FXColor bgcolor)
+/*static void xpWebviewHeader(FXPacker* tb, const char* txt, FXColor bgcolor)
 {
 	FXHorizontalFrame* headerCont = new FXHorizontalFrame(tb, LAYOUT_FILL_X|FRAME_NONE, 0, 0, 0, 0, 12, 2, 8, 6, 0, 0);
 	FXHorizontalFrame* headerCont2 = new FXHorizontalFrame(headerCont, LAYOUT_FILL_X|FRAME_NONE, 0, 0, 0, 0, 6, 0, 6, 5, 0, 0);
-        FXLabel* headerText = new FXLabel(headerCont2, txt, NULL, 0, 0, 0, 14, 0, 8, 6, 0, 0);
+	//FXLabel* headerText = new FXLabel(headerCont2, txt, NULL, 0, 0, 0, 14, 0, 8, 6, 0, 0);
+	new FXLabel(headerCont2, txt, NULL, 0, 0, 0, 14, 0, 8, 6, 0, 0);
         headerCont2->setBackColor(bgcolor);
 
 	// bug: im a lazy fuck so im using static colors instead of grabbing the fox toolkit ones (for now)
         headerCont->setBackColor(FXRGB(255,255,255));
-}
+}*/
 
 // Construct File Panel
 FilePanel::FilePanel(FXWindow* owner, const char* nm, FXComposite* p, DirPanel* dp, FXuint name_size, FXuint size_size, FXuint type_size, FXuint ext_size,
@@ -2388,7 +2389,8 @@ long FilePanel::onCmdFileTrash(FXObject*, FXSelector, void*)
 	    int funnydelete = 0;
             if (funnydelete == 1)
             {
-                    message.format("");
+				message.clear();
+                    //message.format("");
 
 //                  message.format(" ");
             } else {

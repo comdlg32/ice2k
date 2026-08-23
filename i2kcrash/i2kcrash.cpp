@@ -9,6 +9,8 @@
 
 #include "res/foxres.h"
 
+char exe[128];
+
 //FXIcon* ico_main16;
 
 FXIcon* ico_error;
@@ -89,6 +91,7 @@ CrashWindow::CrashWindow(FXApp *a) : FXMainWindow(a, "a.out", NULL, NULL, DECOR_
 
 
 	} else {
+		char message[512];
 		FXFontDesc desc;
 		getApp()->getNormalFont()->getFontDesc(desc);
 		desc.weight = FXFont::Bold;
@@ -96,14 +99,32 @@ CrashWindow::CrashWindow(FXApp *a) : FXMainWindow(a, "a.out", NULL, NULL, DECOR_
 		boldfont = new FXFont(getApp(), desc);
 
 		FXHorizontalFrame* header = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 21,8,13,12, 8,8);
-		FXLabel* headerlbl = new FXLabel(header, "test.exe has encountered a problem and needs to close.\n"
-				"We are sorry for the inconvenience.", NULL, JUSTIFY_LEFT|LAYOUT_CENTER_Y);
-		headerlbl->setFont(boldfont);
+		/*FXLabel* headerlbl = new FXLabel(header, "test.exe has encountered a problem and needs to close.\n"
+				"We are sorry for the inconvenience.", NULL, JUSTIFY_LEFT|LAYOUT_CENTER_Y);*/
+
+		snprintf(message, sizeof(message), "%s has encountered a probelm and needs to close.\n"
+				"We are sorry for the inconvenience.", exe);
+
+		text = new FXText(header, NULL, 0, LAYOUT_FILL_X|LAYOUT_FIX_HEIGHT|TEXT_WORDWRAP, 0,0, 0,0);
+
+		/*text->setText("This program has performed an illegal operation and will be shut down.\n"
+				"\n"
+				"If the problem persists, contact the program vendor.");*/
+		text->setText(message);
+		text->disable();
+		text->setMarginTop(2);
+		text->setMarginLeft(2);
+		text->setMarginBottom(2);
+		text->setMarginRight(2);
+		text->setBackColor(getApp()->getBackColor());
+		text->setDefaultCursor(getApp()->getDefaultCursor(DEF_ARROW_CURSOR));
+
+		text->setFont(boldfont);
 
 		new FXHorizontalSeparator(this, SEPARATOR_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0);
 
 		header->setBackColor(getApp()->getBackColor());
-		headerlbl->setBackColor(getApp()->getBackColor());
+		//headerlbl->setBackColor(getApp()->getBackColor());
 
 		contents = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 24,11,8,8, 12,12);
 
@@ -129,11 +150,11 @@ CrashWindow::~CrashWindow() {
 void CrashWindow::create() {
 	FXMainWindow::create();
 
-	if (style == CRASHDLG_STYLE_9X) {
-		text->setHeight(text->getContentHeight());
+	text->setHeight(text->getContentHeight());
+	//if (style == CRASHDLG_STYLE_9X) {
 		setHeight(getDefaultHeight());
 		setWidth(getDefaultWidth());
-	}
+	//}
 	show(PLACEMENT_SCREEN);
 }
 
@@ -165,6 +186,13 @@ int main(int argc, char *argv[]) {
 	if (strcmp(str, "9x") == 0) {
 		style = CRASHDLG_STYLE_9X;
 	}
+
+	if (argv[1] != NULL && argv[1][0] != '\0') {
+		snprintf(exe, sizeof(exe), "%s", argv[1]);
+	} else {
+		strcpy(exe, "a.out");
+	}
+
 
 	CrashWindow* win = new CrashWindow(&application);
 	if (argv[1] != NULL && argv[1][0] != '\0') {

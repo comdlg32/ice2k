@@ -2695,7 +2695,7 @@ end:
  */
 static inline int compare_locale(wchar_t* p, wchar_t* q, FXbool igncase, FXbool asc, int jmp)
 {
-    int retnames, ret = 0, i;
+    int retnames, ret = 0;
 
     // Compare names
 

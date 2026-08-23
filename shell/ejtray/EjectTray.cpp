@@ -42,7 +42,25 @@ EjectTray::EjectTray(FXApp* a) :
 {
     tray = new I2KTrayIcon(app, "Safely Remove Hardware", ico_eject, 0, this, ID_SAFELYREMOVE, TRAY_CMD_ON_LEFT|TRAY_MENU_ON_RIGHT);
     popup = new FXPopup(tray);
-    new FXMenuCommand(popup, "Safely Remove Hardware", NULL, this, ID_SAFELYREMOVE);
+
+	FXFont* normalfont = a->getNormalFont();
+
+	FXString fname = normalfont->getFont();
+	FXuint fsize = normalfont->getSize()/10;
+	FXuint fslant = normalfont->getSlant();
+	FXuint fencoding = normalfont->getEncoding();
+	FXuint fsetwidth = normalfont->getSetWidth();
+	FXuint fhints = normalfont->getHints();
+
+	FXFont* boldfont = new FXFont(a, fname, fsize, FXFont::Bold, fslant, fencoding, fsetwidth, fhints);
+	if (boldfont == NULL) {
+		boldfont = normalfont;
+	} else {
+		boldfont->create();
+	}
+
+	FXMenuCommand* mcmd = new FXMenuCommand(popup, "&Safely Remove Hardware", NULL, this, ID_SAFELYREMOVE);
+	mcmd->setFont(boldfont);
 	tray->setMenu(popup);
 }
 

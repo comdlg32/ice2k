@@ -4,6 +4,9 @@ listknown() {
 	netlist="$(echo "$netlistcon")"
 	netnumber="$(echo "$netlist" | wc -l)"
 
+	if test -z "$netlist"; then
+		exit 0
+	fi
 	echo "$netlist" | while read line; do
 		if [ "$(echo "${line%????????????????}" | sed 's/[[:blank:]]*$//'  | cut -c 44- | sed 's/[[:blank:]]*$//')" = "yes" ]; then
 			echo 1

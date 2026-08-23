@@ -11,6 +11,8 @@
 FXDEFMAP(I2KBatMeter) I2KBatMeterMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           I2KBatMeter::ID_BATBUTTON,  I2KBatMeter::onCmdBattery),
 	FXMAPFUNC(SEL_COMMAND,           I2KBatMeter::ID_DETAILED,  I2KBatMeter::onChkDetailed),
+	FXMAPFUNC(SEL_COMMAND,           I2KBatMeter::ID_SHOWICON,  I2KBatMeter::onChkShowIcon),
+
 	FXMAPFUNC(SEL_TIMEOUT,           I2KBatMeter::ID_TIMEOUT,  I2KBatMeter::onTimeout),
 };
 
@@ -232,7 +234,7 @@ I2KBatMeter::I2KBatMeter(FXComposite* p, FXuint opts, FXint x, FXint y, FXint w,
 	ico_chargeplug->render();
 
 	topcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 12,12);
-	showiconchk = new FXCheckButton(topcont, "&Always show icon on the taskbar.");
+	showiconchk = new FXCheckButton(topcont, "&Always show icon on the taskbar.", this, ID_SHOWICON);
 	showdetailschk = new FXCheckButton(topcont, "Show details for each &battery.", this, ID_DETAILED,
 			CHECKBUTTON_NORMAL);
 
@@ -292,6 +294,15 @@ I2KBatMeter::I2KBatMeter(FXComposite* p, FXuint opts, FXint x, FXint y, FXint w,
 
 	//new FXFrame(batbtnmtx, FRAME_NONE, 0,0,0,0, 0,0,0,0);
 
+	showiconchk->setCheck(getApp()->reg().readIntEntry("BatMeter", "AlwaysShow", FALSE));
+
+	if (getApp()->reg().readIntEntry("BatMeter", "Detailed", 0) == 0) {
+		showdetailschk->setCheck(FALSE);
+		switcher->setCurrent(0);
+	} else {
+		showdetailschk->setCheck(TRUE);
+		switcher->setCurrent(1);
+	}
 	refreshInfo();
 
 	getApp()->addTimeout(this, ID_TIMEOUT, 2000);
@@ -307,14 +318,26 @@ void I2KBatMeter::create() {
 long I2KBatMeter::onChkDetailed(FXObject*, FXSelector, void* ptr) {
 	if (target != NULL) {
 		if (ptr == 0) {
-			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)BATMETER_DETAILED_OFF);
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)(FXuval)BATMETER_DETAILED_OFF);
 		} else {
-			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)BATMETER_DETAILED_ON);
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)(FXuval)BATMETER_DETAILED_ON);
 		}
 	}
 	
 	if (ptr == 0) switcher->setCurrent(0);
 	else switcher->setCurrent(1);
+	return 1;
+}
+
+long I2KBatMeter::onChkShowIcon(FXObject*, FXSelector, void* ptr) {
+	if (target != NULL) {
+		if (ptr == 0) {
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)(FXuval)BATMETER_SHOWICON_OFF);
+		} else {
+			target->tryHandle(this, FXSEL(SEL_COMMAND, message), (void*)(FXuval)BATMETER_SHOWICON_ON);
+		}
+	}
+
 	return 1;
 }
 

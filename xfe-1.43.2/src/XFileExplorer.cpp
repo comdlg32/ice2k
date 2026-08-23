@@ -886,9 +886,7 @@ XFileExplorer::XFileExplorer(FXApp* app, vector_FXString URIs, const FXbool icon
     // General toolbar
     key = getApp()->reg().readStringEntry("KEYBINDINGS", "go_back", "Ctrl-Backspace");
 
-    if (xp = 1) {
-      btn_rpad = 1;
-    }
+    if (xp) btn_rpad = 1;
 
 
     btn = new FXButton(generaltoolbar, _("Back")+TAB+_("Go to previous folder")+PARS(key), tbdirbackicon, this, XFileExplorer::ID_DIR_BACK, BUTTON_TOOLBAR|ICON_BEFORE_TEXT|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT|LAYOUT_FILL_Y,0,0,0,0,5,3,2,2);
@@ -5157,5 +5155,6 @@ inline long XFileExplorer::onCmdActivateThrobber(FXObject* sender,FXSelector sel
 	//printf("%d\n", throbanimicon->getHeight());
 	//throbymax = - throbanimicon->getHeight();
 	getApp()->addTimeout(this,ID_ANIMTHROB,0);
+	return 1;
 }
 

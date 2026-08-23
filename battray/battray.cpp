@@ -5,6 +5,9 @@
 
 #include "res/foxres.h"
 #include "ice2k/comctl32.h"
+I2KTrayIcon* tray;
+
+int alwaysshow = 0;
 
 class BatTray : public FXObject {
 	FXDECLARE(BatTray)
@@ -26,6 +29,8 @@ public:
 
 	void refreshInfo();
 
+	void create();
+
 
 private:
     BatTray() {}
@@ -33,7 +38,7 @@ private:
     FXApp* app;
 
     FXPopup* popup;
-    I2KTrayIcon* tray;
+
 
 	FXIcon* ico_batfull;
 	FXIcon* ico_bathalf;
@@ -91,6 +96,8 @@ void BatTray::refreshInfo() {
 	int status = getOverallStatus();
 	int powersource = getCurrentPowerSource();
 	int percentage = 0;
+	app->reg().read();
+	alwaysshow = app->reg().readIntEntry("BatMeter", "AlwaysShow", 0);
 	//char statusstr[256];
 	//char percentagestr[64];
 	//char percentage2str[64];
@@ -106,12 +113,16 @@ void BatTray::refreshInfo() {
 	if (powersource == POWER_PSU_TYPE_BATTERY) {
 		if (percentage > 66) {
 			tray->setIcon(ico_batfull);
+			tray->show();
 		} else if (percentage > 33) {
 			tray->setIcon(ico_bathalf);
+			tray->show();
 		} else if (percentage > 9) {
 			tray->setIcon(ico_batlow);
+			tray->show();
 		} else {
 			tray->setIcon(ico_batcrit);
+			tray->show();
 		}
 	}
 	
@@ -119,11 +130,17 @@ void BatTray::refreshInfo() {
 		getOverallDuration(1, &duration);
 		if (powersource != POWER_PSU_TYPE_BATTERY) {
 			tray->setIcon(ico_chargeplug);
+			tray->show();
 		}
 	} else {
 		getOverallDuration(0, &duration);
 		if (powersource != POWER_PSU_TYPE_BATTERY) {
 			tray->setIcon(ico_plug);
+			if (alwaysshow) {
+				tray->show();
+			} else {
+				tray->hide();
+			}
 		}
 	}
 
@@ -241,6 +258,8 @@ BatTray::BatTray(FXApp* a) :
 	}
 
     tray = new I2KTrayIcon(app, "No batteries installed!", ico_plug, 0, this, ID_BATTERY, TRAY_CMD_ON_LEFT|TRAY_MENU_ON_RIGHT);
+	//tray->show();
+	//tray->hide();
     popup = new FXPopup(tray);
 	powercmd = new FXMenuCommand(popup, "&Adjust Power Properties", NULL, this, ID_POWERCFG);
 	metercmd = new FXMenuCommand(popup, "&Open Power Meter", NULL, this, ID_BATTERY);
@@ -248,9 +267,9 @@ BatTray::BatTray(FXApp* a) :
 
 	tray->setMenu(popup);
 
-	refreshInfo();
+	//refreshInfo();
 
-	a->addTimeout(this, ID_TIMEOUT, 2000);
+	a->addTimeout(this, ID_TIMEOUT, 500);
 }
 
 /*BatTray::~BatTray() {
@@ -273,6 +292,10 @@ long BatTray::onTimeout(FXObject*, FXSelector, void*) {
 	return 1;
 }
 
+void BatTray::create() {
+	//puts("created");
+}
+
 int main(int argc, char* argv[]) {
     I2KTrayApp application("BatTray", "I2KProject");
    	application.init(argc, argv);
@@ -280,6 +303,7 @@ int main(int argc, char* argv[]) {
     BatTray tray_app(&application);
 
     application.create();
+	//tray->hide();
 
     return application.run();
 }

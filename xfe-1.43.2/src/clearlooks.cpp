@@ -1,4 +1,4 @@
-#include "comboarrow.xbm"
+//#include "comboarrow.xbm"
 #include "icons.h"
 //#include <fx.h>
 //#include "xfedefs.h"
