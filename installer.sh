@@ -175,6 +175,8 @@ sudo update-fonts-alias misc
 sudo update-fonts-dir 100dpi
 sudo update-fonts-alias 100dpi
 
+sudo ldconfig
+
 echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/poweroff, /sbin/poweroff, /usr/sbin/reboot, /sbin/reboot, /sbin/shutdown, /sbin/pm-suspend, /usr/sbin/pm-suspend
 $USER ALL=(ALL) NOPASSWD: /usr/bin/cpupower
 $USER ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
