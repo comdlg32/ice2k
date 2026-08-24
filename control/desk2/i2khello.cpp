@@ -1,7 +1,11 @@
 #include <fx.h>
 // #include <ice2k/comctl32.h>
-
 #include "res/foxres.h"
+
+#define IMG_MODE_TILED 0
+#define IMG_MODE_CENTER 1
+#define IMG_MODE_STRETCH 2
+#define IMG_MODE_FILL 3
 
 FXIcon* mainIcon;
 
@@ -16,6 +20,8 @@ private:
 
 public:
 	long onCmdHello(FXObject*, FXSelector, void*);
+
+	void writeBackCfg(FXString& img, FXColor col, unsigned mode);
 
 public:
 	enum {
@@ -37,6 +43,7 @@ FXDEFMAP(HelloWindow) HelloWindowMap[] = {
 
 FXIMPLEMENT(HelloWindow, FXMainWindow, HelloWindowMap, ARRAYNUMBER(HelloWindowMap));
 
+
 HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Hello World!", mainIcon, NULL, DECOR_ALL, 0,0,0,0) {
 	new FXButton(this, "Hello World!", NULL, this, ID_HELLO, BUTTON_NORMAL);
 }
@@ -45,8 +52,6 @@ HelloWindow::~HelloWindow() {
 }
 
 void HelloWindow::create() {
-	FXRootWindow* rootwin = getApp()->getRootWindow();
-	puts( ((FXTopWindow*)rootwin->getFirst())->getTitle().text());
 	FXMainWindow::create();
 
 	show(PLACEMENT_SCREEN);
