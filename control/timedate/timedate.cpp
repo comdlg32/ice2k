@@ -771,6 +771,7 @@ private:
 
 	I2KTimeBox* timebox;
 	FXCalendarView* calview;
+	FXButton* applybtn;
 
 
 public:
@@ -863,7 +864,7 @@ long TimeDateCPL::onAccept(FXObject*,FXSelector,void* ptr){
 	char cmd[1024];
 	getApp()->removeTimeout(this, ID_TIMER);
 
-	sprintf(cmd, "pkexec date -s @%llu" , (long long)calcDate());
+	sprintf(cmd, "i2ksudo date -s @%llu" , (long long)calcDate());
 	if (!system(cmd)) getApp()->exit();
 	
 	getApp()->addTimeout(this, ID_TIMER, 10);
@@ -875,10 +876,12 @@ long TimeDateCPL::onApply(FXObject*,FXSelector,void* ptr){
 	char cmd[1024];
 	getApp()->removeTimeout(this, ID_TIMER);
 	
-	sprintf(cmd, "pkexec date -s @%llu" , (long long)calcDate());
+	sprintf(cmd, "i2ksudo date -s @%llu" , (long long)calcDate());
 	system(cmd);
 	
 	getApp()->addTimeout(this, ID_TIMER, 10);
+
+	applybtn->disable();
 	
 	return 1;
 }
@@ -1005,10 +1008,12 @@ TimeDateCPL::TimeDateCPL(FXApp *a) : FXMainWindow(a, "Date and Time Properties",
 			BUTTON_NORMAL|BUTTON_DEFAULT,
 			0,0,0,0, 19, 19);
 
-	new I2KButton(buttoncont, "&Apply", NULL, this,
+	applybtn = new I2KButton(buttoncont, "&Apply", NULL, this,
 			ID_APPLY,
 			BUTTON_NORMAL|BUTTON_DEFAULT,
 			0,0,0,0, 19, 19);
+	
+	applybtn->disable();
 
 	/*new FXTabItem(tabbook, "Time Zone", NULL, TAB_TOP_NORMAL, 0,0,0,0, 5, 4, 1, 2);
 	timezonecont = new FXVerticalFrame(tabbook, FRAME_RAISED|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 10,14,6,6, 4, 4);

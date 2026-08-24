@@ -26,7 +26,7 @@ FXDEFMAP(FirstRunWindow) FirstRunWindowMap[] = {
 
 FXIMPLEMENT(FirstRunWindow, FXMainWindow, FirstRunWindowMap, ARRAYNUMBER(FirstRunWindowMap));
 
-FirstRunWindow::FirstRunWindow(FXApp *a) : FXMainWindow(a, "Personalized Settings", NULL, NULL, DECOR_MENU|DECOR_TITLE|DECOR_BORDER, 33,55,0,0, 10,7,8,9) {
+FirstRunWindow::FirstRunWindow(FXApp *a) : FXMainWindow(a, "Personalized Settings", NULL, NULL, DECOR_TITLE|DECOR_BORDER, 33,55,0,0, 10,7,8,9) {
 	new FXLabel(this, "Setting up personalized settings for:                            ", NULL,  JUSTIFY_LEFT, 0,0,0,0, 2,2,2,10);
 	new FXLabel(this, "Ice2K.sys\n\n", NULL,  JUSTIFY_LEFT);
 }
