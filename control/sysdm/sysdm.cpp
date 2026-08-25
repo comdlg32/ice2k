@@ -208,7 +208,6 @@ class ChangeHostnameBox : public FXDialogBox {
 
 
 
-		void setFocus();
 
 	public:
 
@@ -228,6 +227,14 @@ class ChangeHostnameBox : public FXDialogBox {
 		// Initialize
 		virtual void create();
 
+// hack to fix focusing issues on icewm
+//
+// fox toolkit calls setfocus on the main window one way or another
+// and the way fox focuses the window causes issues and right now
+// i'm too lazy to fork fox to fix it
+
+		void setFocus() {};
+
 		virtual ~ChangeHostnameBox();
 };
 
@@ -240,12 +247,6 @@ FXDEFMAP(ChangeHostnameBox) ChangeHostnameBoxMap[] = {
 
 FXIMPLEMENT(ChangeHostnameBox,FXDialogBox,ChangeHostnameBoxMap,ARRAYNUMBER(ChangeHostnameBoxMap));
 
-// hack to fix focusing issues on icewm
-//
-// fox toolkit calls setfocus on the main window one way or another
-// and the way fox focuses the window causes issues and right now
-// i'm too lazy to fork fox to fix it
-void ChangeHostnameBox::setFocus() { return; }
 
 long ChangeHostnameBox::onCmdAccept(FXObject* obj, FXSelector sel, void* ptr) {
 	int status;
@@ -391,7 +392,6 @@ class SystemPropertiesWindow : public FXMainWindow {
 		long onCmdNtldr(FXObject*,FXSelector,void*);
 		long onCmdDevmgmt(FXObject*,FXSelector,void*);
 
-		void setFocus();
 
 
 	public:
@@ -414,6 +414,7 @@ class SystemPropertiesWindow : public FXMainWindow {
 
 		// Initialize
 		virtual void create();
+		void setFocus() {};
 
 		virtual ~SystemPropertiesWindow();
 };
@@ -436,7 +437,6 @@ FXIMPLEMENT(SystemPropertiesWindow,FXMainWindow,SystemPropertiesWindowMap,ARRAYN
 	}
 
 // ctrl+f, up, "ChangeHostnameBox::setFocus" and find next
-void SystemPropertiesWindow::setFocus() { return; }
 
 void SystemPropertiesWindow::create() {
 	FXMainWindow::create();
@@ -772,6 +772,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	table->setDefRowHeight(fontpx + 3);
 
 	table->setMarginLeft(4);
+	table->getColumnHeader()->setPadTop(0);
+	table->getColumnHeader()->setPadBottom(0);
 
 
 	char passwdname[LOGIN_NAME_MAX+1];
@@ -859,26 +861,13 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 int main(int argc,char *argv[]) {
 	FXApp application("sysdm", "Ice2KProj");
-	//FXApp* ptrapp = &application;
 
 	application.init(argc,argv);
 	sysdmwin = new SystemPropertiesWindow(&application);
 
-	// create windows
 	application.create();
-	sysdmwin->killFocus();
 
 	sysdmwin->show(PLACEMENT_OWNER);
-	sysdmwin->killFocus();
-
-	sysdmwin->changeFocus((FXWindow*)0);
-
-	//sysdmwin->changeFocus(sysdmwin);
-
-
-	//sysdmwin->show(PLACEMENT_SCREEN);
-
-	// Run the application
 	return application.run();
 }
 
