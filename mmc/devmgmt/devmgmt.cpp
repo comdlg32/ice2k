@@ -872,21 +872,62 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 			LAYOUT_FILL_X|LAYOUT_FILL_Y|
 			TREELIST_SHOWS_BOXES|TREELIST_SHOWS_LINES|TREELIST_BROWSESELECT|TREELIST_ROOT_BOXES);
 
-	ico_dev_computer = new FXPNGIcon(app, resico_dev_computer, IMAGE_NEAREST); ico_dev_computer->create();
-	ico_dev_cdrom = new FXPNGIcon(app, resico_dev_cdrom, IMAGE_NEAREST); ico_dev_cdrom->create();
-	ico_dev_disk = new FXPNGIcon(app, resico_dev_disk, IMAGE_NEAREST); ico_dev_disk->create();
-	ico_dev_disp = new FXPNGIcon(app, resico_dev_disp, IMAGE_NEAREST); ico_dev_disp->create();
+
+	if (xpmode) {
+		ico_dev_cdrom = new FXPNGIcon(app, resico_xp_dev_cdrom, IMAGE_NEAREST);
+		ico_dev_cdrom->blend(getApp()->getBackColor());
+		ico_dev_cdrom->create();
+		ico_dev_computer = new FXPNGIcon(app, resico_xp_dev_computer, IMAGE_NEAREST);
+		ico_dev_computer->blend(getApp()->getBackColor());
+		ico_dev_computer->create();
+		ico_dev_disk = new FXPNGIcon(app, resico_xp_dev_disk, IMAGE_NEAREST);
+		ico_dev_disk->blend(getApp()->getBackColor());
+		ico_dev_disk->create();
+		ico_dev_disp = new FXPNGIcon(app, resico_xp_dev_disp, IMAGE_NEAREST);
+		ico_dev_disp->blend(getApp()->getBackColor());
+		ico_dev_disp->create();
+		ico_dev_floppy = new FXPNGIcon(app, resico_xp_dev_floppy, IMAGE_NEAREST);
+		ico_dev_floppy->blend(getApp()->getBackColor());
+		ico_dev_floppy->create();
+		ico_dev_keyb = new FXPNGIcon(app, resico_xp_dev_keyb, IMAGE_NEAREST);
+		ico_dev_keyb->blend(getApp()->getBackColor());
+		ico_dev_keyb->create();
+		ico_dev_mice = new FXPNGIcon(app, resico_xp_dev_mice, IMAGE_NEAREST);
+		ico_dev_mice->blend(getApp()->getBackColor());
+		ico_dev_mice->create();
+		ico_dev_printer = new FXPNGIcon(app, resico_xp_dev_printer, IMAGE_NEAREST);
+		ico_dev_printer->blend(getApp()->getBackColor());
+		ico_dev_printer->create();
+		ico_dev_sound = new FXPNGIcon(app, resico_xp_dev_sound, IMAGE_NEAREST);
+		ico_dev_sound->blend(getApp()->getBackColor());
+		ico_dev_sound->create();
+	} else {
+		ico_dev_cdrom = new FXPNGIcon(app, resico_dev_cdrom, IMAGE_NEAREST);
+		ico_dev_cdrom->create();
+		ico_dev_computer = new FXPNGIcon(app, resico_dev_computer, IMAGE_NEAREST);
+		ico_dev_computer->create();
+		ico_dev_disk = new FXPNGIcon(app, resico_dev_disk, IMAGE_NEAREST);
+		ico_dev_disk->create();
+		ico_dev_disp = new FXPNGIcon(app, resico_dev_disp, IMAGE_NEAREST);
+		ico_dev_disp->create();
+		ico_dev_floppy = new FXPNGIcon(app, resico_dev_floppy, IMAGE_NEAREST);
+		ico_dev_floppy->create();
+		ico_dev_keyb = new FXPNGIcon(app, resico_dev_keyb, IMAGE_NEAREST);
+		ico_dev_keyb->create();
+		ico_dev_mice = new FXPNGIcon(app, resico_dev_mice, IMAGE_NEAREST);
+		ico_dev_mice->create();
+		ico_dev_printer = new FXPNGIcon(app, resico_dev_printer, IMAGE_NEAREST);
+		ico_dev_printer->create();
+		ico_dev_sound = new FXPNGIcon(app, resico_dev_sound, IMAGE_NEAREST);
+		ico_dev_sound->create();
+	}
 	ico_dev_ide = new FXPNGIcon(app, resico_dev_ide, IMAGE_NEAREST); ico_dev_ide->create();
-	ico_dev_floppy = new FXPNGIcon(app, resico_dev_floppy, IMAGE_NEAREST); ico_dev_floppy->create();
-	ico_dev_mice = new FXPNGIcon(app, resico_dev_mice, IMAGE_NEAREST); ico_dev_mice->create();
-	ico_dev_keyb = new FXPNGIcon(app, resico_dev_keyb, IMAGE_NEAREST); ico_dev_keyb->create();
 	ico_dev_network = new FXPNGIcon(app, resico_dev_network, IMAGE_NEAREST); ico_dev_network->create();
 	ico_dev_unknown = new FXPNGIcon(app, resico_dev_unknown, IMAGE_NEAREST); ico_dev_unknown->create();
 	ico_dev_serial = new FXPNGIcon(app, resico_dev_serial, IMAGE_NEAREST); ico_dev_serial->create();
-	ico_dev_printer = new FXPNGIcon(app, resico_dev_printer, IMAGE_NEAREST); ico_dev_printer->create();
-	ico_dev_sound = new FXPNGIcon(app, resico_dev_sound, IMAGE_NEAREST); ico_dev_sound->create();
 	ico_dev_usb = new FXPNGIcon(app, resico_dev_usb, IMAGE_NEAREST); ico_dev_usb->create();
 	ico_dev_firewire = new FXPNGIcon(app, resico_dev_firewire, IMAGE_NEAREST); ico_dev_firewire->create();
+	
 
 	addDevices(NULL, 0, NULL);
 
