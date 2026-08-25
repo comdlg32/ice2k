@@ -213,8 +213,7 @@ class ChangeHostnameBox : public FXDialogBox {
 
 		// Messages for our class
 		enum {
-			ID_MAINWIN=FXMainWindow::ID_LAST,
-			ID_ACCEPT,
+			ID_ACCEPT=FXMainWindow::ID_LAST,
 			ID_LAST
 			//ID_SETFOCUS_T
 		};
@@ -391,6 +390,13 @@ class SystemPropertiesWindow : public FXMainWindow {
 		long onCmdEnvVars(FXObject*,FXSelector,void*);
 		long onCmdNtldr(FXObject*,FXSelector,void*);
 		long onCmdDevmgmt(FXObject*,FXSelector,void*);
+		long onTimeoutText(FXObject*,FXSelector,void*);
+
+
+		FXText* makeWrapLabel(FXComposite* p, const FXString& text,
+				FXuint opts=LAYOUT_FILL_X,
+				FXint x=0, FXint y=0, FXint w=0, FXint h=0,
+				FXint pl=0, FXint pr=0, FXint pt=0, FXint pb=12);
 
 
 
@@ -398,13 +404,14 @@ class SystemPropertiesWindow : public FXMainWindow {
 
 		// Messages for our class
 		enum {
-			ID_MAINWIN=FXMainWindow::ID_LAST,
-			ID_CHANGEHOSTNAME,
+			ID_CHANGEHOSTNAME=FXMainWindow::ID_LAST,
 			ID_ACCEPT,
 			ID_CANCEL,
 			ID_ENVVARS,
 			ID_NTLDR,
 			ID_DEVMGMT,
+			ID_TEXT,
+			ID_LAST,
 		};
 
 	public:
@@ -427,6 +434,8 @@ FXDEFMAP(SystemPropertiesWindow) SystemPropertiesWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_NTLDR, SystemPropertiesWindow::onCmdNtldr),
 
 	FXMAPFUNC(SEL_COMMAND, SystemPropertiesWindow::ID_DEVMGMT, SystemPropertiesWindow::onCmdDevmgmt),
+	FXMAPFUNC(SEL_CHORE, SystemPropertiesWindow::ID_TEXT, SystemPropertiesWindow::onTimeoutText),
+
 };
 
 FXIMPLEMENT(SystemPropertiesWindow,FXMainWindow,SystemPropertiesWindowMap,ARRAYNUMBER(SystemPropertiesWindowMap))
@@ -438,16 +447,54 @@ FXIMPLEMENT(SystemPropertiesWindow,FXMainWindow,SystemPropertiesWindowMap,ARRAYN
 
 // ctrl+f, up, "ChangeHostnameBox::setFocus" and find next
 
+
+#define MAXWRAP 8
+int wraplabelscnt = 0;
+
+FXText* wraplabels[MAXWRAP+1] = {NULL};
+
 void SystemPropertiesWindow::create() {
 	FXMainWindow::create();
+
+	int i = 0;
+	while (wraplabels[i] != NULL) {
+		wraplabels[i]->setHeight(wraplabels[i]->getContentHeight());
+		++i;
+	}
 }
 
+FXText* SystemPropertiesWindow::makeWrapLabel(FXComposite* p, const FXString& text, FXuint opts,
+		FXint x, FXint y, FXint w, FXint h,
+		FXint pl, FXint pr, FXint pt, FXint pb) {
+	if (wraplabelscnt+1 == MAXWRAP+1) {
+		return NULL;
+	}
+	++wraplabelscnt;
+	FXText* txt = new FXText(p, NULL, 0, opts|LAYOUT_FIX_HEIGHT|TEXT_WORDWRAP, x,y,w,h, pl,pr,pt,pb);
+	txt->setMarginRight(0);
+	txt->setMarginLeft(0);
+	txt->setText(text);
+	txt->setBackColor(getApp()->getBaseColor());
+	txt->setDefaultCursor(getApp()->getDefaultCursor(DEF_ARROW_CURSOR));
+	txt->disable();
+
+	wraplabels[wraplabelscnt-1] = txt;
+
+	//getApp()->addChore(this, ID_TEXT, txt);
+
+	return txt;
+}
 
 long SystemPropertiesWindow::onAccept(FXObject* sender, FXSelector sel, void* ptr) {
 	this->close();
 	return 0;
 }
-
+long SystemPropertiesWindow::onTimeoutText(FXObject* sender, FXSelector sel, void* ptr) {
+	FXText* txt = (FXText*)ptr;
+	txt->setHeight(txt->getContentHeight());
+	//puts("hi");
+	return 1;
+}
 long SystemPropertiesWindow::onCmdDevmgmt(FXObject* sender, FXSelector sel, void* ptr) {
 	system("devmgmt &");
 	return 0;
@@ -819,9 +866,12 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 	FXGroupBox* performgrp = new FXGroupBox(advframe, "Performance", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,11, 0,0);
 	FXIcon* performicon = new FXGIFIcon(app, resico_perform);
-	new FXLabel(performgrp, "", performicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,70,  0,16,0,0);
-	new FXLabel(performgrp, "Performance options control how applications use memory,\n"
-			"which affects the speed of your computer.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	if (!xp) new FXLabel(performgrp, "", performicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,70,  0,16,0,0);
+	/*new FXLabel(performgrp, "Performance options control how applications use memory,\n"
+			"which affects the speed of your computer.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);*/
+
+	makeWrapLabel(performgrp, "Performance options control how applications "
+			"use memory, which affects the speed of your computer.");
 
 
 	btn = new FXButton(performgrp, "&Performance Options...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
@@ -832,12 +882,14 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 	FXGroupBox* envvarsgrp = new FXGroupBox(advframe, "Environment Variables", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,10, 7,0);
 	FXIcon* envvarsicon = new FXGIFIcon(app, resico_envvars);
-	new FXLabel(envvarsgrp, "", envvarsicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,71,  0,9,1,0);
+	if (!xp) new FXLabel(envvarsgrp, "", envvarsicon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,71,  0,9,1,0);
 	/* new FXLabel(devmgmtgrp, "The Device Manager lists all the hardware devices installed\n"
 	   "on your computer. Use the Device Manager to change the\n"
 	   "properties of any device.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0); */
-	new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
-	new FXLabel(envvarsgrp, "certain types of information.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	//new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	//new FXLabel(envvarsgrp, "certain types of information.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	makeWrapLabel(envvarsgrp, "Environment variables tell your computer where to find "
+			"certain types of information.");
 
 	btn = new FXButton(envvarsgrp, "&Environment Variables...", NULL, this, ID_ENVVARS, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
 
@@ -847,9 +899,11 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 	FXGroupBox* ntldrgrp = new FXGroupBox(advframe, "Startup and Recovery", FRAME_THICK|LAYOUT_FILL_X, 0,0,0,0, 8,9,2,10, 0,0);
 	FXIcon* ntldricon = new FXGIFIcon(app, resico_ntldr);
-	new FXLabel(ntldrgrp, "", ntldricon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,76,  0,16,0,0);
-	new FXLabel(ntldrgrp, "Startup and recovery options tell your computer how to start\n"
-			"and what to do if an error causes your computer to stop.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
+	if (!xp) new FXLabel(ntldrgrp, "", ntldricon, JUSTIFY_TOP|LABEL_NORMAL|LAYOUT_SIDE_LEFT|LAYOUT_FIX_HEIGHT, 0,0,0,76,  0,16,0,0);
+	/*new FXLabel(ntldrgrp, "Startup and recovery options tell your computer how to start\n"
+			"and what to do if an error causes your computer to stop.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);*/
+	makeWrapLabel(ntldrgrp, "Startup and recovery options tell your computer how to start "
+			"and what to do if an error causes your computer to stop.");
 
 
 	btn = new FXButton(ntldrgrp, "&Startup and Recovery...", NULL, this, ID_NTLDR, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
