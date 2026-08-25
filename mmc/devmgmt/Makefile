@@ -2,13 +2,13 @@
 
 CC = g++
 
-CFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
-CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -O2
+CFLAGS = -Wall -c -O2
+CPPFLAGS = -Wall -c -O2
 LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*/*.gif res/*.gif
+ICONS = res/*/*.gif res/*.gif res/*/*.png
 SOURCES = devmgmt.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = devmgmt
