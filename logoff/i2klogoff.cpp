@@ -35,7 +35,7 @@ char taskid[64];
 FXIcon* logoffIcon;
 Display* xdisplay;
 Window rootwin;
-FXDialogBox* cadwindow;
+FXDialogBox* logoffwindow;
 FXMainWindow* chkwindow;
 #define _OPTION_LOGOFF 0
 #define _OPTION_SHUTDOWN 1
@@ -62,8 +62,6 @@ Status setOnTop (Display* display, Window xid) {
 	return XSendEvent (display, DefaultRootWindow(display), False,
 			SubstructureRedirectMask|SubstructureNotifyMask, &event);
 }
-
-#define ZERO4 0, 0, 0, 0
 
 int unfocus = 0;
 
@@ -155,7 +153,7 @@ long LogoffDialog::onUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 long LogoffDialog::onRealUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 	if (unfocus) {
 		FXDialogBox::onFocusOut(sender, sel, ptr);
-		FXDialogBox::onCmdCancel(cadwindow, sel, ptr);
+		FXDialogBox::onCmdCancel(logoffwindow, sel, ptr);
 	}
 	return 1;
 }
@@ -372,7 +370,7 @@ FXDEFMAP(FadeWindow) FadeWindowMap[] = {
 };
 
 // Macro for the CtrlAltDelApp class hierarchy implementation
-FXIMPLEMENT(FadeWindow,FXMainWindow,FadeWindowMap,ARRAYNUMBER(FadeWindowMap))
+FXIMPLEMENT(FadeWindow,FXMainWindow,FadeWindowMap,ARRAYNUMBER(FadeWindowMap));
 
 
 int main(int argc,char *argv[]) {
@@ -390,22 +388,22 @@ int main(int argc,char *argv[]) {
 
 	xdisplay = (Display*)ptrapp->getDisplay();
 	chkwindow = new FadeWindow(ptrapp);
-	cadwindow = new LogoffDialog(chkwindow);
+	logoffwindow = new LogoffDialog(chkwindow);
 
 	application.create();
 
 	chkwindow->show();
 	setOnTop(xdisplay, chkwindow->id());
 
-	//cadwindow->create();
-	cadwindow->position(
-			(cadwindow->getRoot()->getWidth() - cadwindow->getWidth())/2,
-			((cadwindow->getRoot()->getHeight()+40) - cadwindow->getHeight())/3,
-			(cadwindow->getWidth()),
-			(cadwindow->getHeight()) );
-	cadwindow->show();
+	//logoffwindow->create();
+	logoffwindow->position(
+			(logoffwindow->getRoot()->getWidth() - logoffwindow->getWidth())/2,
+			((logoffwindow->getRoot()->getHeight()+40) - logoffwindow->getHeight())/3,
+			(logoffwindow->getWidth()),
+			(logoffwindow->getHeight()) );
+	logoffwindow->show();
 
-	application.runModalFor(cadwindow);
+	application.runModalFor(logoffwindow);
 
 	return application.run();
 }

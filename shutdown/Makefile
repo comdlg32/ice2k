@@ -13,8 +13,8 @@ LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 PREFIX=/usr/local
 
 SOURCES = shutdlg.cpp
-OBJECTS = shutdlg.o
-ICONS = res/shutdlg.gif
+OBJECTS = shutdlg.o res/foxres.o
+RES = res/shutdlg.gif
 EXECUTABLE = shutdlg
 
 CPPFLAGS += `fox-config --cflags`
@@ -23,9 +23,13 @@ all: $(EXECUTABLE)
 
 $(OBJECTS): res/foxres.h
 
+
 # generate icon resources
-res/foxres.h: $(ICONS)
-	reswrap -o res/foxres.h $(ICONS)
+res/foxres.h: $(RES)
+	reswrap -i -d -p res_ -o res/foxres.h $(RES)
+
+res/foxres.cpp: res/foxres.h $(RES)
+	reswrap -e -d -p res_ -o res/foxres.cpp $(RES)
 
 # link executable
 $(EXECUTABLE): $(OBJECTS)

@@ -97,6 +97,7 @@ simplebuild welcome
 simplebuild i2kcrash
 simplebuild badapp
 simplebuild i2kvolume
+simplebuild trail
 
 
 

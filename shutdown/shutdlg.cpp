@@ -49,7 +49,7 @@ char taskid[64];
 
 Display* xdisplay;
 Window rootwin;
-FXDialogBox* cadwindow;
+FXDialogBox* shutdlg;
 FXMainWindow* chkwindow;
 #define _OPTION_LOGOFF 0
 #define _OPTION_SHUTDOWN 1
@@ -178,60 +178,60 @@ long ShutdownDialog::onUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 long ShutdownDialog::onRealUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
 	if (unfocus) {
 		FXDialogBox::onFocusOut(sender, sel, ptr);
-		FXDialogBox::onCmdCancel(cadwindow, sel, ptr);
+		FXDialogBox::onCmdCancel(shutdlg, sel, ptr);
 	}
 	return 1;
 }
 
 // Macro for the CtrlAltDelApp class hierarchy implementation
-FXIMPLEMENT(ShutdownDialog,FXDialogBox,ShutdownDialogMap,ARRAYNUMBER(ShutdownDialogMap))
+FXIMPLEMENT(ShutdownDialog,FXDialogBox,ShutdownDialogMap,ARRAYNUMBER(ShutdownDialogMap));
 
-	// Construct a ShutdownDialog
-	ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Windows", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
-		const unsigned char *banner = i2kBGetWinShutBrandingImage();
-
-
-		FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);
-		FXIcon* shuticon = new FXGIFIcon(getApp(), shutdlg);
-		bannericon->crop(0, 0, 411, 77);
-		bannericon->render();
-		bannericon->create();
-
-		new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
-		
-		FXHorizontalFrame* horcont;
-		if (i2kBGetWinVersionInt() != ICE2K_BRAND_WIN2K) {
-			horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 20,85,5,20, 14,0);
-		} else {
-			horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 20,85,5,37, 14,0);
-		}
-		new FXLabel(horcont, "", shuticon, LABEL_NORMAL, 0, 0, 411, 0, 0, 0, 0, 2);
-
-		FXVerticalFrame* vercont = new FXVerticalFrame(horcont, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-		new FXLabel(vercont, "What do you want the computer to do?", NULL, LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 0, 8);
-
-		listbox = new I2KListBox(vercont,this,ID_CLICK_OPTION,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 2, 0, 2, 1);
+// Construct a ShutdownDialog
+ShutdownDialog::ShutdownDialog(FXWindow* owner):FXDialogBox(owner, "Shut Down Windows", DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0, 0, 0, 0, 0, 0, 0, 0) {
+	const unsigned char *banner = i2kBGetWinShutBrandingImage();
 
 
-		listbox->insertItem(_OPTION_LOGOFF,   "Log off");
-		listbox->insertItem(_OPTION_SHUTDOWN, "Shut down");
-		listbox->insertItem(_OPTION_RESTART,  "Restart");
-		listbox->insertItem(_OPTION_STANDBY,  "Stand by");
+	FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);
+	FXIcon* shuticon = new FXGIFIcon(getApp(), res_shutdlg);
+	bannericon->crop(0, 0, 411, 77);
+	bannericon->render();
+	bannericon->create();
 
-		listbox->setNumVisible(listbox->getNumItems());
-		listbox->setCurrentItem(_OPTION_SHUTDOWN);
+	new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0, 0, 411, 0, 0, 0, 0, 2);
 
-		actionlbl1 = new FXLabel(vercont, "Ends your session and shuts down Windows so that", NULL, JUSTIFY_LEFT|LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 11, 0);
-		actionlbl2 = new FXLabel(vercont, "you can safely turn off power.", NULL, LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 0, 0);
-
-		FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 10, 0, 11, 6, 0);
-		FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-		new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-		new FXButton(btncont, "&Help", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-
-		okbtn->setFocus();
+	FXHorizontalFrame* horcont;
+	if (i2kBGetWinVersionInt() != ICE2K_BRAND_WIN2K) {
+		horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 20,85,5,20, 14,0);
+	} else {
+		horcont = new FXHorizontalFrame(this, LAYOUT_FILL_X, 0,0,0,0, 20,85,5,37, 14,0);
 	}
+	new FXLabel(horcont, "", shuticon, LABEL_NORMAL, 0, 0, 411, 0, 0, 0, 0, 2);
+
+	FXVerticalFrame* vercont = new FXVerticalFrame(horcont, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+	new FXLabel(vercont, "What do you want the computer to do?", NULL, LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 0, 8);
+
+	listbox = new I2KListBox(vercont,this,ID_CLICK_OPTION,COMBOBOX_INSERT_LAST|LAYOUT_FILL_X|COMBOBOX_STATIC|FRAME_SUNKEN|FRAME_THICK, 0, 0, 0, 0, 2, 0, 2, 1);
+
+
+	listbox->insertItem(_OPTION_LOGOFF,   "Log off");
+	listbox->insertItem(_OPTION_SHUTDOWN, "Shut down");
+	listbox->insertItem(_OPTION_RESTART,  "Restart");
+	listbox->insertItem(_OPTION_STANDBY,  "Stand by");
+
+	listbox->setNumVisible(listbox->getNumItems());
+	listbox->setCurrentItem(_OPTION_SHUTDOWN);
+
+	actionlbl1 = new FXLabel(vercont, "Ends your session and shuts down Windows so that", NULL, JUSTIFY_LEFT|LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 11, 0);
+	actionlbl2 = new FXLabel(vercont, "you can safely turn off power.", NULL, LABEL_NORMAL, 0, 0, 0, 0, 0, 0, 0, 0);
+
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 10, 0, 11, 6, 0);
+	FXButton* okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	new FXButton(btncont, "&Help", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+
+	okbtn->setFocus();
+}
 
 
 ShutdownDialog::~ShutdownDialog() {
@@ -375,15 +375,15 @@ void FadeWindow::XPFade(FXColor* data, FXuint w, FXuint h, FXuint y) {
 		unsigned r = FXREDVAL(*pix);
 		unsigned g = FXGREENVAL(*pix);
 		unsigned b = FXBLUEVAL(*pix);
-		
+
 		unsigned gray = (54 * r + 183 * g + 19 * b) >> 8;
 		unsigned temp = gray * (255 - 213);
-		
+
 		// >> 8 divides by / 256
 		r = (r * 213 + temp) >> 8;
 		g = (g * 213 + temp) >> 8;
 		b = (b * 213 + temp) >> 8;
-		
+
 		*pix = FXRGB(r, g, b);
 		pix++;
 	}
@@ -446,7 +446,7 @@ void FadeWindow::create() {
 		for (int y = 0; y < imgheight; y++) {
 			if (y & 1) startx = 1;
 			else startx = 0;
-	
+
 			for (int x = startx; x < imgwidth; x+=2) {
 				imgdata[y*imgwidth+x] = FXRGB(0,0,0);
 			}
@@ -469,47 +469,47 @@ void FadeWindow::create() {
 
 #define CHECKER_SIZE 512
 /*void FadeWindow::create() {
-    FXMainWindow::create();
+  FXMainWindow::create();
 
-    FXApp* ptrapp = getApp();
+  FXApp* ptrapp = getApp();
 
-    FXWindow* root = ptrapp->getRootWindow();
-    int rootw = root->getWidth();
-    int rooth = root->getHeight();
+  FXWindow* root = ptrapp->getRootWindow();
+  int rootw = root->getWidth();
+  int rooth = root->getHeight();
 
-    FXImage* image = new FXImage(ptrapp, NULL, IMAGE_OPAQUE|IMAGE_NEAREST|IMAGE_SHMP|IMAGE_SHMI, rootw, rooth);
-    FXBitmap* bmp = new FXBitmap(ptrapp, NULL, IMAGE_SHMP|IMAGE_SHMI, CHECKER_SIZE, CHECKER_SIZE);
-    image->create();
-    bmp->create();
+  FXImage* image = new FXImage(ptrapp, NULL, IMAGE_OPAQUE|IMAGE_NEAREST|IMAGE_SHMP|IMAGE_SHMI, rootw, rooth);
+  FXBitmap* bmp = new FXBitmap(ptrapp, NULL, IMAGE_SHMP|IMAGE_SHMI, CHECKER_SIZE, CHECKER_SIZE);
+  image->create();
+  bmp->create();
 
-    FXDCWindow dc(image);
-    FXDCWindow stippledc(bmp);
-    stippledc.setFillStyle(FILL_OPAQUESTIPPLED);
-    stippledc.setStipple(STIPPLE_GRAY);
-    stippledc.setForeground(FXRGB(0,0,0));
-    stippledc.fillRectangle(0, 0, CHECKER_SIZE, CHECKER_SIZE);
+  FXDCWindow dc(image);
+  FXDCWindow stippledc(bmp);
+  stippledc.setFillStyle(FILL_OPAQUESTIPPLED);
+  stippledc.setStipple(STIPPLE_GRAY);
+  stippledc.setForeground(FXRGB(0,0,0));
+  stippledc.fillRectangle(0, 0, CHECKER_SIZE, CHECKER_SIZE);
 
-    dc.clipChildren(FALSE);
-    dc.setFunction(BLT_SRC);
-    //dc.setClipMask(bmp);
-	dc.setForeground(FXRGB(0,0,0));
-	dc.setBackground(FXRGB(255,255,255));
-    dc.drawArea(ptrapp->getRootWindow(), 0, 0, rootw, rooth, 0, 0);
+  dc.clipChildren(FALSE);
+  dc.setFunction(BLT_SRC);
+//dc.setClipMask(bmp);
+dc.setForeground(FXRGB(0,0,0));
+dc.setBackground(FXRGB(255,255,255));
+dc.drawArea(ptrapp->getRootWindow(), 0, 0, rootw, rooth, 0, 0);
 
-    dc.setFillStyle(FILL_STIPPLED);
-    dc.setStipple(bmp	);
-    dc.setForeground(FXRGB(0,0,0));
-    dc.fillRectangle(0, 0, rootw, rooth);
+dc.setFillStyle(FILL_STIPPLED);
+dc.setStipple(bmp	);
+dc.setForeground(FXRGB(0,0,0));
+dc.fillRectangle(0, 0, rootw, rooth);
 
-    image->restore();
+image->restore();
 
-    dc.setFillStyle(FILL_SOLID);
-    dc.clipChildren(TRUE);
+dc.setFillStyle(FILL_SOLID);
+dc.clipChildren(TRUE);
 
-    imgframe = new FXImageFrame(chkwindow, image, FRAME_NONE);
-    imgframe->create();
+imgframe = new FXImageFrame(chkwindow, image, FRAME_NONE);
+imgframe->create();
 
-    FXMainWindow::create();
+FXMainWindow::create();
 }*/
 
 
@@ -519,40 +519,40 @@ FXDEFMAP(FadeWindow) FadeWindowMap[] = {
 };
 
 // Macro for the CtrlAltDelApp class hierarchy implementation
-FXIMPLEMENT(FadeWindow,FXMainWindow,FadeWindowMap,ARRAYNUMBER(FadeWindowMap))
+FXIMPLEMENT(FadeWindow,FXMainWindow,FadeWindowMap,ARRAYNUMBER(FadeWindowMap));
 
-	// Here we begin
-	int main(int argc,char *argv[]) {
-		FXApp application("ShutDlg", "Ice2KProj");
-		FXApp* ptrapp = &application;
+// Here we begin
+int main(int argc,char *argv[]) {
+	FXApp application("ShutDlg", "Ice2KProj");
+	FXApp* ptrapp = &application;
 
-		application.init(argc,argv);
+	application.init(argc,argv);
 
-		xdisplay = (Display*)ptrapp->getDisplay();
-		chkwindow = new FadeWindow(ptrapp);
+	xdisplay = (Display*)ptrapp->getDisplay();
+	chkwindow = new FadeWindow(ptrapp);
 
-		cadwindow = new ShutdownDialog(chkwindow);
+	shutdlg = new ShutdownDialog(chkwindow);
 
-		application.create();
+	application.create();
 
-		chkwindow->show();
-		setOnTop(xdisplay, chkwindow->id());
+	chkwindow->show();
+	setOnTop(xdisplay, chkwindow->id());
 
-		//cadwindow->create();
-		//application.refresh();
-		cadwindow->position(
-				(cadwindow->getRoot()->getWidth() - cadwindow->getWidth())/2,
-				((cadwindow->getRoot()->getHeight()+40) - cadwindow->getHeight())/3,
-				(cadwindow->getWidth()),
-				(cadwindow->getHeight()) );
-		cadwindow->show();
+	//shutdlg->create();
+	//application.refresh();
+	shutdlg->position(
+			(shutdlg->getRoot()->getWidth() - shutdlg->getWidth())/2,
+			((shutdlg->getRoot()->getHeight()+40) - shutdlg->getHeight())/3,
+			(shutdlg->getWidth()),
+			(shutdlg->getHeight()) );
+	shutdlg->show();
 
-		application.runModalFor(cadwindow);
-		
-		//cadwindow->execute(PLACEMENT_SCREEN);
-		//cadwindow->setFocus();
+	application.runModalFor(shutdlg);
 
-		return application.run();
-	}
+	//shutdlg->execute(PLACEMENT_SCREEN);
+	//shutdlg->setFocus();
+
+	return application.run();
+}
 
 
