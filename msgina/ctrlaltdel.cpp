@@ -45,281 +45,272 @@ FXMainWindow* cadwindow;
 // @display: x11 display singleton.
 // @xid    : the window to set on top.
 Status setOnTop (Display* display, Window xid) {
-  XEvent event;
-  event.xclient.type = ClientMessage;
-  event.xclient.serial = 0;
-  event.xclient.send_event = True;
-  event.xclient.display = display;
-  event.xclient.window  = xid;
-  event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
-  event.xclient.format = 32;
+	XEvent event;
+	event.xclient.type = ClientMessage;
+	event.xclient.serial = 0;
+	event.xclient.send_event = True;
+	event.xclient.display = display;
+	event.xclient.window  = xid;
+	event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
+	event.xclient.format = 32;
 
-  event.xclient.data.l[0] = _NET_WM_STATE_ADD;
-  event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_ABOVE", False);
-  event.xclient.data.l[2] = 0; //unused.
-  event.xclient.data.l[3] = 0;
-  event.xclient.data.l[4] = 0;
+	event.xclient.data.l[0] = _NET_WM_STATE_ADD;
+	event.xclient.data.l[1] = XInternAtom (display, "_NET_WM_STATE_ABOVE", False);
+	event.xclient.data.l[2] = 0; //unused.
+	event.xclient.data.l[3] = 0;
+	event.xclient.data.l[4] = 0;
 
-  return XSendEvent (display, DefaultRootWindow(display), False,
-                     SubstructureRedirectMask|SubstructureNotifyMask, &event);
+	return XSendEvent (display, DefaultRootWindow(display), False,
+			SubstructureRedirectMask|SubstructureNotifyMask, &event);
 }
 
 #ifdef _SEC_DESKTOP
-  void setWorkspace(Display *display, Window root, long desktop) {
-    XClientMessageEvent event = {0};
-    event.type = ClientMessage;
-    event.window = root;
-    event.message_type = XInternAtom(display, "_NET_CURRENT_DESKTOP", False);
-    event.format = 32;
-    event.data.l[0] = desktop;
-    event.data.l[1] = CurrentTime;
-    XSendEvent(display, root, False, SubstructureNotifyMask | SubstructureRedirectMask, (XEvent *)&event);
-    XFlush(display);
-  }
+void setWorkspace(Display *display, Window root, long desktop) {
+	XClientMessageEvent event = {0};
+	event.type = ClientMessage;
+	event.window = root;
+	event.message_type = XInternAtom(display, "_NET_CURRENT_DESKTOP", False);
+	event.format = 32;
+	event.data.l[0] = desktop;
+	event.data.l[1] = CurrentTime;
+	XSendEvent(display, root, False, SubstructureNotifyMask|SubstructureRedirectMask, (XEvent *)&event);
+	XFlush(display);
+}
 
-  long getProp(Display *display, Window root, const char *property) {
-   Atom prop = XInternAtom(display, property, False);
-    Atom type;
-    int format;
-    unsigned long nitems, bytes_after;
-    unsigned char *data = NULL;
-    long value = -1;
+long getProp(Display *display, Window root, const char *property) {
+	Atom prop = XInternAtom(display, property, False);
+	Atom type;
+	int format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	long value = -1;
 
-    if (XGetWindowProperty(display, root, prop, 0, 1, False, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &data) == Success && data) {
-      value = *(long *)data;
-      XFree(data);
-    }
-    return value;
-  }
+	if (XGetWindowProperty(display, root, prop, 0, 1, False, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &data) == Success && data) {
+		value = *(long *)data;
+		XFree(data);
+	}
+	return value;
+}
 
-  void setWorkspaces(Display *display, Window root, long num) {
-    XClientMessageEvent event = {0};
-    event.type = ClientMessage;
-    event.window = root;
-    event.message_type = XInternAtom(display, "_NET_NUMBER_OF_DESKTOPS", False);
-    event.format = 32;
-    event.data.l[0] = num;
-    XSendEvent(display, root, False, SubstructureNotifyMask | SubstructureRedirectMask, (XEvent *)&event);
-    XFlush(display);
-  }
+void setWorkspaces(Display *display, Window root, long num) {
+	XClientMessageEvent event = {0};
+	event.type = ClientMessage;
+	event.window = root;
+	event.message_type = XInternAtom(display, "_NET_NUMBER_OF_DESKTOPS", False);
+	event.format = 32;
+	event.data.l[0] = num;
+	XSendEvent(display, root, False, SubstructureNotifyMask|SubstructureRedirectMask, (XEvent*)&event);
+	XFlush(display);
+}
 #endif
 
 int desktopshown() {
-  const char *cmd = "icesh desktop | awk '{print $2}'";
-  char buf[32];
-  FILE *fp = popen(cmd, "r");
+	const char *cmd = "icesh desktop | awk '{print $2}'";
+	char buf[32];
+	FILE *fp = popen(cmd, "r");
 
-  if( fp == NULL ) {
-    perror("popen");
-    return 1;
-  }
+	if( fp == NULL ) {
+		perror("popen");
+		return 1;
+	}
 
-  if( fgets(buf, sizeof buf, fp) == buf ) {
-    int v = strtol(buf, NULL, 10);
-    switch (v) {
-      case 0: return(0); break;
-      case 1: return(1); break;
-      default: return(0); break;
-    }
-  }
-  return(0);
+	if( fgets(buf, sizeof buf, fp) == buf ) {
+		int v = strtol(buf, NULL, 10);
+		switch (v) {
+			case 0: return(0); break;
+			case 1: return(1); break;
+			default: return(0); break;
+		}
+	}
+	return(0);
 }
 
 int taskbarid() {
-  const char *cmd = "icesh -T id | tr -d '\n'";
-  FILE *fp = popen(cmd, "r");
+	const char *cmd = "icesh -T id | tr -d '\n'";
+	FILE *fp = popen(cmd, "r");
 
-  if( fp == NULL ) {
-    perror("popen");
-    return 1;
-  }
+	if( fp == NULL ) {
+		perror("popen");
+		return 1;
+	}
 
-  fgets(taskid, sizeof(taskid), fp);
-  return(0);
+	fgets(taskid, sizeof(taskid), fp);
+	return(0);
 }
 
 // Main Window
 class CtrlAltDelWindow : public FXMainWindow {
+	FXDECLARE(CtrlAltDelWindow);
 
-  // Macro for class hierarchy declarations
-  FXDECLARE(CtrlAltDelWindow)
-
-private:
-  FXVerticalFrame   *cont;                    // Container
-  FXGroupBox        *logongrp;                // Logon information group
-  FXVerticalFrame   *logongrpc;               // Logon information group
-  FXMatrix          *buttons;                 // Button container
+	private:
+	FXVerticalFrame   *cont;                    // Container
+	FXGroupBox        *logongrp;                // Logon information group
+	FXVerticalFrame   *logongrpc;               // Logon information group
+	FXMatrix          *buttons;                 // Button container
 
 
-protected:
-  CtrlAltDelWindow(){}
+	protected:
+	CtrlAltDelWindow(){}
 
-public:
+	public:
+	long onUnfocus(FXObject*,FXSelector,void*);
+	long onRealUnfocus(FXObject*,FXSelector,void*);
 
-  // Message handlers
-  long onUnfocus(FXObject*,FXSelector,void*);
-  long onRealUnfocus(FXObject*,FXSelector,void*);
+	long lockComputer(FXObject*,FXSelector,void*);
 
-  long lockComputer(FXObject*,FXSelector,void*);
+	long onCmdLockComputer(FXObject*,FXSelector,void*);
+	long onCmdTaskManager(FXObject*,FXSelector,void*);
+	long onCmdLogOff(FXObject*,FXSelector,void*);
+	long onCmdShutDown(FXObject*,FXSelector,void*);
 
-  long onCmdLockComputer(FXObject*,FXSelector,void*);
-  long onCmdTaskManager(FXObject*,FXSelector,void*);
-  long onCmdLogOff(FXObject*,FXSelector,void*);
-  long onCmdShutDown(FXObject*,FXSelector,void*);
+	long onKeyPress(FXObject*,FXSelector,void*);
+	long onKeyRelease(FXObject*,FXSelector,void*);
 
-  long onKeyPress(FXObject*,FXSelector,void*);
-  long onKeyRelease(FXObject*,FXSelector,void*);
+	long onConfigure(FXObject*,FXSelector,void*);
 
-  long onConfigure(FXObject*,FXSelector,void*);
+	public:
+	enum {
+		ID_MAINWIN=FXMainWindow::ID_LAST,
+		ID_LOCKCOMPUTER,
+		ID_SHUTDOWN,
+		ID_LOGOFF,
+		ID_TASKMANAGER,
+		ID_UNFOCUS
+	};
 
-public:
+	public:
+	CtrlAltDelWindow(FXApp* a);
 
-  // Messages for our class
-  enum {
-    ID_MAINWIN=FXMainWindow::ID_LAST,
-    ID_LOCKCOMPUTER,
-    ID_SHUTDOWN,
-    ID_LOGOFF,
-    ID_TASKMANAGER,
-    ID_UNFOCUS
-  };
+	virtual void create();
+	void setFocus() {};
 
-public:
-
-  // CtrlAltDelWindow's constructor
-  CtrlAltDelWindow(FXApp* a);
-
-  // Initialize
-  virtual void create();
-  void setFocus() {};
-
-  virtual ~CtrlAltDelWindow();
+	virtual ~CtrlAltDelWindow();
 };
 
 
 
 // Message Map for the CtrlAltDel Window class
 FXDEFMAP(CtrlAltDelWindow) CtrlAltDelWindowMap[] = {
-  FXMAPFUNC(SEL_KEYPRESS, 0, CtrlAltDelWindow::onKeyPress),
-  FXMAPFUNC(SEL_KEYRELEASE, 0, CtrlAltDelWindow::onKeyRelease),
+	FXMAPFUNC(SEL_KEYPRESS, 0, CtrlAltDelWindow::onKeyPress),
+	FXMAPFUNC(SEL_KEYRELEASE, 0, CtrlAltDelWindow::onKeyRelease),
 
-  FXMAPFUNC(SEL_FOCUSOUT, 0, CtrlAltDelWindow::onUnfocus),
-  FXMAPFUNC(SEL_TIMEOUT, CtrlAltDelWindow::ID_UNFOCUS, CtrlAltDelWindow::onRealUnfocus),
+	FXMAPFUNC(SEL_FOCUSOUT, 0, CtrlAltDelWindow::onUnfocus),
+	FXMAPFUNC(SEL_TIMEOUT, CtrlAltDelWindow::ID_UNFOCUS, CtrlAltDelWindow::onRealUnfocus),
 
-  FXMAPFUNC(SEL_CONFIGURE, 0, CtrlAltDelWindow::onConfigure),
+	FXMAPFUNC(SEL_CONFIGURE, 0, CtrlAltDelWindow::onConfigure),
 
-  FXMAPFUNC(SEL_TIMEOUT, CtrlAltDelWindow::ID_LOCKCOMPUTER, CtrlAltDelWindow::lockComputer),
+	FXMAPFUNC(SEL_TIMEOUT, CtrlAltDelWindow::ID_LOCKCOMPUTER, CtrlAltDelWindow::lockComputer),
 
-  FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_LOCKCOMPUTER, CtrlAltDelWindow::onCmdLockComputer),
-  FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_LOGOFF, CtrlAltDelWindow::onCmdLogOff),
-  FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_TASKMANAGER, CtrlAltDelWindow::onCmdTaskManager),
-  FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_SHUTDOWN, CtrlAltDelWindow::onCmdShutDown),
+	FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_LOCKCOMPUTER, CtrlAltDelWindow::onCmdLockComputer),
+	FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_LOGOFF, CtrlAltDelWindow::onCmdLogOff),
+	FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_TASKMANAGER, CtrlAltDelWindow::onCmdTaskManager),
+	FXMAPFUNC(SEL_COMMAND, CtrlAltDelWindow::ID_SHUTDOWN, CtrlAltDelWindow::onCmdShutDown),
 };
 
 
 
 // Macro for the CtrlAltDelApp class hierarchy implementation
-FXIMPLEMENT(CtrlAltDelWindow,FXMainWindow,CtrlAltDelWindowMap,ARRAYNUMBER(CtrlAltDelWindowMap))
+FXIMPLEMENT(CtrlAltDelWindow,FXMainWindow,CtrlAltDelWindowMap,ARRAYNUMBER(CtrlAltDelWindowMap));
 
 //int workspaces;
 
 // Construct a CtrlAltDelWindow
 CtrlAltDelWindow::CtrlAltDelWindow(FXApp *a):FXMainWindow(a, "Windows Security", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,0,0, 0,0,0,0) {
-  const unsigned char *banner = i2kBGetWinShutBrandingImage();
+	const unsigned char *banner = i2kBGetWinShutBrandingImage();
 
-  FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);
-  bannericon->crop(0, 0, 411, 77);
-  bannericon->render();
-  bannericon->create();
+	FXIcon* bannericon = new FXGIFIcon(getApp(), banner,0,IMAGE_OPAQUE);
+	bannericon->crop(0, 0, 411, 77);
+	bannericon->render();
+	bannericon->create();
 
-  // FXIcon* bannericon = new FXGIFIcon(&application, banner2k,0,IMAGE_OPAQUE);
-  new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0,0,411,0, 0,0,0,2);
+	// FXIcon* bannericon = new FXGIFIcon(&application, banner2k,0,IMAGE_OPAQUE);
+	new FXLabel(this, "", bannericon, LABEL_NORMAL|LAYOUT_FILL_X|LAYOUT_CENTER_X, 0,0,411,0, 0,0,0,2);
 
-  cont = new FXVerticalFrame(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 11,10,8,11);
+	cont = new FXVerticalFrame(this, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 11,10,8,11);
 
-  // .-- Logon Information -------------------.
-  logongrp = new FXGroupBox(cont, "Logon Information", GROUPBOX_TITLE_LEFT|FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0 ,0,0);
-  logongrpc = new FXVerticalFrame(logongrp, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 10,10,3,3, 0,0);
+	// .-- Logon Information -------------------.
+	logongrp = new FXGroupBox(cont, "Logon Information", GROUPBOX_TITLE_LEFT|FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0 ,0,0);
+	logongrpc = new FXVerticalFrame(logongrp, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 10,10,3,3, 0,0);
 
-  // Get hostname
-  char hostname[HOST_NAME_MAX+1];
-  gethostname(hostname, HOST_NAME_MAX+1);
+	// Get hostname
+	char hostname[HOST_NAME_MAX+1];
+	gethostname(hostname, HOST_NAME_MAX+1);
 
-  char *upper = hostname;
+	char *upper = hostname;
 
-  while (*upper) {
-    *upper = toupper((unsigned char) *upper);
-    ++upper;
-  }
+	while (*upper) {
+		*upper = toupper((unsigned char) *upper);
+		++upper;
+	}
 
-  //toupper(hostname);
+	//toupper(hostname);
 
-  char *tmp = strdup(hostname);
+	char *tmp = strdup(hostname);
 
-  strcpy(hostname, "You are logged on as ");
-  strcat(hostname, tmp);
+	strcpy(hostname, "You are logged on as ");
+	strcat(hostname, tmp);
 
-  free(tmp);
+	free(tmp);
 
-  strcat(hostname, "\\");
-  strcat(hostname, getlogin());
-  strcat(hostname, ".");
+	strcat(hostname, "\\");
+	strcat(hostname, getlogin());
+	strcat(hostname, ".");
 
-  // new FXLabel(logongrpc, "You are logged on as HOSTNAME\\USERNAME.", NULL, LABEL_NORMAL, 0,0,0,0, 0, 0, 0, 3);
-  new FXLabel(logongrpc, hostname, NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,3);
-  new FXLabel(logongrpc, " ", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,3);
+	// new FXLabel(logongrpc, "You are logged on as HOSTNAME\\USERNAME.", NULL, LABEL_NORMAL, 0,0,0,0, 0, 0, 0, 3);
+	new FXLabel(logongrpc, hostname, NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,3);
+	new FXLabel(logongrpc, " ", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,3);
 
-  char uptimetxt[200];
-
-
-  // get uptime
-  #ifdef OS_LINUX
-  //#if __linux__
-  struct sysinfo info;
-
-  if (sysinfo(&info) == 0) {
-    int uptime = info.uptime;
-    int days = uptime / (24 * 3600);
-    uptime %= (24 * 3600);
-    int hours = uptime / 3600;
-    uptime %= 3600;
-    int minutes = uptime / 60;
-    int seconds = uptime % 60;
-    snprintf(uptimetxt, 200, "System Uptime:        %d days, %02d:%02d:%02d", days, hours, minutes, seconds);
-  } else {
-    perror("sysinfo");
-    strcpy(uptimetxt, "System Uptime:        Unknown");
-    //sprintf(uptimetxt, "System Uptime:        Unknown");
-  }
-  #else
-    strcpy(uptimetxt, "System Uptime:        Unknown");
-  #endif
-
-  new FXLabel(logongrpc, uptimetxt, NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,12);
-
-  new FXLabel(cont, "Use the Task Manager to close an application that is not responding.", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,6,6);
+	char uptimetxt[200];
 
 
-  buttons = new FXMatrix(cont, 2, MATRIX_BY_ROWS|PACK_UNIFORM_WIDTH|LAYOUT_FILL_COLUMN|LAYOUT_FILL_ROW|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 6,6);
+	// get uptime
+#ifdef OS_LINUX
+	//#if __linux__
+	struct sysinfo info;
 
-  FXButton* lockbtn = new FXButton(buttons, "Loc&k Computer", NULL, this, ID_LOCKCOMPUTER,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL, 0,0,0,0, 2,2,2,3);
+	if (sysinfo(&info) == 0) {
+		int uptime = info.uptime;
+		int days = uptime / (24 * 3600);
+		uptime %= (24 * 3600);
+		int hours = uptime / 3600;
+		uptime %= 3600;
+		int minutes = uptime / 60;
+		int seconds = uptime % 60;
+		snprintf(uptimetxt, 200, "System Uptime:        %d days, %02d:%02d:%02d", days, hours, minutes, seconds);
+	} else {
+		perror("sysinfo");
+		strcpy(uptimetxt, "System Uptime:        Unknown");
+		//sprintf(uptimetxt, "System Uptime:        Unknown");
+	}
+#else
+	strcpy(uptimetxt, "System Uptime:        Unknown");
+#endif
 
-  lockbtn->setFocus();
+	new FXLabel(logongrpc, uptimetxt, NULL, LABEL_NORMAL, 0,0,0,0, 0,0,0,12);
 
-  new FXButton(buttons, "&Change Password...", NULL, getApp(), FXApp::ID_QUIT,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
-  
-  new FXButton(buttons, "&Log Off...", NULL, this, ID_LOGOFF,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+	new FXLabel(cont, "Use the Task Manager to close an application that is not responding.", NULL, LABEL_NORMAL, 0,0,0,0, 0,0,6,6);
 
-  new FXButton(buttons, "&Task Manager", NULL, this, ID_TASKMANAGER,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
-  new FXButton(buttons, "&Shut Down...", NULL, this, ID_SHUTDOWN,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
 
-  new FXButton(buttons, "Cancel", NULL, getApp(), FXApp::ID_QUIT,
-		  LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+	buttons = new FXMatrix(cont, 2, MATRIX_BY_ROWS|PACK_UNIFORM_WIDTH|LAYOUT_FILL_COLUMN|LAYOUT_FILL_ROW|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 6,6);
+
+	FXButton* lockbtn = new FXButton(buttons, "Loc&k Computer", NULL, this, ID_LOCKCOMPUTER,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT|BUTTON_INITIAL, 0,0,0,0, 2,2,2,3);
+
+	lockbtn->setFocus();
+
+	new FXButton(buttons, "&Change Password...", NULL, getApp(), FXApp::ID_QUIT,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+
+	new FXButton(buttons, "&Log Off...", NULL, this, ID_LOGOFF,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+
+	new FXButton(buttons, "&Task Manager", NULL, this, ID_TASKMANAGER,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+	new FXButton(buttons, "&Shut Down...", NULL, this, ID_SHUTDOWN,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
+
+	new FXButton(buttons, "Cancel", NULL, getApp(), FXApp::ID_QUIT,
+			LAYOUT_FILL_X|LAYOUT_FILL_COLUMN|BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 2,2,2,3);
 
 }
 
@@ -331,263 +322,270 @@ CtrlAltDelWindow::~CtrlAltDelWindow() {
 // Create and initialize
 void CtrlAltDelWindow::create() {
 
-  // Create the windows
-  FXMainWindow::create();
+	// Create the windows
+	FXMainWindow::create();
 
-  // Make the main window appear
-  //show(PLACEMENT_SCREEN);
+	// Make the main window appear
+	//show(PLACEMENT_SCREEN);
 }
 
 
 long CtrlAltDelWindow::lockComputer(FXObject* sender,FXSelector sel,void*) {
-  system("xlock &");
+	system("xlock &");
 
-  return 0;
+	return 0;
 }
 
 
 long CtrlAltDelWindow::onCmdLockComputer(FXObject* sender,FXSelector sel,void*) {
-  int numButtons = buttons->numChildren();
+	int numButtons = buttons->numChildren();
 
-  for (int i = 0; i < numButtons; i++) {
-    buttons->childAtIndex(i)->disable();
-  }
+	for (int i = 0; i < numButtons; i++) {
+		buttons->childAtIndex(i)->disable();
+	}
 
-  closedisable = 1;
-  buttonpressed = 1;
+	closedisable = 1;
+	buttonpressed = 1;
 
-  getApp()->addTimeout(this,CtrlAltDelWindow::ID_LOCKCOMPUTER,250);
+	getApp()->addTimeout(this,CtrlAltDelWindow::ID_LOCKCOMPUTER,250);
 
-  return 1;
+	return 1;
 }
 
 long CtrlAltDelWindow::onCmdTaskManager(FXObject* sender,FXSelector sel,void*) {
-//  (FXButton*)sender->disable();
-  getApp()->exit();
-  system("xterm -e htop &");
+	//  (FXButton*)sender->disable();
+	getApp()->exit();
+	system("xterm -e htop &");
 
-  return 1;
+	return 1;
 }
 
 long CtrlAltDelWindow::onCmdShutDown(FXObject* sender,FXSelector sel,void*) {
-  system("{ sleep 0.5; shutdlg; } &");
-  getApp()->exit();
-  return 1;
+	system("{ sleep 0.5; shutdlg; } &");
+	getApp()->exit();
+	return 1;
 }
 
 long CtrlAltDelWindow::onCmdLogOff(FXObject* sender,FXSelector sel,void* voidptr) {
-  system("{ sleep 0.5; i2klogoff; } &");
-  getApp()->exit();
-  return 1;
+	system("{ sleep 0.5; i2klogoff; } &");
+	getApp()->exit();
+	return 1;
 }
 
 int unfocus;
 
 long CtrlAltDelWindow::onRealUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
-  if (unfocus == 1) {
-    FXWindow::onFocusOut(sender, sel, ptr);
-    #ifdef _EXIT_ON_UNFOCUS
-      getApp()->exit();
-    #else    
-      if (buttonpressed == 1) {
-        getApp()->exit();
-      }
-    #endif
+	if (unfocus == 1) {
+		FXWindow::onFocusOut(sender, sel, ptr);
+#ifdef _EXIT_ON_UNFOCUS
+		getApp()->exit();
+#else    
+		if (buttonpressed == 1) {
+			getApp()->exit();
+		}
+#endif
 
-    return 1;
-  } else {
-    unfocus = 1;
-    return 0;
-  }
+		return 1;
+	} else {
+		unfocus = 1;
+		return 0;
+	}
 }
 
 long CtrlAltDelWindow::onUnfocus(FXObject* sender,FXSelector sel,void* ptr) {
-  unfocus = 1;
-  getApp()->addTimeout(this,CtrlAltDelWindow::ID_UNFOCUS,20);
-  //onRealUnfocus(sender, sel, ptr);
-  return 1;
+	unfocus = 1;
+	getApp()->addTimeout(this,CtrlAltDelWindow::ID_UNFOCUS,20);
+	//onRealUnfocus(sender, sel, ptr);
+	return 1;
 }
 
 // Skidded from FXDialogBox.cpp
 
 // Keyboard press; handle escape to close the dialog
 long CtrlAltDelWindow::onKeyPress(FXObject* sender,FXSelector sel,void* ptr){
-  if(FXTopWindow::onKeyPress(sender,sel,ptr)) return 1;
-  if(((FXEvent*)ptr)->code==KEY_Escape){
-    //handle(this,FXSEL(SEL_COMMAND,ID_CANCEL),NULL);
-    getApp()->exit();
-    return 1;
-  }
-  return 0;
-  }
+	if(FXTopWindow::onKeyPress(sender,sel,ptr)) return 1;
+	if(((FXEvent*)ptr)->code==KEY_Escape){
+		//handle(this,FXSEL(SEL_COMMAND,ID_CANCEL),NULL);
+		getApp()->exit();
+		return 1;
+	}
+	return 0;
+}
 
 
 // Keyboard release; handle escape to close the dialog
 long CtrlAltDelWindow::onKeyRelease(FXObject* sender,FXSelector sel,void* ptr){
-  if(FXTopWindow::onKeyRelease(sender,sel,ptr)) return 1;
-  if(((FXEvent*)ptr)->code==KEY_Escape){
-    return 1;
-  }
-  return 0;
+	if(FXTopWindow::onKeyRelease(sender,sel,ptr)) return 1;
+	if(((FXEvent*)ptr)->code==KEY_Escape){
+		return 1;
+	}
+	return 0;
 }
 
 // from fox src
 long CtrlAltDelWindow::onConfigure(FXObject* sender, FXSelector sel, void* ptr)
 {
-  //printf("hi\n");
-  unfocus = 0;
+	//printf("hi\n");
+	unfocus = 0;
 
-  // this is skidded from fox toolkit src
-  FXEvent *ev = (FXEvent*)ptr;
-  FXComposite::onConfigure(sender, sel, ptr);
-  xpos=ev->rect.x;
-  ypos=ev->rect.y;
-  if ( ( ev->rect.w != width ) || ( ev->rect.h != height ) ) {
-      width = ev->rect.w;               // Record new size
-      height = ev->rect.h;
+	// this is skidded from fox toolkit src
+	FXEvent *ev = (FXEvent*)ptr;
+	FXComposite::onConfigure(sender, sel, ptr);
+	xpos=ev->rect.x;
+	ypos=ev->rect.y;
+	if ( ( ev->rect.w != width ) || ( ev->rect.h != height ) ) {
+		width = ev->rect.w;               // Record new size
+		height = ev->rect.h;
 
-      recalc();
-  }
-  return 1;
+		recalc();
+	}
+	return 1;
 }
 
 // Attempt to close the window, return TRUE if actually closed
 FXbool FXTopWindow::close(FXbool notify){
-  FXWindow *window;
+	FXWindow *window;
 
-  if (this == cadwindow) {
-    if (closedisable == 1) {
-      return FALSE;
-    }
-  }
+	if (this == cadwindow) {
+		if (closedisable == 1) {
+			return FALSE;
+		}
+	}
 
-  // Ask target if desired
-  if (!notify || !target || !target->tryHandle(this,FXSEL(SEL_CLOSE,message),NULL)) {
+	// Ask target if desired
+	if (!notify || !target || !target->tryHandle(this,FXSEL(SEL_CLOSE,message),NULL)) {
 
-    // Target will receive no further messages from us
-    setTarget(NULL);
-    setSelector(0);
+		// Target will receive no further messages from us
+		setTarget(NULL);
+		setSelector(0);
 
-    // If there was another main level window still visible, that's all we do
-    for( window=getRoot()->getFirst(); window; window=window->getNext() ) {
-      if( window!=this && window->isMemberOf(FXMETACLASS(FXMainWindow)) ) {
-        goto x;
-      }
-    }
+		// If there was another main level window still visible, that's all we do
+		for( window=getRoot()->getFirst(); window; window=window->getNext() ) {
+			if( window!=this && window->isMemberOf(FXMETACLASS(FXMainWindow)) ) {
+				goto x;
+			}
+		}
 
-    // We've just hidden the last remaining top level window:- quit the application
-    getApp()->handle(this,FXSEL(SEL_COMMAND,FXApp::ID_QUIT),NULL);
+		// We've just hidden the last remaining top level window:- quit the application
+		getApp()->handle(this,FXSEL(SEL_COMMAND,FXApp::ID_QUIT),NULL);
 
-    // Self destruct
+		// Self destruct
 x:  delete this;
 
-    // Was closed
-    return TRUE;
-    }
-  return FALSE;
+	// Was closed
+	return TRUE;
+	}
+	return FALSE;
 }
 
 // from fox src
 // Exit application, but not the process
 void FXApp::exit(FXint code) {
-  cadwindow->hide();
-  FXTRACE((100,"%s::exit\n",getClassName()));
+	cadwindow->hide();
+	FXTRACE((100,"%s::exit\n",getClassName()));
 
-  //printf("Hello world!\n");
+	//printf("Hello world!\n");
 
-  // Write the registry
-  registry.write();
+	// Write the registry
+	registry.write();
 
-  #ifdef _SEC_DESKTOP
-    xdisplay = (Display*)this->getDisplay();
-    rootwin = DefaultRootWindow(xdisplay);
+#ifdef _SEC_DESKTOP
+	xdisplay = (Display*)this->getDisplay();
+	rootwin = DefaultRootWindow(xdisplay);
 
-    //printf("%d\n", deskshown);
+	//printf("%d\n", deskshown);
 
-    system("~/.icewm/programs/explorer/desktopicons");
+	system("~/.icewm/programs/explorer/desktopicons");
 
-    setWorkspace(xdisplay, rootwin, currentwksp);
-    setWorkspaces(xdisplay, rootwin, workspaces);
+	setWorkspace(xdisplay, rootwin, currentwksp);
+	setWorkspaces(xdisplay, rootwin, workspaces);
 
-    if (deskshown == 0) {
-      char cmdbuf2[256];
-      snprintf(cmdbuf2, sizeof(cmdbuf2), "icesh -w %s unhide; icesh desktop 0", taskid);
-      system(cmdbuf2);
+	if (deskshown == 0) {
+		char cmdbuf2[256];
+		snprintf(cmdbuf2, sizeof(cmdbuf2), "icesh -w %s unhide; icesh desktop 0", taskid);
+		system(cmdbuf2);
 
-      //system("icesh -T unhide; icesh desktop 0");
-    //printf("0\n");
-    } else {
-    //printf("1\n");
-      char cmdbuf2[256];
-      snprintf(cmdbuf2, sizeof(cmdbuf2), "icesh -w %s unhide; icesh desktop 0; icesh desktop 1", taskid);
-      system(cmdbuf2);
-      //system("icesh -T unhide; icesh desktop 0 ; icesh desktop 1");
-      //system("icesh -T unhide; icesh desktop 1");
-    }
+		//system("icesh -T unhide; icesh desktop 0");
+		//printf("0\n");
+	} else {
+		//printf("1\n");
+		char cmdbuf2[256];
+		snprintf(cmdbuf2, sizeof(cmdbuf2), "icesh -w %s unhide; icesh desktop 0; icesh desktop 1", taskid);
+		system(cmdbuf2);
+		//system("icesh -T unhide; icesh desktop 0 ; icesh desktop 1");
+		//system("icesh -T unhide; icesh desktop 1");
+	}
 
-  #endif
+#endif
 
 
-  // exit the program
-  stop(code);
-  //cadwindow->close();
+	// exit the program
+	stop(code);
+	//cadwindow->close();
 }
 
 
 // Here we begin
 int main(int argc,char *argv[]) {
-  FXApp application("CtrlAltDel", "Ice2KProj");
-  FXApp* ptrapp = &application;
+	FXApp application("CtrlAltDel", "Ice2KProj");
+	FXApp* ptrapp = &application;
 
-  application.init(argc,argv);
+	application.init(argc,argv);
 
-  cadwindow = new CtrlAltDelWindow(&application);
-  xdisplay = (Display*)ptrapp->getDisplay();
+	cadwindow = new CtrlAltDelWindow(&application);
+	xdisplay = (Display*)ptrapp->getDisplay();
 
-  // create windows
-  application.create();
+	// create windows
+	application.create();
 
-  XBell(xdisplay, 100);
+	XBell(xdisplay, 100);
 
-  #ifdef _SEC_DESKTOP
-    rootwin = DefaultRootWindow(xdisplay);
+#ifdef _SEC_DESKTOP
+	rootwin = DefaultRootWindow(xdisplay);
 
-    currentwksp = getProp(xdisplay, rootwin, "_NET_CURRENT_DESKTOP");
-    workspaces = getProp(xdisplay, rootwin, "_NET_NUMBER_OF_DESKTOPS");
+	currentwksp = getProp(xdisplay, rootwin, "_NET_CURRENT_DESKTOP");
+	workspaces = getProp(xdisplay, rootwin, "_NET_NUMBER_OF_DESKTOPS");
 
-    taskbarid();
-    printf(taskid);
+	taskbarid();
+	printf(taskid);
 
-    if (currentwksp == -1 || workspaces == -1) {
-      fputs("Could not retrieve workspace information. Are you running this on IceWM?\n", stderr);
-      ptrapp->exit();
-      exit(1);
-      return 0;
-    }
+	if (currentwksp == -1 || workspaces == -1) {
+		fputs("Could not retrieve workspace information. Are you running this on IceWM?\n", stderr);
+		ptrapp->exit();
+		exit(1);
+		return 0;
+	}
 
-    deskshown = desktopshown();
+	deskshown = desktopshown();
 
-    char cmdbuf[256];
-    snprintf(cmdbuf, sizeof(cmdbuf), "killall idesk >/dev/null 2>&1; icesh -w %s hide; icesh desktop 1", taskid);
-    system(cmdbuf);
+	char cmdbuf[256];
+	snprintf(cmdbuf, sizeof(cmdbuf), "killall idesk >/dev/null 2>&1; icesh -w %s hide; icesh desktop 1", taskid);
+	system(cmdbuf);
 
-    //system("killall idesk >/dev/null 2>&1; icesh desktop 1");
+	//system("killall idesk >/dev/null 2>&1; icesh desktop 1");
 
-    setWorkspaces(xdisplay, rootwin, workspaces + 1);
-    setWorkspace(xdisplay, rootwin, workspaces);
-    usleep(10000);
+	setWorkspaces(xdisplay, rootwin, workspaces + 1);
+	setWorkspace(xdisplay, rootwin, workspaces);
+	usleep(10000);
 
-    system("icesh desktop 0 ; icesh desktop 1");
-    usleep(250000);
+	system("icesh desktop 0 ; icesh desktop 1");
+	usleep(250000);
 
-  #endif
+#endif
+	cadwindow->position(
+			(cadwindow->getRoot()->getWidth() - cadwindow->getWidth())/2,
+			((cadwindow->getRoot()->getHeight()+40) - cadwindow->getHeight())/3,
+			(cadwindow->getWidth()),
+			(cadwindow->getHeight()) );
+	cadwindow->show();
 
-  cadwindow->show(PLACEMENT_SCREEN);
-  setOnTop(xdisplay, cadwindow->id());
-  //setOnTop((Display*)ptrapp->getDisplay(), window->id());
 
-  // Run the application
-  return application.run();
+	//cadwindow->show(PLACEMENT_SCREEN);
+	setOnTop(xdisplay, cadwindow->id());
+	//setOnTop((Display*)ptrapp->getDisplay(), window->id());
+
+	// Run the application
+	return application.run();
 }
 
 
