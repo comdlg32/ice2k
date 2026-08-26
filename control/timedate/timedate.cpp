@@ -889,6 +889,7 @@ long TimeDateCPL::onApply(FXObject*,FXSelector,void* ptr){
 long TimeDateCPL::onCommandCalendar(FXObject*,FXSelector,void* ptr){
 	monthbox->setCurrentItem(calview->getCurrentMonth()-1);
 	datespin->setValue(calview->getCurrentDate().year());
+	applybtn->enable();
 	return 1;
 }
 
@@ -897,6 +898,7 @@ long TimeDateCPL::onCommandYear(FXObject*,FXSelector,void* ptr){
 	FXDate date = calview->getCurrentDate();
 	date.setDate((int)(FXival)ptr, date.month(), date.day());
 	calview->setCurrentDate(date, 1);
+	applybtn->enable();
 	return 1;
 }
 
@@ -904,6 +906,8 @@ long TimeDateCPL::onCommandMonth(FXObject*,FXSelector,void* ptr){
 	FXDate date = calview->getCurrentDate();
 	date.setDate(date.year(), (int)(FXival)ptr+1, date.day());
 	calview->setCurrentDate(date, 1);
+
+	applybtn->enable();
 
 	return 1;
 }
@@ -914,6 +918,7 @@ long TimeDateCPL::onChangeTimebox(FXObject*,FXSelector,void* ptr){
 	system(cmd);*/
 
 	getApp()->removeTimeout(this, ID_TIMER);
+	applybtn->enable();
 
 	clock->setValue(time);
 	return 1;
