@@ -19,7 +19,7 @@ ActiveProcessPID()
 # Spams kill till the process doesn't exist
 KillPID()
 {
-	while true; do
+	while sleep 0.1; do
 		pkill -P "$(ActiveProcessPID "$1" 2>/dev/null)" 2>/dev/null || break
 	done
 }
@@ -34,6 +34,8 @@ scriptdir="$(getscriptdir)"
 PATH="$scriptdir:$PATH"
 
 KillPID animbg
+pkill i2ktrail
+
 xrefresh
 #icewmbg -r
 backmgr &

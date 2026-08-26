@@ -16,9 +16,10 @@
 #define _IMGMODE_FILL    3
 
 typedef struct {
-	int mode;
 	const char* color;
 	const char* image;
+	int mode;
+	int trail;
 } cfg;
 
 int inihandle(void* udata, const char* section, const char* name, const char* value) {
@@ -41,6 +42,10 @@ int inihandle(void* udata, const char* section, const char* name, const char* va
 			}
 		} else if (!strcmp(name, "Image")) {
 			wallcfg->image = strdup(value);
+		} else if (!strcmp(name, "Trail")) {
+			if (strcmp(value, "0") != 0) {
+				wallcfg->trail = 1;
+			}
 		} else {
 			return 0;
 		}
@@ -59,8 +64,7 @@ int makeDirectory(const char *dir) {
 	snprintf(tmp, sizeof(tmp), "%s", dir);
 	len = strlen(tmp);
 	
-	if (tmp[len - 1] == '/')
-		tmp[len - 1] = 0;
+	if (tmp[len-1] == '/') tmp[len-1] = '\0';
 
 	for (p = tmp + 1; *p; p++) {
 		if (*p == '/') {
@@ -101,6 +105,7 @@ int main() {
 	wallcfg.mode = _IMGMODE_FILL; // usually what the user wants
 	wallcfg.color = "#3a6ea5";
 	wallcfg.image = "";
+	wallcfg.trail = 0;
 
 	char cfgpath[512] = "";
 
@@ -139,6 +144,8 @@ int main() {
 		snprintf(imgbg, sizeof(imgbg), "--image-bg=%s", wallcfg.color);
 		snprintf(bgarg, sizeof(bgarg), "--bg-%s", mode);
 	}
+
+	if (wallcfg.trail) system("i2ktrail &");
 
 
 	pid_t pid = vfork();
