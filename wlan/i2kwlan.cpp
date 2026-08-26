@@ -511,7 +511,7 @@ long WLANWizard::onListDoubleClk(FXObject* obj,FXSelector sel, void* ptr) {
 }
 
 
-WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,497,360) {
+WLANWizard::WLANWizard(FXApp *a) : FXMainWindow(a, "Connect to Wireless Network", NULL, mainIcon, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,497,360) {
 	wiz = new I2KWizard(this, this, ID_WIZARD);
 	wiz->getNextButton()->disable();
 
@@ -765,7 +765,7 @@ int main(int argc, char *argv[]) {
 
 	setenv("WLAN_IFACE", netiface, 1);
 
-	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
+	mainIcon = new FXGIFIcon(&application, resico_mainicon);
 	wizIcon = new FXGIFImage(&application, resico_wizicon, 0, IMAGE_OPAQUE);
 
 	ico_wifi0 = new FXGIFIcon(&application, resico_wifi0, 0, IMAGE_NEAREST); ico_wifi0->create();

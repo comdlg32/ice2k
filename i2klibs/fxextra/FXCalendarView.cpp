@@ -421,7 +421,14 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
         else
           dc.setForeground(getApp()->getShadowColor());
 
-        dc.fillRectangle(xx,yy,columnwidth[c],rowheight[r]);
+		if (hasFocus() && current==pd) {
+		dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c],
+				yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text), font->getTextHeight(text));
+		} else {
+		dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c],
+				yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text), font->getTextHeight(text));
+		}
+        //dc.fillRectangle(xx,yy,columnwidth[c],rowheight[r]);
         dc.setForeground(getApp()->getSelforeColor());
         }
       else{
@@ -450,7 +457,8 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
                    text );
 
       if(hasFocus() && current==pd){
-        dc.drawFocusRectangle(xx,yy,columnwidth[c],rowheight[r]);
+        dc.drawFocusRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c]-1,
+				yy+((rowheight[r]-fontheight)/2)-1, font->getTextWidth(text)+2, font->getTextHeight(text)+2);
         }
 
       ++pd; // Next Day
