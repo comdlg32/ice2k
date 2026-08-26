@@ -1,22 +1,8 @@
-/********************************************************************************
-*                                                                               *
-*                         Scribble  Application coding sample                   *
-*                                                                               *
-********************************************************************************/
 #include <fx.h>
 #include <fxkeys.h>
 #include <ice2k/branding.h>
 #include <pwd.h>
 #include <unistd.h>
-
-// optional
-// common controls library, replaces certain fox toolkit controls with
-// more accurate widnows ones
-//
-// if you do not want to override fox toolkit controls use
-// #define _DO_NOT_OVERRIDE_FOX_CONTROLS
-//
-// before including common controls!
 
 #include <ice2k/comctl32.h>
 
@@ -191,11 +177,6 @@ long RunBox::onKeyPress(FXObject* sender,FXSelector sel,void* ptr){
 
 long RunBox::onUnmap(FXObject* obj,FXSelector sel,void* ptr) {
 	if (rancommand) {
-		mainwin->killFocus();
-		mainwin->ungrab();
-		textbox->ungrab();
-		ungrab();
-
 		int sysval = system(textbox->getText().text());
 
 		if (sysval == -1) {
@@ -233,7 +214,6 @@ long RunBox::onUnmap(FXObject* obj,FXSelector sel,void* ptr) {
 long RunBox::onMap(FXObject* obj,FXSelector sel,void* ptr) {
 	FXMainWindow::onMap(obj,sel,ptr);
 
-	mainwin->setFocus();
 	textbox->setFocus();
 	textbox->selectAll();
 
