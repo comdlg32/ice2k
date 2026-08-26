@@ -40,6 +40,7 @@ clean:
 install: all
 	mkdir -p $(PREFIX)/include/ice2k
 	cp branding.h $(PREFIX)/include/ice2k/branding.h
+	rm -f $(PREFIX)/lib/$(OUTPUT)
 	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 
 uninstall:

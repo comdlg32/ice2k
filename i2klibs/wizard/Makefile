@@ -33,6 +33,7 @@ clean:
 install: all
 	mkdir -p $(PREFIX)/include/ice2k
 	cp -r ice2k/wizard $(PREFIX)/include/ice2k/
+	rm -f $(PREFIX)/lib/$(OUTPUT)
 	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 
 uninstall:

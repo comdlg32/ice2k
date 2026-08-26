@@ -50,6 +50,7 @@ clean:
 
 install: all
 	cp -r ice2k $(PREFIX)/include
+	rm -f $(PREFIX)/lib/$(PICOUTPUT)
 	cp $(PICOUTPUT) $(PREFIX)/lib/$(PICOUTPUT)
 	cp $(LIBOUTPUT) $(PREFIX)/lib/$(LIBOUTPUT)
 

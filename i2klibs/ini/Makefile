@@ -22,8 +22,9 @@ clean:
 install: all
 	mkdir -p $(PREFIX)/include/ice2k
 	mkdir -p $(PREFIX)/lib
-	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 	cp ice2k/ini.h $(PREFIX)/include/ice2k/ini.h
+	rm -f $(PREFIX)/lib/$(OUTPUT)
+	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 	
 
 uninstall:

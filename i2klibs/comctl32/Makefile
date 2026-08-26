@@ -39,6 +39,7 @@ install: all
 	cp I2KComboBox.h $(PREFIX)/include/ice2k/
 	cp I2KListBox.h $(PREFIX)/include/ice2k/
 	cp comctl32.h $(PREFIX)/include/ice2k/
+	rm -f $(PREFIX)/lib/$(OUTPUT)
 	cp $(OUTPUT) $(PREFIX)/lib/$(OUTPUT)
 
 uninstall:
