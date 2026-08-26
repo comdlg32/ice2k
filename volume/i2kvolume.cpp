@@ -73,6 +73,9 @@ public:
 	long onUnfocus(FXObject*, FXSelector, void*);
 	long onChangeVol(FXObject*, FXSelector, void*);
 	long onCmdMute(FXObject*, FXSelector, void*);
+	long onPlaySnd(FXObject*, FXSelector, void*);
+
+
 	long onCmdTray(FXObject*, FXSelector, void*);
 	long onCmdVol(FXObject*, FXSelector, void*);
 
@@ -106,6 +109,10 @@ FXDEFMAP(Volume) VolumeMap[] = {
 	FXMAPFUNC(SEL_FOCUSOUT,           0,  Volume::onUnfocus),
 	FXMAPFUNC(SEL_CHANGED,           Volume::ID_VOLUME,  Volume::onChangeVol),
 	FXMAPFUNC(SEL_COMMAND,           Volume::ID_VOLUME,  Volume::onCmdVol),
+	FXMAPFUNC(SEL_LEFTBUTTONRELEASE,           Volume::ID_VOLUME,  Volume::onPlaySnd),
+	FXMAPFUNC(SEL_MIDDLEBUTTONRELEASE,           Volume::ID_VOLUME,  Volume::onPlaySnd),
+
+
 
 
 	FXMAPFUNC(SEL_COMMAND,           Volume::ID_MUTE,  Volume::onCmdMute),
@@ -133,9 +140,15 @@ long Volume::onCmdMute(FXObject*, FXSelector, void* ptr) {
 
 
 long Volume::onCmdVol(FXObject*, FXSelector, void* ptr) {
+	snd_mixer_selem_set_playback_volume_all(s_elem, ((long)(FXival)ptr)*max/100);
+	return 1;
+}
+
+long Volume::onPlaySnd(FXObject*, FXSelector, void* ptr) {
 	system("aplay -q -- \"$ICE2KSYS_SOUND_DING\" &");
 	return 1;
 }
+
 long Volume::onCmdMixer(FXObject*, FXSelector, void* ptr) {
 	system("xterm -e alsamixer &");
 	return 1;
@@ -227,9 +240,6 @@ Volume::Volume(FXApp *a) : FXMainWindow(a, "Volume Mixer", ico_volume, NULL, DEC
 	new FXFrame(hor_frm, LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0, 11+2,66, 0,0,0,0);
 	slider->setHeadSize(11);
 	slider->setSlotSize(4);
-
-	slider->setTarget(this);
-	slider->setSelector(ID_VOLUME);
 
 	slider->setRange(0, 100);
 
