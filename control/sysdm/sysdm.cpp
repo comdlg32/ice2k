@@ -538,9 +538,12 @@ int srv03 = 0;
 
 //int main(int argc, char *argv[]) {
 SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "System Properties", NULL, NULL, DECOR_TITLE|DECOR_BORDER|DECOR_CLOSE, 0,0,404,436,  0,0,0,0,  0,0) {
+	int blk_left_pad;
 	this->changeFocus((FXWindow*)0);
 	this->killFocus();
 	char* windows = i2kBGetWinVersion();
+
+	//FXText* frm;
 
 	if ( !(strcmp(windows, "srv03")) ) {
 		xp = 1;
@@ -553,10 +556,13 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 	FXIcon* monitorimage;
 
-	if (xp)
+	if (xp) {
 		monitorimage = new FXGIFIcon(app, resico_monitorxp);
-	else
+		blk_left_pad = 1;
+	} else {
 		monitorimage = new FXGIFIcon(app, resico_monitor);
+		blk_left_pad = 0;
+	}
 
 
 	//application.init(argc, argv);
@@ -871,7 +877,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 			"which affects the speed of your computer.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);*/
 
 	makeWrapLabel(performgrp, "Performance options control how applications "
-			"use memory, which affects the speed of your computer.");
+			"use memory, which affects the speed of your computer.", LAYOUT_FILL_X,
+			blk_left_pad);
 
 
 	btn = new FXButton(performgrp, "&Performance Options...", NULL, NULL, 0, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
@@ -889,7 +896,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	//new FXLabel(envvarsgrp, "Environment variables tell your computer where to find", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 	//new FXLabel(envvarsgrp, "certain types of information.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);
 	makeWrapLabel(envvarsgrp, "Environment variables tell your computer where to find "
-			"certain types of information.");
+			"certain types of information.", LAYOUT_FILL_X,
+			blk_left_pad);
 
 	btn = new FXButton(envvarsgrp, "&Environment Variables...", NULL, this, ID_ENVVARS, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  
 
@@ -903,7 +911,8 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	/*new FXLabel(ntldrgrp, "Startup and recovery options tell your computer how to start\n"
 			"and what to do if an error causes your computer to stop.", NULL, JUSTIFY_LEFT|LABEL_NORMAL|LAYOUT_SIDE_TOP, 0,0,0,0,  0,0,0,0);*/
 	makeWrapLabel(ntldrgrp, "Startup and recovery options tell your computer how to start "
-			"and what to do if an error causes your computer to stop.");
+			"and what to do if an error causes your computer to stop.", LAYOUT_FILL_X,
+			blk_left_pad);
 
 
 	btn = new FXButton(ntldrgrp, "&Startup and Recovery...", NULL, this, ID_NTLDR, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_BOTTOM|LAYOUT_SIDE_RIGHT, 0, 0, 147, 23, 0, 0, 0, 0);  

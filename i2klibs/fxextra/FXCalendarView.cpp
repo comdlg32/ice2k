@@ -320,6 +320,7 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
   FXint rowheight[7];        // Height of each column
   FXString text;
   FXDate pd=ds;
+  //FXint textlen = 0;
 
   // Calculate Column Widths
   for(i=0,e=0; i<ncols; i++){
@@ -372,9 +373,9 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
 
   for(c=firstday,i=coloffset; c<firstday+7; c++,i++){
     text.format("%s",tr(FXDate::dayNameShort(c%7)));
-    if(c%7==0 || c%7==6)
-      dc.setForeground(weekendcolor);
-    else
+    //if(c%7==0 || c%7==6)
+    //  dc.setForeground(weekendcolor);
+    //else
       dc.setForeground(titlecolor);
 
     dc.drawText(xx+((columnwidth[i]-font->getTextWidth(text))/2),((rowheight[0]-fontheight)/2)+font->getFontAscent(),text);
@@ -421,13 +422,18 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
         else
           dc.setForeground(getApp()->getShadowColor());
 
-		if (hasFocus() && current==pd) {
+		//if (hasFocus() && current==pd) {
+		if (text.length() > 1) {
 		dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c],
 				yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text), font->getTextHeight(text));
 		} else {
-		dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c],
-				yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text), font->getTextHeight(text));
+		dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c]-2,
+				yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text)+2, font->getTextHeight(text));
 		}
+		//} else {
+		//dc.fillRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c],
+		//		yy+((rowheight[r]-fontheight)/2), font->getTextWidth(text), font->getTextHeight(text));
+		//}
         //dc.fillRectangle(xx,yy,columnwidth[c],rowheight[r]);
         dc.setForeground(getApp()->getSelforeColor());
         }
@@ -457,8 +463,13 @@ long FXCalendarView::onPaint(FXObject*,FXSelector,void*ptr){
                    text );
 
       if(hasFocus() && current==pd){
+		if (text.length() > 1) {
         dc.drawFocusRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c]-1,
 				yy+((rowheight[r]-fontheight)/2)-1, font->getTextWidth(text)+2, font->getTextHeight(text)+2);
+		} else {
+        dc.drawFocusRectangle(xx+((columnwidth[c]-font->getTextWidth(text)))-columnoffset[c]-1-2,
+				yy+((rowheight[r]-fontheight)/2)-1, font->getTextWidth(text)+2+2, font->getTextHeight(text)+2);
+		}
         }
 
       ++pd; // Next Day
