@@ -23,9 +23,13 @@ private:
 
 	FXPacker* rdelay_cnt;
 	FXHorizontalFrame* rdelay_sld_cnt;
-	FXPacker* rrate_cnt;
-
 	FXSlider* rdelay_sld;
+
+	FXPacker* rrate_cnt;
+	FXHorizontalFrame* rrate_sld_cnt;
+	FXSlider* rrate_sld;
+
+	FXPacker* test_cnt;
 
 
 public:
@@ -56,11 +60,11 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	
 	tabbook = new FXTabBook(cont, NULL, 0, TABBOOK_NORMAL|LAYOUT_FILL, 0,0,0,0, 6,6,5,5);
 	new FXTabItem(tabbook, "Speed", NULL, TAB_TOP_NORMAL, 0,0,0,0, 4,4,1,2);
-	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,13,11,10, 8,8);
+	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 11,13,11,10, 8,8);
 
-	repeat_grp = new FXGroupBox(speed_cnt, "Character repeat", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,9, 16,16);
+	repeat_grp = new FXGroupBox(speed_cnt, "Character repeat", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,9, 16,20);
 
-	rdelay_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 16,6);
+	rdelay_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 2,0,0,2, 16,6);
 	new FXLabel(rdelay_cnt, "", ico_rdelay, LAYOUT_SIDE_LEFT);
 	new FXLabel(rdelay_cnt, "Repeat &delay:", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,0,2);
 
@@ -75,6 +79,28 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	rdelay_sld->setSlotSize(4);
 	rdelay_sld->setHeadSize(11);
 	new FXLabel(rdelay_sld_cnt, "Short");
+
+	rrate_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 2,0,0,0, 16,6);
+	new FXLabel(rrate_cnt, "", ico_rrate, LAYOUT_SIDE_LEFT);
+	new FXLabel(rrate_cnt, "&Repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,0,2);
+
+	rrate_sld_cnt = new FXHorizontalFrame(rrate_cnt,
+			LAYOUT_FILL_X,
+			0,0,0,0, 0,0,0,0, 10,10);
+	new FXLabel(rrate_sld_cnt, "Slow");
+	rrate_sld = new FXSlider(rrate_sld_cnt, NULL, 0,
+			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
+			0,0,185,25+6, 0,0,6,0);
+	rrate_sld->setRange(1, 25);
+	rrate_sld->setSlotSize(4);
+	rrate_sld->setHeadSize(11);
+	new FXLabel(rrate_sld_cnt, "Fast");
+
+	test_cnt = new FXVerticalFrame(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
+
+	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:");
+
+	new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
 
 	//new FXSlider(repeatgrp);
 	
