@@ -98,7 +98,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 	test_cnt = new FXVerticalFrame(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
 
-	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:");
+	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 1,1,1,1);
 
 	new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
 
