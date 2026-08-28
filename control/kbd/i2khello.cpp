@@ -46,8 +46,13 @@ private:
 
 
 public:
-	long onPaintBlink(FXObject*, FXSelector, void*);
-	long onTimeoutBlink(FXObject*, FXSelector, void*);
+	long onChangeBlink(FXObject*, FXSelector, void*);
+	long onChangeRepDelay(FXObject*, FXSelector, void*);
+	long onChangeRepSpeed(FXObject*, FXSelector, void*);
+
+
+	long onPaintBlinkAnim(FXObject*, FXSelector, void*);
+	long onTimeoutBlinkAnim(FXObject*, FXSelector, void*);
 
 	//long onCmdHello(FXObject*, FXSelector, void*);
 
@@ -59,10 +64,16 @@ public:
 
 public:
 	enum {
-		ID_BLINK = FXMainWindow::ID_LAST,
+		ID_BLINK_ANIM = FXMainWindow::ID_LAST,
+		
+		ID_REPEAT_DELAY,
+		ID_REPEAT_SPEED,
+		ID_BLINK,
+		
 		ID_DLG_OK,
 		ID_DLG_CANCEL,
 		ID_DLG_APPLY,
+
 		ID_LAST
 	};
 
@@ -78,8 +89,13 @@ FXDEFMAP(HelloWindow) HelloWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_APPLY, HelloWindow::onCmdDialogApply),
 	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_CANCEL, HelloWindow::onCmdDialogCancel),
 
-	FXMAPFUNC(SEL_PAINT,             HelloWindow::ID_BLINK,  HelloWindow::onPaintBlink),
-	FXMAPFUNC(SEL_TIMEOUT,           HelloWindow::ID_BLINK,  HelloWindow::onTimeoutBlink),
+	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_DELAY, HelloWindow::onChangeRepDelay),
+	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_SPEED, HelloWindow::onChangeRepSpeed),
+
+	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_BLINK, HelloWindow::onChangeBlink),
+
+	FXMAPFUNC(SEL_PAINT,             HelloWindow::ID_BLINK_ANIM,  HelloWindow::onPaintBlinkAnim),
+	FXMAPFUNC(SEL_TIMEOUT,           HelloWindow::ID_BLINK_ANIM,  HelloWindow::onTimeoutBlinkAnim),
 
 	//FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
 
@@ -104,7 +120,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 			LAYOUT_FILL_X,
 			0,0,0,0, 0,0,0,0, 10,10);
 	new FXLabel(rdelay_sld_cnt, "Long");
-	rdelay_sld = new FXSlider(rdelay_sld_cnt, NULL, 0,
+	rdelay_sld = new FXSlider(rdelay_sld_cnt, this, ID_REPEAT_DELAY,
 			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
 			0,0,185,25+6, 0,0,6,0);
 	rdelay_sld->setRange(1, 4);
@@ -120,7 +136,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 			LAYOUT_FILL_X,
 			0,0,0,0, 0,0,0,0, 10,10);
 	new FXLabel(rrate_sld_cnt, "Slow");
-	rrate_sld = new FXSlider(rrate_sld_cnt, NULL, 0,
+	rrate_sld = new FXSlider(rrate_sld_cnt, this, ID_REPEAT_DELAY,
 			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
 			0,0,185,25+6, 0,0,6,0);
 	rrate_sld->setRange(1, 25);
@@ -134,11 +150,11 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 	new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
 
-	blink_grp = new FXGroupBox(speed_cnt, "Cursor blink rate", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18, 16,20);
+	blink_grp = new FXGroupBox(speed_cnt, "Cursor blink rate", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18-4, 16,20);
 
 	blink_cnt = new FXPacker(blink_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,2, 16,6);
 
-	blink_cvs = new FXCanvas(blink_cnt, this, ID_BLINK, LAYOUT_SIDE_LEFT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,32,32);
+	blink_cvs = new FXCanvas(blink_cnt, this, ID_BLINK_ANIM, LAYOUT_SIDE_LEFT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,32+4,32+4);
 
 	//new FXLabel(blink_cnt, "", ico_rrate, LAYOUT_SIDE_LEFT);
 
@@ -146,10 +162,10 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 			LAYOUT_FILL_X,
 			0,0,0,0, 0,0,0,0, 10,10);
 	new FXLabel(blink_sld_cnt, "None");
-	blink_sld = new FXSlider(blink_sld_cnt, NULL, 0,
+	blink_sld = new FXSlider(blink_sld_cnt, this, ID_BLINK,
 			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
 			0,0,185,25+6, 0,0,6,0);
-	blink_sld->setRange(1, 10);
+	blink_sld->setRange(1, 12);
 	blink_sld->setSlotSize(4);
 	blink_sld->setHeadSize(11);
 	new FXLabel(blink_sld_cnt, "Fast");
@@ -164,7 +180,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 
 
-	getApp()->addTimeout(this, ID_BLINK, blink_speed);
+	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 
 	//new FXSlider(repeatgrp);
 	
@@ -178,6 +194,35 @@ void HelloWindow::create() {
 
 	show(PLACEMENT_SCREEN);
 }
+
+long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
+	if ((FXint)(FXival)ptr == 1) {
+		blink_speed = -1;
+		getApp()->removeTimeout(this, ID_BLINK_ANIM);
+		blink_inv = 1;
+		blink_cvs->update();
+	} else {
+		blink_speed = 1400 - (FXint)(FXival)ptr*100;
+		getApp()->removeTimeout(this, ID_BLINK_ANIM);
+		printf("%d\n", blink_speed);
+		getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);	
+
+	}
+
+
+	apply_btn->enable();
+	return 1;
+}
+long HelloWindow::onChangeRepSpeed(FXObject* obj,FXSelector sel, void* ptr) {
+	apply_btn->enable();
+	return 1;
+}
+
+long HelloWindow::onChangeRepDelay(FXObject* obj,FXSelector sel, void* ptr) {
+	apply_btn->enable();
+	return 1;
+}
+
 
 
 long HelloWindow::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
@@ -198,7 +243,7 @@ long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
 	return 1;
 }
 
-long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
+long HelloWindow::onPaintBlinkAnim(FXObject* obj, FXSelector, void* ptr) {
 	FXWindow* win = (FXWindow*)obj;
 	FXEvent* ev = (FXEvent*)ptr;
 	
@@ -225,8 +270,8 @@ long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
 	return 1;
 }
 
-long HelloWindow::onTimeoutBlink(FXObject*, FXSelector, void*) {
-	getApp()->addTimeout(this, ID_BLINK, blink_speed);
+long HelloWindow::onTimeoutBlinkAnim(FXObject*, FXSelector, void*) {
+	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 	blink_inv =! blink_inv;
 	blink_cvs->update();
 	return 1;
