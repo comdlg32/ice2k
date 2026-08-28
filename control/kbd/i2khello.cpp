@@ -8,6 +8,9 @@ FXIcon* mainIcon;
 FXIcon* ico_rdelay;
 FXIcon* ico_rrate;
 
+FXuint blink_speed = 500;
+int blink_inv = 1;
+
 class HelloWindow : public FXMainWindow {
 	FXDECLARE(HelloWindow);
 
@@ -33,19 +36,33 @@ private:
 
 	FXGroupBox* blink_grp;
 	FXPacker* blink_cnt;
+	FXCanvas* blink_cvs;
 	FXHorizontalFrame* blink_sld_cnt;
 	FXSlider* blink_sld;
+
+	FXButton* ok_btn;
+	FXButton* cancel_btn;
+	FXButton* apply_btn;
 
 
 public:
 	long onPaintBlink(FXObject*, FXSelector, void*);
-	long onCmdHello(FXObject*, FXSelector, void*);
+	long onTimeoutBlink(FXObject*, FXSelector, void*);
+
+	//long onCmdHello(FXObject*, FXSelector, void*);
+
+
+	long onCmdDialogOK(FXObject*,FXSelector,void*);
+	long onCmdDialogApply(FXObject*,FXSelector,void*);
+	long onCmdDialogCancel(FXObject*,FXSelector,void*);
 
 
 public:
 	enum {
 		ID_BLINK = FXMainWindow::ID_LAST,
-		ID_HELLO,
+		ID_DLG_OK,
+		ID_DLG_CANCEL,
+		ID_DLG_APPLY,
 		ID_LAST
 	};
 
@@ -57,8 +74,14 @@ public:
 };
 
 FXDEFMAP(HelloWindow) HelloWindowMap[] = {
+	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_OK, HelloWindow::onCmdDialogOK),
+	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_APPLY, HelloWindow::onCmdDialogApply),
+	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_CANCEL, HelloWindow::onCmdDialogCancel),
+
 	FXMAPFUNC(SEL_PAINT,             HelloWindow::ID_BLINK,  HelloWindow::onPaintBlink),
-	FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
+	FXMAPFUNC(SEL_TIMEOUT,           HelloWindow::ID_BLINK,  HelloWindow::onTimeoutBlink),
+
+	//FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
 
 };
 
@@ -68,8 +91,8 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	cont = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
 	
 	tabbook = new FXTabBook(cont, NULL, 0, TABBOOK_NORMAL|LAYOUT_FILL, 0,0,0,0, 6,6,5,5);
-	new FXTabItem(tabbook, "Speed", NULL, TAB_TOP_NORMAL, 0,0,0,0, 4,4,1,2);
-	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,13,11,10, 6,6);
+	new FXTabItem(tabbook, "Speed", NULL, TAB_TOP_NORMAL, 0,0,0,0, 5,5,1,2);
+	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,13,11,21, 6,6);
 
 	repeat_grp = new FXGroupBox(speed_cnt, "Character repeat", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18, 16,20);
 
@@ -115,7 +138,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 	blink_cnt = new FXPacker(blink_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,2, 16,6);
 
-	new FXCanvas(blink_cnt, this, ID_BLINK, LAYOUT_SIDE_LEFT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,32,32);
+	blink_cvs = new FXCanvas(blink_cnt, this, ID_BLINK, LAYOUT_SIDE_LEFT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,32,32);
 
 	//new FXLabel(blink_cnt, "", ico_rrate, LAYOUT_SIDE_LEFT);
 
@@ -131,6 +154,17 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	blink_sld->setHeadSize(11);
 	new FXLabel(blink_sld_cnt, "Fast");
 
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT, 0,0,0,0, 0,6,1,4, 6,0);
+
+	ok_btn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
+	cancel_btn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
+	apply_btn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
+
+	apply_btn->disable();
+
+
+
+	getApp()->addTimeout(this, ID_BLINK, blink_speed);
 
 	//new FXSlider(repeatgrp);
 	
@@ -144,6 +178,26 @@ void HelloWindow::create() {
 
 	show(PLACEMENT_SCREEN);
 }
+
+
+long HelloWindow::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
+	onCmdDialogApply(obj, sel, ptr);
+	getApp()->exit();
+	return 1;
+}
+
+
+long HelloWindow::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
+	getApp()->exit(1);
+	return 1;
+}
+
+
+long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
+	apply_btn->disable();
+	return 1;
+}
+
 long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
 	FXWindow* win = (FXWindow*)obj;
 	FXEvent* ev = (FXEvent*)ptr;
@@ -158,8 +212,10 @@ long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
 	dc.fillRectangle(0, 0, winwidth, winheight);
 
 
-	dc.setFunction(BLT_SRC_XOR_DST);
-	dc.setForeground(FXRGB(255,255,255));
+	if (blink_inv) {
+		dc.setFunction(BLT_SRC_XOR_DST);
+		dc.setForeground(FXRGB(255,255,255));
+	}
 
 	dc.fillRectangle( (winwidth-2)>>1, (winheight-13)>>1, 2, 13);
 	dc.setFunction(BLT_SRC);
@@ -169,19 +225,23 @@ long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
 	return 1;
 }
 
-long HelloWindow::onCmdHello(FXObject*, FXSelector, void*) {
-	puts("Hello world!");
+long HelloWindow::onTimeoutBlink(FXObject*, FXSelector, void*) {
+	getApp()->addTimeout(this, ID_BLINK, blink_speed);
+	blink_inv =! blink_inv;
+	blink_cvs->update();
 	return 1;
 }
 
 int main(int argc, char *argv[]) {
 	FXApp application("Hello", "I2KTest");
 	
+	application.init(argc, argv);
+
 	ico_rrate = new FXGIFIcon(&application, resico_rrate);
 	ico_rdelay = new FXGIFIcon(&application, resico_rdelay);
 	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
 
-	application.init(argc, argv);
+	blink_speed = application.reg().readUnsignedEntry("SETTINGS", "blinkspeed", blink_speed);
 
 	new HelloWindow(&application);
 
