@@ -31,13 +31,20 @@ private:
 
 	FXPacker* test_cnt;
 
+	FXGroupBox* blink_grp;
+	FXPacker* blink_cnt;
+	FXHorizontalFrame* blink_sld_cnt;
+	FXSlider* blink_sld;
+
 
 public:
+	long onPaintBlink(FXObject*, FXSelector, void*);
 	long onCmdHello(FXObject*, FXSelector, void*);
+
 
 public:
 	enum {
-		ID_MAINWIN = FXMainWindow::ID_LAST,
+		ID_BLINK = FXMainWindow::ID_LAST,
 		ID_HELLO,
 		ID_LAST
 	};
@@ -50,21 +57,23 @@ public:
 };
 
 FXDEFMAP(HelloWindow) HelloWindowMap[] = {
+	FXMAPFUNC(SEL_PAINT,             HelloWindow::ID_BLINK,  HelloWindow::onPaintBlink),
 	FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
+
 };
 
 FXIMPLEMENT(HelloWindow, FXMainWindow, HelloWindowMap, ARRAYNUMBER(HelloWindowMap));
 
-HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", mainIcon, NULL, DECOR_CLOSE|DECOR_BORDER|DECOR_TITLE|DECOR_RESIZE, 0,0,0,0, 0,0,2,3, 0,6) {
+HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", mainIcon, NULL, DECOR_CLOSE|DECOR_BORDER|DECOR_TITLE, 0,0,0,0, 0,0,2,3, 0,6) {
 	cont = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
 	
 	tabbook = new FXTabBook(cont, NULL, 0, TABBOOK_NORMAL|LAYOUT_FILL, 0,0,0,0, 6,6,5,5);
 	new FXTabItem(tabbook, "Speed", NULL, TAB_TOP_NORMAL, 0,0,0,0, 4,4,1,2);
-	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 11,13,11,10, 8,8);
+	speed_cnt = new FXVerticalFrame(tabbook, LAYOUT_FILL|FRAME_RAISED|FRAME_THICK, 0,0,0,0, 13,13,11,10, 6,6);
 
-	repeat_grp = new FXGroupBox(speed_cnt, "Character repeat", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,9, 16,20);
+	repeat_grp = new FXGroupBox(speed_cnt, "Character repeat", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18, 16,20);
 
-	rdelay_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 2,0,0,2, 16,6);
+	rdelay_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,2, 16,6);
 	new FXLabel(rdelay_cnt, "", ico_rdelay, LAYOUT_SIDE_LEFT);
 	new FXLabel(rdelay_cnt, "Repeat &delay:", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,0,2);
 
@@ -80,7 +89,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	rdelay_sld->setHeadSize(11);
 	new FXLabel(rdelay_sld_cnt, "Short");
 
-	rrate_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 2,0,0,0, 16,6);
+	rrate_cnt = new FXPacker(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 16,6);
 	new FXLabel(rrate_cnt, "", ico_rrate, LAYOUT_SIDE_LEFT);
 	new FXLabel(rrate_cnt, "&Repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,0,2);
 
@@ -96,11 +105,32 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	rrate_sld->setHeadSize(11);
 	new FXLabel(rrate_sld_cnt, "Fast");
 
-	test_cnt = new FXVerticalFrame(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
+	test_cnt = new FXVerticalFrame(repeat_grp, LAYOUT_FILL_X, 0,0,0,0, 2,2,1,2, 0,0);
 
-	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 1,1,1,1);
+	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 1,1,1,2);
 
 	new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
+
+	blink_grp = new FXGroupBox(speed_cnt, "Cursor blink rate", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18, 16,20);
+
+	blink_cnt = new FXPacker(blink_grp, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,2, 16,6);
+
+	new FXCanvas(blink_cnt, this, ID_BLINK, LAYOUT_SIDE_LEFT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,32,32);
+
+	//new FXLabel(blink_cnt, "", ico_rrate, LAYOUT_SIDE_LEFT);
+
+	blink_sld_cnt = new FXHorizontalFrame(blink_cnt,
+			LAYOUT_FILL_X,
+			0,0,0,0, 0,0,0,0, 10,10);
+	new FXLabel(blink_sld_cnt, "None");
+	blink_sld = new FXSlider(blink_sld_cnt, NULL, 0,
+			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
+			0,0,185,25+6, 0,0,6,0);
+	blink_sld->setRange(1, 10);
+	blink_sld->setSlotSize(4);
+	blink_sld->setHeadSize(11);
+	new FXLabel(blink_sld_cnt, "Fast");
+
 
 	//new FXSlider(repeatgrp);
 	
@@ -113,6 +143,30 @@ void HelloWindow::create() {
 	FXMainWindow::create();
 
 	show(PLACEMENT_SCREEN);
+}
+long HelloWindow::onPaintBlink(FXObject* obj, FXSelector, void* ptr) {
+	FXWindow* win = (FXWindow*)obj;
+	FXEvent* ev = (FXEvent*)ptr;
+	
+	FXint winwidth = win->getWidth();
+	FXint winheight = win->getHeight();
+
+	FXDCWindow dc(win, ev);
+
+	//dc.setForeground(FXRGB(255,0,255));
+	dc.setForeground(backColor);
+	dc.fillRectangle(0, 0, winwidth, winheight);
+
+
+	dc.setFunction(BLT_SRC_XOR_DST);
+	dc.setForeground(FXRGB(255,255,255));
+
+	dc.fillRectangle( (winwidth-2)>>1, (winheight-13)>>1, 2, 13);
+	dc.setFunction(BLT_SRC);
+
+	dc.end();
+
+	return 1;
 }
 
 long HelloWindow::onCmdHello(FXObject*, FXSelector, void*) {
