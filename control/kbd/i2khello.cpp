@@ -90,6 +90,8 @@ FXDEFMAP(HelloWindow) HelloWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_CANCEL, HelloWindow::onCmdDialogCancel),
 
 	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_DELAY, HelloWindow::onChangeRepDelay),
+
+	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_REPEAT_SPEED, HelloWindow::onChangeRepSpeed),
 	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_SPEED, HelloWindow::onChangeRepSpeed),
 
 	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_BLINK, HelloWindow::onChangeBlink),
@@ -136,10 +138,10 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 			LAYOUT_FILL_X,
 			0,0,0,0, 0,0,0,0, 10,10);
 	new FXLabel(rrate_sld_cnt, "Slow");
-	rrate_sld = new FXSlider(rrate_sld_cnt, this, ID_REPEAT_DELAY,
+	rrate_sld = new FXSlider(rrate_sld_cnt, this, ID_REPEAT_SPEED,
 			LAYOUT_FIX_HEIGHT|LAYOUT_FIX_WIDTH|SLIDER_TICKS_BOTTOM|SLIDER_ARROW_DOWN,
 			0,0,185,25+6, 0,0,6,0);
-	rrate_sld->setRange(1, 25);
+	rrate_sld->setRange(1, 32);
 	rrate_sld->setSlotSize(4);
 	rrate_sld->setHeadSize(11);
 	new FXLabel(rrate_sld_cnt, "Fast");
@@ -168,6 +170,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	blink_sld->setRange(1, 12);
 	blink_sld->setSlotSize(4);
 	blink_sld->setHeadSize(11);
+	blink_sld->setValue( 12-(blink_speed/100)+2 );
 	new FXLabel(blink_sld_cnt, "Fast");
 
 	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT, 0,0,0,0, 0,6,1,4, 6,0);
@@ -214,11 +217,15 @@ long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
 	return 1;
 }
 long HelloWindow::onChangeRepSpeed(FXObject* obj,FXSelector sel, void* ptr) {
+	int repspeed = 1000 / (2+(((FXint)(FXival)ptr)*30/32));
+	printf("%d\n" , ((1000 / repspeed)-2)*32/30);
+	//printf("%d\n", 1000 / (2+(((FXint)(FXival)ptr)*30/32)) );
 	apply_btn->enable();
 	return 1;
 }
 
 long HelloWindow::onChangeRepDelay(FXObject* obj,FXSelector sel, void* ptr) {
+	printf("%d\n", 1250-250*(FXint)(FXival)ptr );
 	apply_btn->enable();
 	return 1;
 }
