@@ -1,12 +1,12 @@
 /* XPM */
 static char * titleAB_xpm[] = {
 "6 19 7 1",
-" 	c #7c7eaf",
-"n	c #6A6C99",
-"m	c #61638E",
-".	c #585A83",
-"p	c #46486D",
-"+	c #353757",
+" 	c #0a246a",
+"n	c #314D8B",
+"m	c #44629C",
+".	c #5877AD",
+"p	c #7FA0CE",
+"+	c #a6caf0",
 "@	c #d4d0c8",
 " nm.p+",
 " nm.p+",

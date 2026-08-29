@@ -187,3 +187,5 @@ netsurf.icon: iexplore
 
 WinMine.icon: winmine
 CrashHandler.I2KProject.ignoreTaskBar: 1
+
+KeyboardProperties.icon: keyboard

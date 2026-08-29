@@ -3,8 +3,8 @@ static char *maximizeI[] = {
 /* columns rows colors chars-per-pixel */
 "18 38 6 1 ",
 "  c #000000",
-". c #404040",
-"X c #808080",
+". c #403e3b",
+"X c #8b8984",
 "o c #c0c0c0",
 "O c #d4d0c8",
 "+ c #ffffff",

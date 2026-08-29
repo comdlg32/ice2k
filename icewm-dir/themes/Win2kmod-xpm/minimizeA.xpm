@@ -3,9 +3,9 @@ static char *minimizeA[] = {
 /* columns rows colors chars-per-pixel */
 "18 38 6 1 ",
 "  c #000000",
-". c #404040",
-"X c #808080",
-"o c #353757",
+". c #403e3b",
+"X c #8b8984",
+"o c #a6caf0",
 "O c #d4d0c8",
 "+ c #ffffff",
 /* pixels */

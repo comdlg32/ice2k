@@ -44,7 +44,7 @@ ColorNormalBorder="#d4d0c8"
 ColorDialog="#d4d0c8"
 ColorListBox="#ffffff"
 ColorListBoxText="#000000"
-ColorListBoxSelection="#4d4f7d"
+ColorListBoxSelection="#0a2368"
 ColorListBoxSelectionText="#ffffff"
 ColorScrollBar="#d4d0c8"
 ColorScrollBarSlider="#d4d0c8"
@@ -54,10 +54,10 @@ ColorLabel="#d4d0c8"
 ColorLabelText="#000000"
 
 ColorNormalMenu="#d4d0c8"
-ColorActiveMenuItem="#404040"
+ColorActiveMenuItem="#403e3b"
 ColorNormalMenuItemText="#000000"
 ColorActiveMenuItemText="#ffffff"
-ColorDisabledMenuItemText="#808080"
+ColorDisabledMenuItemText="#8b8984"
 
 ColorDefaultTaskBar="#d4d0c8"
 ColorNormalTaskBarApp="#d4d0c8"
@@ -78,9 +78,9 @@ ColorMoveSizeStatus="#d4d0c8"
 ColorMoveSizeStatusText="#000000"
 ColorQuickSwitch="#d4d0c8"
 ColorQuickSwitchText="#000000"
-ColorQuickSwitchActive="#4d4f7d"
+ColorQuickSwitchActive="#0a2368"
 
-ColorActiveWorkspaceButton="#4d4f7d"
+ColorActiveWorkspaceButton="#0a2368"
 ColorActiveWorkspaceButtonText="#ffffff"
 
 #PreferFreetypeFonts=1
@@ -145,5 +145,6 @@ MenuButtonIconVertOffset=-1
 #TaskBarEdgeTop=5
 #TaskBarEdgeBottom=5
 
-TitleBarHorzOffset=1
+TitleBarHorzOffset=0
+TitleBarHorzOffsetNoIcon=2
 TitleBarVertOffset=0
