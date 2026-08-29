@@ -1,5 +1,8 @@
+#include <X11/Xlib.h>
+
 #include <fx.h>
-// #include <ice2k/comctl32.h>
+#define PSEP PATHSEPSTRING
+#include <ice2k/comctl32.h>
 
 #include "res/foxres.h"
 
@@ -7,6 +10,8 @@ FXIcon* mainIcon;
 
 FXIcon* ico_rdelay;
 FXIcon* ico_rrate;
+
+FXSettings kbdsettings;
 
 FXuint blink_speed = 500;
 int blink_inv = 1;
@@ -33,6 +38,7 @@ private:
 	FXSlider* rrate_sld;
 
 	FXPacker* test_cnt;
+	FXTextField* test_txt;
 
 	FXGroupBox* blink_grp;
 	FXPacker* blink_cnt;
@@ -81,6 +87,7 @@ public:
 	HelloWindow(FXApp* a);
 
 	virtual void create();
+	void setFocus() {};
 	virtual ~HelloWindow();
 };
 
@@ -150,7 +157,7 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 	new FXLabel(test_cnt, "Click here and hold down a key to &test repeat rate:", NULL, LABEL_NORMAL, 0,0,0,0, 1,1,1,2);
 
-	new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
+	test_txt = new FXTextField(test_cnt, 10, NULL, 0, LAYOUT_FILL_X|TEXTFIELD_NORMAL, 0,0,0,0, 2,2,1,4);
 
 	blink_grp = new FXGroupBox(speed_cnt, "Cursor blink rate", FRAME_GROOVE|LAYOUT_FILL_X, 0,0,0,0, 17,17,9,18-4, 16,20);
 
@@ -182,7 +189,6 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	apply_btn->disable();
 
 
-
 	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 
 	//new FXSlider(repeatgrp);
@@ -194,6 +200,7 @@ HelloWindow::~HelloWindow() {
 
 void HelloWindow::create() {
 	FXMainWindow::create();
+	test_txt->setFocus();
 
 	show(PLACEMENT_SCREEN);
 }
@@ -218,7 +225,9 @@ long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
 }
 long HelloWindow::onChangeRepSpeed(FXObject* obj,FXSelector sel, void* ptr) {
 	int repspeed = 1000 / (2+(((FXint)(FXival)ptr)*30/32));
-	printf("%d\n" , ((1000 / repspeed)-2)*32/30);
+	//printf("%d\n" , ((1000 / repspeed)-2)*32/30);
+	printf("%d\n" , repspeed);
+
 	//printf("%d\n", 1000 / (2+(((FXint)(FXival)ptr)*30/32)) );
 	apply_btn->enable();
 	return 1;
@@ -246,6 +255,15 @@ long HelloWindow::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
 
 
 long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
+	FXString kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
+	//kbdsettings.parseFile(kbdfile);
+
+	kbdsettings.writeIntEntry("Keyboard", "KeyboardSpeed", rrate_sld->getValue()-1);
+	kbdsettings.writeIntEntry("Keyboard", "KeyboardDelay", 4-rdelay_sld->getValue());
+
+	kbdsettings.unparseFile(kbdfile);
+	kbdsettings.clear();
+
 	apply_btn->disable();
 	return 1;
 }
