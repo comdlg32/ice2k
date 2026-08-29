@@ -10,9 +10,6 @@ FXIcon* mainIcon;
 
 FXIcon* ico_rdelay;
 FXIcon* ico_rrate;
-
-FXSettings kbdsettings;
-
 FXuint blink_speed = 500;
 int blink_inv = 1;
 
@@ -188,6 +185,16 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 
 	apply_btn->disable();
 
+	FXSettings kbdsettings;
+
+	FXString kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
+	kbdsettings.parseFile(kbdfile, 0);
+
+	rrate_sld ->setValue(kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15)+1);
+	rdelay_sld->setValue(4-kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  0));
+
+	kbdsettings.clear();
+
 
 	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 
@@ -255,16 +262,36 @@ long HelloWindow::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
 
 
 long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
-	FXString kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
-	//kbdsettings.parseFile(kbdfile);
+	bool modified = getApp()->reg().isModified();
+	FXSettings kbdsettings;
 
-	kbdsettings.writeIntEntry("Keyboard", "KeyboardSpeed", rrate_sld->getValue()-1);
-	kbdsettings.writeIntEntry("Keyboard", "KeyboardDelay", 4-rdelay_sld->getValue());
+	FXString kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
+
+	kbdsettings.writeUnsignedEntry("Keyboard", "KeyboardSpeed", rrate_sld->getValue()-1);
+	kbdsettings.writeUnsignedEntry("Keyboard", "KeyboardDelay", 4-rdelay_sld->getValue());
 
 	kbdsettings.unparseFile(kbdfile);
 	kbdsettings.clear();
 
+	getApp()->setBlinkSpeed(blink_speed);
+	getApp()->reg().deleteEntry("SETTINGS", "blinkspeed");
+	getApp()->reg().setModified(modified);
+
 	apply_btn->disable();
+
+
+	FXSettings settings;
+
+	FXString desktopfile = FXSystem::getHomeDirectory()+PATHSEPSTRING+".foxrc"+PATHSEPSTRING+"Desktop";
+	if (FXStat::exists(desktopfile)) {
+		settings.parseFile(desktopfile, TRUE);
+	}
+
+	settings.writeUnsignedEntry("SETTINGS", "blinkspeed", blink_speed);
+
+	settings.unparseFile(desktopfile);
+	settings.clear();
+
 	return 1;
 }
 
@@ -311,7 +338,8 @@ int main(int argc, char *argv[]) {
 	ico_rdelay = new FXGIFIcon(&application, resico_rdelay);
 	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
 
-	blink_speed = application.reg().readUnsignedEntry("SETTINGS", "blinkspeed", blink_speed);
+	blink_speed = application.getBlinkSpeed();
+	//blink_speed = application.reg().readUnsignedEntry("SETTINGS", "blinkspeed", blink_speed);
 
 	new HelloWindow(&application);
 
