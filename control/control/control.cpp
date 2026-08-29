@@ -39,6 +39,8 @@ FXIcon* ico_exp_throbber;
 
 FXIcon* ico_arrow;
 
+FXIcon* ico_admin_16;
+FXIcon* ico_admin_32;
 FXIcon* ico_appwiz_16;
 FXIcon* ico_appwiz_32;
 FXIcon* ico_desk_16;
@@ -135,12 +137,14 @@ int winsaved = 0;
 #define CPL_ID_INETCPL   12
 #define CPL_ID_PRINTERS  13
 #define CPL_ID_DEVMGMT   14
+#define CPL_ID_ADMIN     15
 
 
 #define SHF_ID_EXPLORER 1
 #define SHF_ID_CONTROL 2
 #define SHF_ID_NCPA 3
 #define SHF_ID_FONTS 4
+#define SHF_ID_ADMIN 5
 
 int shellfolder = SHF_ID_CONTROL;
 
@@ -396,6 +400,14 @@ int changeTitle() {
 			addressicon->setIcon(ico_fonts_16);
 			break;
 
+		case SHF_ID_ADMIN:
+			controlwin->setTitle("Administrative Tools");
+			address->setText("Administrative Tools");
+			controlwin->setIcon(ico_admin_16);
+			addressicon->setIcon(ico_admin_16);
+			break;
+
+
 		default:
 			break;
 	}
@@ -416,6 +428,8 @@ void controlPanelList(FXIconList* icl) {
 	icl->appendHeader("Comment", NULL, 300);
 
 	icl->appendItem("Add/Remove\tInstalls and removes programs", ico_appwiz_32, ico_appwiz_16, (void*)CPL_ID_APPWIZ);
+	icl->appendItem("Administrative Tools\tConfigure administrative settings for your computer.", ico_admin_32, ico_admin_16, (void*)CPL_ID_ADMIN);
+
 	icl->appendItem("Controllers\tAdds, removes, and configures game controller hardware such as joysticks and gamepads", ico_joy_32, ico_joy_16, (void*)CPL_ID_JOY);
 	icl->appendItem("Date/Time\tSets the date, time, and time zone for your computer", ico_timedate_32, ico_timedate_16, (void*)CPL_ID_TIMEDATE);
 	//icl->appendItem("Device Manager\tThe Device Manager lists all the hardware devices installed on your computer", ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
@@ -429,6 +443,22 @@ void controlPanelList(FXIconList* icl) {
 	icl->appendItem("Network Connections\tConnects to other computers, networks, and the Internet", ico_ncpa_32, ico_ncpa_16, (void*)CPL_ID_NCPA);
 	icl->appendItem("Power\tConfigures energy-saving settings for your computer", ico_powercfg_32, ico_powercfg_16, (void*)CPL_ID_POWERCFG);
 	icl->appendItem("System\tProvides system information and changes environment settings", ico_sysdm_32, ico_sysdm_16, (void*)CPL_ID_SYSDM);
+}
+
+void adminList(FXIconList* icl) {
+	icl->clearItems();
+
+	shellfolder = SHF_ID_ADMIN;
+	changeTitle();
+
+	icl->setHeaders(NULL, 0);
+	icl->appendHeader("Name", NULL, 150);
+	icl->appendHeader("Comment", NULL, 300);
+
+	icl->appendItem("Device Manager\t"
+			"You can use Device Manager to view a list of hardware"
+			"devices installed on your computer.",
+			ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
 }
 
 
@@ -648,6 +678,7 @@ void fontsList(FXIconList* icl) {
 }
 
 
+
 void ncpaList(FXIconList* icl) {
 	icl->clearItems();
 
@@ -735,6 +766,10 @@ long ControlPanel::switchFolder(int folder) {
 			shellfolder = SHF_ID_FONTS;
 			fontsList(iconlist);
 			break;
+		case SHF_ID_ADMIN:
+			shellfolder = SHF_ID_ADMIN;
+			adminList(iconlist);
+			break;
 		default:
 			fputs("Invalid shell folder!\n", stderr);
 			return 0;
@@ -776,11 +811,10 @@ long ControlPanel::onCmdUp(FXObject*,FXSelector,void*) {
 			switchFolderHist(SHF_ID_EXPLORER);
 			break;
 		case SHF_ID_NCPA:
+		case SHF_ID_FONTS:
+		case SHF_ID_ADMIN:
 			switchFolderHist(SHF_ID_CONTROL);
 			break;
-		case SHF_ID_FONTS:
-			switchFolderHist(SHF_ID_CONTROL);
-			break;			
 		default:
 			break;
 	}
@@ -838,6 +872,9 @@ int ControlPanel::runCpl(int cpl) {
 		case CPL_ID_JOY:
 			system("jstest-gtk &");
 			break;
+		case CPL_ID_ADMIN:
+			switchFolderHist(SHF_ID_ADMIN);
+			break;
 		case CPL_ID_FONTS:
 			//system("yad --font --window-icon font-x-generic --title Fonts --borders=12 --no-buttons --width=500 --height=350 --center &");
 			switchFolderHist(SHF_ID_FONTS);
@@ -852,7 +889,7 @@ int ControlPanel::runCpl(int cpl) {
 			system("pkexec xterm -e pppconfig &");
 			break;
 		case CPL_ID_MMSYS:
-			system("fxmixer &");
+			system("xterm -e alsamixer &");
 			break;
 		case CPL_ID_NCPA:
 			/*system("~/.icewm/programs/control/cpls-bin/ncpa/ncpa &");*/
@@ -885,6 +922,7 @@ long ControlPanel::onCplActivate(FXObject*,FXSelector,void* ptr) {
 	char fontname[1024] = {0};
 
 	switch(shellfolder) {
+		case SHF_ID_ADMIN:
 		case SHF_ID_CONTROL:
 			runCpl((int)(FXival)iconlist->getItemData((FXival)ptr));
 			break;
@@ -1189,6 +1227,8 @@ int main(int argc, char *argv[]) {
 	if (!strcmp(winver, "xp")) {
 		xpmode = 1;
 
+		ico_admin_16 = loadPNGIcon(app, resico_xp_admin_16);
+		ico_admin_32 = loadPNGIcon(app, resico_xp_admin_32);
 		ico_appwiz_16 = loadPNGIcon(app, resico_xp_appwiz_16);
 		ico_appwiz_32 = loadPNGIcon(app, resico_xp_appwiz_32);
 		ico_desk_16 = loadPNGIcon(app, resico_xp_desk_16);
@@ -1259,6 +1299,8 @@ int main(int argc, char *argv[]) {
 	} else {
 		xpmode = 0;
 
+		ico_admin_16 = loadPNGIcon(app, resico_2k_admin_16);
+		ico_admin_32 = loadPNGIcon(app, resico_2k_admin_32);
 		ico_appwiz_16 = loadPNGIcon(app, resico_2k_appwiz_16);
 		ico_appwiz_32 = loadPNGIcon(app, resico_2k_appwiz_32);
 		ico_desk_16 = loadPNGIcon(app, resico_2k_desk_16);
@@ -1328,21 +1370,23 @@ int main(int argc, char *argv[]) {
 		delete ico_exp_views2;
 	}
 
-	//ico_devmgmt_32 = loadPNGIcon(app, resico_devmgmt_32);
-	//ico_devmgmt_16 = loadPNGIcon(app, resico_devmgmt_16);
+	ico_devmgmt_32 = loadPNGIcon(app, resico_devmgmt_32);
+	ico_devmgmt_16 = loadPNGIcon(app, resico_devmgmt_16);
 	
 	char* ncpastr;
+
+	if (argv[1] != NULL) {
+		if (strcmp(argv[1], "fonts") == 0) {
+			shellfolder = SHF_ID_FONTS;
+		} else if (strcmp(argv[1], "admintools") == 0) {
+			shellfolder = SHF_ID_ADMIN;
+		}
+	}
 
 	if (argv[0] != NULL) {
 		ncpastr = strstr(argv[0], "ncpa.cpi");
 		if (ncpastr != NULL && strlen(ncpastr) == sizeof("ncpa.cpi")-1) {
 			shellfolder = SHF_ID_NCPA;
-		}
-	}
-
-	if (argv[1] != NULL) {
-		if (strcmp(argv[1], "fonts") == 0) {
-			shellfolder = SHF_ID_FONTS;
 		}
 	}
 

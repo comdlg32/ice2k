@@ -194,8 +194,8 @@ KeyboardProperties::KeyboardProperties(FXApp *a) : FXMainWindow(a, "Keyboard Pro
 
 	apply_btn->disable();
 	
-	rrate_sld ->setValue(1+kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15));
-	rdelay_sld->setValue(4-kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  0));
+	rrate_sld ->setValue(1+kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 20));
+	rdelay_sld->setValue(4-kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  1));
 
 
 	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
@@ -209,8 +209,8 @@ KeyboardProperties::~KeyboardProperties() {
 		kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
 		kbdsettings.parseFile(kbdfile, 0);
 
-		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15);
-		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay", 0);
+		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 20);
+		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  1);
 
 		if (kbd_delay > 3) {
 			kbd_delay = 3;
@@ -373,8 +373,8 @@ int main(int argc, char *argv[]) {
 		kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
 		kbdsettings.parseFile(kbdfile, 0);
 
-		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15);
-		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay", 0);
+		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 20);
+		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay", 1);
 
 		if (kbd_delay > 3) {
 			kbd_delay = 3;
