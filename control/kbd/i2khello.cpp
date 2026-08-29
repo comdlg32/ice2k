@@ -1,4 +1,5 @@
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>
 
 #include <fx.h>
 #define PSEP PATHSEPSTRING
@@ -11,6 +12,12 @@ FXIcon* mainIcon;
 FXIcon* ico_rdelay;
 FXIcon* ico_rrate;
 FXuint blink_speed = 500;
+
+FXSettings kbdsettings;
+
+FXString kbdfile;
+
+
 int blink_inv = 1;
 
 class HelloWindow : public FXMainWindow {
@@ -184,16 +191,9 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	apply_btn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
 
 	apply_btn->disable();
-
-	FXSettings kbdsettings;
-
-	FXString kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
-	kbdsettings.parseFile(kbdfile, 0);
-
-	rrate_sld ->setValue(kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15)+1);
+	
+	rrate_sld ->setValue(1+kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15));
 	rdelay_sld->setValue(4-kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  0));
-
-	kbdsettings.clear();
 
 
 	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
@@ -330,9 +330,36 @@ long HelloWindow::onTimeoutBlinkAnim(FXObject*, FXSelector, void*) {
 }
 
 int main(int argc, char *argv[]) {
-	FXApp application("Hello", "I2KTest");
+	Display* dpy;
+	FXApp application("KeyboardProperties", "I2KProject");
 	
 	application.init(argc, argv);
+
+	if ((dpy = (Display*)application.getDisplay())) {
+		kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
+		kbdsettings.parseFile(kbdfile, 0);
+
+		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15);
+		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay", 0);
+
+		if (kbd_delay > 3) {
+			kbd_delay = 3;
+		}
+
+		if (kbd_speed > 31) {
+			kbd_speed = 31;
+		}
+
+		kbd_delay = 250+250*kbd_delay;
+		kbd_speed = 1000 / (2+(kbd_speed*30/32));
+		
+		XkbSetAutoRepeatRate(dpy, XkbUseCoreKbd, kbd_delay, kbd_speed);
+	}
+
+	if (argv[1] != NULL && (strcmp(argv[1], "-a") == 0)) {
+		application.exit();
+		return 0;
+	}
 
 	ico_rrate = new FXGIFIcon(&application, resico_rrate);
 	ico_rdelay = new FXGIFIcon(&application, resico_rdelay);
