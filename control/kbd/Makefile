@@ -9,10 +9,10 @@ LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
-SOURCES = i2khello.cpp
-OBJECTS = i2khello.o res/foxres.o
+SOURCES = keyboard.cpp
+OBJECTS = keyboard.o res/foxres.o
 ICONS = res/*.gif
-EXECUTABLE = i2khello
+EXECUTABLE = keyboard.cpi
 
 CPPFLAGS += `fox-config --cflags`
 

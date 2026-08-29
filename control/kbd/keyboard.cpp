@@ -7,6 +7,8 @@
 
 #include "res/foxres.h"
 
+Display* dpy = NULL;
+
 FXIcon* mainIcon;
 
 FXIcon* ico_rdelay;
@@ -20,11 +22,11 @@ FXString kbdfile;
 
 int blink_inv = 1;
 
-class HelloWindow : public FXMainWindow {
-	FXDECLARE(HelloWindow);
+class KeyboardProperties : public FXMainWindow {
+	FXDECLARE(KeyboardProperties);
 
 protected:
-	HelloWindow() {}
+	KeyboardProperties() {}
 
 private:
 	FXVerticalFrame* cont;
@@ -88,35 +90,35 @@ public:
 	};
 
 public:
-	HelloWindow(FXApp* a);
+	KeyboardProperties(FXApp* a);
 
 	virtual void create();
 	void setFocus() {};
-	virtual ~HelloWindow();
+	virtual ~KeyboardProperties();
 };
 
-FXDEFMAP(HelloWindow) HelloWindowMap[] = {
-	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_OK, HelloWindow::onCmdDialogOK),
-	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_APPLY, HelloWindow::onCmdDialogApply),
-	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_DLG_CANCEL, HelloWindow::onCmdDialogCancel),
+FXDEFMAP(KeyboardProperties) KeyboardPropertiesMap[] = {
+	FXMAPFUNC(SEL_COMMAND, KeyboardProperties::ID_DLG_OK, KeyboardProperties::onCmdDialogOK),
+	FXMAPFUNC(SEL_COMMAND, KeyboardProperties::ID_DLG_APPLY, KeyboardProperties::onCmdDialogApply),
+	FXMAPFUNC(SEL_COMMAND, KeyboardProperties::ID_DLG_CANCEL, KeyboardProperties::onCmdDialogCancel),
 
-	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_DELAY, HelloWindow::onChangeRepDelay),
+	FXMAPFUNC(SEL_CHANGED, KeyboardProperties::ID_REPEAT_DELAY, KeyboardProperties::onChangeRepDelay),
 
-	FXMAPFUNC(SEL_COMMAND, HelloWindow::ID_REPEAT_SPEED, HelloWindow::onChangeRepSpeed),
-	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_REPEAT_SPEED, HelloWindow::onChangeRepSpeed),
+	FXMAPFUNC(SEL_COMMAND, KeyboardProperties::ID_REPEAT_SPEED, KeyboardProperties::onChangeRepSpeed),
+	FXMAPFUNC(SEL_CHANGED, KeyboardProperties::ID_REPEAT_SPEED, KeyboardProperties::onChangeRepSpeed),
 
-	FXMAPFUNC(SEL_CHANGED, HelloWindow::ID_BLINK, HelloWindow::onChangeBlink),
+	FXMAPFUNC(SEL_CHANGED, KeyboardProperties::ID_BLINK, KeyboardProperties::onChangeBlink),
 
-	FXMAPFUNC(SEL_PAINT,             HelloWindow::ID_BLINK_ANIM,  HelloWindow::onPaintBlinkAnim),
-	FXMAPFUNC(SEL_TIMEOUT,           HelloWindow::ID_BLINK_ANIM,  HelloWindow::onTimeoutBlinkAnim),
+	FXMAPFUNC(SEL_PAINT,             KeyboardProperties::ID_BLINK_ANIM,  KeyboardProperties::onPaintBlinkAnim),
+	FXMAPFUNC(SEL_TIMEOUT,           KeyboardProperties::ID_BLINK_ANIM,  KeyboardProperties::onTimeoutBlinkAnim),
 
-	//FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
+	//FXMAPFUNC(SEL_COMMAND,           KeyboardProperties::ID_HELLO,  KeyboardProperties::onCmdHello),
 
 };
 
-FXIMPLEMENT(HelloWindow, FXMainWindow, HelloWindowMap, ARRAYNUMBER(HelloWindowMap));
+FXIMPLEMENT(KeyboardProperties, FXMainWindow, KeyboardPropertiesMap, ARRAYNUMBER(KeyboardPropertiesMap));
 
-HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", mainIcon, NULL, DECOR_CLOSE|DECOR_BORDER|DECOR_TITLE, 0,0,0,0, 0,0,2,3, 0,6) {
+KeyboardProperties::KeyboardProperties(FXApp *a) : FXMainWindow(a, "Keyboard Properties", mainIcon, NULL, DECOR_CLOSE|DECOR_BORDER|DECOR_TITLE, 0,0,0,0, 0,0,2,3, 0,6) {
 	cont = new FXVerticalFrame(this, LAYOUT_FILL_Y|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 0,0);
 	
 	tabbook = new FXTabBook(cont, NULL, 0, TABBOOK_NORMAL|LAYOUT_FILL, 0,0,0,0, 6,6,5,5);
@@ -202,17 +204,39 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Keyboard Properties", main
 	
 }
 
-HelloWindow::~HelloWindow() {
+KeyboardProperties::~KeyboardProperties() {
+	if (dpy != NULL) {
+		kbdfile = FXSystem::getHomeDirectory()+PSEP+".icewm"+PSEP+"cfg"+PSEP+"keyboard.ini";
+		kbdsettings.parseFile(kbdfile, 0);
+
+		FXuint kbd_speed = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardSpeed", 15);
+		FXuint kbd_delay = kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay", 0);
+
+		if (kbd_delay > 3) {
+			kbd_delay = 3;
+		}
+
+		if (kbd_speed > 31) {
+			kbd_speed = 31;
+		}
+
+		kbd_delay = 250+250*kbd_delay;
+		kbd_speed = 1000 / (2+(kbd_speed*30/32));
+		
+		XkbSetAutoRepeatRate(dpy, XkbUseCoreKbd, kbd_delay, kbd_speed);
+	}
+
+	//puts("Goodbye!");
 }
 
-void HelloWindow::create() {
+void KeyboardProperties::create() {
 	FXMainWindow::create();
 	test_txt->setFocus();
 
 	show(PLACEMENT_SCREEN);
 }
 
-long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
+long KeyboardProperties::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
 	if ((FXint)(FXival)ptr == 1) {
 		blink_speed = -1;
 		getApp()->removeTimeout(this, ID_BLINK_ANIM);
@@ -221,7 +245,7 @@ long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
 	} else {
 		blink_speed = 1400 - (FXint)(FXival)ptr*100;
 		getApp()->removeTimeout(this, ID_BLINK_ANIM);
-		printf("%d\n", blink_speed);
+		//printf("%d\n", blink_speed);
 		getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);	
 
 	}
@@ -230,38 +254,49 @@ long HelloWindow::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
 	apply_btn->enable();
 	return 1;
 }
-long HelloWindow::onChangeRepSpeed(FXObject* obj,FXSelector sel, void* ptr) {
-	int repspeed = 1000 / (2+(((FXint)(FXival)ptr)*30/32));
-	//printf("%d\n" , ((1000 / repspeed)-2)*32/30);
-	printf("%d\n" , repspeed);
+long KeyboardProperties::onChangeRepSpeed(FXObject* obj,FXSelector sel, void* ptr) {
+	//printf("%d\n", 1000 / (2+(rrate_sld->getValue())*30/32));
+	if (dpy != NULL) {
+		XkbSetAutoRepeatRate(dpy, XkbUseCoreKbd,
+				1250-250*(rdelay_sld->getValue()),
+				1000 / (2+(rrate_sld->getValue())*30/32) );
+	}
 
-	//printf("%d\n", 1000 / (2+(((FXint)(FXival)ptr)*30/32)) );
+
 	apply_btn->enable();
 	return 1;
 }
 
-long HelloWindow::onChangeRepDelay(FXObject* obj,FXSelector sel, void* ptr) {
-	printf("%d\n", 1250-250*(FXint)(FXival)ptr );
+long KeyboardProperties::onChangeRepDelay(FXObject* obj,FXSelector sel, void* ptr) {
+	//printf("%d\n", 1250-250*(FXint)(FXival)ptr );
+
+	if (dpy != NULL) {
+		XkbSetAutoRepeatRate(dpy, XkbUseCoreKbd,
+				1250-250*(rdelay_sld->getValue()),
+				1000 / (2+(rrate_sld->getValue())*30/32) );
+	}
+
 	apply_btn->enable();
 	return 1;
 }
 
 
 
-long HelloWindow::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
+long KeyboardProperties::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
 	onCmdDialogApply(obj, sel, ptr);
 	getApp()->exit();
 	return 1;
 }
 
 
-long HelloWindow::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
+long KeyboardProperties::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
 	getApp()->exit(1);
 	return 1;
 }
 
 
-long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
+long KeyboardProperties::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
+	//puts("Saving...");
 	bool modified = getApp()->reg().isModified();
 	FXSettings kbdsettings;
 
@@ -295,7 +330,7 @@ long HelloWindow::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
 	return 1;
 }
 
-long HelloWindow::onPaintBlinkAnim(FXObject* obj, FXSelector, void* ptr) {
+long KeyboardProperties::onPaintBlinkAnim(FXObject* obj, FXSelector, void* ptr) {
 	FXWindow* win = (FXWindow*)obj;
 	FXEvent* ev = (FXEvent*)ptr;
 	
@@ -322,7 +357,7 @@ long HelloWindow::onPaintBlinkAnim(FXObject* obj, FXSelector, void* ptr) {
 	return 1;
 }
 
-long HelloWindow::onTimeoutBlinkAnim(FXObject*, FXSelector, void*) {
+long KeyboardProperties::onTimeoutBlinkAnim(FXObject*, FXSelector, void*) {
 	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 	blink_inv =! blink_inv;
 	blink_cvs->update();
@@ -330,7 +365,6 @@ long HelloWindow::onTimeoutBlinkAnim(FXObject*, FXSelector, void*) {
 }
 
 int main(int argc, char *argv[]) {
-	Display* dpy;
 	FXApp application("KeyboardProperties", "I2KProject");
 	
 	application.init(argc, argv);
@@ -363,12 +397,12 @@ int main(int argc, char *argv[]) {
 
 	ico_rrate = new FXGIFIcon(&application, resico_rrate);
 	ico_rdelay = new FXGIFIcon(&application, resico_rdelay);
-	mainIcon = new FXGIFIcon(&application, resico_mainicon, 0, IMAGE_OPAQUE);
+	mainIcon = new FXGIFIcon(&application, resico_mainicon);
 
 	blink_speed = application.getBlinkSpeed();
 	//blink_speed = application.reg().readUnsignedEntry("SETTINGS", "blinkspeed", blink_speed);
 
-	new HelloWindow(&application);
+	new KeyboardProperties(&application);
 
 	application.create();
 	return application.run();

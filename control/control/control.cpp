@@ -421,7 +421,7 @@ void controlPanelList(FXIconList* icl) {
 	//icl->appendItem("Device Manager\tThe Device Manager lists all the hardware devices installed on your computer", ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
 	icl->appendItem("Display\tCustomizes your desktop display and screen saver", ico_desk_32, ico_desk_16, (void*)CPL_ID_DESK);
 	icl->appendItem("Fonts\tDisplays and manages fonts on your computer", ico_fonts_32, ico_fonts_16, (void*)CPL_ID_FONTS);
-	icl->appendItem("Input\tCustomizes your keyboard and mouse settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
+	icl->appendItem("Keyboard\tCustomizes your keyboard settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
 	icl->appendItem("Internet\tCustomizes your Internet display and connections settings", ico_inetcpl_32, ico_inetcpl_16, (void*)CPL_ID_INETCPL);
 	icl->appendItem("Modems\tConfigures your modem properties", ico_modem_32, ico_modem_16, (void*)CPL_ID_MODEM);
 	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
@@ -843,7 +843,7 @@ int ControlPanel::runCpl(int cpl) {
 			switchFolderHist(SHF_ID_FONTS);
 			break;
 		case CPL_ID_KEYB:
-			system("lxinput &");
+			system("keyboard.cpi &");
 			break;
 		case CPL_ID_INETCPL:
 			system("firefox about:preferences &");

@@ -5,6 +5,8 @@ xrdb -merge ~/.icewm/xrescolors
 xrdb -merge ~/.icewm/xrdb/xlock
 xrdb -merge ~/.Xresources
 
+keyboard.cpi -a &
+
 #~/.icewm/programs/volumecontrol/volume &
 
 read deskiconson < ~/.icewm/cfg/desk/deskiconson
