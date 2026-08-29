@@ -34,7 +34,7 @@ libpng-dev libfontconfig1-dev libxinerama-dev libfribidi-dev libimlib2-dev xterm
 x11-utils xinit intltool intltool-debian libxcb-util-dev libx11-xcb-dev \
 build-essential libfox-1.6-dev psmisc libxtst-dev libserialport-dev \
 libpci-dev feh tk imagemagick tk-tktray xxkb x11-xserver-utils \
-bc alsa-utils xfonts-cronyx* idesk gtk2-engines libxt-dev xidle \
+bc alsa-utils xfonts-cronyx* idesk gtk2-engines libxt-dev xidle libasound2-dev \
 || exit
 
 
