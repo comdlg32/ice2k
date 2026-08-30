@@ -435,13 +435,13 @@ void controlPanelList(FXIconList* icl) {
 	//icl->appendItem("Device Manager\tThe Device Manager lists all the hardware devices installed on your computer", ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
 	icl->appendItem("Display\tCustomizes your desktop display and screen saver", ico_desk_32, ico_desk_16, (void*)CPL_ID_DESK);
 	icl->appendItem("Fonts\tDisplays and manages fonts on your computer", ico_fonts_32, ico_fonts_16, (void*)CPL_ID_FONTS);
-	icl->appendItem("Keyboard\tCustomizes your keyboard settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
 	icl->appendItem("Internet\tCustomizes your Internet display and connections settings", ico_inetcpl_32, ico_inetcpl_16, (void*)CPL_ID_INETCPL);
+	icl->appendItem("Keyboard\tCustomizes your keyboard settings", ico_keyb_32, ico_keyb_16, (void*)CPL_ID_KEYB);
 	icl->appendItem("Modems\tConfigures your modem properties", ico_modem_32, ico_modem_16, (void*)CPL_ID_MODEM);
-	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
-	icl->appendItem("Sound\tConfigures sound devices", ico_mmsys_32, ico_mmsys_16, (void*)CPL_ID_MMSYS);
 	icl->appendItem("Network Connections\tConnects to other computers, networks, and the Internet", ico_ncpa_32, ico_ncpa_16, (void*)CPL_ID_NCPA);
 	icl->appendItem("Power\tConfigures energy-saving settings for your computer", ico_powercfg_32, ico_powercfg_16, (void*)CPL_ID_POWERCFG);
+	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
+	icl->appendItem("Sound\tConfigures sound devices", ico_mmsys_32, ico_mmsys_16, (void*)CPL_ID_MMSYS);
 	icl->appendItem("System\tProvides system information and changes environment settings", ico_sysdm_32, ico_sysdm_16, (void*)CPL_ID_SYSDM);
 }
 
