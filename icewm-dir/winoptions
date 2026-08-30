@@ -189,3 +189,5 @@ WinMine.icon: winmine
 CrashHandler.I2KProject.ignoreTaskBar: 1
 
 KeyboardProperties.icon: keyboard
+
+hotplug.icon: hotplug

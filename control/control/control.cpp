@@ -456,7 +456,7 @@ void adminList(FXIconList* icl) {
 	icl->appendHeader("Comment", NULL, 300);
 
 	icl->appendItem("Device Manager\t"
-			"You can use Device Manager to view a list of hardware"
+			"You can use Device Manager to view a list of hardware "
 			"devices installed on your computer.",
 			ico_devmgmt_32, ico_devmgmt_16, (void*)CPL_ID_DEVMGMT);
 }
@@ -1170,6 +1170,9 @@ ControlPanel::ControlPanel(FXApp *app):FXMainWindow(app, "Control Panel", ico_co
 	new FXMenuRadio(viewmenu,"&Columns",iconlist,FXIconList::ID_ARRANGE_BY_COLUMNS);
 
 	iconlist->setItemSpace(76);
+
+	iconlist->getHeader()->setPadTop(0);
+	iconlist->getHeader()->setPadBottom(0);
 
 	/*switch(shellfolder) {
 		case SHF_ID_CONTROL:

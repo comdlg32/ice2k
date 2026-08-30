@@ -4,11 +4,11 @@ CC = g++
 
 CFLAGS = -Wall -c -fno-rtti -fno-exceptions -g
 CPPFLAGS = -Wall -c -fno-rtti -fno-exceptions -g
-LDFLAGS = `fox-config --libs` -lctl32 -lpci -lXrandr -lXi -lserialport -li2kbrand
+LDFLAGS = `fox-config --libs` -lctl32 -li2kbrand
 
 PREFIX=/usr/local
 
-ICONS = res/*/*.gif res/*.gif res/*.bmp
+ICONS = res/*/*.png res/*.png
 SOURCES = hotplug.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = i2khotplug
