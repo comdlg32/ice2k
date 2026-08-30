@@ -40,6 +40,8 @@ private:
 	FXPacker* pass_cnt;
 	FXGroupBox* pass_grp;
 
+	FXText* pass_box;
+
 public:
 	long onCmdHello(FXObject*, FXSelector, void*);
 
@@ -161,9 +163,15 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 
 
 	pass_cnt = new FXPacker(userscont, LAYOUT_FILL_X, 0,0,0,0, 2,2,6,1);
-	pass_grp = new FXGroupBox(pass_cnt, "Password for tf", LAYOUT_FILL_X|FRAME_GROOVE, 0,0,0,0, 9,10,5,11, 3,13);
+	pass_grp = new FXGroupBox(pass_cnt, "Password for tf", LAYOUT_FILL_X|FRAME_GROOVE, 0,0,0,0, 9,10,5,11, 3,3);
 	new FXLabel(pass_grp, "", ico_user32, LAYOUT_SIDE_LEFT);
-	new FXLabel(pass_grp, "To change the password for tf, click Set Password.", NULL, LAYOUT_SIDE_TOP);
+	pass_box = new FXText(pass_grp, NULL, 0, LAYOUT_FILL_X|TEXT_WORDWRAP|VSCROLLER_NEVER|HSCROLLER_NEVER, 0,0,0,0, 0,0,0,0);
+	pass_box->disable();
+	pass_box->setBackColor(getApp()->getBaseColor());
+	pass_box->setDefaultCursor(getApp()->getDefaultCursor(DEF_ARROW_CURSOR));
+	pass_box->setVisibleRows(2);
+	pass_box->setText("To change the password for tf, click Set Password.");
+	//new FXLabel(pass_grp, "To change the password for tf, click Set Password.", NULL, LAYOUT_SIDE_TOP);
 	new FXButton(pass_grp, "Set &Password...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
 
 
