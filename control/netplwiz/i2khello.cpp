@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <fx.h>
 #include <ice2k/comctl32.h>
+#include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
 #include "res/foxres.h"
@@ -43,13 +44,16 @@ private:
 	FXText* pass_box;
 
 public:
+	long onCmdRemove(FXObject*, FXSelector, void*);
 	long onCmdHello(FXObject*, FXSelector, void*);
+
 
 public:
 	enum {
 		ID_DLG_OK = FXMainWindow::ID_LAST,
 		ID_DLG_CANCEL,
 		ID_DLG_APPLY,
+		ID_REMOVE,
 		ID_LAST
 	};
 
@@ -57,11 +61,12 @@ public:
 	UsersAndPasswords(FXApp* a);
 
 	virtual void create();
+	virtual void setFocus() {};
 	virtual ~UsersAndPasswords();
 };
 
 FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
-//	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_HELLO,  UsersAndPasswords::onCmdHello),
+	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,  UsersAndPasswords::onCmdRemove),
 };
 
 FXIMPLEMENT(UsersAndPasswords, FXMainWindow, UsersAndPasswordsMap, ARRAYNUMBER(UsersAndPasswordsMap));
@@ -158,7 +163,7 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	users_buttons = new FXHorizontalFrame(userscont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,2,0,0, 6,6);
 
 	new FXButton(users_buttons, "A&dd...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
-	new FXButton(users_buttons, "&Remove", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
+	new FXButton(users_buttons, "&Remove", NULL, this, ID_REMOVE, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 	new FXButton(users_buttons, "Pr&operties", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 
 
@@ -197,8 +202,29 @@ void UsersAndPasswords::create() {
 	show(PLACEMENT_SCREEN);
 }
 	
-long UsersAndPasswords::onCmdHello(FXObject*, FXSelector, void*) {
-	puts("Hello world!");
+long UsersAndPasswords::onCmdRemove(FXObject*, FXSelector, void*) {
+	char item[512];
+	char curuser[32];
+
+	uid_t uid = getuid();
+	struct passwd* pw = getpwuid(uid);
+	sprintf(item, "%.511s", users_list->getItem(users_list->getCurrentItem())->getText().text());
+
+	size_t len = strcspn(item, "\t");
+
+	if (pw != NULL) {
+		sprintf(curuser, "%.31s", pw->pw_name);
+	} else {
+		strcpy(curuser, "?");
+	}
+
+	if (strncmp(item, "root", len) == 0) {
+		FXMessageBox::error(this, MBOX_OK, "Error", "You cannot delete the root user!");
+	} else if (strncmp(item, curuser, len) == 0) {
+		FXMessageBox::error(this, MBOX_OK, "Error", "You cannot delete your own user!");
+	}
+
+	//puts("Hello world!");
 	return 1;
 }
 
