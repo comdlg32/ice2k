@@ -214,6 +214,7 @@ class ChangeHostnameBox : public FXDialogBox {
 		// Messages for our class
 		enum {
 			ID_ACCEPT=FXMainWindow::ID_LAST,
+			ID_CANCEL,
 			ID_LAST
 			//ID_SETFOCUS_T
 		};
@@ -334,13 +335,9 @@ FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOS
 
 	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
 
-	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT,
-			BUTTON_DEFAULT|BUTTON_INITIAL|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-			0, 0, 75, 23, 3, 3, 2, 3);
+	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
+	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
 
-	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL,
-			BUTTON_DEFAULT|FRAME_THICK|FRAME_RAISED|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-			0, 0, 75, 23, 3, 3, 2, 3);
 	//okbtn->setFocus();
 }
 
@@ -571,11 +568,11 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 	tabbook = new FXTabBook(generalframe,NULL,0,LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_RIGHT, 0,0,0,0, 6,6,7,6);
 
 
-	btncont = new FXHorizontalFrame(generalframe, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 6, 0, 7, 6, 0);
+	btncont = new FXHorizontalFrame(generalframe, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0, 0, 0, 0, 0, 6, 0, 7, 6, 0);
 
-	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-	applybtn = new FXButton(btncont, "&Apply", NULL, this, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
+	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
+	applybtn = new FXButton(btncont, "&Apply", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,19,2,3);
 	applybtn->disable();
 
 

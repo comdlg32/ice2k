@@ -180,11 +180,11 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	new FXButton(pass_grp, "Set &Password...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
 
 
-	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT, 0,0,0,0, 0,6,1,7, 6,0);
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,6,1,7, 6,0);
 
-	okbtn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
-	applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0, 0, 75, 23, 0, 0, 0, 0);
+	okbtn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
+	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
+	applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,19,2,3);
 
 	applybtn->disable();
 

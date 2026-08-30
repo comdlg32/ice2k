@@ -804,20 +804,20 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 	//FXIcon* ico_hist_up = new FXGIFIcon(app, resico_hist_up);
 	FXButton* btn;
 
-	btn = new FXButton(toolbar,"\tBack",ico_back,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(toolbar,"\tBack",ico_back,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 	btn->disable();
-	btn = new FXButton(toolbar,"\tForward",ico_forward,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(toolbar,"\tForward",ico_forward,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 	btn->disable();
 	new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
-	btn = new FXButton(toolbar,"\tUp one level",ico_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(toolbar,"\tUp one level",ico_up,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 	btn->disable();
-	btn = new FXButton(toolbar,"\tShow/Hide Console Tree/Favorites",ico_contree,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(toolbar,"\tShow/Hide Console Tree/Favorites",ico_contree,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 	new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
 
-	propbtn = new FXButton(toolbar,"\tProperties",ico_properties,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	propbtn = new FXButton(toolbar,"\tProperties",ico_properties,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 	propsep = new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
 
-	btn = new FXButton(toolbar,"\tHelp",ico_help,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(toolbar,"\tHelp",ico_help,NULL,0,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 
 	tb2shell = new FXToolBarShell(this,FRAME_SUNKEN);
 
@@ -832,7 +832,7 @@ DeviceManager::DeviceManager(FXApp *app):FXMainWindow(app, "Device Manager", ico
 		new FXVerticalSeparator(toolbar, SEPARATOR_GROOVE|LAYOUT_FILL_Y, 0,0,0,0,  3,2,2,2);
 	}
 
-	btn = new FXButton(scantb,"\tScan for hardware changes",ico_scan,this,ID_ADDDEV,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_TOP|LAYOUT_LEFT,0,0,0,0,  2,2,2,2);
+	btn = new FXButton(scantb,"\tScan for hardware changes",ico_scan,this,ID_ADDDEV,BUTTON_TOOLBAR|FRAME_RAISED|LAYOUT_CENTER_Y,0,0,0,0,  2,2,2,2);
 
 	new FXSeparator(this, SEPARATOR_NONE|LAYOUT_FIX_HEIGHT, 0,0,0,2); // semantics r cute  
 

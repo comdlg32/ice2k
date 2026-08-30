@@ -186,11 +186,11 @@ KeyboardProperties::KeyboardProperties(FXApp *a) : FXMainWindow(a, "Keyboard Pro
 	blink_sld->setValue( 12-(blink_speed/100)+2 );
 	new FXLabel(blink_sld_cnt, "Fast");
 
-	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT, 0,0,0,0, 0,6,1,4, 6,0);
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,6,1,4, 6,0);
 
-	ok_btn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
-	cancel_btn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
-	apply_btn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT, 0,0,75,23, 0,0,0,0);
+	ok_btn = new FXButton(btncont, "OK", NULL, this, ID_DLG_OK, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
+	cancel_btn = new FXButton(btncont, "Cancel", NULL, this, ID_DLG_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
+	apply_btn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,19,2,3);
 
 	apply_btn->disable();
 	
