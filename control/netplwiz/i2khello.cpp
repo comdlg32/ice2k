@@ -1,6 +1,8 @@
 #include <errno.h>
 #include <fx.h>
 #include <ice2k/comctl32.h>
+#include <ice2k/wizard/I2KWizard.h>
+
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
@@ -13,6 +15,123 @@ FXIcon* ico_user16;
 FXIcon* ico_user32;
 
 FXImage* img_banner;
+
+
+class NewUserWizard : public FXDialogBox {
+	FXDECLARE(NewUserWizard);
+
+protected:
+	NewUserWizard() {}
+
+private:
+	I2KWizard* wiz;
+	FXHorizontalFrame* userinfo_page;
+	FXVerticalFrame* userinfo_main;
+
+	FXHorizontalFrame* password_page;
+	FXVerticalFrame* password_main;
+
+	FXMatrix* userinfo_fld_mtx;
+	FXMatrix* password_fld_mtx;
+
+
+
+public:
+	//long onCmdHello(FXObject*, FXSelector, void*);
+	long onCmdWizard(FXObject*, FXSelector, void*);
+
+
+public:
+	enum {
+		ID_WIZARD = FXDialogBox::ID_LAST,
+		ID_LAST
+	};
+
+public:
+	NewUserWizard(FXWindow* window);
+
+	virtual void create();
+	virtual void setFocus() {};
+	virtual ~NewUserWizard();
+};
+
+FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_WIZARD,  NewUserWizard::onCmdWizard),
+};
+
+FXIMPLEMENT(NewUserWizard, FXDialogBox, NewUserWizardMap, ARRAYNUMBER(NewUserWizardMap));
+
+long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
+	int current = wiz->getSwitcher()->getCurrent();
+
+	switch ((unsigned)(FXuval)ptr) {
+		case IWIZARD_ABACK:
+			wiz->setCurrent(--current);
+			wiz->setFinish(FALSE);
+
+			if (current == 0) wiz->getBackButton()->disable();
+			break;
+
+		case IWIZARD_ANEXT:
+			wiz->setCurrent(++current);
+			wiz->getBackButton()->enable();
+
+			if (current == wiz->getSwitcher()->numChildren()-1) {
+				wiz->setFinish(TRUE);
+			} else if (current == wiz->getSwitcher()->numChildren()) {
+				tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+			}
+			break;
+
+		case IWIZARD_ACANCEL:
+			puts("hi");
+			tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+			break;
+	}
+
+
+	return 1;
+}
+
+
+
+NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,0,0, 0,0) {
+	wiz = new I2KWizard(this, this, ID_WIZARD);
+
+	userinfo_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
+	new FXImageFrame(userinfo_page, img_banner, LAYOUT_FIX_HEIGHT, 0,0,0,img_banner->getHeight()-2);
+	userinfo_main = new FXVerticalFrame(userinfo_page, LAYOUT_FILL, 0,0,0,0, 9,9,9,9, 8,8);
+
+	new FXLabel(userinfo_main, "Enter the basic information for the new user.");
+	userinfo_fld_mtx = new FXMatrix(userinfo_main, 2, MATRIX_BY_COLUMNS, 0,0,0,0, 0,0,0,0, 16,6);
+	new FXLabel(userinfo_fld_mtx, "&User name:", NULL, LAYOUT_CENTER_Y);
+	new FXTextField(userinfo_fld_mtx, 33, wiz, I2KWizard::ID_NEXT, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
+	new FXLabel(userinfo_fld_mtx, "&Full name:", NULL, LAYOUT_CENTER_Y);
+	new FXTextField(userinfo_fld_mtx, 33, wiz, I2KWizard::ID_NEXT, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
+	new FXLabel(userinfo_fld_mtx, "&Description:", NULL, LAYOUT_CENTER_Y);
+	new FXTextField(userinfo_fld_mtx, 33, wiz, I2KWizard::ID_NEXT, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
+	new FXLabel(userinfo_main, "To continue, click Next.", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,24,2);
+
+	password_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
+	new FXImageFrame(password_page, img_banner, LAYOUT_FIX_HEIGHT, 0,0,0,img_banner->getHeight()-2);
+	password_main = new FXVerticalFrame(password_page, LAYOUT_FILL, 0,0,0,0, 9,9,9,9, 8,8);
+
+	new FXLabel(password_main, "Type and confirm a password for this user.");
+	password_fld_mtx = new FXMatrix(password_main, 2, MATRIX_BY_COLUMNS|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 16,6);
+	new FXLabel(password_fld_mtx, "&Password:", NULL, LAYOUT_CENTER_Y);
+	new FXTextField(password_fld_mtx, 10, wiz, I2KWizard::ID_NEXT, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+	new FXLabel(password_fld_mtx, "&Confirm password:", NULL, LAYOUT_CENTER_Y);
+	new FXTextField(password_fld_mtx, 10, wiz, I2KWizard::ID_NEXT, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+	new FXLabel(password_main, "To continue, click Next.", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,24,2);
+}
+
+NewUserWizard::~NewUserWizard() {
+}
+
+void NewUserWizard::create() {
+	FXDialogBox::create();
+	//show(PLACEMENT_SCREEN);
+}
 
 class UsersAndPasswords : public FXMainWindow {
 	FXDECLARE(UsersAndPasswords);
@@ -49,7 +168,9 @@ private:
 	FXButton* reset_btn;
 
 public:
+	long onCmdAdd(FXObject*, FXSelector, void*);
 	long onCmdRemove(FXObject*, FXSelector, void*);
+
 	long onSelectUsersList(FXObject*, FXSelector, void*);
 	long onDeSelectUsersList(FXObject*, FXSelector, void*);
 
@@ -59,6 +180,7 @@ public:
 		ID_DLG_OK = FXMainWindow::ID_LAST,
 		ID_DLG_CANCEL,
 		ID_DLG_APPLY,
+		ID_ADD,
 		ID_REMOVE,
 		ID_USERSLIST,
 		ID_LAST
@@ -73,7 +195,9 @@ public:
 };
 
 FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
+	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_ADD,        UsersAndPasswords::onCmdAdd),
 	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,     UsersAndPasswords::onCmdRemove),
+
 	FXMAPFUNC(SEL_SELECTED,          UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onSelectUsersList),
 	FXMAPFUNC(SEL_DESELECTED,        UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onDeSelectUsersList),
 
@@ -173,7 +297,7 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 
 	users_buttons = new FXHorizontalFrame(userscont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,2,0,0, 6,6);
 
-	new FXButton(users_buttons, "A&dd...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
+	new FXButton(users_buttons, "A&dd...", NULL, this, ID_ADD, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 	rem_btn = new FXButton(users_buttons, "&Remove", NULL, this, ID_REMOVE, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 	prop_btn = new FXButton(users_buttons, "Pr&operties", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 
@@ -238,6 +362,13 @@ long UsersAndPasswords::onDeSelectUsersList(FXObject*, FXSelector, void*) {
 	rem_btn->disable();
 	prop_btn->disable();
 
+	return 1;
+}
+
+
+long UsersAndPasswords::onCmdAdd(FXObject*, FXSelector, void*) {
+	NewUserWizard wiz(this);
+	wiz.execute(PLACEMENT_OWNER);
 	return 1;
 }
 

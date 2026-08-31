@@ -45,7 +45,6 @@ public:
 };
 
 FXDEFMAP(HelloWindow) HelloWindowMap[] = {
-	//FXMAPFUNC(SEL_COMMAND,           HelloWindow::ID_HELLO,  HelloWindow::onCmdHello),
 };
 
 FXIMPLEMENT(HelloWindow, FXMainWindow, HelloWindowMap, ARRAYNUMBER(HelloWindowMap));
@@ -79,11 +78,6 @@ HelloWindow::HelloWindow(FXApp *a) : FXMainWindow(a, "Add New User", ico_main16,
 	new FXLabel(password_fld_mtx, "&Confirm password:", NULL, LAYOUT_CENTER_Y);
 	new FXTextField(password_fld_mtx, 10, NULL, 0, TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
 	new FXLabel(password_main, "To continue, click Next.", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,24,2);
-
-	new FXLabel(password_main, "What level of access do you want to grant this user?");
-	
-
-	//wiz->getNextButton()->disable();
 }
 
 HelloWindow::~HelloWindow() {
@@ -91,14 +85,9 @@ HelloWindow::~HelloWindow() {
 
 void HelloWindow::create() {
 	FXMainWindow::create();
-
 	show(PLACEMENT_SCREEN);
 }
 
-long HelloWindow::onCmdHello(FXObject*, FXSelector, void*) {
-	puts("Hello world!");
-	return 1;
-}
 
 int main(int argc, char *argv[]) {
 	FXApp application("WizardTest", "I2KTest");
