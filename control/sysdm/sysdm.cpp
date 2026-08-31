@@ -822,7 +822,9 @@ SystemPropertiesWindow::SystemPropertiesWindow(FXApp *app):FXMainWindow(app, "Sy
 
 	table->setMarginLeft(4);
 	table->getColumnHeader()->setPadTop(0);
-	table->getColumnHeader()->setPadBottom(0);
+	table->getColumnHeader()->setPadBottom(-1);
+	table->getColumnHeader()->setPadLeft(4);
+	table->setColumnHeaderMode(0);
 
 
 	char passwdname[LOGIN_NAME_MAX+1];
