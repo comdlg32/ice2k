@@ -9,6 +9,10 @@
 #include <grp.h>
 #include "res/foxres.h"
 
+int refreshlist = 0;
+
+char seluser[32] = {0};
+
 FXIcon* ico_main16;
 FXIcon* ico_main32;
 
@@ -20,6 +24,108 @@ FXIcon* ico_uncheck;
 
 
 FXImage* img_banner;
+
+int changePassword(const char* user, const char* pass) {
+	setenv("SETADDUSER", user, 1);
+	setenv("SETADDPASSWORD", pass, 1);
+
+	if (pass[0] != '\0') {
+		if (!system("echo \"$SETADDUSER:$SETADDPASSWORD\" | i2ksudo chpasswd")) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		if (!system("i2ksudo passwd -d \"$SETADDUSER\"")) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	return 0;
+}
+
+class ChangePasswordBox : public FXDialogBox {
+	FXDECLARE(ChangePasswordBox);
+
+protected:
+	ChangePasswordBox() {}
+
+private:
+	FXMatrix* mtx;
+	FXTextField* pw_box;
+	FXTextField* c_pw_box;
+
+public:
+	long onCmdAccept(FXObject*, FXSelector, void*);
+	long onChange(FXObject*, FXSelector, void*);
+
+
+
+public:
+	enum {
+		ID_ACCEPT = FXDialogBox::ID_LAST,
+		ID_LAST
+	};
+
+public:
+	ChangePasswordBox(FXWindow* owner);
+
+	virtual void create();
+	virtual void setFocus() {};
+	virtual ~ChangePasswordBox();
+};
+
+FXDEFMAP(ChangePasswordBox) ChangePasswordBoxMap[] = {
+	FXMAPFUNC(SEL_COMMAND,           ChangePasswordBox::ID_ACCEPT,     ChangePasswordBox::onCmdAccept),
+	//FXMAPFUNC(SEL_CHANGED,           ChangePasswordBox::ID_ACCEPT,     ChangePasswordBox::onChange),
+
+};
+
+FXIMPLEMENT(ChangePasswordBox, FXDialogBox, ChangePasswordBoxMap, ARRAYNUMBER(ChangePasswordBoxMap));
+
+ChangePasswordBox::ChangePasswordBox(FXWindow* owner) : FXDialogBox(owner, "Set Password", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 9,9,9,9, 12,12) {
+	mtx = new FXMatrix(this, 2, MATRIX_BY_COLUMNS|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 16,8);
+	new FXLabel(mtx, "New &password:", NULL, LAYOUT_CENTER_Y);
+	pw_box = new FXTextField(mtx, 28, this, ID_ACCEPT, TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|TEXTFIELD_ENTER_ONLY|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+	new FXLabel(mtx, "&Confirm new password:", NULL, LAYOUT_CENTER_Y);
+	c_pw_box = new FXTextField(mtx, 28, this, ID_ACCEPT, TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|TEXTFIELD_ENTER_ONLY|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,0,0,0, 6,0);
+
+	new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
+	new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
+}
+
+long ChangePasswordBox::onCmdAccept(FXObject* sender, FXSelector sel, void* ptr) {
+	if (strcmp(pw_box->getText().text(), c_pw_box->getText().text()) == 0) {
+		if (changePassword(seluser, pw_box->getText().text())) {
+			FXMessageBox::information(this, MBOX_OK, "Set Password", "The password has been set successfully.");
+			tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+		} else {
+			FXMessageBox::error(this, MBOX_OK, "Set Password", "There was an error setting the password!");
+		}
+	} else {
+		FXMessageBox::error(this, MBOX_OK, "Set Password", "The passwords you typed do not match. Type the password for this account in both\ntext boxes.");
+	}
+	return 1;
+}
+
+
+ChangePasswordBox::~ChangePasswordBox() {
+}
+
+void ChangePasswordBox::create() {
+	FXDialogBox::create();
+	pw_box->setFocus();
+	show(PLACEMENT_SCREEN);
+}
+
+
+
+
+
 
 
 class NewUserWizard : public FXDialogBox {
@@ -252,7 +358,8 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 				}
 
 				if (!stop) {
-					if (password_txt->getText().text()[0] != '\0') {
+					refreshlist = 1;
+					/*if (password_txt->getText().text()[0] != '\0') {
 						if (!system("echo \"$SETADDUSER:$SETADDPASSWORD\" | i2ksudo chpasswd")) {
 							(void)0;
 						} else {
@@ -267,6 +374,14 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 							stop = 1;
 							FXMessageBox::error(this, MBOX_OK, "Error", "Could not set password!");
 						}
+						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+					}*/
+
+					if (changePassword(username_txt->getText().text(), password_txt->getText().text())) {
+						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+					} else {
+						FXMessageBox::error(this, MBOX_OK, "Error", "Could not set password!");
+						stop = 1;
 						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 					}
 				}
@@ -292,7 +407,7 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,0,0, 0,0) {
 	struct group* grp;
-	FXDebugTarget* dbg = new FXDebugTarget();
+	//FXDebugTarget* dbg = new FXDebugTarget();
 	wiz = new I2KWizard(this, this, ID_WIZARD, IWIZARD_NOFOCUSNEXT);
 
 	userinfo_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
@@ -393,6 +508,8 @@ private:
 public:
 	long onCmdAdd(FXObject*, FXSelector, void*);
 	long onCmdRemove(FXObject*, FXSelector, void*);
+	long onCmdSetPassword(FXObject*, FXSelector, void*);
+
 
 	long onSelectUsersList(FXObject*, FXSelector, void*);
 	long onDeSelectUsersList(FXObject*, FXSelector, void*);
@@ -409,6 +526,7 @@ public:
 		ID_ADD,
 		ID_REMOVE,
 		ID_USERSLIST,
+		ID_SETPASSWORD,
 		ID_LAST
 	};
 
@@ -427,6 +545,8 @@ FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
 
 	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_ADD,        UsersAndPasswords::onCmdAdd),
 	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,     UsersAndPasswords::onCmdRemove),
+	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_SETPASSWORD,     UsersAndPasswords::onCmdSetPassword),
+
 
 	FXMAPFUNC(SEL_SELECTED,          UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onSelectUsersList),
 	FXMAPFUNC(SEL_DESELECTED,        UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onDeSelectUsersList),
@@ -476,6 +596,9 @@ void genUsersList(FXIconList* list) {
 	char groups[32][32];
 
 	struct passwd* pw;
+
+	setpwent();
+
 	while ( (pw = getpwent()) ) {
 		if (pw->pw_uid == 0 || (pw->pw_uid >= 1000 && pw->pw_uid <= 65000)) {
 			int ngroups = getGroups(groups, pw->pw_uid);
@@ -496,6 +619,8 @@ void genUsersList(FXIconList* list) {
 			list->appendItem(name, ico_user32, ico_user16);
 		}
 	}
+
+	endpwent();
 }
 
 UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Passwords", ico_main16, NULL, DECOR_CLOSE|DECOR_BORDER|DECOR_TITLE, 0,0,0,0) {
@@ -550,16 +675,17 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 
 
 	pass_cnt = new FXPacker(userscont, LAYOUT_FILL_X, 0,0,0,0, 2,2,6,1);
-	pass_grp = new FXGroupBox(pass_cnt, "Password for tf", LAYOUT_FILL_X|FRAME_GROOVE, 0,0,0,0, 9,10,5,11, 3,3);
+	pass_grp = new FXGroupBox(pass_cnt, "Password", LAYOUT_FILL_X|FRAME_GROOVE, 0,0,0,0, 9,10,5,11, 3,3);
 	new FXLabel(pass_grp, "", ico_user32, LAYOUT_SIDE_LEFT);
 	pass_box = new FXText(pass_grp, NULL, 0, LAYOUT_FILL_X|TEXT_WORDWRAP|VSCROLLER_NEVER|HSCROLLER_NEVER, 0,0,0,0, 0,0,0,0);
 	pass_box->disable();
 	pass_box->setBackColor(getApp()->getBaseColor());
 	pass_box->setDefaultCursor(getApp()->getDefaultCursor(DEF_ARROW_CURSOR));
 	pass_box->setVisibleRows(2);
-	pass_box->setText("To change the password for tf, click Set Password.");
+
+	//pass_box->setText("To change the password for tf, click Set Password.");
 	//new FXLabel(pass_grp, "To change the password for tf, click Set Password.", NULL, LAYOUT_SIDE_TOP);
-	reset_btn = new FXButton(pass_grp, "Set &Password...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
+	reset_btn = new FXButton(pass_grp, "Set &Password...", NULL, this, ID_SETPASSWORD, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
 	reset_btn->disable();
 
 
@@ -572,6 +698,8 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	applybtn->disable();
 	rem_btn->disable();
 	prop_btn->disable();
+	users_list->selectItem(0, TRUE);
+	//tryHandle(users_list, FXSEL(SEL_SELECTED, ID_USERSLIST), 0);
 	//users_list->setNumVisible(4);
 	//new FXLabel(userscont, "SMOKE ROCK BIETCHHHH =)");
 
@@ -588,7 +716,10 @@ void UsersAndPasswords::create() {
 	
 long UsersAndPasswords::onSelectUsersList(FXObject*, FXSelector, void*) {
 	char user[32];
+	char grptext[128];
 	char info[256];
+
+	if (users_list->getItem(users_list->getCurrentItem()) == NULL) return 1;
 
 	sprintf(user, "%.31s", users_list->getItem(users_list->getCurrentItem())->getText().text());
 	user[strcspn(user, "\t")] = 0;
@@ -596,10 +727,14 @@ long UsersAndPasswords::onSelectUsersList(FXObject*, FXSelector, void*) {
 	//size_t len = strcspn(item, "\t");
 
 	sprintf(info, "To change the password for %.31s, click Set Password.", user);
+	sprintf(grptext, "Password for %.31s", user);
 	pass_box->setText(info);
+	pass_grp->setText(grptext);
 	reset_btn->enable();
 	rem_btn->enable();
 	prop_btn->enable();
+
+	sprintf(seluser, "%.31s", user);
 
 	return 1;
 }
@@ -616,12 +751,27 @@ long UsersAndPasswords::onDeSelectUsersList(FXObject*, FXSelector, void*) {
 long UsersAndPasswords::onCmdAdd(FXObject*, FXSelector, void*) {
 	NewUserWizard wiz(this);
 	wiz.execute(PLACEMENT_OWNER);
+
+	if (refreshlist) {
+		users_list->clearItems();
+		genUsersList(users_list);
+	}
+
+	return 1;
+}
+
+long UsersAndPasswords::onCmdSetPassword(FXObject*, FXSelector, void*) {
+	ChangePasswordBox wiz(this);
+	wiz.execute(PLACEMENT_OWNER);
+
 	return 1;
 }
 
 
+
 long UsersAndPasswords::onCmdRemove(FXObject*, FXSelector, void*) {
 	char item[512];
+	char msg[1024];
 	char curuser[32];
 
 	uid_t uid = getuid();
@@ -638,8 +788,32 @@ long UsersAndPasswords::onCmdRemove(FXObject*, FXSelector, void*) {
 
 	if (strncmp(item, "root", len) == 0) {
 		FXMessageBox::error(this, MBOX_OK, "Error", "You cannot delete the root user!");
+		return 1;
 	} else if (strncmp(item, curuser, len) == 0) {
 		FXMessageBox::error(this, MBOX_OK, "Error", "You cannot delete your own user!");
+		return 1;
+	}
+
+	item[strcspn(item, "\t")] = '\0';
+
+	sprintf(msg,
+			"You have chosen to remove %.31s from this computer's user list. %.31s will no\n"
+			"longer be allowed to use this computer.\n"
+			"\n"
+			"Are you sure you want to remove %.31s?",
+		   item, item, item);
+
+	if (FXMessageBox::warning(this, MBOX_YES_NO, "Users and Passwords", msg) == MBOX_CLICKED_YES) {
+		setenv("SETADDUSER", item, 1);
+		if (system("i2ksudo userdel \"$SETADDUSER\"") == 0) {
+			FXMessageBox::information(this, MBOX_OK, "Users and Passwords",
+					"The user has been removed from this computer's user list.");
+			users_list->clearItems();
+			genUsersList(users_list);
+		} else {
+			FXMessageBox::error(this, MBOX_OK, "Users and Passwords",
+					"There was an error with removing the user from the computer's user list.");
+		}
 	}
 
 	//puts("Hello world!");
