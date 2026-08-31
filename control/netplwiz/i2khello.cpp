@@ -229,18 +229,45 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 
 				setenv("SETADDUSER", username_txt->getText().text(), 1);
+				setenv("SETADDPASSWORD", password_txt->getText().text(), 1);
+				int stop = 0;
 				if (groups[0] != '\0') {
 					setenv("SETADDGROUPS", groups, 1);
 					if (!system("i2ksudo useradd -m -G \"$SETADDGROUPS\" \"$SETADDUSER\"")) {
-						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+						(void)0;
 					} else {
-						FXMessageBox::error(this, MBOX_OK, "Error", "Could not authenticate as root!");
+						stop = 1;
+						FXMessageBox::error(this, MBOX_OK, "Error", "Could not create user!");
 					}
 				} else {
-					if (!system("i2ksudo useradd -m \"$SETADDUSER\"")) {
+					if (!stop) {
+						if (!system("i2ksudo useradd -m \"$SETADDUSER\"")) {
+							(void)0;
+							//tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+						} else {
+							stop = 1;
+							FXMessageBox::error(this, MBOX_OK, "Error", "Could not create user!");
+						}
+					}
+				}
+
+				if (!stop) {
+					if (password_txt->getText().text()[0] != '\0') {
+						if (!system("echo \"$SETADDUSER:$SETADDPASSWORD\" | i2ksudo chpasswd")) {
+							(void)0;
+						} else {
+							stop = 1;
+							FXMessageBox::error(this, MBOX_OK, "Error", "Could not set password!");
+						}
 						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 					} else {
-						FXMessageBox::error(this, MBOX_OK, "Error", "Could not authenticate as root!");
+						if (!system("i2ksudo passwd -d \"$SETADDUSER\"")) {
+							(void)0;
+						} else {
+							stop = 1;
+							FXMessageBox::error(this, MBOX_OK, "Error", "Could not set password!");
+						}
+						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 					}
 				}
 
@@ -253,7 +280,7 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 			break;
 
 		case IWIZARD_ACANCEL:
-			puts("hi");
+			//puts("hi");
 			tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 			return 1;
 	}
@@ -369,6 +396,9 @@ public:
 
 	long onSelectUsersList(FXObject*, FXSelector, void*);
 	long onDeSelectUsersList(FXObject*, FXSelector, void*);
+	long onCmdDialogOK(FXObject*,FXSelector,void*);
+	long onCmdDialogApply(FXObject*,FXSelector,void*);
+	long onCmdDialogCancel(FXObject*,FXSelector,void*);
 
 
 public:
@@ -391,6 +421,10 @@ public:
 };
 
 FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
+	FXMAPFUNC(SEL_COMMAND, UsersAndPasswords::ID_DLG_OK, UsersAndPasswords::onCmdDialogOK),
+	FXMAPFUNC(SEL_COMMAND, UsersAndPasswords::ID_DLG_APPLY, UsersAndPasswords::onCmdDialogApply),
+	FXMAPFUNC(SEL_COMMAND, UsersAndPasswords::ID_DLG_CANCEL, UsersAndPasswords::onCmdDialogCancel),
+
 	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_ADD,        UsersAndPasswords::onCmdAdd),
 	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,     UsersAndPasswords::onCmdRemove),
 
@@ -401,6 +435,23 @@ FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
 };
 
 FXIMPLEMENT(UsersAndPasswords, FXMainWindow, UsersAndPasswordsMap, ARRAYNUMBER(UsersAndPasswordsMap));
+
+long UsersAndPasswords::onCmdDialogOK(FXObject* obj,FXSelector sel, void* ptr) {
+	onCmdDialogApply(obj, sel, ptr);
+	getApp()->exit();
+	return 1;
+}
+
+
+long UsersAndPasswords::onCmdDialogCancel(FXObject* obj,FXSelector sel, void* ptr) {
+	getApp()->exit(1);
+	return 1;
+}
+
+long UsersAndPasswords::onCmdDialogApply(FXObject* obj,FXSelector sel, void* ptr) {
+	return 1;
+}
+
 
 int getGroups(char arr[32][32], __uid_t uid) {
 	struct passwd* pw = getpwuid(uid);
