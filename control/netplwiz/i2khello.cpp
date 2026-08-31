@@ -34,16 +34,29 @@ private:
 	FXMatrix* userinfo_fld_mtx;
 	FXMatrix* password_fld_mtx;
 
+	FXTextField* username_txt;
+	FXTextField* password_txt;
+	FXTextField* password_c_txt;
+
 
 
 public:
 	//long onCmdHello(FXObject*, FXSelector, void*);
 	long onCmdWizard(FXObject*, FXSelector, void*);
+	long onChangeUserField(FXObject*, FXSelector, void*);
+	long onChangePassword(FXObject*, FXSelector, void*);
+
+	long onCmdUserField(FXObject*, FXSelector, void*);
+
+
 
 
 public:
 	enum {
 		ID_WIZARD = FXDialogBox::ID_LAST,
+		ID_USERFIELD,
+		ID_PASSWORD,
+
 		ID_LAST
 	};
 
@@ -56,10 +69,40 @@ public:
 };
 
 FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
-	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_WIZARD,  NewUserWizard::onCmdWizard),
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_WIZARD,     NewUserWizard::onCmdWizard),
+	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onChangeUserField),
+	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onChangePassword),
+
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onCmdUserField),
+
+
 };
 
 FXIMPLEMENT(NewUserWizard, FXDialogBox, NewUserWizardMap, ARRAYNUMBER(NewUserWizardMap));
+long NewUserWizard::onChangeUserField(FXObject* sender, FXSelector sel, void* ptr) {
+	if (strlen(username_txt->getText().text()) > 0) {
+		wiz->getNextButton()->enable();
+	} else {
+		wiz->getNextButton()->disable();
+	}
+	return 1;
+}
+
+long NewUserWizard::onChangePassword(FXObject* sender, FXSelector sel, void* ptr) {
+	if (password_txt->getText().text()[0] != '\0' &&
+			strcmp(password_txt->getText().text(), password_c_txt->getText().text()) == 0) {
+		wiz->getNextButton()->enable();
+	} else {
+		wiz->getNextButton()->disable();
+	}
+	return 1;
+}
+
+long NewUserWizard::onCmdUserField(FXObject* sender, FXSelector sel, void* ptr) {
+	wiz->tryHandle(this, FXSEL(SEL_COMMAND, ID_WIZARD), (void*)(FXuval)IWIZARD_ABACK);
+	return 1;
+}
+
 
 long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 	int current = wiz->getSwitcher()->getCurrent();
@@ -69,10 +112,27 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 			wiz->setCurrent(--current);
 			wiz->setFinish(FALSE);
 
-			if (current == 0) wiz->getBackButton()->disable();
+			if (current == 0) {
+				wiz->getBackButton()->disable();
+				wiz->getNextButton()->enable();
+			}
 			break;
 
 		case IWIZARD_ANEXT:
+			if (current+1 == 1) {
+				if (username_txt->getText().text()[0] == '\0') {
+					FXMessageBox::error(this, MBOX_OK, "Error", "No username is specified!");
+					wiz->getNextButton()->disable();
+					return 1;
+				} else {
+					tryHandle(password_txt, FXSEL(SEL_CHANGED, ID_PASSWORD), 0);
+				}
+
+
+			} else {
+				wiz->getNextButton()->enable();
+			}
+				
 			wiz->setCurrent(++current);
 			wiz->getBackButton()->enable();
 
@@ -81,14 +141,18 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 			} else if (current == wiz->getSwitcher()->numChildren()) {
 				tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 			}
+
+			if (current == 1) {
+				password_txt->setFocus();
+			}
+				
 			break;
 
 		case IWIZARD_ACANCEL:
 			puts("hi");
 			tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
-			break;
+			return 1;
 	}
-
 
 	return 1;
 }
@@ -96,7 +160,7 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 
 NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,0,0, 0,0) {
-	wiz = new I2KWizard(this, this, ID_WIZARD);
+	wiz = new I2KWizard(this, this, ID_WIZARD, IWIZARD_NOFOCUSNEXT);
 
 	userinfo_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
 	new FXImageFrame(userinfo_page, img_banner, LAYOUT_FIX_HEIGHT, 0,0,0,img_banner->getHeight()-2);
@@ -105,7 +169,7 @@ NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User
 	new FXLabel(userinfo_main, "Enter the basic information for the new user.");
 	userinfo_fld_mtx = new FXMatrix(userinfo_main, 2, MATRIX_BY_COLUMNS, 0,0,0,0, 0,0,0,0, 16,6);
 	new FXLabel(userinfo_fld_mtx, "&User name:", NULL, LAYOUT_CENTER_Y);
-	new FXTextField(userinfo_fld_mtx, 33, wiz, I2KWizard::ID_NEXT, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
+	username_txt = new FXTextField(userinfo_fld_mtx, 33, this, ID_USERFIELD, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
 	new FXLabel(userinfo_fld_mtx, "&Full name:", NULL, LAYOUT_CENTER_Y);
 	new FXTextField(userinfo_fld_mtx, 33, wiz, I2KWizard::ID_NEXT, TEXTFIELD_NORMAL|TEXTFIELD_ENTER_ONLY, 0,0,0,0, 4,0,1,4);
 	new FXLabel(userinfo_fld_mtx, "&Description:", NULL, LAYOUT_CENTER_Y);
@@ -119,10 +183,12 @@ NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User
 	new FXLabel(password_main, "Type and confirm a password for this user.");
 	password_fld_mtx = new FXMatrix(password_main, 2, MATRIX_BY_COLUMNS|LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0, 16,6);
 	new FXLabel(password_fld_mtx, "&Password:", NULL, LAYOUT_CENTER_Y);
-	new FXTextField(password_fld_mtx, 10, wiz, I2KWizard::ID_NEXT, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+	password_txt = new FXTextField(password_fld_mtx, 10, this, ID_PASSWORD, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
 	new FXLabel(password_fld_mtx, "&Confirm password:", NULL, LAYOUT_CENTER_Y);
-	new FXTextField(password_fld_mtx, 10, wiz, I2KWizard::ID_NEXT, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
+	password_c_txt = new FXTextField(password_fld_mtx, 10, this, ID_PASSWORD, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
 	new FXLabel(password_main, "To continue, click Next.", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,24,2);
+
+	wiz->getNextButton()->disable();
 }
 
 NewUserWizard::~NewUserWizard() {
@@ -130,6 +196,7 @@ NewUserWizard::~NewUserWizard() {
 
 void NewUserWizard::create() {
 	FXDialogBox::create();
+	username_txt->setFocus();
 	//show(PLACEMENT_SCREEN);
 }
 
