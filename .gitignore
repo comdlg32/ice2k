@@ -4,6 +4,7 @@
 Thumbs.db
 desktop.ini
 *.swp
+*.swo
 
 core
 core.*
@@ -12,3 +13,4 @@ core.*
 
 *.o
 *.obj
+
