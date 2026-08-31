@@ -28,6 +28,9 @@ private:
 	FXButton*               cancelbtn;
 	FXButton*               applybtn;
 
+	FXButton* rem_btn;
+	FXButton* prop_btn;
+
 	FXVerticalFrame*        userscont;
 	FXHorizontalFrame*      users_top_cont;
 
@@ -43,9 +46,12 @@ private:
 
 	FXText* pass_box;
 
+	FXButton* reset_btn;
+
 public:
 	long onCmdRemove(FXObject*, FXSelector, void*);
-	long onCmdHello(FXObject*, FXSelector, void*);
+	long onSelectUsersList(FXObject*, FXSelector, void*);
+	long onDeSelectUsersList(FXObject*, FXSelector, void*);
 
 
 public:
@@ -54,6 +60,7 @@ public:
 		ID_DLG_CANCEL,
 		ID_DLG_APPLY,
 		ID_REMOVE,
+		ID_USERSLIST,
 		ID_LAST
 	};
 
@@ -66,7 +73,11 @@ public:
 };
 
 FXDEFMAP(UsersAndPasswords) UsersAndPasswordsMap[] = {
-	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,  UsersAndPasswords::onCmdRemove),
+	FXMAPFUNC(SEL_COMMAND,           UsersAndPasswords::ID_REMOVE,     UsersAndPasswords::onCmdRemove),
+	FXMAPFUNC(SEL_SELECTED,          UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onSelectUsersList),
+	FXMAPFUNC(SEL_DESELECTED,        UsersAndPasswords::ID_USERSLIST,  UsersAndPasswords::onDeSelectUsersList),
+
+
 };
 
 FXIMPLEMENT(UsersAndPasswords, FXMainWindow, UsersAndPasswordsMap, ARRAYNUMBER(UsersAndPasswordsMap));
@@ -138,7 +149,7 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 
 	users_list_cont = new FXPacker(userscont, LAYOUT_FILL_X, 0,0,0,0, 2,2,0,1);
 	users_list_frame = new FXPacker(users_list_cont, LAYOUT_FILL_X|FRAME_NORMAL|LAYOUT_FIX_HEIGHT, 0,0,0,117, 0,0,0,0);
-	users_list = new FXIconList(users_list_frame, NULL, 0, LAYOUT_FILL|ICONLIST_DETAILED|HSCROLLER_NEVER);
+	users_list = new FXIconList(users_list_frame, this, ID_USERSLIST, LAYOUT_FILL|ICONLIST_DETAILED|ICONLIST_SINGLESELECT|HSCROLLER_NEVER);
 
 	users_list->appendHeader("User Name", NULL, 168);
 	users_list->appendHeader("Group", NULL, 168);
@@ -148,8 +159,8 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	users_list->getHeader()->setPadTop(0);
 
 	users_list->getHeader()->setPadBottom(-1);*/
-	users_list->getHeader()->setPadTop(1);
-	users_list->getHeader()->setPadBottom(1);
+	users_list->getHeader()->setPadTop(0);
+	users_list->getHeader()->setPadBottom(0);
 
 	/*users_list->appendItem("Administrator\tAdministrators", ico_user32, ico_user16);
 	users_list->appendItem("Guest\tGuests", ico_user32, ico_user16);
@@ -163,8 +174,8 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	users_buttons = new FXHorizontalFrame(userscont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,2,0,0, 6,6);
 
 	new FXButton(users_buttons, "A&dd...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
-	new FXButton(users_buttons, "&Remove", NULL, this, ID_REMOVE, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
-	new FXButton(users_buttons, "Pr&operties", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
+	rem_btn = new FXButton(users_buttons, "&Remove", NULL, this, ID_REMOVE, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
+	prop_btn = new FXButton(users_buttons, "Pr&operties", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 11,11,2,3);
 
 
 	pass_cnt = new FXPacker(userscont, LAYOUT_FILL_X, 0,0,0,0, 2,2,6,1);
@@ -177,7 +188,8 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	pass_box->setVisibleRows(2);
 	pass_box->setText("To change the password for tf, click Set Password.");
 	//new FXLabel(pass_grp, "To change the password for tf, click Set Password.", NULL, LAYOUT_SIDE_TOP);
-	new FXButton(pass_grp, "Set &Password...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
+	reset_btn = new FXButton(pass_grp, "Set &Password...", NULL, NULL, 0, BUTTON_NORMAL|BUTTON_DEFAULT|LAYOUT_SIDE_BOTTOM|LAYOUT_RIGHT, 0,0,0,0, 15,15,2,3);
+	reset_btn->disable();
 
 
 	FXHorizontalFrame* btncont = new FXHorizontalFrame(cont, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0,0,0,0, 0,6,1,7, 6,0);
@@ -187,7 +199,8 @@ UsersAndPasswords::UsersAndPasswords(FXApp *a) : FXMainWindow(a, "Users and Pass
 	applybtn = new FXButton(btncont, "&Apply", NULL, this, ID_DLG_APPLY, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,19,2,3);
 
 	applybtn->disable();
-
+	rem_btn->disable();
+	prop_btn->disable();
 	//users_list->setNumVisible(4);
 	//new FXLabel(userscont, "SMOKE ROCK BIETCHHHH =)");
 
@@ -202,6 +215,33 @@ void UsersAndPasswords::create() {
 	show(PLACEMENT_SCREEN);
 }
 	
+long UsersAndPasswords::onSelectUsersList(FXObject*, FXSelector, void*) {
+	char user[32];
+	char info[256];
+
+	sprintf(user, "%.31s", users_list->getItem(users_list->getCurrentItem())->getText().text());
+	user[strcspn(user, "\t")] = 0;
+
+	//size_t len = strcspn(item, "\t");
+
+	sprintf(info, "To change the password for %.31s, click Set Password.", user);
+	pass_box->setText(info);
+	reset_btn->enable();
+	rem_btn->enable();
+	prop_btn->enable();
+
+	return 1;
+}
+long UsersAndPasswords::onDeSelectUsersList(FXObject*, FXSelector, void*) {
+	reset_btn->disable();
+
+	rem_btn->disable();
+	prop_btn->disable();
+
+	return 1;
+}
+
+
 long UsersAndPasswords::onCmdRemove(FXObject*, FXSelector, void*) {
 	char item[512];
 	char curuser[32];
