@@ -86,7 +86,7 @@ FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
 	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onChangePassword),
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onCmdPassword),
 
-	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
+	//FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
 
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onCmdUserField),
 
@@ -174,6 +174,16 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 			if (current == wiz->getSwitcher()->numChildren()-1) {
 				wiz->setFinish(TRUE);
 			} else if (current == wiz->getSwitcher()->numChildren()) {
+				FXTreeItem* tritem = groups_list->getFirstItem();
+
+				while (tritem) {
+					if (tritem->getOpenIcon() == ico_check) {
+						puts(tritem->getText().text());
+					}
+					tritem = tritem->getNext();
+				}
+
+
 				tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
 			}
 
@@ -196,7 +206,7 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,0,0, 0,0) {
 	struct group* grp;
-	//FXDebugTarget* dbg = new FXDebugTarget();
+	FXDebugTarget* dbg = new FXDebugTarget();
 	wiz = new I2KWizard(this, this, ID_WIZARD, IWIZARD_NOFOCUSNEXT);
 
 	userinfo_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
@@ -233,14 +243,14 @@ NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User
 
 
 	groups_list_cont = new FXPacker(groups_main, LAYOUT_FILL|FRAME_NORMAL, 0,0,0,0, 0,0,0,0);
-	groups_list = new FXTreeList(groups_list_cont, this, ID_GROUPLIST, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
+	groups_list = new FXTreeList(groups_list_cont, dbg, 0, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
 
 	//FXTreeItem* item = groups_list->appendItem(NULL, "wheel", ico_check, ico_uncheck);
 
 	setgrent();
 
 	while ((grp = getgrent()) != NULL) {
-		groups_list->appendItem(NULL, grp->gr_name, ico_uncheck, ico_uncheck);
+		groups_list->appendItem(NULL, grp->gr_name, ico_uncheck, ico_check);
 	}
 
 	endgrent();
@@ -365,7 +375,7 @@ void genUsersList(FXIconList* list) {
 					if (i == ngroups-1) {
 						chars += sprintf(name+chars, "%.*s", 31, groups[i]);
 					} else {
-						chars += sprintf(name+chars, "%.*s, ", 31, groups[i]);
+						chars += sprintf(name+chars, "%.*s, ",31, groups[i]);
 					}
 				} else {
 					break;
