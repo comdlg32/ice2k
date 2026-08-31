@@ -213,8 +213,7 @@ class ChangeHostnameBox : public FXDialogBox {
 
 		// Messages for our class
 		enum {
-			ID_ACCEPT=FXMainWindow::ID_LAST,
-			ID_CANCEL,
+			ID_ACCEPT=FXDialogBox::ID_LAST,
 			ID_LAST
 			//ID_SETFOCUS_T
 		};
@@ -333,7 +332,7 @@ FXDialogBox(owner, "Identification Changes", DECOR_TITLE|DECOR_BORDER|DECOR_CLOS
 
 	//membergrp->disable();
 
-	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
+	FXHorizontalFrame* btncont = new FXHorizontalFrame(this, LAYOUT_RIGHT|PACK_UNIFORM_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
 
 	okbtn = new FXButton(btncont, "OK", NULL, this, ID_ACCEPT, BUTTON_DEFAULT|BUTTON_NORMAL, 0,0,0,0, 19,20,2,3);
 	cancelbtn = new FXButton(btncont, "Cancel", NULL, this, ID_CANCEL, BUTTON_NORMAL|BUTTON_DEFAULT, 0,0,0,0, 19,20,2,3);
