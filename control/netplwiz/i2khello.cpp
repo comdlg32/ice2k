@@ -14,6 +14,10 @@ FXIcon* ico_main32;
 FXIcon* ico_user16;
 FXIcon* ico_user32;
 
+FXIcon* ico_check;
+FXIcon* ico_uncheck;
+
+
 FXImage* img_banner;
 
 
@@ -31,12 +35,18 @@ private:
 	FXHorizontalFrame* password_page;
 	FXVerticalFrame* password_main;
 
+	FXHorizontalFrame* groups_page;
+	FXVerticalFrame* groups_main;
+
 	FXMatrix* userinfo_fld_mtx;
 	FXMatrix* password_fld_mtx;
 
 	FXTextField* username_txt;
 	FXTextField* password_txt;
 	FXTextField* password_c_txt;
+
+	FXPacker* groups_list_cont;
+	FXTreeList* groups_list;
 
 
 
@@ -47,8 +57,8 @@ public:
 	long onChangePassword(FXObject*, FXSelector, void*);
 
 	long onCmdUserField(FXObject*, FXSelector, void*);
-
-
+	long onCmdPassword(FXObject*, FXSelector, void*);
+	long onCmdGroupList(FXObject*, FXSelector, void*);
 
 
 public:
@@ -56,6 +66,8 @@ public:
 		ID_WIZARD = FXDialogBox::ID_LAST,
 		ID_USERFIELD,
 		ID_PASSWORD,
+
+		ID_GROUPLIST,
 
 		ID_LAST
 	};
@@ -72,6 +84,9 @@ FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_WIZARD,     NewUserWizard::onCmdWizard),
 	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onChangeUserField),
 	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onChangePassword),
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onCmdPassword),
+
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
 
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onCmdUserField),
 
@@ -89,14 +104,34 @@ long NewUserWizard::onChangeUserField(FXObject* sender, FXSelector sel, void* pt
 }
 
 long NewUserWizard::onChangePassword(FXObject* sender, FXSelector sel, void* ptr) {
-	if (password_txt->getText().text()[0] != '\0' &&
-			strcmp(password_txt->getText().text(), password_c_txt->getText().text()) == 0) {
+	if (strcmp(password_txt->getText().text(), password_c_txt->getText().text()) == 0) {
 		wiz->getNextButton()->enable();
 	} else {
 		wiz->getNextButton()->disable();
 	}
 	return 1;
 }
+long NewUserWizard::onCmdGroupList(FXObject* sender, FXSelector sel, void* ptr) {
+	FXTreeList* list = (FXTreeList*)sender;
+
+	if (list->getItemOpenIcon(list->getCurrentItem()) == ico_check) {
+		list->setItemOpenIcon(list->getCurrentItem(), ico_uncheck);
+		list->setItemClosedIcon(list->getCurrentItem(), ico_uncheck);
+	} else {
+		list->setItemOpenIcon(list->getCurrentItem(), ico_check);
+		list->setItemClosedIcon(list->getCurrentItem(), ico_check);
+	}
+
+	return 0;
+}
+
+long NewUserWizard::onCmdPassword(FXObject* sender, FXSelector sel, void* ptr) {
+	if (strcmp(password_txt->getText().text(), password_c_txt->getText().text()) == 0) {
+		wiz->tryHandle(this, FXSEL(SEL_COMMAND, ID_WIZARD), (void*)(FXuval)IWIZARD_ANEXT);
+	}
+	return 1;
+}
+
 
 long NewUserWizard::onCmdUserField(FXObject* sender, FXSelector sel, void* ptr) {
 	wiz->tryHandle(this, FXSEL(SEL_COMMAND, ID_WIZARD), (void*)(FXuval)IWIZARD_ABACK);
@@ -160,6 +195,8 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 
 NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User", DECOR_BORDER|DECOR_CLOSE|DECOR_TITLE, 0,0,0,0, 0,0,0,0, 0,0) {
+	struct group* grp;
+	//FXDebugTarget* dbg = new FXDebugTarget();
 	wiz = new I2KWizard(this, this, ID_WIZARD, IWIZARD_NOFOCUSNEXT);
 
 	userinfo_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
@@ -188,6 +225,26 @@ NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User
 	password_c_txt = new FXTextField(password_fld_mtx, 10, this, ID_PASSWORD, TEXTFIELD_ENTER_ONLY|TEXTFIELD_NORMAL|TEXTFIELD_PASSWD|LAYOUT_FILL_X|LAYOUT_FILL_COLUMN, 0,0,0,0, 4,0,1,4);
 	new FXLabel(password_main, "To continue, click Next.", NULL, LABEL_NORMAL, 0,0,0,0, 2,2,24,2);
 
+	groups_page = new FXHorizontalFrame(wiz->getSwitcher(), LAYOUT_FILL, 0,0,0,0, 0,1,0,0, 7,7);
+	new FXImageFrame(groups_page, img_banner, LAYOUT_FIX_HEIGHT, 0,0,0,img_banner->getHeight()-2);
+	groups_main = new FXVerticalFrame(groups_page, LAYOUT_FILL, 0,0,0,0, 9,9,9,18, 4,4);
+
+	new FXLabel(groups_main, "What groups do you want to give this user?");
+
+
+	groups_list_cont = new FXPacker(groups_main, LAYOUT_FILL|FRAME_NORMAL, 0,0,0,0, 0,0,0,0);
+	groups_list = new FXTreeList(groups_list_cont, this, ID_GROUPLIST, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
+
+	//FXTreeItem* item = groups_list->appendItem(NULL, "wheel", ico_check, ico_uncheck);
+
+	setgrent();
+
+	while ((grp = getgrent()) != NULL) {
+		groups_list->appendItem(NULL, grp->gr_name, ico_uncheck, ico_uncheck);
+	}
+
+	endgrent();
+
 	wiz->getNextButton()->disable();
 }
 
@@ -195,6 +252,8 @@ NewUserWizard::~NewUserWizard() {
 }
 
 void NewUserWizard::create() {
+	ico_uncheck->create();
+	ico_check->create();
 	FXDialogBox::create();
 	username_txt->setFocus();
 	//show(PLACEMENT_SCREEN);
@@ -469,14 +528,16 @@ long UsersAndPasswords::onCmdRemove(FXObject*, FXSelector, void*) {
 int main(int argc, char *argv[]) {
 	FXApp application("netplwiz", "I2KProject");
 
-	ico_main16 = new FXGIFIcon (&application, res_ico_main16);
-	ico_main32 = new FXGIFIcon (&application, res_ico_main32);
+	ico_main16  = new FXGIFIcon (&application, res_ico_main16);
+	ico_main32  = new FXGIFIcon (&application, res_ico_main32);
 
-	ico_user16 = new FXGIFIcon (&application, res_ico_user16);
-	ico_user32 = new FXGIFIcon (&application, res_ico_user32);
+	ico_user16  = new FXGIFIcon (&application, res_ico_user16);
+	ico_user32  = new FXGIFIcon (&application, res_ico_user32);
 
+	ico_check   = new FXGIFIcon (&application, res_ico_check);
+	ico_uncheck = new FXGIFIcon (&application, res_ico_uncheck);
 
-	img_banner = new FXGIFImage(&application, res_img_banner);
+	img_banner  = new FXGIFImage(&application, res_img_banner);
 
 	application.init(argc, argv);
 
