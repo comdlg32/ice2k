@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <fx.h>
+#include <fxkeys.h>
 #include <ice2k/comctl32.h>
 #include <ice2k/wizard/I2KWizard.h>
 
@@ -59,6 +60,10 @@ public:
 	long onCmdUserField(FXObject*, FXSelector, void*);
 	long onCmdPassword(FXObject*, FXSelector, void*);
 	long onCmdGroupList(FXObject*, FXSelector, void*);
+	long onKeyPressGroupList(FXObject*, FXSelector, void*);
+	long onUpdateGroupList(FXObject*, FXSelector, void*);
+
+
 
 
 public:
@@ -86,7 +91,10 @@ FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
 	FXMAPFUNC(SEL_CHANGED,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onChangePassword),
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onCmdPassword),
 
-	//FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
+	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
+	FXMAPFUNC(SEL_UPDATE,            NewUserWizard::ID_GROUPLIST,  NewUserWizard::onUpdateGroupList),
+
+	FXMAPFUNC(SEL_KEYPRESS,          NewUserWizard::ID_GROUPLIST,  NewUserWizard::onKeyPressGroupList),
 
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_USERFIELD,  NewUserWizard::onCmdUserField),
 
@@ -120,6 +128,31 @@ long NewUserWizard::onCmdGroupList(FXObject* sender, FXSelector sel, void* ptr) 
 	} else {
 		list->setItemOpenIcon(list->getCurrentItem(), ico_check);
 		list->setItemClosedIcon(list->getCurrentItem(), ico_check);
+	}
+
+	return 1;
+}
+
+FXTreeItem* item = NULL;
+
+long NewUserWizard::onKeyPressGroupList(FXObject* sender, FXSelector sel, void* ptr) {
+	FXEvent* ev = (FXEvent*)ptr;
+	FXTreeList* list = (FXTreeList*)sender;
+
+
+	if ( (!(ev->code >= KEY_Shift_L && ev->code <= KEY_Hyper_R)) && ev->code != KEY_space && ev->code != KEY_Linefeed && ev->code != KEY_Return) {
+		item = list->getCurrentItem();
+	}
+	//printf("%d\n", ev->code);
+	return 0;
+}
+
+long NewUserWizard::onUpdateGroupList(FXObject* sender, FXSelector sel, void* ptr) {
+	FXTreeList* list = (FXTreeList*)sender;
+
+	if (item != NULL) {
+		onCmdGroupList(sender, 0, NULL);
+		item = NULL;
 	}
 
 	return 0;
@@ -243,14 +276,15 @@ NewUserWizard::NewUserWizard(FXWindow* owner) : FXDialogBox(owner, "Add New User
 
 
 	groups_list_cont = new FXPacker(groups_main, LAYOUT_FILL|FRAME_NORMAL, 0,0,0,0, 0,0,0,0);
-	groups_list = new FXTreeList(groups_list_cont, dbg, 0, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
+	//groups_list = new FXTreeList(groups_list_cont, dbg, 0, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
+	groups_list = new FXTreeList(groups_list_cont, this, ID_GROUPLIST, LAYOUT_FILL|TREELIST_BROWSESELECT|SCROLLERS_DONT_TRACK);
 
 	//FXTreeItem* item = groups_list->appendItem(NULL, "wheel", ico_check, ico_uncheck);
 
 	setgrent();
 
 	while ((grp = getgrent()) != NULL) {
-		groups_list->appendItem(NULL, grp->gr_name, ico_uncheck, ico_check);
+		groups_list->appendItem(NULL, grp->gr_name, ico_uncheck, ico_uncheck);
 	}
 
 	endgrent();
