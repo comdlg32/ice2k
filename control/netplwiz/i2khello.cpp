@@ -173,6 +173,11 @@ long NewUserWizard::onCmdUserField(FXObject* sender, FXSelector sel, void* ptr) 
 
 
 long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
+	char groups[4096];
+	groups[0] = '\0';
+	char* groupptr = groups;
+	char* groups_end = groups+sizeof(groups)/sizeof(groups[0])-1;
+
 	int current = wiz->getSwitcher()->getCurrent();
 
 	switch ((unsigned)(FXuval)ptr) {
@@ -211,13 +216,34 @@ long NewUserWizard::onCmdWizard(FXObject* sender, FXSelector sel, void* ptr) {
 
 				while (tritem) {
 					if (tritem->getOpenIcon() == ico_check) {
-						puts(tritem->getText().text());
+						if (groupptr < groups_end ) {
+							if (groupptr == groups) {
+								groupptr += snprintf(groupptr, groups_end-groupptr, "%s", tritem->getText().text());
+							} else {
+								groupptr += snprintf(groupptr, groups_end-groupptr, ",%s", tritem->getText().text());
+							}
+						}
 					}
 					tritem = tritem->getNext();
 				}
 
 
-				tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+				setenv("SETADDUSER", username_txt->getText().text(), 1);
+				if (groups[0] != '\0') {
+					setenv("SETADDGROUPS", groups, 1);
+					if (!system("i2ksudo useradd -m -G \"$SETADDGROUPS\" \"$SETADDUSER\"")) {
+						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+					} else {
+						FXMessageBox::error(this, MBOX_OK, "Error", "Could not authenticate as root!");
+					}
+				} else {
+					if (!system("i2ksudo useradd -m \"$SETADDUSER\"")) {
+						tryHandle(this, FXSEL(SEL_CLOSE, 0), (void*)(FXuval)0);
+					} else {
+						FXMessageBox::error(this, MBOX_OK, "Error", "Could not authenticate as root!");
+					}
+				}
+
 			}
 
 			if (current == 1) {
