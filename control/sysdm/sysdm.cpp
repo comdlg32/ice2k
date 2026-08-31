@@ -466,7 +466,7 @@ FXText* SystemPropertiesWindow::makeWrapLabel(FXComposite* p, const FXString& te
 		return NULL;
 	}
 	++wraplabelscnt;
-	FXText* txt = new FXText(p, NULL, 0, opts|LAYOUT_FIX_HEIGHT|TEXT_WORDWRAP, x,y,w,h, pl,pr,pt,pb);
+	FXText* txt = new FXText(p, NULL, 0, opts|LAYOUT_FIX_HEIGHT|TEXT_WORDWRAP|VSCROLLER_NEVER|HSCROLLER_NEVER, x,y,w,h, pl,pr,pt,pb);
 	txt->setMarginRight(0);
 	txt->setMarginLeft(0);
 	txt->setText(text);
