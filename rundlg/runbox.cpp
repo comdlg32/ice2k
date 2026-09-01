@@ -1,4 +1,6 @@
 #include <fx.h>
+#include <FXPNGIcon.h>
+
 #include <fxkeys.h>
 #include <ice2k/branding.h>
 #include <pwd.h>
@@ -319,14 +321,14 @@ int main(int argc, char *argv[]) {
 	int windows = i2kBGetWinVersionInt();
 
 	if (windows >= ICE2K_BRAND_WINXP) {
-		mainIcon = new FXBMPIcon(&application, resico_run16xp);
+		mainIcon = new FXPNGIcon(&application, resico_run16xp);
 		mainIcon->blend(app->getBaseColor());
 
-		mainIconLarge = new FXBMPIcon(&application, resico_run32xp);
+		mainIconLarge = new FXPNGIcon(&application, resico_run32xp);
 		mainIconLarge->blend(app->getBaseColor());
 	} else {
-		mainIcon = new FXGIFIcon(&application, resico_run16);
-		mainIconLarge = new FXGIFIcon(&application, resico_run32);
+		mainIcon = new FXPNGIcon(&application, resico_run16);
+		mainIconLarge = new FXPNGIcon(&application, resico_run32);
 	}
 
 	// Start app

@@ -13,7 +13,7 @@ PREFIX=/usr/local
 
 SOURCES = runbox.cpp
 OBJECTS = runbox.o
-ICONS = res/*.gif res/*.bmp
+ICONS = res/*.png
 EXECUTABLE = runbox
 
 CPPFLAGS += `fox-config --cflags`
