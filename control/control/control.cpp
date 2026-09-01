@@ -73,6 +73,9 @@ FXIcon* ico_printers_32;
 FXIcon* ico_devmgmt_16;
 FXIcon* ico_devmgmt_32;
 
+FXIcon* ico_netplwiz_16;
+FXIcon* ico_netplwiz_32;
+
 /* ncpa */
 FXIcon* ico_ncpa_dial;
 FXIcon* ico_ncpa_dial_down;
@@ -138,6 +141,7 @@ int winsaved = 0;
 #define CPL_ID_PRINTERS  13
 #define CPL_ID_DEVMGMT   14
 #define CPL_ID_ADMIN     15
+#define CPL_ID_NETPLWIZ  16
 
 
 #define SHF_ID_EXPLORER 1
@@ -443,6 +447,8 @@ void controlPanelList(FXIconList* icl) {
 	icl->appendItem("Printers\tAdds, removes, and configures local and network printers", ico_printers_32, ico_printers_16, (void*)CPL_ID_PRINTERS);
 	icl->appendItem("Sound\tConfigures sound devices", ico_mmsys_32, ico_mmsys_16, (void*)CPL_ID_MMSYS);
 	icl->appendItem("System\tProvides system information and changes environment settings", ico_sysdm_32, ico_sysdm_16, (void*)CPL_ID_SYSDM);
+	icl->appendItem("Users and Passwords\tChange user accounts settings and passwords for people who share this computer.", ico_netplwiz_32, ico_netplwiz_16, (void*)CPL_ID_NETPLWIZ);
+
 }
 
 void adminList(FXIconList* icl) {
@@ -910,6 +916,9 @@ int ControlPanel::runCpl(int cpl) {
 		case CPL_ID_DEVMGMT:
 			system("devmgmt&");
 			break;
+		case CPL_ID_NETPLWIZ:
+			system("netplwiz.cpi &");
+			break;
 		default:
 			fputs("No action asociated!\n", stderr);
 			return 0;
@@ -1295,6 +1304,10 @@ int main(int argc, char *argv[]) {
 		ico_ttffont_16 = loadPNGIcon(app, resico_xp_ttffont_16);
 		ico_ttffont_32 = loadPNGIcon(app, resico_xp_ttffont_32);
 
+		ico_netplwiz_16 = loadPNGIcon(app, resico_xp_netplwiz_16);
+		ico_netplwiz_32 = loadPNGIcon(app, resico_xp_netplwiz_32);
+
+
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "bigicons.png");
 		ico_exp_views = addTriangle(app, ico_exp_views2);
 
@@ -1365,6 +1378,10 @@ int main(int argc, char *argv[]) {
 		ico_bmpfont_32 = loadPNGIcon(app, resico_2k_bmpfont_32);
 		ico_ttffont_16 = loadPNGIcon(app, resico_2k_ttffont_16);
 		ico_ttffont_32 = loadPNGIcon(app, resico_2k_ttffont_32);
+
+		ico_netplwiz_16 = loadPNGIcon(app, resico_2k_netplwiz_16);
+		ico_netplwiz_32 = loadPNGIcon(app, resico_2k_netplwiz_32);
+
 
 
 		FXIcon* ico_exp_views2 = loadToolbarIcon(app, "smallicons.png");

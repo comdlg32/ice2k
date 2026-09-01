@@ -86,6 +86,7 @@ simplebuild control/timedate
 simplebuild control/desk
 simplebuild control/fontview
 simplebuild control/powercfg
+simplebuild control/netplwiz
 simplebuild rundlg
 simplebuild calendar
 simplebuild i2ksudo
