@@ -167,7 +167,6 @@ public:
 	long onCmdPassword(FXObject*, FXSelector, void*);
 	long onCmdGroupList(FXObject*, FXSelector, void*);
 	long onKeyPressGroupList(FXObject*, FXSelector, void*);
-	long onClickedGroupList(FXObject*, FXSelector, void*);
 
 
 
@@ -198,7 +197,6 @@ FXDEFMAP(NewUserWizard) NewUserWizardMap[] = {
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_PASSWORD,   NewUserWizard::onCmdPassword),
 
 	FXMAPFUNC(SEL_COMMAND,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onCmdGroupList),
-	FXMAPFUNC(SEL_CLICKED,           NewUserWizard::ID_GROUPLIST,  NewUserWizard::onClickedGroupList),
 
 	FXMAPFUNC(SEL_KEYPRESS,          NewUserWizard::ID_GROUPLIST,  NewUserWizard::onKeyPressGroupList),
 
@@ -229,14 +227,20 @@ FXTreeItem* item = NULL;
 long NewUserWizard::onCmdGroupList(FXObject* sender, FXSelector sel, void* ptr) {
 	FXTreeList* list = (FXTreeList*)sender;
 
-	//if (item != NULL) {
-		if (list->getItemOpenIcon(list->getCurrentItem()) == ico_check) {
-			list->setItemOpenIcon(list->getCurrentItem(), ico_uncheck);
-			list->setItemClosedIcon(list->getCurrentItem(), ico_uncheck);
-		} else {
-			list->setItemOpenIcon(list->getCurrentItem(), ico_check);
-			list->setItemClosedIcon(list->getCurrentItem(), ico_check);
-		}
+	if (item != NULL) {
+		item = NULL;
+		return 1;
+	}
+
+	if (list->getItemOpenIcon(list->getCurrentItem()) == ico_check) {
+		list->setItemOpenIcon(list->getCurrentItem(), ico_uncheck);
+		list->setItemClosedIcon(list->getCurrentItem(), ico_uncheck);
+	} else {
+		list->setItemOpenIcon(list->getCurrentItem(), ico_check);
+		list->setItemClosedIcon(list->getCurrentItem(), ico_check);
+	}
+
+	//item = NULL;
 
 	//	item = NULL;
 	//}
@@ -249,18 +253,10 @@ long NewUserWizard::onKeyPressGroupList(FXObject* sender, FXSelector sel, void* 
 	FXEvent* ev = (FXEvent*)ptr;
 	FXTreeList* list = (FXTreeList*)sender;
 
-
-	if ( (!(ev->code >= KEY_Shift_L && ev->code <= KEY_Hyper_R)) && ev->code != KEY_space && ev->code != KEY_Linefeed && ev->code != KEY_Return) {
+	if ( (!(ev->code >= KEY_Shift_L && ev->code <= KEY_Hyper_R))
+			&& ev->code != KEY_space && ev->code != KEY_Linefeed
+			&& ev->code != KEY_Return) {
 		item = list->getCurrentItem();
-	}
-	//printf("%d\n", ev->code);
-	return 0;
-}
-
-long NewUserWizard::onClickedGroupList(FXObject* sender, FXSelector sel, void* ptr) {
-	if (item != NULL) {
-		onCmdGroupList(sender, 0, NULL);
-		item = NULL;
 	}
 
 	return 0;
