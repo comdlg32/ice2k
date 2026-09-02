@@ -202,8 +202,6 @@ KeyboardProperties::KeyboardProperties(FXApp *a) : FXMainWindow(a, "Keyboard Pro
 	rdelay_sld->setValue(4-kbdsettings.readUnsignedEntry("Keyboard", "KeyboardDelay",  1));
 
 
-	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
-
 	//new FXSlider(repeatgrp);
 	
 }
@@ -253,6 +251,7 @@ void KeyboardProperties::create() {
 	test_txt->setFocus();
 
 	show(PLACEMENT_SCREEN);
+	getApp()->addTimeout(this, ID_BLINK_ANIM, blink_speed);
 }
 
 long KeyboardProperties::onChangeBlink(FXObject* obj,FXSelector sel, void* ptr) {
