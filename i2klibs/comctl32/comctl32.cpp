@@ -64,8 +64,12 @@ long I2KButton::onPaint(FXObject* obj,FXSelector sel,void* ptr){
 
       // Enabled and checked
       else if(isEnabled() && (state==STATE_ENGAGED)){
+        dc.setStipple(STIPPLE_GRAY);
+        dc.setFillStyle(FILL_OPAQUESTIPPLED);
         dc.setForeground(hiliteColor);
+        dc.setBackground(backColor);
         dc.fillRectangle(border,border,width-border*2,height-border*2);
+        dc.setFillStyle(FILL_SOLID);
         if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
         else drawSunkenRectangle(dc,0,0,width,height);
       }
@@ -122,8 +126,17 @@ long I2KButton::onPaint(FXObject* obj,FXSelector sel,void* ptr){
 
         // Draw sunken if enabled and either checked or pressed
         else{
-          if(state==STATE_ENGAGED) dc.setForeground(hiliteColor); else dc.setForeground(backColor);
-          dc.fillRectangle(border,border,width-border*2,height-border*2);
+          if(state==STATE_ENGAGED) {
+            dc.setStipple(STIPPLE_GRAY);
+            dc.setFillStyle(FILL_OPAQUESTIPPLED);
+            dc.setForeground(hiliteColor);
+            dc.setBackground(backColor);
+            dc.fillRectangle(border,border,width-border*2,height-border*2);
+			dc.setFillStyle(FILL_SOLID);
+		  } else {
+			dc.setForeground(backColor);
+            dc.fillRectangle(border,border,width-border*2,height-border*2);
+		  }
           if(options&FRAME_THICK) drawDoubleSunkenRectangle(dc,0,0,width,height);
           else drawSunkenRectangle(dc,0,0,width,height);
 
