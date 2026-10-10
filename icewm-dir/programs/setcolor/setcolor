@@ -538,6 +538,10 @@ getejecttray()
 	fi
 #fi
 
+
+mkdir -p "$HOME/.config/qt5ct/colors"
+mkdir -p "$HOME/.config/qt6ct/colors"
+
 getqtcolors | sed -e \
 "s/selbackcolor/$selbackcolor/gI
 s/seltextcolor/$seltextcolor/gI; \
