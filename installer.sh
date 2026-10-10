@@ -80,13 +80,16 @@ simplebuild shell/nettray
 simplebuild shell/ejtray
 
 simplebuild control/control
-simplebuild control/ncpastat
-simplebuild control/sysdm
-simplebuild control/timedate
 simplebuild control/desk
 simplebuild control/fontview
-simplebuild control/powercfg
+simplebuild control/keyboard
+simplebuild control/ncpastat
 simplebuild control/netplwiz
+simplebuild control/powercfg
+simplebuild control/sysdm
+simplebuild control/timedate
+
+
 simplebuild rundlg
 simplebuild calendar
 simplebuild i2ksudo
