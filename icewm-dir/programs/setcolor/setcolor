@@ -596,9 +596,6 @@ echo '*Text.background: '"$backcolor"
 echo '*XmText.background: '"$backcolor"
 echo '*XmTextField.background: '"$backcolor"
 echo '*XmList.background: '"$backcolor"
-
-
-echo '*shadowThickness: 1'
 ) | tee ~/.icewm/xrescolors | xrdb -merge
 
 if [ "$firstrun" -ne 0 ]; then

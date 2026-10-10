@@ -1,7 +1,11 @@
+XXkb*type: tray
+xxkb*type: tray
+
+
 XTerm*selectToClipboard: true
-XTerm*renderFont: true
-XTerm*faceName: Bm437 IBM VGA 8x16
-XTerm*faceSize: 12
+
+XTerm*font:  -*-winvga-*-*-*-*-*-*-*-*-*-*-*-*
+
 XTerm*iconHint: REPLACEHOMEFOLDER/.icewm/icons/terminal
 XTerm*VT100*background: black
 XTerm*VT100*foreground: silver
@@ -17,10 +21,14 @@ XTerm.*.decTerminalID: vt340
 XTerm*allowBoldFonts: false
 XTerm.*.numColorRegisters: 1024
 
+XTerm*bellIsUrgent: true
+XTerm*visualBell: false
+
+
 UXTerm*selectToClipboard: true
-UXTerm*renderFont: true
-UXTerm*faceName: Bm437 IBM VGA 8x16
-UXTerm*faceSize: 12
+
+UXTerm*font: -*-winvga-*-*-*-*-*-*-*-*-*-*-*-*
+
 UXTerm*iconHint: REPLACEHOMEFOLDER/.icewm/icons/terminal
 UXTerm*VT100*background: black
 UXTerm*VT100*foreground: silver
@@ -36,11 +44,9 @@ UXTerm.*.decTerminalID: vt340
 UXTerm*allowBoldFonts: false
 UXTerm.*.numColorRegisters: 1024
 
-!Xpdf*shadowThickness: 2
-Xpdf*Text*background: white
-Xpdf*pageNum*background: white
-Xpdf*XmList*background: white
-Xpdf*XmTextField*background: white
+
+UXTerm*bellIsUrgent: true
+UXTerm*visualBell: false
 
 
 ! xft
@@ -56,4 +62,72 @@ Xft.rgba: rgb
 *.renderTable.variable.fontName: Tahoma
 *.renderTable.variable.fontSize: 8
 *.renderTable.variable.fontType: FONT_IS_XFT
+
+
+
+dpmslock*mode: blank
+dpmslock*resetsaver: off
+dpmslock*dpmsoff: 5
+
+
+
+*customization: 
+*.customization: 
+
+XLock.star.size: 30
+XLock.star.count: 500
+XLock.star.trek: 0
+XLock.star.blake: 0
+XLock.star.rock: off
+XLock.star.straight: on
+
+
+XLock.morph3d.count: 2
+XLock.morph3d.timeout: 10
+XLock.morph3d.delay: 10000
+XLock.font: -*-tahoma-medium-r-*-*-15-*-*-*-*-*-*-*
+XLock.planfont: -*-tahoma-medium-r-*-*-12-*-*-*-*-*-*-*
+XLock.info: 
+XLock.timeelapsed: off
+XLock.showdate: on
+XLock.description: off
+XLock.echokeys: on
+XLock.echokey: *
+XLock.erasemode: no_fade
+XLock.startCmd: killall -9 xidle
+XLock.endCmd: xidle &
+XLock.resetsaver: on
+XLock.dpmsoff: 0
+XLock.password: Password:
+XLock.username: Username:\040
+XLock.pipes.count: 4
+XLock.pipes.factory: 0
+XLock.pipes.fisheye: 1
+XLock.fisheye: 1
+XLock.pipes.delay: 7500
+
+XLock.qix.delay: 17500
+XLock.qix.count: 6
+
+dpmslock*mode: blank
+dpmslock*resetsaver: off
+dpmslock*dpmsoff: 5
+
+
+
+Vim*MenuButton.borderWidth: 0
+Vim*SimpleMenu*borderWidth: 1
+Vim*Box.borderWidth: 1
+Vim*Command.borderWidth: 1
+
+
+
+Wine*antialias: false
+
+
+gv*font: fixed
+
+
+*shadowThickness: 1
+*XmToggleButton.shadowThickness: 0
 
