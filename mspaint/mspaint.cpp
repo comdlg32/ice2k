@@ -4,6 +4,23 @@
 
 FXIcon* ico_main16;
 
+FXIcon* ico_tool_airbrush;
+FXIcon* ico_tool_brush;
+FXIcon* ico_tool_circle;
+FXIcon* ico_tool_curve;
+FXIcon* ico_tool_erase;
+FXIcon* ico_tool_fill;
+FXIcon* ico_tool_freeform;
+FXIcon* ico_tool_line;
+FXIcon* ico_tool_pencil;
+FXIcon* ico_tool_picker;
+FXIcon* ico_tool_polygon;
+FXIcon* ico_tool_rect;
+FXIcon* ico_tool_roundrect;
+FXIcon* ico_tool_select;
+FXIcon* ico_tool_text;
+FXIcon* ico_tool_zoom;
+
 // Main Window
 class ScribbleWindow : public FXMainWindow {
 
@@ -228,11 +245,31 @@ int main(int argc, char *argv[]) {
 	// Make application
 	FXApp application("Scribble", "FoxTest");
 
-	// Load program icon
-	ico_main16 = new FXGIFIcon(&application, res_ico_main16);
 
 	// Start app
 	application.init(argc, argv);
+
+
+	// Load program icon
+	ico_main16 = new FXGIFIcon(&application, res_ico_main16);
+
+	ico_tool_airbrush = new FXGIFIcon(&application, res_tool_airbrush);
+	ico_tool_brush = new FXGIFIcon(&application, res_tool_brush);
+	ico_tool_circle = new FXGIFIcon(&application, res_tool_circle);
+	ico_tool_curve = new FXGIFIcon(&application, res_tool_curve);
+	ico_tool_erase = new FXGIFIcon(&application, res_tool_erase);
+	ico_tool_fill = new FXGIFIcon(&application, res_tool_fill);
+	ico_tool_freeform = new FXGIFIcon(&application, res_tool_freeform);
+	ico_tool_line = new FXGIFIcon(&application, res_tool_line);
+	ico_tool_pencil = new FXGIFIcon(&application, res_tool_pencil);
+	ico_tool_picker = new FXGIFIcon(&application, res_tool_picker);
+	ico_tool_polygon = new FXGIFIcon(&application, res_tool_polygon);
+	ico_tool_rect = new FXGIFIcon(&application, res_tool_rect);
+	ico_tool_roundrect = new FXGIFIcon(&application, res_tool_roundrect);
+	ico_tool_select = new FXGIFIcon(&application, res_tool_select);
+	ico_tool_text = new FXGIFIcon(&application, res_tool_text);
+	ico_tool_zoom = new FXGIFIcon(&application, res_tool_zoom);
+
 
 	// Scribble window
 	new ScribbleWindow(&application);

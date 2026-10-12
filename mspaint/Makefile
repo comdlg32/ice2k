@@ -11,7 +11,7 @@ PREFIX=/usr/local
 
 SOURCES = mspaint.cpp
 OBJECTS = mspaint.o res/foxres.o
-ICONS = res/*.gif
+ICONS = res/*.gif res/icons/*.gif
 EXECUTABLE = mspaint
 
 CPPFLAGS += `fox-config --cflags`
@@ -22,10 +22,10 @@ $(OBJECTS): res/foxres.h res/foxres.cpp
 
 # generate icon resources
 res/foxres.h: $(ICONS)
-	reswrap -i -d -p resico_ -o res/foxres.h $(ICONS)
+	reswrap -i -d -p res_ -o res/foxres.h $(ICONS)
 
 res/foxres.cpp: res/foxres.h $(ICONS)
-	reswrap -e -d -p resico_ -o res/foxres.cpp $(ICONS)
+	reswrap -e -d -p res_ -o res/foxres.cpp $(ICONS)
 
 # link executable
 $(EXECUTABLE): $(OBJECTS)
