@@ -28,9 +28,11 @@ class ScribbleWindow : public FXMainWindow {
 	FXDECLARE(ScribbleWindow)
 
 private:
+	
 	FXHorizontalFrame *contents;                // Content frame
 	FXVerticalFrame   *canvasFrame;             // Canvas frame
-	FXVerticalFrame   *buttonFrame;             // Button frame
+	FXVerticalFrame   *toolbar;
+	FXMatrix* toolbarbtns;
 	FXCanvas          *canvas;                  // Canvas to draw into
 	int                mdflag;                  // Mouse button down?
 	int                dirty;                   // Canvas has been painted?
@@ -52,6 +54,24 @@ public:
 	// Messages for our class
 	enum {
 		ID_CANVAS = FXMainWindow::ID_LAST,
+
+		ID_TOOL_FREEFORM,
+		ID_TOOL_SELECT,
+		ID_TOOL_ERASE,
+		ID_TOOL_FILL,
+		ID_TOOL_PICKER,
+		ID_TOOL_ZOOM,
+		ID_TOOL_PENCIL,
+		ID_TOOL_BRUSH,
+		ID_TOOL_AIRBRUSH,
+		ID_TOOL_TEXT,
+		ID_TOOL_LINE,
+		ID_TOOL_CURVE,
+		ID_TOOL_RECT,
+		ID_TOOL_POLYGON,
+		ID_TOOL_CIRCLE,
+		ID_TOOL_ROUNDRECT,
+
 		ID_CLEAR,
 		ID_LAST
 	};
@@ -82,15 +102,83 @@ FXDEFMAP(ScribbleWindow) ScribbleWindowMap[] = {
 
 
 // Macro for the ScribbleApp class hierarchy implementation
-FXIMPLEMENT(ScribbleWindow, FXMainWindow, ScribbleWindowMap, ARRAYNUMBER(ScribbleWindowMap))
+FXIMPLEMENT(ScribbleWindow, FXMainWindow, ScribbleWindowMap, ARRAYNUMBER(ScribbleWindowMap));
 
+
+class ToolBarButton : public FXButton {
+	FXDECLARE(ToolBarButton);
+
+protected:
+	ToolBarButton() {}
+
+public:
+	virtual bool canFocus() const {return false;}
+	virtual void setFocus() {}
+
+
+public:
+	ToolBarButton(FXComposite* p,
+			FXIcon* ic=NULL, FXObject* tgt=NULL, FXSelector sel=0,
+			FXuint opts=BUTTON_NORMAL,
+			FXint x=0, FXint y=0, FXint w=0, FXint h=0,
+			FXint pl=2,FXint pr=3,FXint pt=2,FXint pb=3) :
+	FXButton(p,FXString::null,ic,tgt,sel,opts,x,y,w,h,pl,pr,pt,pb) {
+	}
+};
+
+FXIMPLEMENT(ToolBarButton, FXButton, NULL, 0);
+
+	enum {
+		ID_CANVAS = FXMainWindow::ID_LAST,
+
+		ID_TOOL_FREEFORM,
+		ID_TOOL_SELECT,
+		ID_TOOL_ERASE,
+		ID_TOOL_FILL,
+		ID_TOOL_PICKER,
+		ID_TOOL_ZOOM,
+		ID_TOOL_PENCIL,
+		ID_TOOL_BRUSH,
+		ID_TOOL_AIRBRUSH,
+		ID_TOOL_TEXT,
+		ID_TOOL_LINE,
+		ID_TOOL_CURVE,
+		ID_TOOL_RECT,
+		ID_TOOL_POLYGON,
+		ID_TOOL_CIRCLE,
+		ID_TOOL_ROUNDRECT,
+
+		ID_CLEAR,
+		ID_LAST
+	};
 
 
 // Construct a ScribbleWindow
 ScribbleWindow::ScribbleWindow(FXApp *a) : FXMainWindow(a, "Scribble Application", ico_main16, NULL, DECOR_ALL, 0,0,800,600) {
-
-	// its a good idea to space numbers like this
 	contents = new FXHorizontalFrame(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_Y, 0,0,0,0, 0,0,0,0);
+
+	toolbar = new FXVerticalFrame(contents, LAYOUT_FILL_X, 0,0,0,0, 0,0,0,0);
+	toolbarbtns = new FXMatrix(toolbar, 2, MATRIX_BY_COLUMNS, 0,0,0,0, 4,4,4,4, 0,0);
+
+	new ToolBarButton(toolbarbtns, ico_tool_freeform,  this, ID_TOOL_FREEFORM);
+	new ToolBarButton(toolbarbtns, ico_tool_select,    this, ID_TOOL_SELECT);
+	new ToolBarButton(toolbarbtns, ico_tool_erase,     this, ID_TOOL_ERASE);
+	new ToolBarButton(toolbarbtns, ico_tool_fill,      this, ID_TOOL_FILL);
+	new ToolBarButton(toolbarbtns, ico_tool_picker,    this, ID_TOOL_PICKER);
+	new ToolBarButton(toolbarbtns, ico_tool_zoom,      this, ID_TOOL_ZOOM);
+	new ToolBarButton(toolbarbtns, ico_tool_pencil,    this, ID_TOOL_PENCIL);
+	new ToolBarButton(toolbarbtns, ico_tool_brush,     this, ID_TOOL_BRUSH);
+	new ToolBarButton(toolbarbtns, ico_tool_airbrush,  this, ID_TOOL_AIRBRUSH);
+	new ToolBarButton(toolbarbtns, ico_tool_text,      this, ID_TOOL_TEXT);
+	new ToolBarButton(toolbarbtns, ico_tool_line,      this, ID_TOOL_LINE);
+	new ToolBarButton(toolbarbtns, ico_tool_curve,     this, ID_TOOL_CURVE);
+	new ToolBarButton(toolbarbtns, ico_tool_rect,      this, ID_TOOL_RECT);
+	new ToolBarButton(toolbarbtns, ico_tool_polygon,   this, ID_TOOL_POLYGON);
+	new ToolBarButton(toolbarbtns, ico_tool_circle,    this, ID_TOOL_CIRCLE);
+	new ToolBarButton(toolbarbtns, ico_tool_roundrect, this, ID_TOOL_ROUNDRECT);
+
+
+
 
 	// LEFT pane to contain the canvas
 	canvasFrame = new FXVerticalFrame(contents, FRAME_SUNKEN|LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_TOP|LAYOUT_LEFT, 0,0,0,0, 10,10,10,10);
@@ -104,11 +192,8 @@ ScribbleWindow::ScribbleWindow(FXApp *a) : FXMainWindow(a, "Scribble Application
 	// Drawing canvas
 	canvas = new FXCanvas(canvasFrame, this, ID_CANVAS, FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_Y|LAYOUT_FILL_ROW|LAYOUT_FILL_COLUMN);
 
-	// RIGHT pane for the buttons
-	buttonFrame = new FXVerticalFrame(contents, FRAME_SUNKEN|LAYOUT_FILL_Y|LAYOUT_TOP|LAYOUT_LEFT, 0,0,0,0, 10,10,10,10);
-
 	// Label above the buttons
-	new FXLabel(buttonFrame, "Button Frame", NULL, JUSTIFY_CENTER_X|LAYOUT_FILL_X);
+	/*new FXLabel(buttonFrame, "Button Frame", NULL, JUSTIFY_CENTER_X|LAYOUT_FILL_X);
 
 	// Horizontal divider line
 	new FXHorizontalSeparator(buttonFrame, SEPARATOR_RIDGE|LAYOUT_FILL_X);
@@ -117,7 +202,7 @@ ScribbleWindow::ScribbleWindow(FXApp *a) : FXMainWindow(a, "Scribble Application
 	new FXButton(buttonFrame, "&Clear", NULL, this, ID_CLEAR, FRAME_THICK|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_TOP|LAYOUT_LEFT, 0,0,0,0, 10,10,5,5);
 
 	// Exit button
-	new FXButton(buttonFrame, "&Exit", NULL, getApp(), FXApp::ID_QUIT, FRAME_THICK|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_TOP|LAYOUT_LEFT, 0,0,0,0, 10,10,5,5);
+	new FXButton(buttonFrame, "&Exit", NULL, getApp(), FXApp::ID_QUIT, FRAME_THICK|FRAME_RAISED|LAYOUT_FILL_X|LAYOUT_TOP|LAYOUT_LEFT, 0,0,0,0, 10,10,5,5);*/
 
 	// Initialize private variables
 	drawColor = FXRGB(255, 0, 0);
